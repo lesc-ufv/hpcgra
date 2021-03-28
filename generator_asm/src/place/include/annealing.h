@@ -1,6 +1,112 @@
 #ifndef __ANNEALING__H
 #define __ANNEALING__H
 
+void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const int SIZE_GRID, 
+    const int TOTAL_GRID_SIZE, int *grid, int *pos, int *v_i, int *v, vector<int> A, 
+    double *randomvec, int *results, int **table, int *table_pe, vector<pe_t> &pe) {
+
+    int localGrid[TOTAL_GRID_SIZE];
+    int localPos[SIZE_NODES];
+
+    int currentCost = results[N];
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) 
+        localGrid[i] = grid[N*TOTAL_GRID_SIZE+i];
+    for (int i = 0; i < SIZE_NODES; ++i)
+        localPos[i] = pos[N*SIZE_NODES+i];
+
+    int node1, node2, a, b, old1, old2;
+    //random vector index
+    double random, valor;
+    int randomctrl = 0;
+    double T = 100.0;
+
+    int nextCost;
+    
+    while (T >= 0.00001){
+        for (int i = 0; i < SIZE_GRID-1; ++i) {
+            for (int j = i+1; j < SIZE_GRID; ++j) {
+
+                node1 = localGrid[i], node2 = localGrid[j];
+                //if we're looking at 2 empty spaces, skip                   
+                if (node1 == -1 && node2 == -1)
+                    continue;
+                
+                nextCost = currentCost;
+                
+                // verify if can swap, else continue
+                if (pe[node1].type != pe[node2].type && 
+                    table_pe[node1] != table_pe[node2]) 
+                    continue;
+                
+                if (node1 != -1){
+                    for (int k = 0; k < v[node1]; ++k) {
+                        a = localPos[node1]; 
+                        b = localPos[A[v_i[node1]+k]];
+                        nextCost -= table[a][b]; 
+                    }
+                }
+                if(node2 != -1){
+                    for(int k = 0; k < v[node2]; k++) {
+                        a = localPos[node2]; 
+                        b = localPos[A[v_i[node2]+k]];
+                        nextCost -= table[a][b];
+                    }
+                }
+
+                // swap positions
+                old1 = i; old2 = j;
+
+                if (node1 != -1) localPos[node1] = old2;
+                if (node2 != -1) localPos[node2] = old1;
+                localGrid[j] = node1;
+                localGrid[i] = node2;
+
+                //recalculate cost
+                if (node1 != -1){
+                    for(int i = 0; i < v[node1]; ++i){
+                        a = localPos[node1]; 
+                        b = localPos[A[v_i[node1]+i]];
+                        nextCost += table[a][b];                       
+                    }
+                }
+                if (node2 != -1){
+                    for(int i = 0; i < v[node2]; i++) {
+                        a = localPos[node2]; 
+                        b = localPos[A[v_i[node2]+i]];
+                        nextCost += table[a][b];
+                    }
+                }
+
+                //parameter for annealing probability
+                valor = exp(-1*(nextCost - currentCost)/T);
+
+                //random number between 0 and 1
+                random = randomvec[randomctrl++];
+                if(randomctrl == 1000000) randomctrl = 0;
+
+                //if cost after changes is less than before or if cost is higher 
+                //but we're in the annealing probanility range, return
+                if(nextCost <= currentCost || random <= valor){
+                    currentCost = nextCost;
+                } else { //else, undo changes and stay with previous cost
+                    if(node1 != -1) localPos[node1] = old1;
+                    if(node2 != -1) localPos[node2] = old2;
+                    localGrid[j] = node2;
+                    localGrid[i] = node1;
+                }
+            }
+            if(currentCost == SIZE_EDGES) break;             
+            T *= 0.999;
+        }
+    }
+
+    // update the results
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) grid[N*TOTAL_GRID_SIZE+i] = localGrid[i];
+    for (int i = 0; i < SIZE_NODES; ++i) pos[N*SIZE_NODES+i] = localPos[i];
+    results[N] = currentCost;
+}
+
+/*
 void buildMatrices(int dim, vector<vector<int>> &tablemesh, vector<vector<int>> &table1hop, vector<vector<int>> &tablechess1hop, vector<vector<int>> &tablechessmesh, vector<vector<int>> &tablehex){
     table1hop.resize(dim);
     tablemesh.resize(dim);
@@ -45,8 +151,9 @@ void buildMatrices(int dim, vector<vector<int>> &tablemesh, vector<vector<int>> 
     //     }
     //     cout << endl;
     // }
-}
+}*/
 
+/*
 void printGraphInfo(int nodes, int edges, int *h_edgeA, int *h_edgeB, vector<int> &A, int *v, int *v_i){
     printf("NODES: %d EDGES: %d\n", nodes, edges);
     for (int i = 0; i < edges; ++i) printf("%d -> %d\n", h_edgeA[i], h_edgeB[i]);    
@@ -59,8 +166,9 @@ void printGraphInfo(int nodes, int edges, int *h_edgeA, int *h_edgeB, vector<int
     printf("A: ");
     for (int i = 0; i < A.size(); ++i) printf("%d ", A[i]);
     printf("\n\n");
-}
+}*/
 
+/*
 void printPlacementInfo(int nodes, int gridSize, int *grid, int *positions, int cost){
     printf("grid: ");
     for (int i = 0; i < gridSize; ++i) printf("%d ", grid[i]);
@@ -70,8 +178,9 @@ void printPlacementInfo(int nodes, int gridSize, int *grid, int *positions, int 
     printf("\n");
     printf("cost: %d", cost);
     printf("\n\n");
-}
+}*/
 
+/*
 int gridCost(int edges, int dim, int *h_edgeA, int *h_edgeB, int *positions, int arch, vector<vector<int>> &table){
     int cost_ = 0, increment = 0, distManhattanI, distManhattanJ, ifrom, jfrom, ito, jto;
     for(int k=0; k<edges; k++){
@@ -89,8 +198,9 @@ int gridCost(int edges, int dim, int *h_edgeA, int *h_edgeB, int *positions, int
         cost_ += increment;
     }
     return cost_;
-}
+}*/
 
+/*
 void annealing2(int iresult, int nodes, int dim, int gridSize, int &cost, int *grid, int *positions, int *v_i, int *v, vector<int> &A, int arch, bool *io, bool *borders, bool *mults, bool *others, bool *pattern, int **results, double *randomvec, vector<vector<int>> &table){
     int *localGrid, *localPositions;
     int currentCost = cost, nextCost, swapCount=0, increment, distManhattanI, distManhattanJ, chess;
@@ -443,6 +553,6 @@ void printBuffers(vector<map<pair<int,int>,int>> &buffers){
             cout << it->first.first << "->" << it->first.second << " " << it->second << "\n";
         }
     }
-}
+}*/
 
 #endif

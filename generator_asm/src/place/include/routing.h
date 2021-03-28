@@ -3,10 +3,49 @@
 
 using namespace std;
 
-#include <vector>
-#include <map>
-#include "instance.h"
+void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
+    const int TOTAL_GRID_SIZE, int *edges_cost, int *results, int *pos,
+    int *h_edgeA, int *h_edgeB, map<pair<int,int>,vector<int>> *route, vector<pe_t> &pe) {
 
+    vector<pair<int,int>> edge[NGRIDS];
+    vector<int> grid_route[NGRIDS];
+
+    for (int i = 0; i < NGRIDS; ++i) {
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            grid_route[i] = get_neighbors(pe, j);
+        }
+    }
+
+    int a, b;
+
+    // resolve first to edges of cost 1
+    for (int j = 0; j < NGRIDS; ++j) {
+        for (int i = 0; i < SIZE_EDGES; ++i) {
+            a = h_edgeA[i];
+            b = h_edgeB[i];
+            if (edges_cost[j*SIZE_EDGES+i] == 1) {
+                // remove of the grid
+                grid_route[j].erase(remove(grid_route[j].begin(), 
+                    grid_route[j].end(), pos[b]), grid_route[j].end());
+
+                route[j][make_pair(a,b)].push_back(pos[a+j*SIZE_NODES]);
+                route[j][make_pair(a,b)].push_back(pos[b+j*SIZE_NODES]);
+            } else {
+                edge[j].push_back(make_pair(a,b));
+            }
+        }
+    }
+
+    // resolve the cost greater than 1
+    for (int j = 0; j < NGRIDS; ++j) {
+        printf("\ntry: %d\n", j);
+        for (int i = 0; i < edge[j].size(); ++i) {
+            printf("%d -> %d\n", edge[j][i].first, edge[j][i].second);
+        }
+    }
+}
+
+/*
 void routing(int GRID_SIZE, int EDGE_SIZE, int NODE_SIZE, vector<pair<int,int>> &vector_edges, 
     vector<map<pair<int,int>,int>> &edges_cost, int *pos_i, int *pos_j, int times, int __ARCH, vector<bool> &successfulRoutings, vector<Instance> &instances) {
 
@@ -234,6 +273,6 @@ void routing(int GRID_SIZE, int EDGE_SIZE, int NODE_SIZE, vector<pair<int,int>> 
         }
         if(successfulRoutings[t]) instances[t].setRouting(grid,__ARCH);
     }
-}
+}*/
 
 #endif

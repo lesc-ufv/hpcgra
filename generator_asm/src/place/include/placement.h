@@ -109,7 +109,7 @@ void get_edge_cost(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
             a = h_edgeA[j];
             b = h_edgeB[j];
             edges_cost[i][make_pair(a,b)] = table[pos[i*SIZE_NODES+a]][pos[i*SIZE_NODES+b]];
-            printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], table[pos[i*SIZE_NODES+a]][pos[i*SIZE_NODES+b]]);
+            printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], edges_cost[i][make_pair(a,b)]);
         }
         printf("\n");
     }

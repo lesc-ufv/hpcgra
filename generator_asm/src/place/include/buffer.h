@@ -2,7 +2,6 @@
 #define __BUFFER_H
 
 #include <Graph.h>
-#include <instance.h>
 #include <get_critical_path.h>
 
 void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int,int>,int> &buffers, map<pair<int,int>,int> &edges){
@@ -94,7 +93,12 @@ int manhattan_dist(int pos_a_i, int pos_a_j, int pos_b_i, int pos_b_j) {
     return (diff_i + diff_j);
 }
 
-int buffer(Graph g, vector<vector<int>> &activeFifos, map<pair<int,int>,int> &manh, vector<map<pair<int,int>,int>> &edges_cost, vector<map<pair<int,int>,int>> &buffers_per_PE, vector<bool> &successfulRoutings, vector<Instance> &instances){
+void buffer() {
+
+}
+
+/*
+int buffer_old(Graph g, vector<vector<int>> &activeFifos, map<pair<int,int>,int> &manh, vector<map<pair<int,int>,int>> &edges_cost, vector<map<pair<int,int>,int>> &buffers_per_PE, vector<bool> &successfulRoutings, vector<Instance> &instances){
     const int SAMPLES_SIZE = edges_cost.size();
     const int NODE_SIZE = g.get_nodes().size();
     const int EDGE_SIZE = g.get_edges().size();
@@ -222,5 +226,6 @@ int buffer(Graph g, vector<vector<int>> &activeFifos, map<pair<int,int>,int> &ma
     //cout << "LOWEST AVERAGE NUMBER OF BUFFERS: " << lowestAve << endl;
     //printf("%d,",lowestPE);
 }
+*/
 
 #endif

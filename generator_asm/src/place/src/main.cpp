@@ -1,6 +1,4 @@
 #include <Graph.h>
-#include <buffer.h>
-//#include <get_critical_path.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -18,6 +16,7 @@
 #include <verify.h>
 #include <placement.h>
 #include <routing.h>
+#include <buffer.h>
 
 #define NGRIDS 1
 
@@ -184,6 +183,14 @@ int main(int argc, char** argv) {
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
         edges_cost, results, pos, h_edgeA, h_edgeB, route, pe);
+    
+    printf("New cost after routing\n");
+    for (int i = 0; i < NGRIDS; ++i) {
+        printf("Sol %d new cost: %d\n", i, results[i]);
+    }
+
+    // generate buffer
+    buffer();
     
     delete v;
     delete v_i;

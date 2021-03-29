@@ -101,14 +101,14 @@ void placement(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
 }
 
 void get_edge_cost(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
-    int *h_edgeA, int *h_edgeB, int *pos, int **table, int *edges_cost) {
+    int *h_edgeA, int *h_edgeB, int *pos, int **table, map<pair<int,int>,int> *edges_cost) {
     
     int a, b;
     for (int i = 0; i < NGRIDS; ++i) {
         for (int j = 0; j < SIZE_EDGES; ++j) {
             a = h_edgeA[j];
             b = h_edgeB[j];
-            edges_cost[i*SIZE_EDGES+j] = table[pos[i*SIZE_NODES+a]][pos[i*SIZE_NODES+b]];
+            edges_cost[i][make_pair(a,b)] = table[pos[i*SIZE_NODES+a]][pos[i*SIZE_NODES+b]];
             printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], table[pos[i*SIZE_NODES+a]][pos[i*SIZE_NODES+b]]);
         }
         printf("\n");

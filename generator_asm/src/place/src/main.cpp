@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
     int cost = 100000;    
     
     int *grid = new int[TOTAL_GRID_SIZE * NGRIDS];
-    int *edges_cost = new int[SIZE_EDGES * NGRIDS];
+    map<pair<int,int>,int> *edges_cost = new map<pair<int,int>,int>[NGRIDS];
     int *buffers = new int[SIZE_EDGES * NGRIDS];
     int *pos = new int[SIZE_NODES * NGRIDS];
     int *results = new int[NGRIDS];
@@ -188,7 +188,7 @@ int main(int argc, char** argv) {
     delete v;
     delete v_i;
     delete grid;
-    delete edges_cost;
+    //delete edges_cost;
     delete buffers;
     delete pos;
     delete results;

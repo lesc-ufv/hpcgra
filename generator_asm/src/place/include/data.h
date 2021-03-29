@@ -3,8 +3,8 @@
 
 void clean_data(const int NGRIDS, const int SIZE_EDGES, 
     const int SIZE_NODES, const int TOTAL_GRID_SIZE,
-    int *edges_cost, int *buffers, int *pos,
-    int *grid, int *v, int *v_i) {
+    map<pair<int,int>,int> *edges_cost, int *buffers, int *pos,
+    int *grid, int *v, int *v_i, int *h_edgeA, int *h_edgeB) {
 
     for(int i = 0; i < SIZE_NODES; i++){
         v[i] = 0; 
@@ -14,7 +14,7 @@ void clean_data(const int NGRIDS, const int SIZE_EDGES,
     // Fill zero in the data
     for (int k = 0; k < NGRIDS; k++) {
         for (int i = 0; i < SIZE_EDGES; ++i) {
-            edges_cost[k*SIZE_EDGES+i] = 0;
+            edges_cost[k][make_pair(h_edgeA[i], h_edgeB[i])] = 0;
             buffers[k*SIZE_EDGES+i] = 0;
         }
         for (int i = 0; i < SIZE_NODES; ++i) {
@@ -28,7 +28,7 @@ void clean_data(const int NGRIDS, const int SIZE_EDGES,
 
 void fill_data(const int TOTAL_GRID_SIZE, const int NGRIDS,
     const int SIZE_EDGES, const int SIZE_NODES, int *grid, 
-    int *edges_cost, int *buffers, int *pos,
+    map<pair<int,int>,int> *edges_cost, int *buffers, int *pos,
     vector<int> &inputs, vector<int> &outputs, vector<int> &basic,
     vector<int> &pe_in, vector<int> &pe_out, vector<int> &pe_basic,
     int *v, int *v_i, int *h_edgeA, int *h_edgeB, vector<int> &A, 
@@ -36,7 +36,7 @@ void fill_data(const int TOTAL_GRID_SIZE, const int NGRIDS,
     
     // clean the data
     clean_data(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
-    edges_cost, buffers, pos, grid, v, v_i);
+    edges_cost, buffers, pos, grid, v, v_i, h_edgeA, h_edgeB);
 
     //Preenche a estrutura do grafo
     int n1, n2;

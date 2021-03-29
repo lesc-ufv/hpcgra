@@ -1,32 +1,107 @@
 #ifndef __ROUTING_H
 #define __ROUTING_H
 
-using namespace std;
+typedef struct route_t {
+    vector<int> *path;
+} route_t;
+
+void remove_element(int pe_a, int pe_b, vector<int> *grid_route) {
+    grid_route[pe_a].erase(remove(grid_route[pe_a].begin(), 
+                    grid_route[pe_a].end(), pe_b), grid_route[pe_a].end());
+}
+
+bool try_route(const int TOTAL_GRID_SIZE, int a, int b, 
+    vector<int> *grid_route) {
+    
+    // shortest distance between pes
+    vector<pair<int,int>> path;
+
+    queue<int> q;
+    q.push(a);
+
+    bool visited[TOTAL_GRID_SIZE];
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) visited[i] = false;
+    bool found = false;
+
+    int n_dad;
+    while (!q.empty()) {
+        n_dad = q.front();
+        q.pop();
+        visited[n_dad] = true;
+
+        for (int j = 0, n = grid_route[n_dad].size(); j < n; ++j) {
+            if (!visited[grid_route[n_dad][j]]) {
+                q.push(grid_route[n_dad][j]);
+                path.push_back(make_pair(n_dad,grid_route[n_dad][j]));
+                if (grid_route[n_dad][j] == b) {
+                    found = true; break;
+                }
+            }
+        }
+        if (found) break;
+    }
+
+    if (found) {
+        vector<pair<int,int>> new_path;
+        int nodo = b;
+        for(int i = path.size()-1; i > -1; --i) {
+            if (path[i].first == a) {
+                new_path.push_back(make_pair(a, nodo));
+                break;
+            } else if (path[i].second == nodo) {
+                new_path.push_back(make_pair(path[i].first, nodo));
+                nodo = path[i].first;
+            }
+        }
+
+        for (int i = new_path.size()-1; i > -1; --i) {
+            //printf("%d %d, ", new_path[i].first, new_path[i].second);
+            remove_element(new_path[i].first, new_path[i].second, grid_route);
+        }
+        //printf("\n");
+
+        return true;
+    }
+    return false;
+}
 
 void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
     const int TOTAL_GRID_SIZE, int *edges_cost, int *results, int *pos,
     int *h_edgeA, int *h_edgeB, map<pair<int,int>,vector<int>> *route, vector<pe_t> &pe) {
 
     vector<pair<int,int>> edge[NGRIDS];
-    vector<int> grid_route[NGRIDS];
+    route_t grid_route[NGRIDS];
 
     for (int i = 0; i < NGRIDS; ++i) {
+        grid_route[i].path = new vector<int>[TOTAL_GRID_SIZE];
         for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            grid_route[i] = get_neighbors(pe, j);
+            grid_route[i].path[j] = get_neighbors(pe, j);
         }
     }
 
-    int a, b;
-
+    
+    for (int i = 0; i < NGRIDS; ++i) {
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            printf("%2d: ", j);
+            for (int k = 0; k < grid_route[i].path[j].size(); ++k) {
+                printf("%d ", grid_route[i].path[j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+    
+    int a, b, pe_a, pe_b;
     // resolve first to edges of cost 1
     for (int j = 0; j < NGRIDS; ++j) {
         for (int i = 0; i < SIZE_EDGES; ++i) {
             a = h_edgeA[i];
             b = h_edgeB[i];
             if (edges_cost[j*SIZE_EDGES+i] == 1) {
-                // remove of the grid
-                grid_route[j].erase(remove(grid_route[j].begin(), 
-                    grid_route[j].end(), pos[b]), grid_route[j].end());
+                pe_a = pos[a+j*SIZE_NODES];
+                pe_b = pos[b+j*SIZE_NODES];
+                // remove of the grid, get the pos(a) and remove the link with pos(b)
+                remove_element(pe_a, pe_b, grid_route[j].path);
 
                 route[j][make_pair(a,b)].push_back(pos[a+j*SIZE_NODES]);
                 route[j][make_pair(a,b)].push_back(pos[b+j*SIZE_NODES]);
@@ -36,12 +111,38 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
         }
     }
 
+    for (int i = 0; i < NGRIDS; ++i) {
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            printf("%2d: ", j);
+            for (int k = 0; k < grid_route[i].path[j].size(); ++k) {
+                printf("%d ", grid_route[i].path[j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+
     // resolve the cost greater than 1
     for (int j = 0; j < NGRIDS; ++j) {
         printf("\ntry: %d\n", j);
         for (int i = 0; i < edge[j].size(); ++i) {
-            printf("%d -> %d\n", edge[j][i].first, edge[j][i].second);
+            a = edge[j][i].first;
+            b = edge[j][i].second;
+            pe_a = pos[a+j*SIZE_NODES];
+            pe_b = pos[b+j*SIZE_NODES];
+            printf("%d [%d] -> %d [%d]\n", a, pe_a, b, pe_b);
+            try_route(TOTAL_GRID_SIZE, pe_a, pe_b, grid_route[j].path);
         }
+    }
+    for (int i = 0; i < NGRIDS; ++i) {
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            printf("%2d: ", j);
+            for (int k = 0; k < grid_route[i].path[j].size(); ++k) {
+                printf("%d ", grid_route[i].path[j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
     }
 }
 

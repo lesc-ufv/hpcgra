@@ -14,11 +14,15 @@
 #include <read_arch.h>
 #include <data.h>
 #include <verify.h>
+
+#define MAXVALUE 9999
+
 #include <placement.h>
 #include <routing.h>
 #include <buffer.h>
 
 #define NGRIDS 1
+
 
 using namespace std;
 using namespace std::chrono;
@@ -189,8 +193,26 @@ int main(int argc, char** argv) {
         printf("Sol %d new cost: %d\n", i, results[i]);
     }
 
+    map<pair<int,int>,int> *buffer_PE = new map<pair<int,int>,int>[NGRIDS];
+
     // generate buffer
-    buffer();
+    buffer(g, NGRIDS, SIZE_NODES, SIZE_EDGES, h_edgeA, 
+    h_edgeB, results, edges_cost, buffer_PE);
+
+    for (int k = 0; k < NGRIDS; ++k) {
+        printf("Sol: %d", k);
+        if (results[k] >= MAXVALUE) { 
+            printf("No routed!\n");
+            continue;
+        }
+        printf("\n");
+        for (int i = 0; i < SIZE_EDGES; ++i) {
+            int a = h_edgeA[i];
+            int b = h_edgeB[i];
+
+            printf("%d -> %d cost: %2d buffer: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffer_PE[k][make_pair(a,b)]);
+        }
+    }
     
     delete v;
     delete v_i;

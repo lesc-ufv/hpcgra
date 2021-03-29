@@ -84,6 +84,7 @@ void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int,int>,
     }
 }
 
+/*
 int manhattan_dist(int pos_a_i, int pos_a_j, int pos_b_i, int pos_b_j) {
     if (pos_a_i == pos_b_i && pos_a_j == pos_b_j) return 1;
 
@@ -91,9 +92,58 @@ int manhattan_dist(int pos_a_i, int pos_a_j, int pos_b_i, int pos_b_j) {
     int diff_j = abs(pos_a_j - pos_b_j);
 
     return (diff_i + diff_j);
-}
+}*/
 
-void buffer() {
+void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGES,
+    int *h_edgeA, int *h_edgeB, int *results, map<pair<int,int>,int> *edges_cost, 
+    map<pair<int,int>,int> *buffer_PE) {
+
+    int** levelOrig = new int*[NGRIDS];
+    int** level = new int*[NGRIDS];
+
+    for(int i = 0; i < NGRIDS; ++i) {
+        levelOrig[i] = new int[SIZE_NODES];
+        level[i] = new int[SIZE_NODES];
+    }
+
+    //Gets level of each node given edges costs
+    for(int i=0; i < NGRIDS; i++){
+        if(results[i] >= MAXVALUE) continue;
+        get_critical_path(g, SIZE_NODES, levelOrig[i]);
+        dfsLvl(g, SIZE_NODES, level[i], edges_cost[i]);
+    } 
+
+    bool *visited = new bool[SIZE_NODES];
+    vector<map<pair<int,int>,int>> buffers(NGRIDS);
+    vector<int> outputs = g.get_outputs();
+    vector<int> inputs = g.get_inputs();
+    set<int> inp;
+
+    for(int i=0; i < inputs.size(); ++i) inp.insert(inputs[i]);
+    //vector<map<pair<int,int>,int>> buffers_per_PE(SAMPLES_SIZE);
+    vector<int> buffersPE(SIZE_NODES);
+    int minNumberFifos;
+
+    for(int k = 0; k < NGRIDS; k++){
+        minNumberFifos = 100000;
+        if(results[k] >= MAXVALUE) continue;
+
+        //Initializing map with buffer size 0 for each edge
+        for(int i = 0; i < SIZE_EDGES; i++){
+            pair<int,int> aux = make_pair(h_edgeA[i], h_edgeB[i]);
+            buffers[k][aux] = 0;
+        }
+
+        // Find number of buffers needed on each edge
+        dfsBuffer(g, level[k], levelOrig[k], buffers[k], edges_cost[k]);
+        for(int i = 0; i < SIZE_EDGES; i++){
+            pair<int,int> aux = make_pair(h_edgeA[i], h_edgeB[i]);
+            pair<int,int> aux2; aux2.first = aux.second; aux2.second = aux.first;
+            if(inp.count(aux.first) || inp.count(aux.second)) buffers[k][aux] = 0; //set buffers on inputs to 0
+            
+            buffer_PE[k][aux] = ceil(float(buffers[k][aux])/(edges_cost[k][aux]+1));
+        }
+    }
 
 }
 

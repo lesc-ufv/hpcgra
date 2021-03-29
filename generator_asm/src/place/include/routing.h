@@ -140,7 +140,7 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
             //printf("%d [%d] -> %d [%d]\n", a, pe_a, b, pe_b);
             if(!try_route(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path, 
                 results[j], edges_cost[j])){
-                    results[j] = 9999;
+                    results[j] = MAXVALUE;
                     break; // it not possible 
             }
         }

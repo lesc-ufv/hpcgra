@@ -84,22 +84,6 @@ int get_result(const int N, const int SIZE_EDGE, const int SIZE_NODES,
     return sum;
 }
 
-
-void placement(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
-    const int SIZE_GRID, const int TOTAL_GRID_SIZE, int *pos,
-    int *results, int* h_edgeA, int* h_edgeB, int **table,
-    int *v, int *v_i, vector<int> A, double *randomvec,
-    int *grid, int *table_pe, vector<pe_t> &pe) {
-    
-    #pragma omp parallel for
-    for (int i = 0; i < NGRIDS; ++i) {
-        if(results[i] == SIZE_EDGES) continue; // Found perfect solution!
-
-        annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE, 
-            grid, pos, v_i, v, A, randomvec, results, table, table_pe, pe);
-    }
-}
-
 void get_edge_cost(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
     int *h_edgeA, int *h_edgeB, int *pos, int **table, map<pair<int,int>,int> *edges_cost) {
     
@@ -109,9 +93,9 @@ void get_edge_cost(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
             a = h_edgeA[j];
             b = h_edgeB[j];
             edges_cost[i][make_pair(a,b)] = table[pos[i*SIZE_NODES+a]][pos[i*SIZE_NODES+b]];
-            printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], edges_cost[i][make_pair(a,b)]);
+            //printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], edges_cost[i][make_pair(a,b)]);
         }
-        printf("\n");
+        //printf("\n");
     }
 
 }

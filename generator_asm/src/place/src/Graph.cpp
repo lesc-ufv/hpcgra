@@ -14,22 +14,7 @@ Graph::Graph() {
 	this->dp.property("weight", weight);
 
 	// Use ref_property_map to turn a graph property into a property map
-	boost::ref_property_map<graph_t*, string> gname(get_property(this->graph, boost::graph_name));
-	
-	// this->dp.property("name", gname);
-
-	// // Construct an empty graph and prepare the dynamic_property_maps.
-    // graph_t graph(0);
-
-    // dynamic_properties dp/*(ignore_other_properties)*/;
-    // dp.property("node_id", get(&Vertex::name,  graph));
-    // dp.property("label",   get(&Vertex::label, graph));
-    // dp.property("shape",   get(&Vertex::shape, graph));
-    // dp.property("label",   get(&Edge::label,   graph));
-
-    // // Use ref_property_map to turn a graph property into a property map
-    // boost::ref_property_map<graph_t *, std::string> gname(get_property(graph, graph_name));
-    // dp.property("name",    gname);
+	//boost::ref_property_map<graph_t*, string> gname(get_property(this->graph, boost::graph_name));
 
     // std::ifstream dot("input.dot");
 
@@ -57,13 +42,17 @@ Graph::Graph(string filename) {
 	boost::property_map<graph_t, boost::vertex_color_t>::type mass = get(boost::vertex_color, this->graph);
 	this->dp.property("mass", mass);
 
-	boost::property_map<graph_t, boost::edge_weight_t>::type weight = get(boost::edge_weight, this->graph);
-	this->dp.property("weight", weight);
+	//boost::property_map<graph_t, boost::edge_name_t>::type weight = get(boost::edge_name, this->graph);
+	//this->dp.property("weight", weight);
 
 	// Use ref_property_map to turn a graph property into a property map
-	//ref_property_map<graph_t*, string> gname(get_property(this->graph, graph_name));
+	//ref_property_map<graph_t*, string> opcode(get_property(this->graph, graph_name));
 	
-	//this->dp.property("name", gname);
+	boost::property_map<graph_t, boost::vertex_name_t>::type opcode = get(boost::vertex_name, this->graph);
+	this->dp.property("opcode", opcode);
+
+	boost::property_map<graph_t, boost::edge_weight_t>::type port = get(boost::edge_weight, this->graph);
+	this->dp.property("port", port);
 
 	if (filename.substr(filename.find_last_of(".") + 1) == "dot") {
     	ifstream dot_file = ifstream(filename);
@@ -80,16 +69,18 @@ Graph::Graph(string filename) {
 		u = source(*it.first, this->graph);
 		v = target(*it.first, this->graph);
 		this->edges.push_back(make_pair(u, v));
+		this->port[make_pair(u,v)] = port[*it.first];
 		if (u != v) node_in_degree[v].push_back(u);
 		if (u != v) node_out_degree[u].push_back(v);
 	}
 
-	// set nodes
+	// set name nodes
 	v_iter vi, vi_end, next;
 	boost::tie(vi, vi_end) = vertices(this->graph);
 	for (next = vi; vi != vi_end; vi = next) {
 		++next;
-		name_label[*vi] = name[*vi];
+		this->name_label[*vi] = name[*vi];
+		this->opcode[*vi] = opcode[*vi];
 		this->nodes.push_back(*vi);
 	}
 }
@@ -102,6 +93,8 @@ Graph::Graph(const Graph &g) {
 	this->node_in_degree = g.node_in_degree;
 	this->node_out_degree = g.node_out_degree;
 	this->name_label = g.name_label;
+	this->opcode = g.opcode;
+	this->port = g.port;
 }
 
 Graph::~Graph() {
@@ -155,6 +148,14 @@ vector<int> Graph::get_nodes() {
 
 string Graph::get_name_node(int u) {
 	return this->name_label[u];
+}
+
+string Graph::get_opcode(int u) {
+	return this->opcode[u];
+}
+
+int Graph::get_port(int u, int v) {
+	return this->port[make_pair(u,v)];
 }
 
 vector<int> Graph::get_predecessors(int u) {

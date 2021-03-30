@@ -61,7 +61,7 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
                 localGrid[j] = node1;
                 localGrid[i] = node2;
 
-                //recalculate cost
+                // recalculate cost
                 if (node1 != -1){
                     for(int i = 0; i < v[node1]; ++i){
                         a = localPos[node1]; 
@@ -77,10 +77,10 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
                     }
                 }
 
-                //parameter for annealing probability
+                // parameter for annealing probability
                 valor = exp(-1*(nextCost - currentCost)/T);
 
-                //random number between 0 and 1
+                // random number between 0 and 1
                 random = randomvec[randomctrl++];
                 if(randomctrl == 1000000) randomctrl = 0;
 

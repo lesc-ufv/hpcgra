@@ -1,0 +1,9 @@
+Digraph g {
+	A [opcode="input"]
+	B [opcode="input"]
+	C [opcode="add"]
+	D [opcode="output"]
+	A->C [port=0]
+	B->C [port=1]
+	C->D [port=0]
+}

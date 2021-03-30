@@ -50,6 +50,8 @@ class Graph {
         vector<pair<int,int>> get_edges_inverse();
         vector<int> get_nodes();
         string get_name_node(int u);
+        string get_opcode(int u);
+        int get_port(int u, int v);
         vector<int> get_predecessors(int u);
         vector<vector<int>> get_fanin();
         vector<vector<int>> get_fanout();
@@ -65,6 +67,8 @@ class Graph {
         map<int,vector<int>> node_in_degree;
         map<int,vector<int>> node_out_degree;
         map<int,string> name_label;
+        map<int,string> opcode;
+        map<pair<int,int>,int> port;
 };
 
 #endif

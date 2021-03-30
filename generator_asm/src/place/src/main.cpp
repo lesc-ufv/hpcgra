@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <cmath>
 #include <ctime>
@@ -20,9 +21,11 @@
 #include <placement.h>
 #include <routing.h>
 #include <buffer.h>
+#include <evaluate.h>
+#include <print_out.h>
+#include <generate_asm.h>
 
 #define NGRIDS 1
-
 
 using namespace std;
 using namespace std::chrono;
@@ -78,6 +81,9 @@ int main(int argc, char** argv) {
     // Verify about arch and graph
     if (!verify(SIZE_NODES, TOTAL_GRID_SIZE, SIZE_GRAPH_IN, 
     SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT) ) return 1;
+    
+    // print mapping of json
+    print_inputs_outputs_json(g, name);   
 
     int *h_edgeA = new int[SIZE_EDGES];
     int *h_edgeB = new int[SIZE_EDGES];
@@ -160,8 +166,13 @@ int main(int argc, char** argv) {
     printf("\n");
 
     auto start = high_resolution_clock::now();
-    placement(NGRIDS, SIZE_EDGES, SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,  pos, results, 
-        h_edgeA, h_edgeB, table, v, v_i, A, randomvec, grid, table_pe, pe);
+    #pragma omp parallel for
+    for (int i = 0; i < NGRIDS; ++i) {
+        if(results[i] == SIZE_EDGES) continue; // Found perfect solution!
+
+        annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE, 
+            grid, pos, v_i, v, A, randomvec, results, table, table_pe, pe);
+    }
     auto stop = high_resolution_clock::now();
 
     std::chrono::duration<double, std::milli> duration = (stop-start);
@@ -194,10 +205,11 @@ int main(int argc, char** argv) {
     }
 
     map<pair<int,int>,int> *buffer_PE = new map<pair<int,int>,int>[NGRIDS];
+    map<pair<int,int>,int> *buffers_EDGE = new map<pair<int,int>,int>[NGRIDS];
 
     // generate buffer
     buffer(g, NGRIDS, SIZE_NODES, SIZE_EDGES, h_edgeA, 
-    h_edgeB, results, edges_cost, buffer_PE);
+    h_edgeB, results, edges_cost, buffer_PE, buffers_EDGE);
 
     for (int k = 0; k < NGRIDS; ++k) {
         printf("Sol: %d", k);
@@ -210,10 +222,20 @@ int main(int argc, char** argv) {
             int a = h_edgeA[i];
             int b = h_edgeB[i];
 
-            printf("%d -> %d cost: %2d buffer: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffer_PE[k][make_pair(a,b)]);
+            printf("%d -> %d cost: %2d buffer_EDGE: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffers_EDGE[k][make_pair(a,b)]);
         }
     }
-    
+
+    int best_index = get_better_index(NGRIDS, SIZE_EDGES, results, h_edgeA, 
+        h_edgeB, buffers_EDGE);
+
+    printf("better index = %d\n", best_index);
+
+    printf("Creating asm\n");
+
+    generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE, 
+        route[best_index], edges_cost[best_index]);
+
     delete v;
     delete v_i;
     delete grid;

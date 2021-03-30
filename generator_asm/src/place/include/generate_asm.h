@@ -49,7 +49,11 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
             if (!visited[son[i]]){    
                 rota = route[make_pair(dad,son[i])]; 
                 for (int j = 0; j < rota.size(); j += 2) {
-                    printf("route $%d $alu $%d\n", rota[j], rota[j+1]);
+                    if (j > 1) {
+                        printf("route $%d $%d $%d\n", rota[j], rota[j-1], rota[j+1]);
+                    } else {
+                        printf("route $%d $alu $%d\n", rota[j], rota[j+1]);
+                    }
                 }
                 new_cost = cost + edges_cost[make_pair(dad,son[i])];
                 q.push(make_pair(son[i], new_cost));

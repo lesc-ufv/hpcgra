@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
         randomvec[i] = (double) rand() / (double)(RAND_MAX);
     }
     //Cria a estrutura do grafo com os vetores (A, v e v_i) à partir do grafo g
-    string path_dot = "", name = "", path_arch= "";
+    string path_dot = "", name = "", path_arch = "", path_asm = "";
 
     if (argc > 2) {
         name = argv[1];
@@ -49,6 +49,8 @@ int main(int argc, char** argv) {
         printf("./place mac ../dot/mac.dot ../arch/cgra_4x4.json \n");
         return 1;
     }
+
+    path_asm = name;
 
     vector<int> pe_in, pe_out, pe_basic; 
     map<pair<int,int>,vector<int>> *route = new map<pair<int,int>,vector<int>>[NGRIDS];
@@ -237,8 +239,8 @@ int main(int argc, char** argv) {
 
     printf("Creating asm\n");
 
-    generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE, 
-        route[best_index], edges_cost[best_index]);
+    generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
+        path_asm, route[best_index], edges_cost[best_index]);
 
     delete v;
     delete v_i;

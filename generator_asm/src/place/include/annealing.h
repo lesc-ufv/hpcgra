@@ -19,33 +19,40 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
     double random, valor;
     int randomctrl = 0;
     double T = 100.0;
+    int pe_node1, pe_node2;
 
     int nextCost;
     
     while (T >= 0.00001){
-        for (int i = 0; i < SIZE_GRID-1; ++i) {
-            for (int j = i+1; j < SIZE_GRID; ++j) {
+        for (int i = 0; i < TOTAL_GRID_SIZE-1; ++i) {
+            for (int j = i+1; j < TOTAL_GRID_SIZE; ++j) {
 
-                node1 = localGrid[i], node2 = localGrid[j];
+                node1 = localGrid[i]; 
+                node2 = localGrid[j];
                 //if we're looking at 2 empty spaces, skip                   
                 if (node1 == -1 && node2 == -1)
                     continue;
                 
                 nextCost = currentCost;
-                
+
+                pe_node1 = localPos[node1];
+                pe_node2 = localPos[node2];
+
                 // verify if can swap, else continue
-                if (pe[node1].type != pe[node2].type && 
-                    table_pe[node1] != table_pe[node2]) 
+                if (table_pe[pe_node1] != table_pe[pe_node2]) {
                     continue;
+                }
+
+                printf("%d %d n1: %d n2: %d pe1: %d pe2: %d\n", i, j, node1, node2, pe_node1, pe_node2);
                 
-                if (node1 != -1){
+                if (node1 != -1) {
                     for (int k = 0; k < v[node1]; ++k) {
                         a = localPos[node1]; 
                         b = localPos[A[v_i[node1]+k]];
                         nextCost -= table[a][b]; 
                     }
                 }
-                if(node2 != -1){
+                if (node2 != -1) {
                     for(int k = 0; k < v[node2]; k++) {
                         a = localPos[node2]; 
                         b = localPos[A[v_i[node2]+k]];
@@ -54,7 +61,8 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
                 }
 
                 // swap positions
-                old1 = i; old2 = j;
+                old1 = i; 
+                old2 = j;
 
                 if (node1 != -1) localPos[node1] = old2;
                 if (node2 != -1) localPos[node2] = old1;
@@ -62,7 +70,7 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
                 localGrid[i] = node2;
 
                 // recalculate cost
-                if (node1 != -1){
+                if (node1 != -1) {
                     for(int i = 0; i < v[node1]; ++i){
                         a = localPos[node1]; 
                         b = localPos[A[v_i[node1]+i]];
@@ -82,11 +90,11 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
 
                 // random number between 0 and 1
                 random = randomvec[randomctrl++];
-                if(randomctrl == 1000000) randomctrl = 0;
+                if (randomctrl == 1000000) randomctrl = 0;
 
                 //if cost after changes is less than before or if cost is higher 
                 //but we're in the annealing probanility range, return
-                if(nextCost <= currentCost || random <= valor){
+                if (nextCost <= currentCost || random <= valor){
                     currentCost = nextCost;
                 } else { //else, undo changes and stay with previous cost
                     if(node1 != -1) localPos[node1] = old1;
@@ -95,7 +103,7 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
                     localGrid[i] = node1;
                 }
             }
-            if(currentCost == SIZE_EDGES) break;             
+            if (currentCost == SIZE_EDGES) break;             
             T *= 0.999;
         }
     }

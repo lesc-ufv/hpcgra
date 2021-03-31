@@ -66,11 +66,13 @@ int main(int argc, char** argv) {
 
     int *table_pe = new int[TOTAL_GRID_SIZE];
 
+    int id;
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-        table_pe[i] = pe[i].type;
-        if (pe[i].type == 0 || pe[i].type == 2) pe_in.push_back(pe[i].id);
-        else if (pe[i].type == 1 || pe[i].type == 2) pe_out.push_back(pe[i].id);
-        pe_basic.push_back(pe[i].id);
+        id = pe[i].id;
+        table_pe[id] = pe[id].type;
+        if (pe[id].type == 0 || pe[id].type == 2) pe_in.push_back(pe[id].id);
+        else if (pe[id].type == 1 || pe[id].type == 2) pe_out.push_back(pe[id].id);
+        pe_basic.push_back(pe[id].id);
     }
 
     const int SIZE_PE_IN = pe_in.size();
@@ -154,13 +156,14 @@ int main(int argc, char** argv) {
         printf("n = %d cost = %d\n", i, results[i]);
     }
 
-    printf("Before\n");
+    printf("Cost Before\n");
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
     }
 
+    printf("\nPlacement before:\n");
     for (int j = 0; j < NGRIDS*TOTAL_GRID_SIZE; ++j) {
-        if (j % TOTAL_GRID_SIZE == 0) printf("\n");
+        if (j % SIZE_GRID == 0) printf("\n");
         printf("%2d ", grid[j]);
     }
     printf("\n");
@@ -180,11 +183,12 @@ int main(int argc, char** argv) {
 
     printf("Time spent: %.4lf\n", time_total);
 
-    printf("After\n");
+    printf("Cost After\n");
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
     }
 
+    printf("\nPlacement After:\n");
     for (int j = 0; j < NGRIDS*TOTAL_GRID_SIZE; ++j) {
         if (j % SIZE_GRID == 0) printf("\n");
         printf("%2d ", grid[j]);

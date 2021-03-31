@@ -64,11 +64,11 @@ bool try_route(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
         for (int i = new_path.size()-1; i > -1; --i) {
             //printf("%d %d, ", new_path[i].first, new_path[i].second);
             route[make_pair(a,b)].push_back(new_path[i].first);
+            //if (i == 0) // pull betweens pairs, except the last
             route[make_pair(a,b)].push_back(new_path[i].second);
             remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
         //printf("\n");
-
         return true;
     }
     return false;
@@ -142,8 +142,8 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
             pe_a = pos[a+j*SIZE_NODES];
             pe_b = pos[b+j*SIZE_NODES];
             //printf("%d [%d] -> %d [%d]\n", a, pe_a, b, pe_b);
-            if(!try_route(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
-                route[j], results[j], edges_cost[j])){
+            if (!try_route(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
+                route[j], results[j], edges_cost[j])) {
                     results[j] = MAXVALUE;
                     break; // it not possible 
             }

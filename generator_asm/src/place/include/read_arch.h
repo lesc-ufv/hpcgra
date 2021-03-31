@@ -14,7 +14,6 @@ using namespace std;
     "inout" = 2
     "basic" = 3
 */
-
 /*
     'add'   : 0
     'sub'   : 1
@@ -60,8 +59,6 @@ bool read_arch(string &arch_file, vector<pe_t>& pe) {
                                         {"subsub", 10},
                                         {"addsub", 11},
                                         {"mux", 12}};
-
-    
 
     Json::Value data;
     std::ifstream ifs;

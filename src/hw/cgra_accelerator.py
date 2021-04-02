@@ -23,7 +23,7 @@ class CgraAccelerator:
         fd = comp.create_fecth_data()
         dd = comp.create_dispath_data()
         control_conf = comp.create_control_conf(self.cgra.id, self.cgra.conf_bus_width, self.num_in, self.num_out,
-                                                len(self.cgra.arch['pe'])*4)
+                                                len(self.cgra.arch['pe']) * 4)
         control_exec = comp.create_control_exec(self.cgra.id, self.num_in, self.num_out)
 
         m = Module('cgra_acc')

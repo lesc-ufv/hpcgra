@@ -85,6 +85,16 @@ class AluOperationAnd(AluOperationBinary):
         return [temp(And(src_a, src_b)), dst(temp)]
 
 
+class AluOperationSlt(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('slt_temp', src_a.width)
+        return [temp(Mux(src_a < src_b,Int(1,src_a.width,10), Int(0,src_a.width,10))), dst(temp)]
+
+class AluOperationSgt(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('sgt_temp', src_a.width)
+        return [temp(Mux(src_a > src_b,Int(1,src_a.width,10), Int(0,src_a.width,10))), dst(temp)]
+
 class AluOperationMulAdd(AluOperationTernary):
     def get(self, m, dst, src_a, src_b, src_c):
         temp = m.Reg('muladd_temp', src_a.width)
@@ -137,5 +147,7 @@ class CgraAluOperations:
             'addadd': AluOperationAddAdd(),
             'subsub': AluOperationSubSub(),
             'addsub': AluOperationAddSub(),
-            'mux': AluOperationMux()
+            'mux': AluOperationMux(),
+            'slt':AluOperationSlt(),
+            'sgt':AluOperationSgt()
         }

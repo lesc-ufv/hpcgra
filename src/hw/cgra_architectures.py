@@ -1,4 +1,4 @@
-from hw.utils import get_id
+from src.hw.utils import get_id
 
 
 def create_neighbors(shape, i, j, arch_type):

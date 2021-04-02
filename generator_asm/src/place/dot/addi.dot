@@ -1,0 +1,16 @@
+digraph g {
+    
+    B [opcode="input"]
+    A [opcode="subi",const="1000",cpos="1"] // port = 1
+
+    C [opcode="mux",const="0,1"]
+    
+    // três entradas, com duas constantes
+    A [opcode="subi",]
+    
+    // Y = A[i] - 1000;
+    B->A [port="0"]
+    // Y = 1000 - A[i]
+    B->A [port="1"]
+    
+}

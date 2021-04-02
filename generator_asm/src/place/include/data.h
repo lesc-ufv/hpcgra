@@ -51,7 +51,6 @@ void fill_data(const int TOTAL_GRID_SIZE, const int NGRIDS,
 
     for(int i=1; i < SIZE_NODES; i++){
         v_i[i] = v_i[i-1] + v[i-1];
-        printf("%d ", v_i[i]);
     }
 
     for(int i = 0; i < SIZE_NODES; ++i){
@@ -72,12 +71,14 @@ void fill_data(const int TOTAL_GRID_SIZE, const int NGRIDS,
         random_shuffle( pe_out.begin(), pe_out.end() );
         random_shuffle( pe_basic.begin(), pe_basic.end() );
 
+        /*
         for (int i = 0; i < pe_in.size(); ++i) printf("%d ", pe_in[i]);
         printf("\n");
         for (int i = 0; i < pe_out.size(); ++i) printf("%d ", pe_out[i]);
         printf("\n");
         for (int i = 0; i < pe_basic.size(); ++i) printf("%d ", pe_basic[i]);
         printf("\n\n");
+        */
 
         for (int j = 0; j < inputs.size(); ++j) {
             grid[n*TOTAL_GRID_SIZE+pe_in[j]] = inputs[j];

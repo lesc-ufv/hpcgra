@@ -43,7 +43,7 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
                     continue;
                 }
 
-                printf("%d %d n1: %d n2: %d pe1: %d pe2: %d\n", i, j, node1, node2, pe_node1, pe_node2);
+                //printf("%d %d n1: %d n2: %d pe1: %d pe2: %d\n", i, j, node1, node2, pe_node1, pe_node2);
                 
                 if (node1 != -1) {
                     for (int k = 0; k < v[node1]; ++k) {

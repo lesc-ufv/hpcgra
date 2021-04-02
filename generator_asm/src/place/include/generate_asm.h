@@ -55,6 +55,7 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
                 myfile << "$" << pe_gf << " ";
             }
             printf("\n");
+            myfile << "\n";
         }
 
         son = g.get_sucessors(dad);
@@ -69,7 +70,7 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
                         myfile << "route $" << rota[j] << " $" << rota[j-2] << " $" << rota[j+1] << "\n";
                     } else {
                         printf("route $%d $alu $%d\n", rota[j], rota[j+1]);
-                        myfile << "route $" << rota[j] << "$alu $" << rota[j+1] << "\n";
+                        myfile << "route $" << rota[j] << " $alu $" << rota[j+1] << "\n";
                     }
                 }
                 new_cost = cost + edges_cost[make_pair(dad,son[i])];

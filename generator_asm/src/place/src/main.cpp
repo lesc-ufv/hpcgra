@@ -130,6 +130,7 @@ int main(int argc, char** argv) {
     // create the table that measure the distance between 
     create_table(TOTAL_GRID_SIZE, table, pe);
 
+    /*
     printf("matrix de distance\n");
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         printf("%2d: ", i);
@@ -137,23 +138,25 @@ int main(int argc, char** argv) {
             printf("%2d ", table[i][j]);
         }
         printf("\n");
-    }
+    }*/
     
     // update all position from grid
     update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE, 
         NGRIDS, pos, grid);
     
+    /*
     for (int n = 0; n < NGRIDS; ++n) {
         for (int i = 0; i < SIZE_NODES; ++i) {
             printf("%2d: [%2d] ", i, pos[n*SIZE_NODES+i]);
         }
         printf("\n");
-    }
+    }*/
     
     // get all results and put in results array
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, 
         h_edgeA, h_edgeB, table);
 
+    /*
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
     }
@@ -169,6 +172,7 @@ int main(int argc, char** argv) {
         printf("%2d ", grid[j]);
     }
     printf("\n");
+    */
 
     auto start = high_resolution_clock::now();
     #pragma omp parallel for
@@ -185,6 +189,7 @@ int main(int argc, char** argv) {
 
     printf("Time spent: %.4lf\n", time_total);
 
+    /*
     printf("Cost After\n");
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
@@ -195,7 +200,7 @@ int main(int argc, char** argv) {
         if (j % SIZE_GRID == 0) printf("\n");
         printf("%2d ", grid[j]);
     }
-    printf("\n");
+    printf("\n");*/
 
     // get each value of edge, to routing
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
@@ -205,10 +210,11 @@ int main(int argc, char** argv) {
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
         edges_cost, results, pos, h_edgeA, h_edgeB, route, pe);
     
+    /*
     printf("New cost after routing\n");
     for (int i = 0; i < NGRIDS; ++i) {
         printf("Sol %d new cost: %d\n", i, results[i]);
-    }
+    }*/
 
     map<pair<int,int>,int> *buffer_PE = new map<pair<int,int>,int>[NGRIDS];
     map<pair<int,int>,int> *buffers_EDGE = new map<pair<int,int>,int>[NGRIDS];
@@ -217,6 +223,7 @@ int main(int argc, char** argv) {
     buffer(g, NGRIDS, SIZE_NODES, SIZE_EDGES, h_edgeA, 
     h_edgeB, results, edges_cost, buffer_PE, buffers_EDGE);
 
+    /*
     for (int k = 0; k < NGRIDS; ++k) {
         printf("Sol: %d", k);
         if (results[k] >= MAXVALUE) { 
@@ -230,7 +237,7 @@ int main(int argc, char** argv) {
 
             printf("%d -> %d cost: %2d buffer_EDGE: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffers_EDGE[k][make_pair(a,b)]);
         }
-    }
+    }*/
 
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, results, h_edgeA, 
         h_edgeB, buffers_EDGE);

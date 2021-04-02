@@ -1,3 +1,6 @@
+#define MAXVALUE 9999
+#define __DEBUG false
+
 #include <Graph.h>
 #include <stdio.h>
 #include <string.h>
@@ -15,17 +18,12 @@
 #include <read_arch.h>
 #include <data.h>
 #include <verify.h>
-
-#define MAXVALUE 9999
-
 #include <placement.h>
 #include <routing.h>
 #include <buffer.h>
 #include <evaluate.h>
 #include <print_out.h>
 #include <generate_asm.h>
-
-#define NGRIDS 1
 
 using namespace std;
 using namespace std::chrono;
@@ -39,8 +37,9 @@ int main(int argc, char** argv) {
     }
     //Cria a estrutura do grafo com os vetores (A, v e v_i) à partir do grafo g
     string path_dot = "", name = "", path_arch = "", path_asm = "";
+    int NGRIDS = 1000;
 
-    if (argc > 2) {
+    if (argc > 3) {
         name = argv[1];
         path_dot = argv[2]; 
         path_arch = argv[3];
@@ -48,6 +47,9 @@ int main(int argc, char** argv) {
         printf("ERROR: ./place <name> <path_to_dot.dot> <path_to_arch.json>\n");
         printf("./place mac ../dot/mac.dot ../arch/cgra_4x4.json \n");
         return 1;
+    }
+    if (argc > 4) {
+        NGRIDS = atoi(argv[4]);
     }
 
     path_asm = name;
@@ -104,7 +106,7 @@ int main(int argc, char** argv) {
     int *pos = new int[SIZE_NODES * NGRIDS];
     int *results = new int[NGRIDS];
     
-    double time_total = 0.0;
+    double time_total = 0.0, time_place, time_route, time_buffer;
     int cost_min = -1;
 
     vector<int> inputs = g.get_inputs();
@@ -185,9 +187,8 @@ int main(int argc, char** argv) {
     auto stop = high_resolution_clock::now();
 
     std::chrono::duration<double, std::milli> duration = (stop-start);
-    time_total = duration.count();
-
-    printf("Time spent: %.4lf\n", time_total);
+    time_place = duration.count();
+    time_total += time_place;
 
     /*
     printf("Cost After\n");
@@ -206,9 +207,16 @@ int main(int argc, char** argv) {
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
         pos, table, edges_cost);
 
+    start = high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
         edges_cost, results, pos, h_edgeA, h_edgeB, route, pe);
+    // end routing
+    stop = high_resolution_clock::now();
+
+    duration = (stop-start);
+    time_route = duration.count();
+    time_total += time_route;
     
     /*
     printf("New cost after routing\n");
@@ -219,9 +227,16 @@ int main(int argc, char** argv) {
     map<pair<int,int>,int> *buffer_PE = new map<pair<int,int>,int>[NGRIDS];
     map<pair<int,int>,int> *buffers_EDGE = new map<pair<int,int>,int>[NGRIDS];
 
+    start = high_resolution_clock::now();
     // generate buffer
     buffer(g, NGRIDS, SIZE_NODES, SIZE_EDGES, h_edgeA, 
     h_edgeB, results, edges_cost, buffer_PE, buffers_EDGE);
+    // end buffer
+    stop = high_resolution_clock::now();
+
+    duration = (stop-start);
+    time_buffer = duration.count();
+    time_total += time_buffer;
 
     /*
     for (int k = 0; k < NGRIDS; ++k) {
@@ -244,10 +259,13 @@ int main(int argc, char** argv) {
 
     printf("better index = %d\n", best_index);
 
-    printf("Creating asm\n");
-
     generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
         path_asm, route[best_index], edges_cost[best_index]);
+    
+    printf("\nTime spent PLACE : %.4lf\n", time_place);
+    printf("Time spent ROUTE : %.4lf\n", time_route);
+    printf("Time spent BUFFER: %.4lf\n", time_buffer);
+    printf("Time spent TOTAL : %.4lf\n", time_total);
 
     delete v;
     delete v_i;

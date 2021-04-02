@@ -55,7 +55,7 @@ class Bitstream:
         conf = []
         for c in cgra_bitstream_hex:
             conf.append(c)
-            count += 1
+            count += len(c) // 2  # conf_size are in bytes and c are in string hex, each c has 2 bytes
             if count == conf_size:
                 self.initial_conf += '\n' + to_hex(int("".join(reversed(conf)), 16), 512)
                 conf.clear()

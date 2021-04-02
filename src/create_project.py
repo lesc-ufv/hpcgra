@@ -30,50 +30,53 @@ def create_args():
     return parser.parse_args()
 
 
+def create_project(hpcgra_root, arch_json, name, output_path):
+    cgra = Cgra(arch_json)
+    cgraacc = CgraAccelerator(cgra)
+    acc_axi = AccAXIInterface(cgraacc)
+
+    template_path = hpcgra_root + '/resources/template.prj'
+    cmd = 'cp -r %s  %s/%s' % (template_path, output_path, name)
+    commands_getoutput(cmd)
+
+    hw_path = '%s/%s/xilinx_aws_f1/hw/' % (output_path, name)
+    sw_path = '%s/%s/xilinx_aws_f1/sw/' % (output_path, name)
+
+    m = acc_axi.create_kernel_top(name)
+    m.to_verilog(hw_path + 'src/%s.v' % (name))
+
+    num_axis_str = 'NUM_M_AXIS=%d' % cgraacc.get_num_in()
+    conn_str = acc_axi.get_connectivity_config(name)
+
+    write_file(hw_path + 'simulate/num_m_axis.mk', num_axis_str)
+    write_file(hw_path + 'synthesis/num_m_axis.mk', num_axis_str)
+    write_file(sw_path + 'host/prj_name', name)
+    write_file(hw_path + 'simulate/prj_name', name)
+    write_file(hw_path + 'synthesis/prj_name', name)
+    write_file(hw_path + 'simulate/vitis_config.txt', conn_str)
+    write_file(hw_path + 'synthesis/vitis_config.txt', conn_str)
+
+
 def main():
     args = create_args()
     running_path = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     hpcgra_root = os.getcwd() + '/../'
 
     if args.output == '.':
         args.output = running_path
 
     if args.json:
+
         args.json = running_path + '/' + args.json
-        cgra = Cgra(args.json)
-        cgraacc = CgraAccelerator(cgra)
-        acc_axi = AccAXIInterface(cgraacc)
 
-        commands_getoutput('cp -r %s/resources/template.prj %s/%s' % (hpcgra_root, args.output, args.name))
-
-        acc_axi.create_kernel_top(args.name).to_verilog(
-            '%s/%s/xilinx_aws_f1/hw/src/%s.v' % (args.output, args.name, args.name))
-
-        write_file('%s/%s/xilinx_aws_f1/hw/simulate/num_m_axis.mk' % (args.output, args.name),
-                   'NUM_M_AXIS=%d' % cgraacc.get_num_in())
-
-        write_file('%s/%s/xilinx_aws_f1/hw/synthesis/num_m_axis.mk' % (args.output, args.name),
-                   'NUM_M_AXIS=%d' % cgraacc.get_num_in())
-
-        write_file('%s/%s/xilinx_aws_f1/sw/host/prj_name' % (args.output, args.name), args.name)
-
-        write_file('%s/%s/xilinx_aws_f1/hw/simulate/prj_name' % (args.output, args.name), args.name)
-
-        write_file('%s/%s/xilinx_aws_f1/hw/synthesis/prj_name' % (args.output, args.name), args.name)
-
-        write_file('%s/%s/xilinx_aws_f1/hw/simulate/vitis_config.txt' % (args.output, args.name),
-                   acc_axi.get_connectivity_config(args.name))
-
-        write_file('%s/%s/xilinx_aws_f1/hw/synthesis/vitis_config.txt' % (args.output, args.name),
-                   acc_axi.get_connectivity_config(args.name))
-
-        commands_getoutput(
-            'rm -rf %s/src/parser.out %s/src/parsetab.py %s/src/__pycache__' % (hpcgra_root, hpcgra_root, hpcgra_root))
+        create_project(hpcgra_root, args.json, args.name, args.output)
 
         print('Project successfully created in %s/%s' % (args.output, args.name))
     else:
-        raise Exception('Missing parameters. Run create_project -h to see all parameters needed')
+        msg = 'Missing parameters. Run create_project -h to see all parameters needed'
+
+        raise Exception(msg)
 
 
 if __name__ == '__main__':

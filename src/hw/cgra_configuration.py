@@ -1,5 +1,3 @@
-from math import ceil
-
 from veriloggen import Complement2
 
 from src.hw.utils import bits
@@ -27,7 +25,7 @@ class CgraConfiguration:
         conf_bits = ConfTag.bits + self.cgra.pe_id_width + max(self.cgra.data_width, pe_conf_bits)
         id_bits = format(int(bin(id + 1)[2:], 2), '0%db' % self.cgra.pe_id_width)
         raw_conf = format(int(ConfTag.reset + id_bits, 2), '0%db' % conf_bits)
-        #return True, self.raw_conf_to_packages(raw_conf, '0', '1')
+        # return True, self.raw_conf_to_packages(raw_conf, '0', '1')
         return True, [raw_conf]
 
     def create_alu_conf(self, id, op, alu_src, alu_delay):
@@ -56,7 +54,7 @@ class CgraConfiguration:
 
         if len(alu_delay) > alu_num_inputs:
             return False, 'The elastic_queue parameter must be less than or equal to the number of ALU inputs.'
-        
+
         for i, eq in alu_delay:
             if elastic_queue[i] < eq:
                 return False, 'The maximum latency of elastic queue in the PE %s is %d.' % (id, elastic_queue[i])
@@ -65,11 +63,12 @@ class CgraConfiguration:
         op_width = bits(len(isa))
         opcode_bits = format(opcode, '0%db' % op_width)
 
-        offset_mux_alu = 1
-        if pe_is_input:
-            offset_mux_alu = 2
-        if has_acc:
+        if pe_is_input and has_acc:
             offset_mux_alu = 3
+        elif pe_is_input or has_acc:
+            offset_mux_alu = 2
+        else:
+            offset_mux_alu = 1
 
         sel_alu = []
         sel_alu_bits = bits(len(neighbors) + offset_mux_alu)
@@ -118,7 +117,7 @@ class CgraConfiguration:
 
         raw_conf = format(int(cp_elastic_queue_latency + sel_alu + opcode_bits + ConfTag.alu + id_bits, 2),
                           '0%db' % conf_bits)
-        #return True, self.raw_conf_to_packages(raw_conf, '0', '1')
+        # return True, self.raw_conf_to_packages(raw_conf, '0', '1')
         return True, [raw_conf]
 
     def create_const_conf(self, id, const):
@@ -132,7 +131,7 @@ class CgraConfiguration:
             const = Complement2(const)
         const = format(const, '0%db' % self.cgra.data_width)
         raw_conf = format(int(const + ConfTag.const + id_bits, 2), '0%db' % conf_bits)
-        #return True, self.raw_conf_to_packages(raw_conf, '0', '1')
+        # return True, self.raw_conf_to_packages(raw_conf, '0', '1')
         return True, [raw_conf]
 
     def create_router_conf(self, id, routing):
@@ -197,7 +196,7 @@ class CgraConfiguration:
                 if len(routing.keys()) > routes:
                     return False, 'PE %s can perform only %d routing.' % (id, routes)
                 else:
-                    if routes == len(neighbors):
+                    if routes >= len(neighbors):
                         route_sel_in_v = [format(0, '0%db' % route_sel_in_bits) for _ in range(num_out)]
                         for o, i in routing.items():
                             if o == 'ostream':
@@ -233,7 +232,7 @@ class CgraConfiguration:
                         route_sel_out = "".join(route_sel_in_v)
 
         raw_conf = format(int(route_sel_out + route_sel_in + ConfTag.router + id_bits, 2), '0%db' % conf_bits)
-        #return True, self.raw_conf_to_packages(raw_conf, '0', '1')
+        # return True, self.raw_conf_to_packages(raw_conf, '0', '1')
         return True, [raw_conf]
 
     def create_acc_reset_conf(self, id, val):
@@ -247,7 +246,7 @@ class CgraConfiguration:
         raw_conf = format(int(val + ConfTag.acc_reset + id_bits, 2), '0%db' % conf_bits)
 
         return True, [raw_conf]
-        #return True, self.raw_conf_to_packages(raw_conf, '0', '1')
+        # return True, self.raw_conf_to_packages(raw_conf, '0', '1')
 
     # def raw_conf_to_packages(self, raw_conf, start_packet, end_packet):
     #     packet = []

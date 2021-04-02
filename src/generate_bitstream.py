@@ -22,7 +22,7 @@ def create_args():
 def main():
     args = create_args()
     running_path = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
     if args.json and args.assembly:
         args.json = running_path + '/' + args.json
@@ -30,7 +30,6 @@ def main():
         bitstream = Bitstream(args.json, args.assembly)
         bitstream.save(running_path + '/' + args.output)
     else:
-
         raise Exception('Missing parameters. Run generate_bitstream -h to see all parameters needed')
 
 

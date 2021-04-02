@@ -20,11 +20,11 @@ EXEC="./build/place"
 
 for ((i=0; i < ${#BENCH[@]}; i++)) do
     echo "+ "${BENCH[i]}
-    JSON="${ARCH[j]}.json"
+    DOT="../dot/${BENCH[i]}.dot"
     for ((j=0; j < ${#ARCH[@]}; j++)) do
         echo " - "${ARCH[j]}
         NAME=${BENCH[i]}"_"${ARCH[j]}
-        DOT="../dot/${BENCH[i]}.dot"
+        JSON="${ARCH[j]}.json"
         $EXEC $NAME $DOT $JSON 4
     done
 done

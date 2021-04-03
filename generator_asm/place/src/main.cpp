@@ -24,6 +24,8 @@ int main(int argc, char** argv) {
         NGRIDS = atoi(argv[4]);
     }
 
+    auto start_total = high_resolution_clock::now();
+
     path_asm = name;
 
     vector<int> pe_in, pe_out, pe_basic; 
@@ -78,7 +80,7 @@ int main(int argc, char** argv) {
     int *pos = new int[SIZE_NODES * NGRIDS];
     int *results = new int[NGRIDS];
     
-    double time_total = 0.0, time_place, time_route, time_buffer;
+    double time_total, time_place, time_route, time_buffer, time_table;
     int cost_min = -1;
 
     vector<int> inputs = g.get_inputs();
@@ -101,9 +103,14 @@ int main(int argc, char** argv) {
     int **table = new int*[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
+    auto start = high_resolution_clock::now();
     // create the table that measure the distance between 
     create_table(TOTAL_GRID_SIZE, table, pe);
+    // end table
+    auto stop = high_resolution_clock::now();
 
+    std::chrono::duration<double, std::milli> duration = (stop-start);
+    time_table = duration.count();
     /*
     printf("matrix de distance\n");
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
@@ -148,7 +155,7 @@ int main(int argc, char** argv) {
     printf("\n");
     */
 
-    auto start = high_resolution_clock::now();
+    start = high_resolution_clock::now();
     #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
         if(results[i] == SIZE_EDGES) continue; // Found perfect solution!
@@ -156,11 +163,10 @@ int main(int argc, char** argv) {
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE, 
             grid, pos, v_i, v, A, randomvec, results, table, table_pe, pe);
     }
-    auto stop = high_resolution_clock::now();
+    stop = high_resolution_clock::now();
 
-    std::chrono::duration<double, std::milli> duration = (stop-start);
+    duration = (stop-start);
     time_place = duration.count();
-    time_total += time_place;
 
     /*
     printf("Cost After\n");
@@ -188,7 +194,6 @@ int main(int argc, char** argv) {
 
     duration = (stop-start);
     time_route = duration.count();
-    time_total += time_route;
     
     /*
     printf("New cost after routing\n");
@@ -208,7 +213,6 @@ int main(int argc, char** argv) {
 
     duration = (stop-start);
     time_buffer = duration.count();
-    time_total += time_buffer;
 
     /*
     for (int k = 0; k < NGRIDS; ++k) {
@@ -233,8 +237,14 @@ int main(int argc, char** argv) {
 
     generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
         path_asm, route[best_index], edges_cost[best_index]);
+
+    auto stop_total = high_resolution_clock::now();
+
+    duration = (stop_total-start_total);
+    time_total = duration.count();
     
-    printf("\nTime spent PLACE : %.4lf\n", time_place);
+    printf("\nTime spent TABLE : %.4lf\n", time_table);
+    printf("Time spent PLACE : %.4lf\n", time_place);
     printf("Time spent ROUTE : %.4lf\n", time_route);
     printf("Time spent BUFFER: %.4lf\n", time_buffer);
     printf("Time spent TOTAL : %.4lf\n", time_total);

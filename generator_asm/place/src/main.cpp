@@ -152,10 +152,10 @@ int main(int argc, char** argv) {
     }
     printf("\n");
     
+    printf("place\n");
     start = high_resolution_clock::now();
     #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
-        printf("%d\n", i);
         if(results[i] == SIZE_EDGES) continue; // Found perfect solution!
 
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE, 
@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
 
     duration = (stop-start);
     time_place = duration.count();
-    
+    printf("end place\n");
     /*
     printf("Cost After\n");
     for(int i = 0; i < NGRIDS; ++i) {
@@ -179,10 +179,12 @@ int main(int argc, char** argv) {
     }
     printf("\n");*/
 
+    printf("edge_cost\n");
     // get each value of edge, to routing
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
         pos, table, edges_cost);
 
+    printf("routing\n");
     start = high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
@@ -193,6 +195,7 @@ int main(int argc, char** argv) {
     duration = (stop-start);
     time_route = duration.count();
     
+    printf("opa\n");
     /*
     printf("New cost after routing\n");
     for (int i = 0; i < NGRIDS; ++i) {

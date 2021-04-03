@@ -9,10 +9,14 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
     int localPos[SIZE_NODES];
 
     int currentCost = results[N];
-    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) 
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         localGrid[i] = grid[N*TOTAL_GRID_SIZE+i];
+        //printf("%d %d %d\n", N*TOTAL_GRID_SIZE+i, localGrid[i], grid[N*TOTAL_GRID_SIZE+i]);
+    }
     for (int i = 0; i < SIZE_NODES; ++i)
         localPos[i] = pos[N*SIZE_NODES+i];
+
+    //printf("ola mundo\n");
 
     int node1, node2, a, b, old1, old2;
     //random vector index
@@ -29,14 +33,33 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
 
                 node1 = localGrid[i]; 
                 node2 = localGrid[j];
+                //printf("%d %d\n", node1, node2);
                 //if we're looking at 2 empty spaces, skip                   
                 if (node1 == -1 && node2 == -1)
                     continue;
                 
                 nextCost = currentCost;
 
-                pe_node1 = localPos[node1];
-                pe_node2 = localPos[node2];
+                if (node1 != -1) {
+                    pe_node1 = localPos[node1];
+                    for (int k = 0; k < v[node1]; ++k) {
+                        a = localPos[node1]; 
+                        b = localPos[A[v_i[node1]+k]];
+                        nextCost -= table[a][b]; 
+                    }
+                } else {
+                    pe_node1 = i;
+                }
+                if (node2 != -1) {
+                    pe_node2 = localPos[node2];
+                    for(int k = 0; k < v[node2]; k++) {
+                        a = localPos[node2]; 
+                        b = localPos[A[v_i[node2]+k]];
+                        nextCost -= table[a][b];
+                    }
+                } else {
+                    pe_node2 = j;
+                }
 
                 // verify if can swap, else continue
                 if (table_pe[pe_node1] != table_pe[pe_node2]) {
@@ -44,21 +67,6 @@ void annealing(const int N, const int SIZE_NODES, const int SIZE_EDGES, const in
                 }
 
                 //printf("%d %d n1: %d n2: %d pe1: %d pe2: %d\n", i, j, node1, node2, pe_node1, pe_node2);
-                
-                if (node1 != -1) {
-                    for (int k = 0; k < v[node1]; ++k) {
-                        a = localPos[node1]; 
-                        b = localPos[A[v_i[node1]+k]];
-                        nextCost -= table[a][b]; 
-                    }
-                }
-                if (node2 != -1) {
-                    for(int k = 0; k < v[node2]; k++) {
-                        a = localPos[node2]; 
-                        b = localPos[A[v_i[node2]+k]];
-                        nextCost -= table[a][b];
-                    }
-                }
 
                 // swap positions
                 old1 = i; 

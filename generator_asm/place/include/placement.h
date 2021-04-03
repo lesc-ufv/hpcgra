@@ -60,7 +60,7 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
 
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            table[i][j] = 9999;
+            table[i][j] = 99999;
         }
     }
     printf("opa\n");
@@ -70,12 +70,12 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
         table[i][i] = 0;
         neigh = arch[i].neighbors;
         for (int j = 0, n = neigh.size(); j < n; ++j) {
-            aux_edge.push_back(make_pair(i, neigh[j]));
+            //aux_edge.push_back(make_pair(i, neigh[j]));
             if (i != neigh[j]) table[i][neigh[j]] = 1;
         }
     }
     printf("opa2\n");
-    
+
     const int N = aux_edge.size();
     int aux;
 
@@ -89,7 +89,9 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
             }
         }
     }
+
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
+        printf("%2d:", i);
         for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
             printf("%2d ", table[i][j]);
         }

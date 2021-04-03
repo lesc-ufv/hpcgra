@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
     printf("opa\n");
-    
+
     auto start = high_resolution_clock::now();
     // create the table that measure the distance between 
     //create_table(i, TOTAL_GRID_SIZE, table, pe);
@@ -227,6 +227,8 @@ int main(int argc, char** argv) {
             printf("%d -> %d cost: %2d buffer_EDGE: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffers_EDGE[k][make_pair(a,b)]);
         }
     }*/
+
+    printf("opa\n");
 
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, results, h_edgeA, 
         h_edgeB, buffers_EDGE);

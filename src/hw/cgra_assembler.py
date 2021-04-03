@@ -39,8 +39,8 @@ class CgraAssembler:
         for line in lines:
             line = line.split('//')[0]
             if line and line[0] != '#':
-                line = re.sub(' +', ' ', line)
-                tokens = line.split(' ')
+                line = re.sub(' +', ' ', line).strip()
+                tokens = line.split()
                 if tokens[0] == 'route':
                     r, v = self.decode_route_inst(tokens)
                     if r:
@@ -99,7 +99,7 @@ class CgraAssembler:
                         alu_src.append(int(i[1:]))
                     else:
                         alu_src.append('const')
-                        self.const.append((line, pe, int(i)))
+                        self.const.append((line, pe, len(alu_src) - 1, int(i)))
 
             for i in range(len(delays)):
                 idx, v = delays[i]
@@ -154,8 +154,8 @@ class CgraAssembler:
                         break
 
         if self.last_error == '':
-            for line, i, const in self.const:
-                r, v = self.cc.create_const_conf(i, const)
+            for line, i, op_idx, const in self.const:
+                r, v = self.cc.create_const_conf(i, op_idx, const)
                 if r:
                     for c in v:
                         machine_code += c + '\n'

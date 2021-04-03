@@ -1,906 +1,906 @@
 {
-    "data_width": 16,
-    "conf_bus_width": 8,
-    "pe": [
-        {
-            "id": 0,
-            "type": "input",
-            "neighbors": [
-                6,
-                1,
-                12,
-                2
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 1,
-            "type": "basic",
-            "neighbors": [
-                0,
-                7,
-                2,
-                13,
-                3
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 2,
-            "type": "basic",
-            "neighbors": [
-                1,
-                8,
-                3,
-                0,
-                14,
-                4
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 3,
-            "type": "basic",
-            "neighbors": [
-                2,
-                9,
-                4,
-                1,
-                15,
-                5
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 4,
-            "type": "basic",
-            "neighbors": [
-                3,
-                10,
-                5,
-                2,
-                16
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 5,
-            "type": "output",
-            "neighbors": [
-                4,
-                11,
-                3,
-                17
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 6,
-            "type": "input",
-            "neighbors": [
-                0,
-                12,
-                7,
-                18,
-                8
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 7,
-            "type": "basic",
-            "neighbors": [
-                1,
-                6,
-                13,
-                8,
-                19,
-                9
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 8,
-            "type": "basic",
-            "neighbors": [
-                2,
-                7,
-                14,
-                9,
-                6,
-                20,
-                10
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 9,
-            "type": "basic",
-            "neighbors": [
-                3,
-                8,
-                15,
-                10,
-                7,
-                21,
-                11
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 10,
-            "type": "basic",
-            "neighbors": [
-                4,
-                9,
-                16,
-                11,
-                8,
-                22
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 11,
-            "type": "output",
-            "neighbors": [
-                5,
-                10,
-                17,
-                9,
-                23
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 12,
-            "type": "input",
-            "neighbors": [
-                6,
-                18,
-                13,
-                0,
-                24,
-                14
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 13,
-            "type": "basic",
-            "neighbors": [
-                7,
-                12,
-                19,
-                14,
-                1,
-                25,
-                15
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 14,
-            "type": "basic",
-            "neighbors": [
-                8,
-                13,
-                20,
-                15,
-                2,
-                12,
-                26,
-                16
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 15,
-            "type": "basic",
-            "neighbors": [
-                9,
-                14,
-                21,
-                16,
-                3,
-                13,
-                27,
-                17
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 16,
-            "type": "basic",
-            "neighbors": [
-                10,
-                15,
-                22,
-                17,
-                4,
-                14,
-                28
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 17,
-            "type": "output",
-            "neighbors": [
-                11,
-                16,
-                23,
-                5,
-                15,
-                29
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 18,
-            "type": "input",
-            "neighbors": [
-                12,
-                24,
-                19,
-                6,
-                30,
-                20
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 19,
-            "type": "basic",
-            "neighbors": [
-                13,
-                18,
-                25,
-                20,
-                7,
-                31,
-                21
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 20,
-            "type": "basic",
-            "neighbors": [
-                14,
-                19,
-                26,
-                21,
-                8,
-                18,
-                32,
-                22
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 21,
-            "type": "basic",
-            "neighbors": [
-                15,
-                20,
-                27,
-                22,
-                9,
-                19,
-                33,
-                23
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 22,
-            "type": "basic",
-            "neighbors": [
-                16,
-                21,
-                28,
-                23,
-                10,
-                20,
-                34
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 23,
-            "type": "output",
-            "neighbors": [
-                17,
-                22,
-                29,
-                11,
-                21,
-                35
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 24,
-            "type": "input",
-            "neighbors": [
-                18,
-                30,
-                25,
-                12,
-                26
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 25,
-            "type": "basic",
-            "neighbors": [
-                19,
-                24,
-                31,
-                26,
-                13,
-                27
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 26,
-            "type": "basic",
-            "neighbors": [
-                20,
-                25,
-                32,
-                27,
-                14,
-                24,
-                28
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 27,
-            "type": "basic",
-            "neighbors": [
-                21,
-                26,
-                33,
-                28,
-                15,
-                25,
-                29
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 28,
-            "type": "basic",
-            "neighbors": [
-                22,
-                27,
-                34,
-                29,
-                16,
-                26
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 29,
-            "type": "output",
-            "neighbors": [
-                23,
-                28,
-                35,
-                17,
-                27
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 30,
-            "type": "input",
-            "neighbors": [
-                24,
-                31,
-                18,
-                32
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 31,
-            "type": "basic",
-            "neighbors": [
-                25,
-                30,
-                32,
-                19,
-                33
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 32,
-            "type": "basic",
-            "neighbors": [
-                26,
-                31,
-                33,
-                20,
-                30,
-                34
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 33,
-            "type": "basic",
-            "neighbors": [
-                27,
-                32,
-                34,
-                21,
-                31,
-                35
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 34,
-            "type": "basic",
-            "neighbors": [
-                28,
-                33,
-                35,
-                22,
-                32
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 35,
-            "type": "output",
-            "neighbors": [
-                29,
-                34,
-                23,
-                33
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        }
-    ]
+  "data_width": 16,
+  "conf_bus_width": 8,
+  "pe": [
+    {
+      "id": 0,
+      "type": "input",
+      "neighbors": [
+        6,
+        1,
+        12,
+        2
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "basic",
+      "neighbors": [
+        0,
+        7,
+        2,
+        13,
+        3
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "basic",
+      "neighbors": [
+        1,
+        8,
+        3,
+        0,
+        14,
+        4
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "basic",
+      "neighbors": [
+        2,
+        9,
+        4,
+        1,
+        15,
+        5
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "basic",
+      "neighbors": [
+        3,
+        10,
+        5,
+        2,
+        16
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "output",
+      "neighbors": [
+        4,
+        11,
+        3,
+        17
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "input",
+      "neighbors": [
+        0,
+        12,
+        7,
+        18,
+        8
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "basic",
+      "neighbors": [
+        1,
+        6,
+        13,
+        8,
+        19,
+        9
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "basic",
+      "neighbors": [
+        2,
+        7,
+        14,
+        9,
+        6,
+        20,
+        10
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "basic",
+      "neighbors": [
+        3,
+        8,
+        15,
+        10,
+        7,
+        21,
+        11
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "basic",
+      "neighbors": [
+        4,
+        9,
+        16,
+        11,
+        8,
+        22
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "output",
+      "neighbors": [
+        5,
+        10,
+        17,
+        9,
+        23
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "input",
+      "neighbors": [
+        6,
+        18,
+        13,
+        0,
+        24,
+        14
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "basic",
+      "neighbors": [
+        7,
+        12,
+        19,
+        14,
+        1,
+        25,
+        15
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "basic",
+      "neighbors": [
+        8,
+        13,
+        20,
+        15,
+        2,
+        12,
+        26,
+        16
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "basic",
+      "neighbors": [
+        9,
+        14,
+        21,
+        16,
+        3,
+        13,
+        27,
+        17
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "basic",
+      "neighbors": [
+        10,
+        15,
+        22,
+        17,
+        4,
+        14,
+        28
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "output",
+      "neighbors": [
+        11,
+        16,
+        23,
+        5,
+        15,
+        29
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "input",
+      "neighbors": [
+        12,
+        24,
+        19,
+        6,
+        30,
+        20
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "basic",
+      "neighbors": [
+        13,
+        18,
+        25,
+        20,
+        7,
+        31,
+        21
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 20,
+      "type": "basic",
+      "neighbors": [
+        14,
+        19,
+        26,
+        21,
+        8,
+        18,
+        32,
+        22
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "basic",
+      "neighbors": [
+        15,
+        20,
+        27,
+        22,
+        9,
+        19,
+        33,
+        23
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "basic",
+      "neighbors": [
+        16,
+        21,
+        28,
+        23,
+        10,
+        20,
+        34
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 23,
+      "type": "output",
+      "neighbors": [
+        17,
+        22,
+        29,
+        11,
+        21,
+        35
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 24,
+      "type": "input",
+      "neighbors": [
+        18,
+        30,
+        25,
+        12,
+        26
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 25,
+      "type": "basic",
+      "neighbors": [
+        19,
+        24,
+        31,
+        26,
+        13,
+        27
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 26,
+      "type": "basic",
+      "neighbors": [
+        20,
+        25,
+        32,
+        27,
+        14,
+        24,
+        28
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 27,
+      "type": "basic",
+      "neighbors": [
+        21,
+        26,
+        33,
+        28,
+        15,
+        25,
+        29
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 28,
+      "type": "basic",
+      "neighbors": [
+        22,
+        27,
+        34,
+        29,
+        16,
+        26
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 29,
+      "type": "output",
+      "neighbors": [
+        23,
+        28,
+        35,
+        17,
+        27
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 30,
+      "type": "input",
+      "neighbors": [
+        24,
+        31,
+        18,
+        32
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 31,
+      "type": "basic",
+      "neighbors": [
+        25,
+        30,
+        32,
+        19,
+        33
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 32,
+      "type": "basic",
+      "neighbors": [
+        26,
+        31,
+        33,
+        20,
+        30,
+        34
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 33,
+      "type": "basic",
+      "neighbors": [
+        27,
+        32,
+        34,
+        21,
+        31,
+        35
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 34,
+      "type": "basic",
+      "neighbors": [
+        28,
+        33,
+        35,
+        22,
+        32
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 35,
+      "type": "output",
+      "neighbors": [
+        29,
+        34,
+        23,
+        33
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    }
+  ]
 }

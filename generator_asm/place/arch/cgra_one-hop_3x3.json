@@ -1,213 +1,213 @@
 {
-    "data_width": 16,
-    "conf_bus_width": 8,
-    "pe": [
-        {
-            "id": 0,
-            "type": "input",
-            "neighbors": [
-                3,
-                1,
-                6,
-                2
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 1,
-            "type": "basic",
-            "neighbors": [
-                0,
-                4,
-                2,
-                7
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 2,
-            "type": "output",
-            "neighbors": [
-                1,
-                5,
-                0,
-                8
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 3,
-            "type": "input",
-            "neighbors": [
-                0,
-                6,
-                4,
-                5
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 4,
-            "type": "basic",
-            "neighbors": [
-                1,
-                3,
-                7,
-                5
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 5,
-            "type": "output",
-            "neighbors": [
-                2,
-                4,
-                8,
-                3
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 6,
-            "type": "input",
-            "neighbors": [
-                3,
-                7,
-                0,
-                8
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 7,
-            "type": "basic",
-            "neighbors": [
-                4,
-                6,
-                8,
-                1
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        },
-        {
-            "id": 8,
-            "type": "output",
-            "neighbors": [
-                5,
-                7,
-                2,
-                6
-            ],
-            "routes": 4,
-            "elastic_queue": [
-                4,
-                4
-            ],
-            "acc": true,
-            "isa": [
-                "add",
-                "sub",
-                "mul",
-                "and",
-                "or"
-            ]
-        }
-    ]
+  "data_width": 16,
+  "conf_bus_width": 8,
+  "pe": [
+    {
+      "id": 0,
+      "type": "input",
+      "neighbors": [
+        3,
+        1,
+        6,
+        2
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "basic",
+      "neighbors": [
+        0,
+        4,
+        2,
+        7
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "output",
+      "neighbors": [
+        1,
+        5,
+        0,
+        8
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "input",
+      "neighbors": [
+        0,
+        6,
+        4,
+        5
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "basic",
+      "neighbors": [
+        1,
+        3,
+        7,
+        5
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "output",
+      "neighbors": [
+        2,
+        4,
+        8,
+        3
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "input",
+      "neighbors": [
+        3,
+        7,
+        0,
+        8
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "basic",
+      "neighbors": [
+        4,
+        6,
+        8,
+        1
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "output",
+      "neighbors": [
+        5,
+        7,
+        2,
+        6
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    }
+  ]
 }

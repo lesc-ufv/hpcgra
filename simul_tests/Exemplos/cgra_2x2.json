@@ -1,9 +1,70 @@
 {
-	"shape": [ 2, 2], "data_width": 8, "conf_bus_width":8,
-	"pe": [
-		{"id":0,"type":"input","neighbors":[1 ,2],"routes":2,"elastic_queue":4,"acc": false,"isa":["add","sub"]},
-		{"id":1,"type":"basic","neighbors":[0 ,3],"routes":2,"elastic_queue":4,"acc": false,"isa":["add","sub"]},
-		{"id":2,"type":"input","neighbors":[0 ,3],"routes":2,"elastic_queue":4,"acc": false,"isa":["add","sub"]},
-		{"id":3,"type":"output","neighbors":[1, 2],"routes":2,"elastic_queue":4,"acc": false,"isa":["add","sub"]}
-	]
+  "shape": [
+    2,
+    2
+  ],
+  "data_width": 8,
+  "conf_bus_width": 8,
+  "pe": [
+    {
+      "id": 0,
+      "type": "input",
+      "neighbors": [
+        1,
+        2
+      ],
+      "routes": 2,
+      "elastic_queue": 4,
+      "acc": false,
+      "isa": [
+        "add",
+        "sub"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "basic",
+      "neighbors": [
+        0,
+        3
+      ],
+      "routes": 2,
+      "elastic_queue": 4,
+      "acc": false,
+      "isa": [
+        "add",
+        "sub"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "input",
+      "neighbors": [
+        0,
+        3
+      ],
+      "routes": 2,
+      "elastic_queue": 4,
+      "acc": false,
+      "isa": [
+        "add",
+        "sub"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "output",
+      "neighbors": [
+        1,
+        2
+      ],
+      "routes": 2,
+      "elastic_queue": 4,
+      "acc": false,
+      "isa": [
+        "add",
+        "sub"
+      ]
+    }
+  ]
 }

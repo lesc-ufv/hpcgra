@@ -32,13 +32,12 @@
  * CGRA-ME framework.                                                           
 '''
 
-import sys
 import os
-import string
+import sys
+
 
 def loop_parser(input_source, output_source, output_tag):
-
-    #Generate absolute path from reletive path
+    # Generate absolute path from reletive path
     dir = os.path.dirname(os.path.realpath("__file__"))
     input_src_path = os.path.join(dir, input_source)
     output_src_path = os.path.join(dir, output_source)
@@ -55,11 +54,11 @@ def loop_parser(input_source, output_source, output_tag):
 
     for line in input_src_f:
         tag_loc = line.find(tag_string)
-        if tag_loc != -1: #Found a tag
-            tag_name = line[tag_loc + len(tag_string) : -1].strip()
+        if tag_loc != -1:  # Found a tag
+            tag_name = line[tag_loc + len(tag_string): -1].strip()
             output_tag_f.write(str(tag_count) + ' ' + tag_name + '\n')
             output_src_f.write("DFGLOOP_TAG(" + str(tag_count) + ");\n")
-            tag_count+=1
+            tag_count += 1
         else:
             output_src_f.write(line)
 
@@ -67,6 +66,7 @@ def loop_parser(input_source, output_source, output_tag):
     output_src_f.close()
     output_tag_f.close()
     return
+
 
 if __name__ == "__main__":
     loop_parser(sys.argv[1], sys.argv[2], sys.argv[3])

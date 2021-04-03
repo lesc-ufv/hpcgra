@@ -23,6 +23,7 @@
 #include <data.h>
 #include <verify.h>
 #include <placement.h>
+#include <bits/stdc++.h>
 #include <routing.h>
 #include <buffer.h>
 #include <evaluate.h>

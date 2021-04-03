@@ -4,7 +4,7 @@
 #include <Graph.h>
 
 int get_critical_path(Graph g, const int NODE_SIZE, int *critical_path) {
-    queue<pair<int,int>> q;
+    std::queue<pair<int,int>> q;
     vector<int> son, inputs;
     int dad, child, big_sum, new_cost, cost;
     pair<int, int> key;

@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     }
     //Cria a estrutura do grafo com os vetores (A, v e v_i) à partir do grafo g
     string path_dot = "", name = "", path_arch = "", path_asm = "";
-    int NGRIDS = 1000;
+    int NGRIDS = 1;
 
     if (argc > 3) {
         name = argv[1];
@@ -103,9 +103,12 @@ int main(int argc, char** argv) {
     int **table = new int*[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
+    printf("opa\n");
+    
     auto start = high_resolution_clock::now();
     // create the table that measure the distance between 
-    create_table(TOTAL_GRID_SIZE, table, pe);
+    //create_table(i, TOTAL_GRID_SIZE, table, pe);
+    create_table_floyd_warshall(TOTAL_GRID_SIZE, table, pe);
     // end table
     auto stop = high_resolution_clock::now();
 
@@ -137,27 +140,22 @@ int main(int argc, char** argv) {
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, 
         h_edgeA, h_edgeB, table);
 
-    /*
-    for(int i = 0; i < NGRIDS; ++i) {
-        printf("n = %d cost = %d\n", i, results[i]);
-    }
-
     printf("Cost Before\n");
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
     }
 
-    printf("\nPlacement before:\n");
+    printf("Placement before:\n");
     for (int j = 0; j < NGRIDS*TOTAL_GRID_SIZE; ++j) {
         if (j % SIZE_GRID == 0) printf("\n");
         printf("%2d ", grid[j]);
     }
     printf("\n");
-    */
-
+    
     start = high_resolution_clock::now();
     #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
+        printf("%d\n", i);
         if(results[i] == SIZE_EDGES) continue; // Found perfect solution!
 
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE, 
@@ -167,7 +165,7 @@ int main(int argc, char** argv) {
 
     duration = (stop-start);
     time_place = duration.count();
-
+    
     /*
     printf("Cost After\n");
     for(int i = 0; i < NGRIDS; ++i) {
@@ -232,11 +230,9 @@ int main(int argc, char** argv) {
 
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, results, h_edgeA, 
         h_edgeB, buffers_EDGE);
-
-    printf("better index = %d\n", best_index);
-
+    
     generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
-        path_asm, route[best_index], edges_cost[best_index]);
+        path_asm, route, edges_cost);
 
     auto stop_total = high_resolution_clock::now();
 

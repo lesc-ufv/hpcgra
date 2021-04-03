@@ -1,6 +1,8 @@
 #ifndef __ROUTING_H
 #define __ROUTING_H
 
+//
+
 typedef struct route_t {
     vector<int> *path;
 } route_t;
@@ -10,7 +12,8 @@ void remove_element(int pe_a, int pe_b, vector<int> *grid_route) {
         grid_route[pe_a].end(), pe_b), grid_route[pe_a].end());
 }
 
-bool try_route(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
+/*
+bool try_route_brute_force(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
     int a, int b, vector<int> *grid_route,
     map<pair<int,int>,vector<int>> &route, int &results, 
     map<pair<int,int>,int> &edges_cost) {
@@ -69,6 +72,102 @@ bool try_route(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
             remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
         //printf("\n");
+        return true;
+    }
+    return false;
+}*/
+
+typedef pair<int, int> pd;
+
+// Structure of the condition for sorting 
+// the pair by its second elements
+struct spq {
+    constexpr bool operator()(pair<int, int> const& a, 
+        pair<int, int> const& b) const noexcept {
+        return a.second > b.second; // min, to max change signal
+    }
+};
+
+bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
+    int a, int b, vector<int> *grid_route,
+    map<pair<int,int>,vector<int>> &route, int &results, 
+    map<pair<int,int>,int> &edges_cost) {
+    
+    int node, cost;
+
+    // shortest distance between pes
+    vector<pd> path;
+    vector<int> n_son;
+    pd key;
+
+    priority_queue<pd, vector<pd>, spq> open;
+    open.push(make_pair(pe_a, 0));
+
+    map<pd,int> closed;
+    bool found = false;
+
+    printf("PE %d -> PE %d\n", pe_a, pe_b);
+
+    // loop while the open is not empty
+    while (!open.empty()) {
+        node = open.top().first;
+        cost = open.top().second;
+        open.pop();
+
+        n_son = grid_route[node];
+        for (int j = 0, n = n_son.size(); j < n; ++j) {
+
+            key = make_pair(node, n_son[j]);
+            cost += edges_cost[key];
+            
+
+            if (closed.count(key) == 0) { // not int closed 
+                open.push(make_pair(n_son[j], cost));
+                path.push_back(make_pair(node, n_son[j]));
+                closed[key] = cost;
+                if (n_son[j] == pe_b) { 
+                    found = true;
+                    break;
+                }
+            } else if (closed[key] > cost) {
+                closed[key] = cost;
+            }
+        }
+        if (found) break;
+    }
+
+    /*
+    for (int i = 0; i < path.size(); ++i) {
+        printf("%d %d ", path[i].first, path[i].second);
+    }
+    printf("\n");*/
+
+    if (found) {
+        vector<pair<int,int>> new_path;
+        int nodo = pe_b;
+        for(int i = path.size()-1; i > -1; --i) {
+            if (path[i].first == pe_a) {
+                new_path.push_back(make_pair(pe_a, nodo));
+                break;
+            } else if (path[i].second == nodo) {
+                new_path.push_back(make_pair(path[i].first, nodo));
+                nodo = path[i].first;
+            }
+        }
+
+        // update values
+        //printf("%d %d %d\n", results, new_path.size(), edges_cost[make_pair(a,b)]);
+        results += new_path.size()-edges_cost[make_pair(a,b)];
+        edges_cost[make_pair(a,b)] = new_path.size();
+
+        for (int i = new_path.size()-1; i > -1; --i) {
+            printf("%d %d, ", new_path[i].first, new_path[i].second);
+            route[make_pair(a,b)].push_back(new_path[i].first);
+            //if (i == 0) // pull betweens pairs, except the last
+            route[make_pair(a,b)].push_back(new_path[i].second);
+            remove_element(new_path[i].first, new_path[i].second, grid_route);
+        }
+        printf("\n");
         return true;
     }
     return false;
@@ -142,7 +241,7 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
             pe_a = pos[a+j*SIZE_NODES];
             pe_b = pos[b+j*SIZE_NODES];
             //printf("%d [%d] -> %d [%d]\n", a, pe_a, b, pe_b);
-            if (!try_route(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
+            if (!try_route_dijkstra(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
                 route[j], results[j], edges_cost[j])) {
                     results[j] = MAXVALUE;
                     break; // it not possible 

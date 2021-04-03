@@ -14,7 +14,7 @@ if [ ! -d build ]; then
     cmake -S .. -B build
 fi
 
-cd build && make -j 4 && cd ..
+cd build && make -j 1 && cd ..
 
 EXEC="./build/place"
 

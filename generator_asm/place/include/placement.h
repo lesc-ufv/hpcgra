@@ -10,33 +10,92 @@ vector<int> get_neighbors(vector<pe_t> &arch, const int id) {
     return vector<int>();
 }
 
-void create_table(const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {
+void create_table(const int i, const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {
+
     queue<pair<int,int>> q; 
     vector<int> aux;
     bool visited[TOTAL_GRID_SIZE];
     int n_dad, dist;
 
-    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) visited[j] = false;
-        
-        q.push(make_pair(i,0));
-        table[i][i] = 0;
+    for (int j = 0; j < TOTAL_GRID_SIZE; ++j) visited[j] = false;
+    
+    q.push(make_pair(i,0));
+    table[i][i] = 0;
 
-        // shortest distance between i and j
-        while (!q.empty()) {
-            n_dad = q.front().first;
-            dist = q.front().second;
-            q.pop();
-            visited[n_dad] = true;
+    // shortest distance between i and j
+    while (!q.empty()) {
+        n_dad = q.front().first;
+        dist = q.front().second;
+        q.pop();
+        visited[n_dad] = true;
 
-            aux = get_neighbors(arch, n_dad);
-            for (int j = 0, n = aux.size(); j < n; ++j) {
-                if (!visited[aux[j]]) {
-                    table[i][aux[j]] = dist + 1;
-                    q.push(make_pair(aux[j],dist+1));
-                }
+        aux = get_neighbors(arch, n_dad);
+        for (int j = 0, n = aux.size(); j < n; ++j) {
+            if (!visited[aux[j]]) {
+                table[i][aux[j]] = dist + 1;
+                q.push(make_pair(aux[j],dist+1));
             }
         }
+    }
+}
+
+
+void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {
+    /*
+    let dist be a |V| × |V| array of minimum distances initialized to ∞ (infinity)
+    for each edge (u, v) do
+        dist[u][v] ← w(u, v)  // The weight of the edge (u, v)
+    for each vertex v do
+        dist[v][v] ← 0
+    for k from 1 to |V|
+        for i from 1 to |V|
+            for j from 1 to |V|
+                if dist[i][j] > dist[i][k] + dist[k][j] 
+                    dist[i][j] ← dist[i][k] + dist[k][j]
+                end if
+    */
+    vector<pair<int,int>> aux_edge;
+    vector<int> neigh;
+    int i, j, k;
+
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            table[i][j] = 99999;
+        }
+    }
+    printf("opa\n");
+
+    // fill the data
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
+        table[i][i] = 0;
+        neigh = arch[i].neighbors;
+        for (int j = 0, n = neigh.size(); j < n; ++j) {
+            //aux_edge.push_back(make_pair(i, neigh[j]));
+            if (i != neigh[j]) table[i][neigh[j]] = 1;
+        }
+    }
+    printf("opa2\n");
+
+    const int N = aux_edge.size();
+    int aux;
+
+    printf("opa2\n");
+
+    for (k = 0 ; k < TOTAL_GRID_SIZE; k++) {
+        for (i = 0; i < TOTAL_GRID_SIZE; i++) {
+            aux = table[i][k];
+            for (j = 0; j < TOTAL_GRID_SIZE; j++) {
+                table[i][j] = min(table[i][j], aux + table[k][j]);
+            }
+        }
+    }
+
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
+        printf("%2d:", i);
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            printf("%2d ", table[i][j]);
+        }
+        printf("\n");
     }
 }
 

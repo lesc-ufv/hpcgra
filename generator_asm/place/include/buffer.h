@@ -6,7 +6,7 @@
 
 void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int,int>,int> &buffers, 
     map<pair<int,int>,int> &edges){
-    queue<pair<int,int>> q;
+    std::queue<pair<int,int>> q;
     int node, nodeLvl;
     vector<int> outputs;
     pair<int, int> key, keyInv;
@@ -50,7 +50,7 @@ void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int,int>,int> &buff
 }
 
 void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int,int>,int> &edges) {
-    queue<pair<int,int>> q;
+    std::queue<pair<int,int>> q;
     vector<int> son, inputs;
     int dad, child, big_sum, new_cost, cost;
     pair<int,int> key, keyInv;

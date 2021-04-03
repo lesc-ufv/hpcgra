@@ -3,7 +3,12 @@
 
 void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
     int *pos, map<pair<int,int>,int> *buffers_EDGE, string path,
-    map<pair<int,int>,vector<int>> route, map<pair<int,int>,int> edges_cost) {
+    map<pair<int,int>,vector<int>> *route, map<pair<int,int>,int> *edges_cost) {
+
+    if (best_index == -1) {
+        printf("No solution found!\n"); 
+        return;
+    }
 
 #if __DEBUG
     printf("Creating asm\n");
@@ -13,7 +18,7 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
     myfile.open(path+".asm");
 
     int dad, new_cost, cost, pe, pe_gf, buff;
-    queue<pair<int,int>> q;
+    std::queue<pair<int,int>> q;
     vector<int> inputs = g.get_inputs();
     vector<int> outputs = g.get_outputs();
     vector<int> son, grandfather;
@@ -76,7 +81,7 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
         vector<int> rota;
         for (int i = 0; i < son.size(); ++i) {
             if (!visited[son[i]]){    
-                rota = route[make_pair(dad,son[i])]; 
+                rota = route[best_index][make_pair(dad,son[i])]; 
                 for (int j = 0, n = rota.size(); j < n; j += 2) {
                     //printf("%d %d\n", rota[j], rota[j+1]);
                     if (j > 1) {
@@ -91,7 +96,7 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
                         myfile << "route $" << rota[j] << " $alu $" << rota[j+1] << "\n";
                     }
                 }
-                new_cost = cost + edges_cost[make_pair(dad,son[i])];
+                new_cost = cost + edges_cost[best_index][make_pair(dad,son[i])];
                 q.push(make_pair(son[i], new_cost));
             }
         }

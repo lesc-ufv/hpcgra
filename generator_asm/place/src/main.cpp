@@ -231,8 +231,6 @@ int main(int argc, char** argv) {
         }
     }*/
 
-    printf("opa\n");
-
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, results, h_edgeA, 
         h_edgeB, buffers_EDGE);
     

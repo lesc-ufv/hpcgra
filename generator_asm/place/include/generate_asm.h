@@ -17,7 +17,8 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
     ofstream myfile;
     myfile.open(path+".asm");
 
-    int dad, new_cost, cost, pe, pe_gf, buff;
+    int dad, new_cost, cost, pe_gf, pe, buff;
+    vector<int> rota;
     std::queue<pair<int,int>> q;
     vector<int> inputs = g.get_inputs();
     vector<int> outputs = g.get_outputs();
@@ -59,7 +60,8 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
             myfile << g.get_opcode(dad).c_str() << " $" << pe << " ";
             for (int i = 0; i < grandfather.size(); ++i) {
                 buff = buffers_EDGE[best_index][make_pair(grandfather[i], dad)];
-                pe_gf = pos[best_index*SIZE_NODES+grandfather[i]];
+                rota = route[best_index][make_pair(grandfather[i],dad)];
+                pe_gf = rota[rota.size()-2]; //pos[best_index*SIZE_NODES+grandfather[i]];
                 if (buff > 0) { 
 #if __DEBUG
                     printf("#%d ", buff);
@@ -78,7 +80,6 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
         }
 
         son = g.get_sucessors(dad);
-        vector<int> rota;
         for (int i = 0; i < son.size(); ++i) {
             if (!visited[son[i]]){    
                 rota = route[best_index][make_pair(dad,son[i])]; 

@@ -54,15 +54,22 @@ class Bitstream:
         count = 0
         conf = []
         for c in cgra_bitstream_hex:
-            conf.append(c)
-            count += len(c) // 2  # conf_size are in bytes and c are in string hex, each c has 2 bytes
-            if count == conf_size:
-                self.initial_conf += '\n' + to_hex(int("".join(reversed(conf)), 16), 512)
+            if count + (len(c)//2) < conf_size:
+                conf.append(c)
+                count += len(c) // 2  # conf_size are in bytes and c are in string hex, each c has 2 bytes
+            elif count + (len(c)//2) == conf_size:
+                self.initial_conf += '\n' + to_hex(int("".join(reversed(conf)), 16), self.align_bits)
                 conf.clear()
                 count = 0
+            else:
+                self.initial_conf += '\n' + to_hex(int("".join(reversed(conf)), 16), self.align_bits)
+                conf.clear()
+                count = 0
+                conf.append(c)
+                count += len(c) // 2  # conf_size are in bytes and c are in string hex, each c has 2 bytes
 
         if len(conf):
-            self.initial_conf += '\n' + to_hex(int("".join(reversed(conf)), 16), 512)
+            self.initial_conf += '\n' + to_hex(int("".join(reversed(conf)), 16), self.align_bits)
 
     def get(self):
         return self.initial_conf

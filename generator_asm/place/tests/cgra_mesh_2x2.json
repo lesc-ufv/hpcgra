@@ -1,0 +1,90 @@
+{
+  "data_width": 16,
+  "conf_bus_width": 8,
+  "pe": [
+    {
+      "id": 0,
+      "type": "input",
+      "neighbors": [
+        2,
+        1
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "output",
+      "neighbors": [
+        0,
+        3
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "input",
+      "neighbors": [
+        0,
+        3
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "output",
+      "neighbors": [
+        1,
+        2
+      ],
+      "routes": 4,
+      "elastic_queue": [
+        4,
+        4
+      ],
+      "acc": true,
+      "isa": [
+        "add",
+        "sub",
+        "mul",
+        "and",
+        "or"
+      ]
+    }
+  ]
+}

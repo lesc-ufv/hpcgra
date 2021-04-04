@@ -106,7 +106,7 @@ bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
     map<pd,int> closed;
     bool found = false;
 
-    printf("PE %d -> PE %d\n", pe_a, pe_b);
+    //printf("PE %d -> PE %d\n", pe_a, pe_b);
 
     // loop while the open is not empty
     while (!open.empty()) {
@@ -161,13 +161,12 @@ bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
         edges_cost[make_pair(a,b)] = new_path.size();
 
         for (int i = new_path.size()-1; i > -1; --i) {
-            printf("%d %d, ", new_path[i].first, new_path[i].second);
+            //printf("%d %d, ", new_path[i].first, new_path[i].second);
             route[make_pair(a,b)].push_back(new_path[i].first);
-            //if (i == 0) // pull betweens pairs, except the last
             route[make_pair(a,b)].push_back(new_path[i].second);
             remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
-        printf("\n");
+        //printf("\n");
         return true;
     }
     return false;

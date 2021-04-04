@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
     int **table = new int*[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
-    printf("opa\n");
+    //printf("opa\n");
 
     auto start = high_resolution_clock::now();
     // create the table that measure the distance between 
@@ -140,6 +140,7 @@ int main(int argc, char** argv) {
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, 
         h_edgeA, h_edgeB, table);
 
+    /*
     printf("Cost Before\n");
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
@@ -151,8 +152,9 @@ int main(int argc, char** argv) {
         printf("%2d ", grid[j]);
     }
     printf("\n");
+    */
     
-    printf("place\n");
+    //printf("place\n");
     start = high_resolution_clock::now();
     #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
@@ -165,7 +167,7 @@ int main(int argc, char** argv) {
 
     duration = (stop-start);
     time_place = duration.count();
-    printf("end place\n");
+    //printf("end place\n");
     /*
     printf("Cost After\n");
     for(int i = 0; i < NGRIDS; ++i) {
@@ -179,12 +181,12 @@ int main(int argc, char** argv) {
     }
     printf("\n");*/
 
-    printf("edge_cost\n");
+    //printf("edge_cost\n");
     // get each value of edge, to routing
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
         pos, table, edges_cost);
 
-    printf("routing\n");
+    //printf("routing\n");
     start = high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
@@ -195,7 +197,7 @@ int main(int argc, char** argv) {
     duration = (stop-start);
     time_route = duration.count();
     
-    printf("opa\n");
+    //printf("opa\n");
     /*
     printf("New cost after routing\n");
     for (int i = 0; i < NGRIDS; ++i) {

@@ -195,7 +195,7 @@ class Cgra:
 
         inputs_regs = []
         if routes > 0:
-            inputs_regs = [m.Wire('in_reg%d' % i, self.data_width) for i in neighbors]
+            inputs_regs = [m.Wire('in_reg%d' % i, self.data_width) for i in range(len(neighbors))]
 
         mux_alu_bits = bits(len(mux_alu_inputs))
         alu_in = [m.Wire('alu_in%d' % i, self.data_width) for i in range(alu_num_inputs)]

@@ -12,7 +12,13 @@ class Bitstream:
         self.mask_output = 0
         self.cgra = Cgra(cgra_json)
         self.assembler = CgraAssembler(self.cgra, assembly)
-        cgra_bitstream = self.assembler.compile().split('\n')
+
+        cgra_bitstream = self.assembler.compile()
+        if cgra_bitstream is None:
+            raise Exception('An error occurred while generating the bitstream!')
+
+        cgra_bitstream=cgra_bitstream.split('\n')
+
         sorted(self.cgra.input_ids)
         for i in range(len(self.cgra.input_ids)):
             if self.cgra.input_ids[i] in self.assembler.used_inputs:
@@ -58,6 +64,7 @@ class Bitstream:
                 conf.append(c)
                 count += len(c) // 2  # conf_size are in bytes and c are in string hex, each c has 2 bytes
             elif count + (len(c)//2) == conf_size:
+                conf.append(c)
                 self.initial_conf += '\n' + to_hex(int("".join(reversed(conf)), 16), self.align_bits)
                 conf.clear()
                 count = 0

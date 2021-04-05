@@ -47,9 +47,6 @@ Graph::Graph(string filename) {
 
 	// Use ref_property_map to turn a graph property into a property map
 	//ref_property_map<graph_t*, string> opcode(get_property(this->graph, graph_name));
-	
-	boost::property_map<graph_t, boost::vertex_name_t>::type opcode = get(boost::vertex_name, this->graph);
-	this->dp.property("opcode", opcode);
 
 	boost::property_map<graph_t, boost::edge_weight_t>::type port = get(boost::edge_weight, this->graph);
 	this->dp.property("port", port);
@@ -72,6 +69,15 @@ Graph::Graph(string filename) {
 		this->port[make_pair(u,v)] = port[*it.first];
 		if (u != v) node_in_degree[v].push_back(u);
 		if (u != v) node_out_degree[u].push_back(v);
+	}
+
+	boost::property_map<graph_t, boost::vertex_name_t>::type opcode = get(boost::vertex_name, this->graph);
+	this->dp.property("opcode", opcode);
+
+	for(it = boost::edges(this->graph); it.first != it.second; ++it.first) {
+		u = source(*it.first, this->graph);
+		v = target(*it.first, this->graph);
+		this->port[make_pair(u,v)] = port[*it.first];
 	}
 
 	// set name nodes
@@ -116,7 +122,6 @@ void Graph::write(string path) {
 	}
 
 	ofstream dotfile (path.c_str());
-	
 	write_graphviz_dp(dotfile, this->graph, this->dp);
 }
 

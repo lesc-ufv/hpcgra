@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     }
     //Cria a estrutura do grafo com os vetores (A, v e v_i) à partir do grafo g
     string path_dot = "", name = "", path_arch = "", path_asm = "";
-    int NGRIDS = 1;
+    int NGRIDS = 1000;
 
     if (argc > 3) {
         name = argv[1];
@@ -248,7 +248,7 @@ int main(int argc, char** argv) {
     printf("Time spent PLACE : %.4lf\n", time_place);
     printf("Time spent ROUTE : %.4lf\n", time_route);
     printf("Time spent BUFFER: %.4lf\n", time_buffer);
-    printf("Time spent TOTAL : %.4lf\n", time_total);
+    printf("Time spent TOTAL : %.4lf\n\n", time_total);
 
     delete v;
     delete v_i;

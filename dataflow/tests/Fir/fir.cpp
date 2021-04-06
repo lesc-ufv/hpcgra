@@ -34,21 +34,21 @@ DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps) {
         for (int i = 0; i < taps; ++i) {
             auto m = new Multi(idx++, coef[taps - i - 1]);
             if (i == 0) {
-                op = new PassA(idx++);
+                op = new Addi(idx++,0);
             } else {
                 op = new Add(idx++);
             }
             add.push_back(op);
-            df->connect(in_cp[j], m, m->getPortA());
-            df->connect(m, op, m->getPortA());
+            df->connect(in_cp[j], m, 1);
+            df->connect(m, op, 1);
         }
         for (int i = 0; i < taps - 1; ++i) {
             op1 = add[i];
             op2 = add[i + 1];
-            df->connect(op1, op2, op2->getPortB());
+            df->connect(op1, op2, 2);
         }
         op1 = add[taps - 1];
-        df->connect(op1, out_cp[j], out_cp[j]->getPortA());
+        df->connect(op1, out_cp[j], 1);
     }
 
 

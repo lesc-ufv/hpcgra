@@ -6,9 +6,10 @@ ARCH=(
 )
 
 BENCH=(
-  sum_vector
-  mux
-  chebyshev
+  #sum_vector
+  #mux
+  #chebyshev
+  fir
 )
 
 if [ ! -d build ]; then

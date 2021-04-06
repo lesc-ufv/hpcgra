@@ -1,0 +1,11 @@
+#ifndef CGRASCHEDULER_DATAFLOWDEFS_H
+#define CGRASCHEDULER_DATAFLOWDEFS_H
+
+typedef enum {
+    OP_BASIC,
+    OP_IMMEDIATE,
+    OP_IN,
+    OP_OUT
+} op_type_t;
+
+#endif //CGRASCHEDULER_DATAFLOWDEFS_H

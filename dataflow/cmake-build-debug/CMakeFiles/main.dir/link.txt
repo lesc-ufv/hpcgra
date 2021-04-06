@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11 -fopenmp -O3 -g  -rdynamic CMakeFiles/main.dir/tests/main.cpp.o  -o main  -Wl,-rpath,/media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/dataflow/cmake-build-debug libdataflow.so 

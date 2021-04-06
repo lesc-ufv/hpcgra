@@ -1,0 +1,4 @@
+/media/lucas/3CF6B349F6B301E6/tools/JetBrains/clion-2020.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/dataflow
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/dataflow/cmake-build-debug

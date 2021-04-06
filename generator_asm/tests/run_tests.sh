@@ -8,6 +8,8 @@ ARCH=(
 BENCH=(
   sum_vector
   mux
+  chebyshev
+
 )
 
 if [ ! -d build ]; then

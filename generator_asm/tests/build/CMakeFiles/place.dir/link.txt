@@ -1,1 +1,1 @@
-/usr/bin/c++   -std=c++11 -fopenmp -O3   CMakeFiles/place.dir/src/lib_json/json_reader.cpp.o CMakeFiles/place.dir/src/lib_json/json_value.cpp.o CMakeFiles/place.dir/src/lib_json/json_writer.cpp.o CMakeFiles/place.dir/src/main.cpp.o  -o place 
+/usr/bin/c++  -std=c++11 -fopenmp -O3 CMakeFiles/place.dir/src/lib_json/json_reader.cpp.o CMakeFiles/place.dir/src/lib_json/json_value.cpp.o CMakeFiles/place.dir/src/lib_json/json_writer.cpp.o CMakeFiles/place.dir/src/main.cpp.o -o place 

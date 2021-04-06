@@ -37,6 +37,7 @@ class Graph {
         vector<int> get_sucessors(int u);
         vector<int> get_inputs();
         vector<int> get_outputs();
+		vector<pair<int,int>> get_const(int u);
         //vector<double> get_betweenness_centrality();
     private:
         vector<int> nodes;
@@ -70,9 +71,12 @@ Graph::Graph(string filename) {
         this->nodes.push_back(u);
 		this->opcode[u] = node["opcode"].asString();
 		this->name_label[u] = node["label"].asString();
-		/*for (auto c : node["const"]) {
-			this->constant[u].push_back(make_pair(c[0],c[1]));
-		}*/
+		
+		if (node.isMember("const")) {
+			for (auto c : node["const"]) {
+				this->constant[u].push_back(make_pair(atoi(c[0].asCString()),atoi(c[1].asCString())));
+			}
+		}
     }
 
 	for (auto edge : data["edges"]) {
@@ -146,6 +150,10 @@ vector<int> Graph::get_nodes() {
 
 string Graph::get_name_node(int u) {
 	return this->name_label[u];
+}
+
+vector<pair<int,int>> Graph::get_const(int u) {
+	return this->constant[u];
 }
 
 string Graph::get_opcode(int u) {

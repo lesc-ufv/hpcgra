@@ -3,7 +3,7 @@
      {"id":"0","opcode":"input","label":"IN0"},
      {"id":"1","opcode":"input","label":"IN1"},
      {"id":"2","opcode":"slt","label":"SLT"},
-     {"id":"3","opcode":"mux","label":"MUX","const":[[1,10],[2,6]]}, 
+     {"id":"3","opcode":"mux","label":"MUX","const":[["1","10"],["2","6"]]}, 
      {"id":"4","opcode":"output","label":"OUT0"}
   ],
   "edges":[

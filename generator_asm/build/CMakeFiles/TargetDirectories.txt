@@ -1,3 +1,0 @@
-/media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/generator_asm/build/CMakeFiles/rebuild_cache.dir
-/media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/generator_asm/build/CMakeFiles/edit_cache.dir
-/media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/generator_asm/build/CMakeFiles/place.dir

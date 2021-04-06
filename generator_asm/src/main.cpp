@@ -51,6 +51,16 @@ int main(int argc, char** argv) {
         printf("%d %s\n", i, g.get_opcode(i).c_str());
     }*/
 
+    /*
+    for (int i = 0; i < SIZE_NODES; ++i) {
+        printf("%d %s\n", i, g.get_name_node(i).c_str());
+        if (g.get_const(i).size() > 0) {
+            for (auto c : g.get_const(i)) {
+                printf("%d %d\n", c.first, c.second);
+            }
+        }
+    }*/
+
     int *table_pe = new int[TOTAL_GRID_SIZE];
 
     int id;
@@ -252,7 +262,7 @@ int main(int argc, char** argv) {
     printf("Worst buffer     : %d\n\n", worst_fifo);
 
 #if __DEBUG
-    //if (best_index != -1) {
+    if (best_index != -1) {
         printf("\nPlacement After:\n");
         for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
             if (j % SIZE_GRID == 0) printf("\n");
@@ -266,7 +276,7 @@ int main(int argc, char** argv) {
             printf("%3d ", j);
         }
         printf("\n");
-    //}
+    }
 #endif
 
     delete v;

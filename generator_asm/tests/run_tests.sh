@@ -2,7 +2,7 @@
 
 ARCH=(
   cgra_16x16_8_2
-  #cgra_16x16_8_4
+  cgra_16x16_8_4
 )
 
 BENCH=(

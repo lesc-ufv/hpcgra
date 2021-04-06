@@ -1,6 +1,8 @@
 #ifndef __GENERATE_ASM_H
 #define __GENERATE_ASM_H
 
+/// TODO: Refactor code, because this code is bad format.
+
 void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
     int *pos, map<pair<int,int>,int> *buffers_EDGE, string path,
     map<pair<int,int>,vector<int>> *route, map<pair<int,int>,int> *edges_cost) {
@@ -44,16 +46,31 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
             myfile << "set $" << pe << " $ostream_loop 0\n";
         } else {
             grandfather = g.get_predecessors(dad);
+            int oper_size = grandfather.size() + g.get_const(dad).size();
+            string operators[oper_size];
+            
             pe = pos[best_index*SIZE_NODES+dad];
             myfile << g.get_opcode(dad).c_str() << " $" << pe << " ";
+
             for (int i = 0; i < grandfather.size(); ++i) {
-                buff = buffers_EDGE[best_index][make_pair(grandfather[i], dad)];
-                rota = route[best_index][make_pair(grandfather[i],dad)];
+                pair<int,int> key = make_pair(grandfather[i], dad);
+                buff = buffers_EDGE[best_index][key];
+                rota = route[best_index][key];
+                int port = g.get_port(grandfather[i],dad);
                 pe_gf = rota[rota.size()-2]; //pos[best_index*SIZE_NODES+grandfather[i]];
+                operators[port] = "";
+
                 if (buff > 0) { 
-                    myfile << "#" << buff << " ";
+                    operators[port] += "#" + to_string(buff) + " ";
                 }
-                myfile << "$" << pe_gf << " ";
+                operators[port] += "$" + to_string(pe_gf) + " ";
+            }
+            for (auto c : g.get_const(dad)){
+                operators[c.first] = to_string(c.second) + " ";
+            }
+            
+            for (auto op: operators) {
+                myfile << op;
             }
             myfile << "\n";
         }

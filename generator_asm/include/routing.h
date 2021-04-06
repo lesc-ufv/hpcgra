@@ -88,12 +88,12 @@ struct spq {
     }
 };
 
-bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
+bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
     int a, int b, vector<int> *grid_route,
     map<pair<int,int>,vector<int>> &route, int &results, 
-    map<pair<int,int>,int> &edges_cost) {
+    map<pair<int,int>,int> &edges_cost, int **table) {
     
-    int node, cost;
+    int node, cost, cost_g, cost_h;
 
     // shortest distance between pes
     vector<pd> path;
@@ -101,10 +101,11 @@ bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
     pd key;
 
     priority_queue<pd, vector<pd>, spq> open;
-    open.push(make_pair(pe_a, 0));
+    open.push(make_pair(pe_a, table[pe_a][pe_b]));
 
-    map<pd,int> closed;
     bool found = false;
+    map<pd,int> closed;
+    int cost_b, index_b;
 
     //printf("PE %d -> PE %d\n", pe_a, pe_b);
 
@@ -114,31 +115,41 @@ bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
         cost = open.top().second;
         open.pop();
 
+        cost_b = 9999;
+        index_b = -1;
         n_son = grid_route[node];
         for (int j = 0, n = n_son.size(); j < n; ++j) {
 
             key = make_pair(node, n_son[j]);
-            cost += edges_cost[key];
+            cost_h = table[n_son[j]][pe_b];
+            cost_g = edges_cost[key];
+            cost = cost_h + cost_g;
             
-
-            if (closed.count(key) == 0) { // not int closed 
-                open.push(make_pair(n_son[j], cost));
-                path.push_back(make_pair(node, n_son[j]));
+            if (closed.find(key) == closed.end()) { // not in closed 
+                open.push(make_pair(n_son[j], cost_h+cost_g));
                 closed[key] = cost;
-                if (n_son[j] == pe_b) { 
+
+                if (cost_b > cost) {
+                    cost_b = cost;
+                    index_b = j;
+                }
+                
+                if (n_son[j] == pe_b){ 
+                    index_b = j;
                     found = true;
                     break;
                 }
-            } else if (closed[key] > cost) {
-                closed[key] = cost;
+            } else if (closed[key] > cost_h+cost_g) {
+                closed[key] = cost_h+cost_g;
             }
         }
+        path.push_back(make_pair(node,n_son[index_b]));
         if (found) break;
     }
 
     /*
     for (int i = 0; i < path.size(); ++i) {
-        printf("%d %d ", path[i].first, path[i].second);
+        printf("%d %d, ", path[i].first, path[i].second);
     }
     printf("\n");*/
 
@@ -161,12 +172,12 @@ bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
         edges_cost[make_pair(a,b)] = new_path.size();
 
         for (int i = new_path.size()-1; i > -1; --i) {
-            //printf("%d %d, ", new_path[i].first, new_path[i].second);
+            printf("%d %d, ", new_path[i].first, new_path[i].second);
             route[make_pair(a,b)].push_back(new_path[i].first);
             route[make_pair(a,b)].push_back(new_path[i].second);
             remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
-        //printf("\n");
+        printf("\n");
         return true;
     }
     return false;
@@ -174,7 +185,8 @@ bool try_route_dijkstra(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
 
 void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
     const int TOTAL_GRID_SIZE, map<pair<int,int>,int> *edges_cost, int *results, int *pos,
-    int *h_edgeA, int *h_edgeB, map<pair<int,int>,vector<int>> *route, vector<pe_t> &pe) {
+    int *h_edgeA, int *h_edgeB, map<pair<int,int>,vector<int>> *route, vector<pe_t> &pe,
+    int **table) {
 
     vector<pair<int,int>> edge[NGRIDS];
     route_t grid_route[NGRIDS];
@@ -233,18 +245,19 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
 
     // resolve the cost greater than 1
     for (int j = 0; j < NGRIDS; ++j) {
-        //printf("\ntry: %d\n", j);
+        printf("\ntry: %d\n", j);
         for (int i = 0; i < edge[j].size(); ++i) {
             a = edge[j][i].first;
             b = edge[j][i].second;
             pe_a = pos[a+j*SIZE_NODES];
             pe_b = pos[b+j*SIZE_NODES];
-            //printf("%d [%d] -> %d [%d]\n", a, pe_a, b, pe_b);
-            if (!try_route_dijkstra(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
-                route[j], results[j], edges_cost[j])) {
+            printf("%d [%d] -> %d [%d] cost: %d\n", a, pe_a, b, pe_b, edges_cost[j][make_pair(a,b)]);
+            if (!try_route_aStar(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
+                route[j], results[j], edges_cost[j], table)) {
                     results[j] = MAXVALUE;
                     break; // it not possible 
             }
+            printf("new cost: %d\n", edges_cost[j][make_pair(a,b)]);
         }
     }
     /*

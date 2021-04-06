@@ -10,10 +10,6 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
         return;
     }
 
-#if __DEBUG
-    printf("Creating asm\n");
-#endif
-
     ofstream myfile;
     myfile.open(path+".asm");
 
@@ -43,39 +39,22 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
             myfile << "add $" << pos[best_index*SIZE_NODES+dad] << " $istream 0\n";
         } else if (g.get_opcode(dad) == "output") {
             pe = pos[best_index*SIZE_NODES+dad];
-#if __DEBUG
-            printf("route $%d $alu $ostream\n", pe);
-            printf("set $%d $ostream_ignore %d\n", pe, cost+1);
-            printf("set $%d $ostream_loop 0\n", pe);
-#endif
             myfile << "route $" << pe << " $alu $ostream\n";
             myfile << "set $" << pe << " $ostream_ignore " << cost+1 << "\n";
             myfile << "set $" << pe << " $ostream_loop 0\n";
         } else {
             grandfather = g.get_predecessors(dad);
             pe = pos[best_index*SIZE_NODES+dad];
-#if __DEBUG
-            printf("%s $%d ", g.get_opcode(dad).c_str(), pe);
-#endif
             myfile << g.get_opcode(dad).c_str() << " $" << pe << " ";
             for (int i = 0; i < grandfather.size(); ++i) {
                 buff = buffers_EDGE[best_index][make_pair(grandfather[i], dad)];
                 rota = route[best_index][make_pair(grandfather[i],dad)];
                 pe_gf = rota[rota.size()-2]; //pos[best_index*SIZE_NODES+grandfather[i]];
                 if (buff > 0) { 
-#if __DEBUG
-                    printf("#%d ", buff);
-#endif
                     myfile << "#" << buff << " ";
                 }
-#if __DEBUG
-                printf("$%d ", pe_gf);
-#endif
                 myfile << "$" << pe_gf << " ";
             }
-#if __DEBUG
-            printf("\n");
-#endif
             myfile << "\n";
         }
 
@@ -86,14 +65,8 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
                 for (int j = 0, n = rota.size(); j < n; j += 2) {
                     //printf("%d %d\n", rota[j], rota[j+1]);
                     if (j > 1) {
-#if __DEBUG
-                        printf("route $%d $%d $%d\n", rota[j], rota[j-2], rota[j+1]);
-#endif
                         myfile << "route $" << rota[j] << " $" << rota[j-2] << " $" << rota[j+1] << "\n";
                     } else {
-#if __DEBUG
-                        printf("route $%d $alu $%d\n", rota[j], rota[j+1]);
-#endif
                         myfile << "route $" << rota[j] << " $alu $" << rota[j+1] << "\n";
                     }
                 }

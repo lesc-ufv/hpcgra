@@ -108,6 +108,14 @@ int main(int argc, char** argv) {
         grid, edges_cost, buffers, pos, inputs, outputs, 
         basic, pe_in, pe_out, pe_basic, v, v_i, h_edgeA, h_edgeB, A, 
         g.get_edges());
+    
+#if __DEBUG
+    printf("EDGES\n");
+    for (int i = 0; i < SIZE_EDGES; ++i) {
+        printf("%d -> %d\n", h_edgeA[i], h_edgeB[i]);
+    }
+    printf("\n");
+#endif
 
     int **table = new int*[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
@@ -147,19 +155,12 @@ int main(int argc, char** argv) {
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, 
         h_edgeA, h_edgeB, table);
 
-    /*
+#if __DEBUG    
     printf("Cost Before\n");
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
     }
-
-    printf("Placement before:\n");
-    for (int j = 0; j < NGRIDS*TOTAL_GRID_SIZE; ++j) {
-        if (j % SIZE_GRID == 0) printf("\n");
-        printf("%2d ", grid[j]);
-    }
-    printf("\n");
-    */
+#endif
     
     //printf("place\n");
     start = high_resolution_clock::now();
@@ -174,19 +175,7 @@ int main(int argc, char** argv) {
 
     duration = (stop-start);
     time_place = duration.count();
-    //printf("end place\n");
-    /*
-    printf("Cost After\n");
-    for(int i = 0; i < NGRIDS; ++i) {
-        printf("n = %d cost = %d\n", i, results[i]);
-    }
-
-    printf("\nPlacement After:\n");
-    for (int j = 0; j < NGRIDS*TOTAL_GRID_SIZE; ++j) {
-        if (j % SIZE_GRID == 0) printf("\n");
-        printf("%2d ", grid[j]);
-    }
-    printf("\n");*/
+    
 
     //printf("edge_cost\n");
     // get each value of edge, to routing
@@ -197,19 +186,19 @@ int main(int argc, char** argv) {
     start = high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
-        edges_cost, results, pos, h_edgeA, h_edgeB, route, pe);
+        edges_cost, results, pos, h_edgeA, h_edgeB, route, pe, table);
     // end routing
     stop = high_resolution_clock::now();
 
     duration = (stop-start);
     time_route = duration.count();
     
-    //printf("opa\n");
-    /*
+#if __DEBUG
     printf("New cost after routing\n");
     for (int i = 0; i < NGRIDS; ++i) {
         printf("Sol %d new cost: %d\n", i, results[i]);
-    }*/
+    }
+#endif
 
     map<pair<int,int>,int> *buffer_PE = new map<pair<int,int>,int>[NGRIDS];
     map<pair<int,int>,int> *buffers_EDGE = new map<pair<int,int>,int>[NGRIDS];
@@ -223,8 +212,7 @@ int main(int argc, char** argv) {
 
     duration = (stop-start);
     time_buffer = duration.count();
-
-    /*
+    
     for (int k = 0; k < NGRIDS; ++k) {
         printf("Sol: %d", k);
         if (results[k] >= MAXVALUE) { 
@@ -235,14 +223,13 @@ int main(int argc, char** argv) {
         for (int i = 0; i < SIZE_EDGES; ++i) {
             int a = h_edgeA[i];
             int b = h_edgeB[i];
-
             printf("%d -> %d cost: %2d buffer_EDGE: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffers_EDGE[k][make_pair(a,b)]);
         }
-    }*/
+    }
 
-    int best_index = get_better_index(NGRIDS, SIZE_EDGES, results, h_edgeA, 
-        h_edgeB, buffers_EDGE);
-    
+    int worst_fifo;
+    int best_index = get_better_index(NGRIDS, SIZE_EDGES, worst_fifo, 
+        results, h_edgeA, h_edgeB, buffers_EDGE);
     
     generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
         path_asm, route, edges_cost);
@@ -256,7 +243,28 @@ int main(int argc, char** argv) {
     printf("Time spent PLACE : %.4lf\n", time_place);
     printf("Time spent ROUTE : %.4lf\n", time_route);
     printf("Time spent BUFFER: %.4lf\n", time_buffer);
-    printf("Time spent TOTAL : %.4lf\n\n", time_total);
+    printf("Time spent TOTAL : %.4lf\n", time_total);
+    printf("Best index       : %d\n", best_index);
+    printf("Wire cost        : %d\n", results[best_index]);
+    printf("Worst buffer     : %d\n\n", worst_fifo);
+
+#if __DEBUG
+    //if (best_index != -1) {
+        printf("\nPlacement After:\n");
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            if (j % SIZE_GRID == 0) printf("\n");
+            printf("%3d ", grid[best_index*TOTAL_GRID_SIZE+j]);
+        }
+        printf("\n");
+
+        printf("\nGRID PE:\n");
+        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
+            if (j % SIZE_GRID == 0) printf("\n");
+            printf("%3d ", j);
+        }
+        printf("\n");
+    //}
+#endif
 
     delete v;
     delete v_i;

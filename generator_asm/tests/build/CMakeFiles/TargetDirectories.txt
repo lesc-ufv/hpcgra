@@ -1,0 +1,3 @@
+/home/canesche/git/hpcgra/generator_asm/tests/build/CMakeFiles/rebuild_cache.dir
+/home/canesche/git/hpcgra/generator_asm/tests/build/CMakeFiles/edit_cache.dir
+/home/canesche/git/hpcgra/generator_asm/tests/build/CMakeFiles/place.dir

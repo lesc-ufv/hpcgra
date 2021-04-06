@@ -1,9 +1,0 @@
-#instalar na maquina
-sudo apt install cmake libboost-all-dev gcc g++
-
-# compilar o comando
-mkdir build
-cd build && cmake .. && make 
-
-#executar (dentro da pasta build)
-./place mac ../dot/mac.dot ../arch/cgra_4x4.json

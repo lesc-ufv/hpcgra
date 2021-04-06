@@ -1,3 +1,0 @@
-/home/canesche/git/masters/place_route/compiler/DFG/build/CMakeFiles/rebuild_cache.dir
-/home/canesche/git/masters/place_route/compiler/DFG/build/CMakeFiles/DFG.dir
-/home/canesche/git/masters/place_route/compiler/DFG/build/CMakeFiles/edit_cache.dir

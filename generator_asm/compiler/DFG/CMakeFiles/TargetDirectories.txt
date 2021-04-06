@@ -1,3 +1,0 @@
-/mnt/d/git/masters/place_route/compiler/llvm-passes/DFG/CMakeFiles/rebuild_cache.dir
-/mnt/d/git/masters/place_route/compiler/llvm-passes/DFG/CMakeFiles/edit_cache.dir
-/mnt/d/git/masters/place_route/compiler/llvm-passes/DFG/CMakeFiles/DFG.dir

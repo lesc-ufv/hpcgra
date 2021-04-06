@@ -1,3 +1,0 @@
-  load5    mul6    add7
-   add9    mul0    NONE
-   mul3   load2 output8

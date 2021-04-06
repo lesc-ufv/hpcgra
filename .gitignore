@@ -1,8 +1,10 @@
 **/__pycache__
 **/*.pyc
-**/.idea
+**/*.idea
 **/*.vscode
 **/*.env
 **/*test
-**/venv
+**/*venv
 **/*build
+**/*cmake-build-debug
+**/*cmake-build-release

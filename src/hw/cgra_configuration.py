@@ -191,15 +191,12 @@ class CgraConfiguration:
 
         if routes > 0:
             if routes == 1:
-                if len(routing.keys()) == 1:
                     for _, i in routing.items():
                         if i == 'alu':
                             route_sel_in = format(0, '0%db' % route_sel_in_bits)
                         else:
                             iidx = neighbors.index(i) + 1  # the first port is always alu
                             route_sel_in = format(iidx, '0%db' % route_sel_in_bits)
-                elif len(routing.keys()) > 1:
-                    return False, 'PE %s can perform only one routing.' % id
             else:
                 if len(routing.keys()) > routes:
                     return False, 'PE %s can perform only %d routing.' % (id, routes)

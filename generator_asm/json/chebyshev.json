@@ -102,7 +102,8 @@
 		{
 			"id" : "0",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"const":[]
 		},
 		{
 			"id" : "1",
@@ -202,13 +203,13 @@
 				]
 			],
 			"id" : "9",
-			"label" : "multi",
-			"opcode" : "mult"
+			"label" : "muli",
+			"opcode" : "mul"
 		},
 		{
 			"id" : "10",
-			"label" : "mult",
-			"opcode" : "mult"
+			"label" : "mul",
+			"opcode" : "mul"
 		},
 		{
 			"const" : 
@@ -224,13 +225,13 @@
 		},
 		{
 			"id" : "12",
-			"label" : "mult",
-			"opcode" : "mult"
+			"label" : "mul",
+			"opcode" : "mul"
 		},
 		{
 			"id" : "13",
-			"label" : "mult",
-			"opcode" : "mult"
+			"label" : "mul",
+			"opcode" : "mul"
 		},
 		{
 			"const" : 
@@ -246,8 +247,8 @@
 		},
 		{
 			"id" : "15",
-			"label" : "mult",
-			"opcode" : "mult"
+			"label" : "mul",
+			"opcode" : "mul"
 		}
 	]
 }

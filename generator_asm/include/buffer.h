@@ -99,7 +99,7 @@ int manhattan_dist(int pos_a_i, int pos_a_j, int pos_b_i, int pos_b_j) {
 
 void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGES,
     int *h_edgeA, int *h_edgeB, int *results, map<pair<int,int>,int> *edges_cost, 
-    map<pair<int,int>,int> *buffer_PE, map<pair<int,int>,int> *buffers) {
+    map<pair<int,int>,int> *buffers, vector<pe_t> &arch, int* pos) {
 
     int** levelOrig = new int*[NGRIDS];
     int** level = new int*[NGRIDS];
@@ -143,14 +143,22 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
         // Find number of buffers needed on each edge
         dfsBuffer(g, level[k], levelOrig[k], buffers[k], edges_cost[k]);
 
+        int a, b, port, pe, buffer_arch;
+        // verify buffer by edges
         for(int i = 0; i < SIZE_EDGES; i++){
-            pair<int,int> aux = make_pair(h_edgeA[i], h_edgeB[i]);
-            
-            //printf("%d -> %d %d ", h_edgeA[i], h_edgeB[i], buffers[k][aux]);
-            //if(inp.count(aux.first) || inp.count(aux.second)) buffers[k][aux] = 0; //set buffers on inputs to 0
-            
-            //printf("%d %d\n", buffers[k][aux], edges_cost[k][aux]+1);
-            buffer_PE[k][aux] = ceil(float(buffers[k][aux])/(edges_cost[k][aux]+1));
+            a = h_edgeA[i];
+            b = h_edgeB[i];
+            port = g.get_port(a,b);
+            pe = pos[k*SIZE_NODES+b];
+            buffer_arch = arch[pe].elastic_queue[port];
+            pair<int,int> key = make_pair(a, b);
+#if __DEBUG
+            printf("%d -> %d %d port: %d arch: %d buffer: %d\n", a, b, buffers[k][key], port, buffer_arch, buffers[k][key]);
+#endif
+            if (buffers[k][key] > buffer_arch) {
+                results[k] = MAXVALUE;
+                break;
+            }
         }
     }
 

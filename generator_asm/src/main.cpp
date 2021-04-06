@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 
     // Verify about arch and graph
     if (!verify(SIZE_NODES, TOTAL_GRID_SIZE, SIZE_GRAPH_IN, 
-    SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT) ) return 1;
+    SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT)) return 1;
     
     // print mapping of json
     print_inputs_outputs_json(g, name);   
@@ -129,7 +129,8 @@ int main(int argc, char** argv) {
 
     std::chrono::duration<double, std::milli> duration = (stop-start);
     time_table = duration.count();
-    /*
+
+#if __DEBUG
     printf("matrix de distance\n");
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         printf("%2d: ", i);
@@ -137,7 +138,8 @@ int main(int argc, char** argv) {
             printf("%2d ", table[i][j]);
         }
         printf("\n");
-    }*/
+    }
+#endif
     
     // update all position from grid
     update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE, 
@@ -200,19 +202,19 @@ int main(int argc, char** argv) {
     }
 #endif
 
-    map<pair<int,int>,int> *buffer_PE = new map<pair<int,int>,int>[NGRIDS];
     map<pair<int,int>,int> *buffers_EDGE = new map<pair<int,int>,int>[NGRIDS];
 
     start = high_resolution_clock::now();
     // generate buffer
     buffer(g, NGRIDS, SIZE_NODES, SIZE_EDGES, h_edgeA, 
-    h_edgeB, results, edges_cost, buffer_PE, buffers_EDGE);
+    h_edgeB, results, edges_cost, buffers_EDGE, pe, pos);
     // end buffer
     stop = high_resolution_clock::now();
 
     duration = (stop-start);
     time_buffer = duration.count();
-    
+
+#if __DEBUG    
     for (int k = 0; k < NGRIDS; ++k) {
         printf("Sol: %d", k);
         if (results[k] >= MAXVALUE) { 
@@ -226,6 +228,7 @@ int main(int argc, char** argv) {
             printf("%d -> %d cost: %2d buffer_EDGE: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffers_EDGE[k][make_pair(a,b)]);
         }
     }
+#endif
 
     int worst_fifo;
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, worst_fifo, 

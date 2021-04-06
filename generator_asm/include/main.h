@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #define MAXVALUE 9999
-#define __DEBUG true
+#define __DEBUG false
 
 #include <Graph.h>
 #include <stdio.h>

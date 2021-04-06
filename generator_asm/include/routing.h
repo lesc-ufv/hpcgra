@@ -172,12 +172,12 @@ bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
         edges_cost[make_pair(a,b)] = new_path.size();
 
         for (int i = new_path.size()-1; i > -1; --i) {
-            printf("%d %d, ", new_path[i].first, new_path[i].second);
+            //printf("%d %d, ", new_path[i].first, new_path[i].second);
             route[make_pair(a,b)].push_back(new_path[i].first);
             route[make_pair(a,b)].push_back(new_path[i].second);
             remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
-        printf("\n");
+        //printf("\n");
         return true;
     }
     return false;
@@ -197,18 +197,6 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
             grid_route[i].path[j] = get_neighbors(pe, j);
         }
     }
-    
-    /*
-    for (int i = 0; i < NGRIDS; ++i) {
-        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            printf("%2d: ", j);
-            for (int k = 0; k < grid_route[i].path[j].size(); ++k) {
-                printf("%d ", grid_route[i].path[j][k]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }*/
     
     int a, b, pe_a, pe_b;
     // resolve first to edges of cost 1
@@ -245,19 +233,19 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
 
     // resolve the cost greater than 1
     for (int j = 0; j < NGRIDS; ++j) {
-        printf("\ntry: %d\n", j);
+        //printf("\ntry: %d\n", j);
         for (int i = 0; i < edge[j].size(); ++i) {
             a = edge[j][i].first;
             b = edge[j][i].second;
             pe_a = pos[a+j*SIZE_NODES];
             pe_b = pos[b+j*SIZE_NODES];
-            printf("%d [%d] -> %d [%d] cost: %d\n", a, pe_a, b, pe_b, edges_cost[j][make_pair(a,b)]);
+            //printf("%d [%d] -> %d [%d] cost: %d\n", a, pe_a, b, pe_b, edges_cost[j][make_pair(a,b)]);
             if (!try_route_aStar(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
                 route[j], results[j], edges_cost[j], table)) {
                     results[j] = MAXVALUE;
                     break; // it not possible 
             }
-            printf("new cost: %d\n", edges_cost[j][make_pair(a,b)]);
+            //printf("new cost: %d\n", edges_cost[j][make_pair(a,b)]);
         }
     }
     /*

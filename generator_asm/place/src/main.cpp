@@ -42,6 +42,14 @@ int main(int argc, char** argv) {
     const int TOTAL_GRID_SIZE = pe.size();
     const int SIZE_GRID = ceil(sqrt(TOTAL_GRID_SIZE));
 
+    for (int i = 0; i < SIZE_NODES; ++i) {
+        printf("%d %s\n", i, g.get_name_node(i).c_str());
+    }
+    printf("\n");
+    for (int i = 0; i < SIZE_NODES; ++i) {
+        printf("%d %s\n", i, g.get_opcode(i).c_str());
+    }
+
     int *table_pe = new int[TOTAL_GRID_SIZE];
 
     int id;
@@ -140,7 +148,7 @@ int main(int argc, char** argv) {
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, 
         h_edgeA, h_edgeB, table);
 
-    /*
+    
     printf("Cost Before\n");
     for(int i = 0; i < NGRIDS; ++i) {
         printf("n = %d cost = %d\n", i, results[i]);
@@ -152,7 +160,7 @@ int main(int argc, char** argv) {
         printf("%2d ", grid[j]);
     }
     printf("\n");
-    */
+    
     
     //printf("place\n");
     start = high_resolution_clock::now();
@@ -186,7 +194,7 @@ int main(int argc, char** argv) {
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
         pos, table, edges_cost);
 
-    //printf("routing\n");
+    printf("routing\n");
     start = high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
@@ -217,7 +225,7 @@ int main(int argc, char** argv) {
     duration = (stop-start);
     time_buffer = duration.count();
 
-    /*
+    
     for (int k = 0; k < NGRIDS; ++k) {
         printf("Sol: %d", k);
         if (results[k] >= MAXVALUE) { 
@@ -231,10 +239,11 @@ int main(int argc, char** argv) {
 
             printf("%d -> %d cost: %2d buffer_EDGE: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffers_EDGE[k][make_pair(a,b)]);
         }
-    }*/
+    }
 
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, results, h_edgeA, 
         h_edgeB, buffers_EDGE);
+    
     
     generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
         path_asm, route, edges_cost);

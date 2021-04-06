@@ -1,11 +1,11 @@
 {
 	"input":
 	{
-		"A": 0,
-		"B": 1
+		"input": 0,
+		"input": 1
 	},
 	"output":
 	{
-		"D": 3
+		"output": 3
 	}
 }

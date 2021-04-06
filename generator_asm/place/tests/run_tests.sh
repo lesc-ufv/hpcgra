@@ -1,8 +1,8 @@
 set -e
 
 ARCH=(
-  cgra_16x16_8_2
-  cgra_16x16_8_4
+  #cgra_16x16_8_2
+  #cgra_16x16_8_4
   cgra_mesh_2x2
 )
 
@@ -21,7 +21,7 @@ EXEC="./build/place"
 
 for ((i = 0; i < ${#BENCH[@]}; i++)); do
   echo "+ "${BENCH[i]}
-  DOT="../dot/${BENCH[i]}.dot"
+  DOT="../dot/${BENCH[i]}.json"
   for ((j = 0; j < ${#ARCH[@]}; j++)); do
     echo " - "${ARCH[j]}
     NAME=${BENCH[i]}"_"${ARCH[j]}

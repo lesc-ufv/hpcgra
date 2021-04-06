@@ -10,9 +10,10 @@ vector<int> get_neighbors(vector<pe_t> &arch, const int id) {
     return vector<int>();
 }
 
+/*
 void create_table(const int i, const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {
 
-    queue<pair<int,int>> q; 
+    std::queue<pair<int,int>> q; 
     vector<int> aux;
     bool visited[TOTAL_GRID_SIZE];
     int n_dad, dist;
@@ -38,6 +39,7 @@ void create_table(const int i, const int TOTAL_GRID_SIZE, int **table, vector<pe
         }
     }
 }
+*/
 
 
 void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {

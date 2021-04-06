@@ -37,7 +37,7 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
         if (visited[dad]) continue;
 
         visited[dad] = true;
-
+        
         if (g.get_opcode(dad) == "input") {
             //printf("add $%d $istream 0\n", pos[best_index*SIZE_NODES+dad]);
             myfile << "add $" << pos[best_index*SIZE_NODES+dad] << " $istream 0\n";

@@ -1,36 +1,16 @@
 #ifndef __GRAPH__H
 #define __GRAPH__H
 
-#include <boost/graph/graphviz.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_iterator.hpp>
-#include <boost/graph/betweenness_centrality.hpp>
+#include <json/json.h>
 #include <string>
+#include <fstream>
 #include <sstream>
 #include <iostream>
 #include <vector>
 #include <map>
 #include <stdio.h>
 
-using namespace boost;
 using namespace std;
-
-// Vertex properties
-typedef boost::property <boost::vertex_name_t, string, boost::property <boost::vertex_color_t, float>> vertex_p;  
-// Edge properties
-typedef boost::property <boost::edge_weight_t, double> edge_p;
-// Graph properties
-typedef boost::property <boost::graph_name_t, string> graph_p;
-// adjacency_list-based type
-typedef boost::adjacency_list < boost::vecS, boost::vecS, boost::directedS, vertex_p, edge_p, graph_p> graph_t;
-// Vertex index map
-typedef boost::property_map<graph_t, boost::vertex_index_t>::type VertexIndexMap;
-
-using vertex_t = boost::graph_traits<graph_t>::vertex_descriptor;
-
-typedef typename boost::graph_traits<graph_t>::edge_iterator   e_iter;
-typedef typename boost::graph_traits<graph_t>::vertex_iterator v_iter;
 
 class Graph {
     public:
@@ -44,7 +24,6 @@ class Graph {
         void write(string filename="test.dot");
         //vertex_t add_node(Vertex u); // ps da vida kkk
         const int num_nodes();
-        void add_edge(vertex_t u, vertex_t v);
         const int num_edges();
         vector<pair<int,int>> get_edges();
         vector<pair<int,int>> get_edges_inverse();
@@ -58,10 +37,8 @@ class Graph {
         vector<int> get_sucessors(int u);
         vector<int> get_inputs();
         vector<int> get_outputs();
-        vector<double> get_betweenness_centrality();
+        //vector<double> get_betweenness_centrality();
     private:
-        graph_t graph;
-        boost::dynamic_properties dp;
         vector<int> nodes;
         vector<pair<int,int>> edges;
         map<int,vector<int>> node_in_degree;
@@ -70,5 +47,185 @@ class Graph {
         map<int,string> opcode;
         map<pair<int,int>,int> port;
 };
+
+Graph::Graph() { }
+
+Graph::Graph(string filename) {
+
+    Json::Value data;
+    std::ifstream ifs;
+    ifs.open(filename);
+    Json::CharReaderBuilder builder;
+    JSONCPP_STRING errs;
+    if (!parseFromStream(builder, ifs, &data, &errs)) {
+        std::cout << errs << std::endl;
+        return;
+    }
+    ifs.close();
+
+	int u, v;
+
+    for (auto node : data["nodes"]) {
+        u = atoi(node["id"].asCString());
+        this->nodes.push_back(u);
+		this->opcode[u] = node["opcode"].asString();
+		this->name_label[u] = node["label"].asString();
+    }
+
+	for (auto edge : data["edges"]) {
+		u = atoi(edge["source"].asCString());
+		v = atoi(edge["target"].asCString());
+        this->edges.push_back(make_pair(u, v));
+		this->port[make_pair(u, v)] = atoi(edge["port"].asCString());
+		this->node_out_degree[u].push_back(v);
+		this->node_in_degree[v].push_back(u);
+    }
+}
+
+Graph::Graph(const Graph &g) {
+	this->nodes = g.nodes;
+	this->edges = g.edges;
+	this->node_in_degree = g.node_in_degree;
+	this->node_out_degree = g.node_out_degree;
+	this->name_label = g.name_label;
+	this->opcode = g.opcode;
+	this->port = g.port;
+}
+
+Graph::~Graph() {
+	nodes.clear();
+	edges.clear();
+}
+
+void Graph::print() {
+    //write_graphviz_dp(std::cout, this->graph, this->dp, "node_id");
+}
+
+void Graph::write(string path) {
+	string graphName;  
+	if (path.length() < 4 && path.substr(path.find_last_of(".") + 1) != "dot") {
+		graphName = path;
+    	path.append(".dot");
+	} else {
+		graphName = path.substr(path.find_last_of(".") - 1);
+	}
+
+	//ofstream dotfile (path.c_str());
+	//write_graphviz_dp(dotfile, this->graph, this->dp);
+}
+
+/*
+vertex_t Graph::add_node(Vertex u) {
+	boost::add_vertex(u, this->graph);
+}
+*/
+
+const int Graph::num_nodes() {
+	return this->nodes.size();
+}
+
+/*void Graph::add_edge(vertex_t u, vertex_t v) {
+	boost::add_edge(u, v, this->graph);
+}*/
+
+const int Graph::num_edges() {
+	return this->edges.size();
+}
+
+vector<pair<int,int>> Graph::get_edges() {
+	return this->edges;
+}
+
+vector<int> Graph::get_nodes() {
+	return this->nodes;
+}
+
+string Graph::get_name_node(int u) {
+	return this->name_label[u];
+}
+
+string Graph::get_opcode(int u) {
+	return this->opcode[u];
+}
+
+int Graph::get_port(int u, int v) {
+	return this->port[make_pair(u,v)];
+}
+
+vector<int> Graph::get_predecessors(int u) {
+	return this->node_in_degree[u];
+}
+
+vector<int> Graph::get_sucessors(int u) {
+	return this->node_out_degree[u];
+}
+
+vector<vector<int>> Graph::get_fanin() {
+	vector<vector<int>> aux;
+	for (int i = 0, n = num_nodes(); i < n; ++i)
+		aux.push_back(get_predecessors(i));
+	return aux;
+}
+
+vector<vector<int>> Graph::get_fanout() {
+	vector<vector<int>> aux;
+	for (int i = 0, n = num_nodes(); i < n; ++i)
+		aux.push_back(get_sucessors(i));
+	return aux;
+}
+
+vector<int> Graph::get_inputs() {
+	vector<int> aux;
+	for (int i = 0; i < num_nodes(); ++i)
+		if (get_predecessors(i).size() == 0) aux.push_back(i);
+	return aux;
+}
+
+vector<int> Graph::get_outputs() {
+	vector<int> aux;
+	for (int i = 0; i < num_nodes(); ++i)
+		if (get_sucessors(i).size() == 0) aux.push_back(i);
+	return aux;
+}
+
+vector<pair<int,int>> Graph::get_edges_inverse() {
+	vector<pair<int,int>> aux;
+	int u, v;
+	for(int i = num_edges()-1; i >= 0; --i){
+		u = get_edges()[i].first;
+		v = get_edges()[i].second;
+		aux.push_back(make_pair(v,u));
+	}
+	return aux;
+}
+
+void Graph::print_graph_number() {
+	vector<pair<int,int>> edges;
+
+	cout << "digraph G {" << endl;
+	for (int i = 0; i < num_edges(); ++i) {
+		cout << this->edges[i].first << "->" << this->edges[i].second << endl;
+	}
+	cout << "}" << endl;
+
+}
+
+/*
+vector<double> Graph::get_betweenness_centrality() {
+	
+	vector<double> centrality(boost::num_vertices(this->graph), 0.0);
+	VertexIndexMap v_index = get(boost::vertex_index, this->graph);
+	boost::iterator_property_map<vector<double>::iterator, VertexIndexMap> vertex_property_map = make_iterator_property_map(centrality.begin(), v_index);
+
+	boost::brandes_betweenness_centrality(this->graph, vertex_property_map);
+
+	//double max = *max_element(centrality.begin(), centrality.end());
+	//max = (max > 0.0) ? max : 1;
+	
+	//for (int i = 0, n = centrality.size(); i < n; ++i)
+	//	centrality[i] = centrality[i] / max;
+
+	return centrality;
+}*/
 
 #endif

@@ -1,17 +1,17 @@
-add $80 $istream 0
-route $80 $alu $82
-add $48 $istream 0
-route $48 $alu $50
-route $50 $48 $82
-slt $82 #1 $80 $50 
-route $82 $alu $84
-route $84 $82 $86
-route $86 $84 $88
-route $88 $86 $90
-route $90 $88 $92
-mux $92 $90 10 6 
-route $92 $alu $93
-route $93 $92 $95
-route $95 $alu $ostream
-set $95 $ostream_ignore 9
-set $95 $ostream_loop 0
+add $32 $istream 0
+route $32 $alu $33
+add $64 $istream 0
+route $64 $alu $65
+route $65 $64 $33
+slt $33 #1 $32 $65 
+route $33 $alu $35
+route $35 $33 $37
+route $37 $35 $39
+route $39 $37 $41
+mux $41 $39 10 6 
+route $41 $alu $43
+route $43 $41 $45
+route $45 $43 $47
+route $47 $45 $ostream
+set $47 $ostream_ignore 9
+set $47 $ostream_loop 0

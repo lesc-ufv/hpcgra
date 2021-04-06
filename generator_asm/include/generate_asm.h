@@ -40,8 +40,17 @@ void generate_asm(Graph g, const int best_index, const int SIZE_NODES,
             //printf("add $%d $istream 0\n", pos[best_index*SIZE_NODES+dad]);
             myfile << "add $" << pos[best_index*SIZE_NODES+dad] << " $istream 0\n";
         } else if (g.get_opcode(dad) == "output") {
+
+            grandfather = g.get_predecessors(dad);
             pe = pos[best_index*SIZE_NODES+dad];
-            myfile << "route $" << pe << " $alu $ostream\n";
+
+            for (int i = 0; i < grandfather.size(); ++i) {
+                pair<int,int> key = make_pair(grandfather[i], dad);
+                rota = route[best_index][key];
+                pe_gf = rota[rota.size()-2];
+                myfile << "route $" << pe << " $" << pe_gf << " $ostream\n";
+            }
+            
             myfile << "set $" << pe << " $ostream_ignore " << cost+1 << "\n";
             myfile << "set $" << pe << " $ostream_loop 0\n";
         } else {

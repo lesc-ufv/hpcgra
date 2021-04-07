@@ -56,7 +56,7 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
                     dist[i][j] ← dist[i][k] + dist[k][j]
                 end if
     */
-    vector<pair<int,int>> aux_edge;
+    vector<pair<int, int>> aux_edge;
     vector<int> neigh;
     int i, j, k;
 
@@ -83,7 +83,7 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
 
     //printf("opa2\n");
 
-    for (k = 0 ; k < TOTAL_GRID_SIZE; k++) {
+    for (k = 0; k < TOTAL_GRID_SIZE; k++) {
         for (i = 0; i < TOTAL_GRID_SIZE; i++) {
             aux = table[i][k];
             for (j = 0; j < TOTAL_GRID_SIZE; j++) {
@@ -101,14 +101,14 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
     }*/
 }
 
-void update_all_positions(const int NODE_SIZE, const int GRID_SIZE, 
-    const int TOTAL_GRID_SIZE, const int NGRIDS, int *pos, int *grid) {
+void update_all_positions(const int NODE_SIZE, const int GRID_SIZE,
+                          const int TOTAL_GRID_SIZE, const int NGRIDS, int *pos, int *grid) {
 
     for (int n = 0; n < NGRIDS; ++n) {
         for (int i = 0; i < NODE_SIZE; ++i) {
             for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-                if (i == grid[n*TOTAL_GRID_SIZE+j]) { 
-                    pos[n*NODE_SIZE+i] = j;
+                if (i == grid[n * TOTAL_GRID_SIZE + j]) {
+                    pos[n * NODE_SIZE + i] = j;
                     break;
                 }
             }
@@ -117,16 +117,16 @@ void update_all_positions(const int NODE_SIZE, const int GRID_SIZE,
 }
 
 void get_all_results(const int NGRIDS, const int SIZE_EDGE, const int SIZE_NODES,
-    int *pos, int *results, int* h_edgeA, int* h_edgeB, int **table) {
-    
+                     int *pos, int *results, int *h_edgeA, int *h_edgeB, int **table) {
+
     int sum, pos_global_A, pos_global_B, edgeA, edgeB;
     for (int n = 0; n < NGRIDS; ++n) {
         sum = 0;
         for (int i = 0; i < SIZE_EDGE; ++i) {
             edgeA = h_edgeA[i];
             edgeB = h_edgeB[i];
-            pos_global_A = pos[n*SIZE_NODES+edgeA];
-            pos_global_B = pos[n*SIZE_NODES+edgeB];
+            pos_global_A = pos[n * SIZE_NODES + edgeA];
+            pos_global_B = pos[n * SIZE_NODES + edgeB];
             sum += table[pos_global_A][pos_global_B];
         }
         results[n] = sum;
@@ -134,26 +134,26 @@ void get_all_results(const int NGRIDS, const int SIZE_EDGE, const int SIZE_NODES
 }
 
 int get_result(const int N, const int SIZE_EDGE, const int SIZE_NODES,
-    int *pos, int* h_edgeA, int* h_edgeB, int **table) {
+               int *pos, int *h_edgeA, int *h_edgeB, int **table) {
     int sum = 0;
     int pos_global_A, pos_global_B;
     for (int i = 0; i < SIZE_EDGE; ++i) {
-        pos_global_A = pos[N*SIZE_NODES+h_edgeA[i]];
-        pos_global_B = pos[N*SIZE_NODES+h_edgeB[i]];
+        pos_global_A = pos[N * SIZE_NODES + h_edgeA[i]];
+        pos_global_B = pos[N * SIZE_NODES + h_edgeB[i]];
         sum += table[pos_global_A][pos_global_B];
     }
     return sum;
 }
 
 void get_edge_cost(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
-    int *h_edgeA, int *h_edgeB, int *pos, int **table, map<pair<int,int>,int> *edges_cost) {
-    
+                   int *h_edgeA, int *h_edgeB, int *pos, int **table, map<pair<int, int>, int> *edges_cost) {
+
     int a, b;
     for (int i = 0; i < NGRIDS; ++i) {
         for (int j = 0; j < SIZE_EDGES; ++j) {
             a = h_edgeA[j];
             b = h_edgeB[j];
-            edges_cost[i][make_pair(a,b)] = table[pos[i*SIZE_NODES+a]][pos[i*SIZE_NODES+b]];
+            edges_cost[i][make_pair(a, b)] = table[pos[i * SIZE_NODES + a]][pos[i * SIZE_NODES + b]];
             //printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], edges_cost[i][make_pair(a,b)]);
         }
         //printf("\n");

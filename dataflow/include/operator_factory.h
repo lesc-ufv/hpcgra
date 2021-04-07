@@ -13,7 +13,7 @@
 #include <input_stream.h>
 #include <max.h>
 #include <min.h>
-#include <mult.h>
+#include <mul.h>
 #include <mux.h>
 #include <not.h>
 #include <or.h>

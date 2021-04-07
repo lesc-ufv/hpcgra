@@ -2,13 +2,14 @@
 
 
 int main(int argc, char *argv[]) {
-
-    unsigned short coef[64];
-    for(int i =0; i < 64;i++){
+    int taps = 64;
+    unsigned short coef[taps];
+    for(int i =0; i < taps;i++){
         coef[i] = i+1;
     }
-    auto df = createDataFlow(0,1,coef,64);
-    df->toJSON("fir.json");
+    auto df = createDataFlow(0,1,coef,taps);
+    df->toJSON("../fir"+to_string(taps)+".json");
+    df->toDOT("../fir"+to_string(taps)+".dot");
     delete df;
     return 0;
 }
@@ -32,7 +33,7 @@ DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps) {
         std::vector<Operator *> add;
         add.reserve((unsigned long) taps - 1);
         for (int i = 0; i < taps; ++i) {
-            auto m = new Multi(idx++, coef[taps - i - 1]);
+            auto m = new Muli(idx++, coef[taps - i - 1]);
             if (i == 0) {
                 op = new Addi(idx++,0);
             } else {

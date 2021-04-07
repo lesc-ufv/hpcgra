@@ -1,9 +1,11 @@
 #include "loopback.h"
 
 int main(int argc, char *argv[]) {
+    int num_copies = 8;
+    auto df = createDataFlow(0,num_copies);
+    df->toJSON("../loopback_"+to_string(num_copies)+".json");
+    df->toDOT("../loopback_"+to_string(num_copies)+".dot");
 
-    auto df = createDataFlow(0,1);
-    df->toJSON()
     delete df;
     return 0;
 }
@@ -18,7 +20,7 @@ DataFlow *createDataFlow(int id, int copies) {
         out[i] = new OutputStream(idx++,nullptr,0);
     }
     for (int i = 0; i < copies; ++i) {
-        df->connect(inA[i], out[i], out[i]->getPortA());
+        df->connect(inA[i], out[i], 1);
     }
 
     return df;

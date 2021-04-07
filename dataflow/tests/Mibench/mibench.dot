@@ -1,0 +1,91 @@
+digraph mibench{
+ 0 [ label = input0 ]
+ 1 [ label = input1 ]
+ 2 [ label = input2 ]
+ 3 [ label = output3 ]
+ 4 [ label = addi, value = "[[1,0]]"]
+ "4.0"[ label = 0 ]
+ 5 [ label = addi, value = "[[1,0]]"]
+ "5.0"[ label = 0 ]
+ 6 [ label = addi, value = "[[1,0]]"]
+ "6.0"[ label = 0 ]
+ 7 [ label = addi, value = "[[1,0]]"]
+ "7.0"[ label = 0 ]
+ 8 [ label = addi, value = "[[1,0]]"]
+ "8.0"[ label = 0 ]
+ 9 [ label = addi, value = "[[1,0]]"]
+ "9.0"[ label = 0 ]
+ 10 [ label = addi, value = "[[1,0]]"]
+ "10.0"[ label = 0 ]
+ 11 [ label = addi, value = "[[1,0]]"]
+ "11.0"[ label = 0 ]
+ 12 [ label = addi, value = "[[1,0]]"]
+ "12.0"[ label = 0 ]
+ 13 [ label = addi, value = "[[1,0]]"]
+ "13.0"[ label = 0 ]
+ 14 [ label = muli, value = "[[1,9]]"]
+ "14.9"[ label = 9 ]
+ 15 [ label = muli, value = "[[1,6]]"]
+ "15.6"[ label = 6 ]
+ 16 [ label = muli, value = "[[1,2]]"]
+ "16.2"[ label = 2 ]
+ 17 [ label = addi, value = "[[1,1]]"]
+ "17.1"[ label = 1 ]
+ 18 [ label = addi, value = "[[1,43]]"]
+ "18.43"[ label = 43 ]
+ 19 [ label = add]
+ 20 [ label = mul]
+ 21 [ label = add]
+ 22 [ label = add]
+ 23 [ label = mul]
+ 24 [ label = mul]
+ 25 [ label = add]
+ 26 [ label = add]
+ 0 -> 16
+ 0 -> 6
+ 1 -> 9
+ 2 -> 14
+ 2 -> 15
+ 2 -> 4
+ "4.0" -> 4
+ 4 -> 5
+ "5.0" -> 5
+ 5 -> 20
+ "6.0" -> 6
+ 6 -> 7
+ "7.0" -> 7
+ 7 -> 8
+ 7 -> 21
+ "8.0" -> 8
+ 8 -> 23
+ "9.0" -> 9
+ 9 -> 10
+ 9 -> 19
+ "10.0" -> 10
+ 10 -> 11
+ "11.0" -> 11
+ 11 -> 24
+ "12.0" -> 12
+ 12 -> 13
+ "13.0" -> 13
+ 13 -> 26
+ "14.9" -> 14
+ 14 -> 17
+ "15.6" -> 15
+ 15 -> 18
+ "16.2" -> 16
+ 16 -> 19
+ "17.1" -> 17
+ 17 -> 20
+ "18.43" -> 18
+ 18 -> 21
+ 18 -> 22
+ 19 -> 22
+ 20 -> 12
+ 21 -> 23
+ 22 -> 24
+ 23 -> 25
+ 24 -> 25
+ 25 -> 26
+ 26 -> 3
+}

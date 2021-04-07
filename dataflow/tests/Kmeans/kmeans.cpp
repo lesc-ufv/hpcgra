@@ -2,8 +2,12 @@
 
 int main(int argc, char *argv[]) {
 
-    auto df = createDataFlow(0,8,8);
-    df->toJSON("../kmeans.json");
+    int num_clusters=4;
+    int num_dim=4;
+
+    auto df = createDataFlow(0,num_clusters,num_dim);
+    df->toJSON("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".json");
+    df->toDOT("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".dot");
     delete df;
     return 0;
 }
@@ -35,7 +39,7 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
         outId = idx++;
         for (int j = 0; j < num_clusters; ++j) {
             for (int i = 0; i < num_dim; ++i) {
-                df->connect(inputs[i], subs[j][i], subs[j][i]->getPortA());
+                df->connect(inputs[i], subs[j][i], 0);
             }
             for (auto s:subs[j]) {
                 //auto a = new Abs(idx++);
@@ -50,15 +54,15 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
             while (aux.size() > 1) {
                 int start = 0;
                 if (aux.size() % 2 != 0) {
-                    auto passA = new PassA(idx++);
-                    df->connect(aux[0], passA, passA->getPortA());
+                    auto passA = new Addi(idx++,0);
+                    df->connect(aux[0], passA,0);
                     aux_reduz.push_back(passA);
                     start = 1;
                 }
                 for (int l = start; l < aux.size(); l += 2) {
                     auto add = new Add(idx++);
-                    df->connect(aux[l], add, add->getPortA());
-                    df->connect(aux[l + 1], add, add->getPortB());
+                    df->connect(aux[l], add, 0);
+                    df->connect(aux[l + 1], add, 1);
                     aux_reduz.push_back(add);
                 }
                 aux.clear();
@@ -84,24 +88,28 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
 
         while (aux.size() > 1) {
             for (int l = 0; l < aux.size() - 1; l += 2) {
-                auto slt = new Slt(idx++);
-                auto mux = new Mux(idx++);
-                df->connect(aux[l], slt, slt->getPortA());
-                df->connect(aux[l + 1], slt, slt->getPortB());
-                df->connect(slt, mux, mux->getPortBranch());
-                aux_reduz.push_back(slt);
                 if (reg > 0) {
-                    df->connect(mux_reduz.front(), mux, mux->getPortA());
+                    auto slt = new Slt(idx++);
+                    auto mux = new Mux(idx++);
+                    df->connect(aux[l], slt, 0);
+                    df->connect(aux[l + 1], slt, 1);
+                    df->connect(slt, mux, 0);
+                    aux_reduz.push_back(slt);
+                    df->connect(mux_reduz.front(), mux, 1);
                     mux_reduz.pop();
-                    df->connect(mux_reduz.front(), mux, mux->getPortB());
+                    df->connect(mux_reduz.front(), mux,2);
                     mux_reduz.pop();
+                    mux_reduz.push(mux);
                 } else {
-                    auto reg1 = new PassBi(idx++, l);
-                    auto reg2 = new PassBi(idx++, l + 1);
-                    df->connect(reg1, mux, mux->getPortA());
-                    df->connect(reg2, mux, mux->getPortB());
+                    auto slt = new Slt(idx++);
+                    auto mux = new Muxi(idx++,l,l+1);
+                    df->connect(aux[l], slt, 0);
+                    df->connect(aux[l + 1], slt, 1);
+                    df->connect(slt, mux, 0);
+                    aux_reduz.push_back(slt);
+                    mux_reduz.push(mux);
                 }
-                mux_reduz.push(mux);
+
             }
             aux.clear();
             for (auto a:aux_reduz) {
@@ -113,31 +121,31 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
         if (num_clusters % 2 != 0) {
             auto rr = addEnd;
             for (int i = 0; i < reg; ++i) {
-                auto r = new PassA(idx++);
-                df->connect(rr, r, r->getPortA());
+                auto r = new Addi(idx++,0);
+                df->connect(rr, r, 0);
                 rr = r;
             }
             auto sltEnd = new Slt(idx++);
             auto muxEnd = new Mux(idx++);
-            auto reg1 = new PassBi(idx++, num_clusters - 1);
+            auto reg1 = new Addi(idx++, num_clusters - 1);
 
-            df->connect(aux[0], sltEnd, sltEnd->getPortA());
-            df->connect(rr, sltEnd, sltEnd->getPortB());
-            df->connect(sltEnd, muxEnd, muxEnd->getPortBranch());
-            df->connect(mux_reduz.front(), muxEnd, muxEnd->getPortA());
-            df->connect(reg1, muxEnd, muxEnd->getPortB());
+            df->connect(aux[0], sltEnd,0);
+            df->connect(rr, sltEnd, 1);
+            df->connect(sltEnd, muxEnd, 0);
+            df->connect(mux_reduz.front(), muxEnd, 0);
+            df->connect(reg1, muxEnd, 1);
             auto out = new OutputStream(outId,nullptr,0);
-            df->connect(muxEnd, out, out->getPortA());
+            df->connect(muxEnd, out, 0);
         } else {
             auto out = new OutputStream(outId,nullptr,0);
-            df->connect(mux_reduz.front(), out, out->getPortA());
+            df->connect(mux_reduz.front(), out, 0);
         }
     } else {
         auto in = new InputStream(idx++,nullptr,0);
         auto out = new OutputStream(idx++,nullptr,0);
-        auto reg = new PassBi(idx, 0);
-        df->connect(in, out, out->getPortB());
-        df->connect(reg, out, out->getPortA());
+        auto reg = new Addi(idx, 0);
+        df->connect(in, out, 1);
+        df->connect(reg, out, 0);
     }
 
     return df;

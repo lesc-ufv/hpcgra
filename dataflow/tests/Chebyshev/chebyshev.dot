@@ -1,0 +1,57 @@
+digraph chebyshev{
+ 0 [ label = input0 ]
+ 1 [ label = output1 ]
+ 2 [ label = addi, value = "[[1,0]]"]
+ "2.0"[ label = 0 ]
+ 3 [ label = addi, value = "[[1,0]]"]
+ "3.0"[ label = 0 ]
+ 4 [ label = addi, value = "[[1,0]]"]
+ "4.0"[ label = 0 ]
+ 5 [ label = addi, value = "[[1,0]]"]
+ "5.0"[ label = 0 ]
+ 6 [ label = addi, value = "[[1,0]]"]
+ "6.0"[ label = 0 ]
+ 7 [ label = addi, value = "[[1,0]]"]
+ "7.0"[ label = 0 ]
+ 8 [ label = addi, value = "[[1,0]]"]
+ "8.0"[ label = 0 ]
+ 9 [ label = muli, value = "[[1,16]]"]
+ "9.16"[ label = 16 ]
+ 10 [ label = mul]
+ 11 [ label = subi, value = "[[1,20]]"]
+ "11.20"[ label = 20 ]
+ 12 [ label = mul]
+ 13 [ label = mul]
+ 14 [ label = addi, value = "[[1,5]]"]
+ "14.5"[ label = 5 ]
+ 15 [ label = mul]
+ 0 -> 9
+ 0 -> 2
+ "2.0" -> 2
+ 2 -> 3
+ 2 -> 10
+ "3.0" -> 3
+ 3 -> 6
+ 3 -> 8
+ "4.0" -> 4
+ 4 -> 7
+ 4 -> 13
+ "5.0" -> 5
+ 5 -> 15
+ "6.0" -> 6
+ 6 -> 4
+ "7.0" -> 7
+ 7 -> 5
+ "8.0" -> 8
+ 8 -> 12
+ "9.16" -> 9
+ 9 -> 10
+ 10 -> 11
+ "11.20" -> 11
+ 11 -> 12
+ 12 -> 13
+ 13 -> 14
+ "14.5" -> 14
+ 14 -> 15
+ 15 -> 1
+}

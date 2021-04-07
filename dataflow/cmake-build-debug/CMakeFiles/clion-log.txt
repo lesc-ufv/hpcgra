@@ -1,4 +1,18 @@
-/media/lucas/3CF6B349F6B301E6/tools/JetBrains/clion-2020.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/dataflow
+/snap/clion/145/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/lucas/Documents/hpcgra/dataflow
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc - works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ - works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: /media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/dataflow/cmake-build-debug
+-- Build files have been written to: /home/lucas/Documents/hpcgra/dataflow/cmake-build-debug

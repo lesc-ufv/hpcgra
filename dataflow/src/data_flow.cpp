@@ -89,10 +89,17 @@ void DataFlow::toDOT(const std::string &fileNamePath) {
         } else if (op.second->getType() == OP_IMMEDIATE) {
             myfile << " " << op.first;
             myfile << " [ label = " << op.second->getOpCode() << "i";
-            myfile << ", VALUE = " << op.second->getConst()[0][1];
-            myfile << "]" << std::endl;
-            myfile << " \"" << op.first << "." << op.second->getConst()[0][1] << "\"[ label = " << op.second->getConst()[0][1]
-                   << " ]" << std::endl;
+            myfile << ", value = \"[";
+            auto v = op.second->getConst();
+            for(int i = 0;i < v.size()-1;i++){
+                    myfile << "[" << v[i][0] <<","<<v[i][1] << "],";
+            }
+            myfile << "[" << v[v.size()-1][0] <<","<<v[v.size()-1][1] << "]";
+            myfile << "]\"]" << std::endl;
+
+            for(auto c : op.second->getConst()) {
+                myfile << " \"" << op.first << "." << c[1] << "\"[ label = " << c[1] << " ]" << std::endl;
+            }
 
         } else {
             myfile << " " << op.first << " [ label = " << op.second->getOpCode() << "]" << std::endl;
@@ -101,7 +108,9 @@ void DataFlow::toDOT(const std::string &fileNamePath) {
     }
     for (auto op:DataFlow::op_array) {
         if (op.second->getType() == OP_IMMEDIATE) {
-            myfile << " \"" << op.first << "." << op.second->getConst()[0][1] << "\" -> " << op.first << std::endl;
+            for(auto c : op.second->getConst()){
+                myfile << " \"" << op.first << "." << c[1] << "\" -> " << op.first << std::endl;
+            }
         }
         for (auto op_dst:op.second->getDst()) {
             myfile << " " << op.first << " -> " << op_dst->getId() << std::endl;

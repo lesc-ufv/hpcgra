@@ -19,8 +19,8 @@ OperatorFactory::OperatorFactory() {
     Register("maxi", &Maxi::create);
     Register("min", &Min::create);
     Register("mini", &Mini::create);
-    Register("mult", &Mult::create);
-    Register("multi", &Multi::create);
+    Register("mul", &Mul::create);
+    Register("muli", &Muli::create);
     Register("mux", &Mux::create);
     Register("muxi", &Muxi::create);
     Register("not", &Not::create);

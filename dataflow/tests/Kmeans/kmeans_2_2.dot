@@ -1,0 +1,37 @@
+digraph kmeans{
+ 0 [ label = subi, value = "[[1,0]]"]
+ "0.0"[ label = 0 ]
+ 1 [ label = subi, value = "[[1,1]]"]
+ "1.1"[ label = 1 ]
+ 2 [ label = subi, value = "[[1,2]]"]
+ "2.2"[ label = 2 ]
+ 3 [ label = subi, value = "[[1,3]]"]
+ "3.3"[ label = 3 ]
+ 4 [ label = input4 ]
+ 5 [ label = input5 ]
+ 6 [ label = output6 ]
+ 7 [ label = add]
+ 8 [ label = add]
+ 9 [ label = slt]
+ 10 [ label = muxi, value = "[[1,0],[2,1]]"]
+ "10.0"[ label = 0 ]
+ "10.1"[ label = 1 ]
+ "0.0" -> 0
+ 0 -> 7
+ "1.1" -> 1
+ 1 -> 7
+ "2.2" -> 2
+ 2 -> 8
+ "3.3" -> 3
+ 3 -> 8
+ 4 -> 0
+ 4 -> 2
+ 5 -> 1
+ 5 -> 3
+ 7 -> 9
+ 8 -> 9
+ 9 -> 10
+ "10.0" -> 10
+ "10.1" -> 10
+ 10 -> 6
+}

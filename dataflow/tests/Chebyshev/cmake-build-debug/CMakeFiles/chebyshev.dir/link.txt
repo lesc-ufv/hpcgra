@@ -1,1 +1,0 @@
-/usr/bin/c++   -O3 -g  -rdynamic CMakeFiles/chebyshev.dir/chebyshev.cpp.o  -o chebyshev  -Wl,-rpath,/media/lucas/3CF6B349F6B301E6/UFV/Projetos/Projetos-Pos-Graduacao/Doutorado/hpcgra/dataflow/tests/Chebyshev/cmake-build-debug libdataflow.so 

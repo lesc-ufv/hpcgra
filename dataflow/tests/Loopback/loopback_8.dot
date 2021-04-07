@@ -1,0 +1,26 @@
+digraph loopback{
+ 0 [ label = input0 ]
+ 1 [ label = output1 ]
+ 2 [ label = input2 ]
+ 3 [ label = output3 ]
+ 4 [ label = input4 ]
+ 5 [ label = output5 ]
+ 6 [ label = input6 ]
+ 7 [ label = output7 ]
+ 8 [ label = input8 ]
+ 9 [ label = output9 ]
+ 10 [ label = input10 ]
+ 11 [ label = output11 ]
+ 12 [ label = input12 ]
+ 13 [ label = output13 ]
+ 14 [ label = input14 ]
+ 15 [ label = output15 ]
+ 0 -> 1
+ 2 -> 3
+ 4 -> 5
+ 6 -> 7
+ 8 -> 9
+ 10 -> 11
+ 12 -> 13
+ 14 -> 15
+}

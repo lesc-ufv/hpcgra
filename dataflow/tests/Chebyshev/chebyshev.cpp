@@ -4,8 +4,8 @@ int main(int argc, char *argv[]) {
     
     auto df = createDataFlow(0,1);
     
-    df->toJSON("chebyshev.json");
-    df->toDOT("chebyshev.dot");
+    df->toJSON("../chebyshev.json");
+    df->toDOT("../chebyshev.dot");
     
     delete df;
 
@@ -30,13 +30,13 @@ DataFlow *createDataFlow(int id, int copies) {
         auto reg5 = new Addi(idx++,0);
         auto reg6 = new Addi(idx++,0);
         auto reg7 = new Addi(idx++,0);
-        auto mult1 = new Multi(idx++,16);
-        auto mult2 = new Mult(idx++);
+        auto mult1 = new Muli(idx++,16);
+        auto mult2 = new Mul(idx++);
         auto sub1 = new Subi(idx++,20);
-        auto mult3 = new Mult(idx++);
-        auto mult4 = new Mult(idx++);
+        auto mult3 = new Mul(idx++);
+        auto mult4 = new Mul(idx++);
         auto add1 = new Addi(idx++, 5);
-        auto mult5 = new Mult(idx++);
+        auto mult5 = new Mul(idx++);
 
         df->connect(in[i], mult1, 0);
         df->connect(in[i], reg1, 0);

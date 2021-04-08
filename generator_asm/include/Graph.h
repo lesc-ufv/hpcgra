@@ -49,6 +49,10 @@ public:
 
     int get_port(int u, int v);
 
+    const int get_number_inputs() {
+        return this->sum_inputs;
+    }
+
     vector<int> get_predecessors(int u);
 
     vector<vector<int>> get_fanin();
@@ -72,6 +76,7 @@ private:
     map<int, string> opcode;
     map<pair<int, int>, int> port;
     map<int, vector<pair<int, int>>> constant;
+    int sum_inputs;
 };
 
 Graph::Graph() {}
@@ -90,11 +95,14 @@ Graph::Graph(string filename) {
     ifs.close();
 
     int u, v;
+    this->sum_inputs = 0;
     for (auto node : data["nodes"]) {
         u = atoi(node["id"].asCString());
         this->nodes.push_back(u);
         this->opcode[u] = node["opcode"].asString();
         this->name_label[u] = node["label"].asString();
+
+        if (node["opcode"].asString() == "input") this->sum_inputs++;
 
         if (node.isMember("const")) {
             for (auto c : node["const"]) {
@@ -213,7 +221,7 @@ vector<vector<int>> Graph::get_fanout() {
 vector<int> Graph::get_inputs() {
     vector<int> aux;
     for (int i = 0; i < num_nodes(); ++i)
-        if (get_predecessors(i).size() == 0) aux.push_back(i);
+        if (get_opcode(i) == "input") aux.push_back(i);
     return aux;
 }
 

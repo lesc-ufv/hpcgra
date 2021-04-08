@@ -48,6 +48,10 @@ class AluOperationNot(AluOperationUnary):
         temp = m.Reg('not_temp', src_a.width)
         return [temp(Not(src_a)), dst(temp)]
 
+class AluOperationAbs(AluOperationUnary):
+    def get(self, m, dst, src_a):
+        temp = m.Reg('abs_temp', src_a.width)
+        return [temp(Abs(src_a)), dst(temp)]
 
 class AluOperationPass(AluOperationUnary):
     def get(self, m, dst, src_a):
@@ -79,23 +83,26 @@ class AluOperationOr(AluOperationBinary):
         return [temp(Or(src_a, src_b)), dst(temp)]
 
 
+class AluOperationXor(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('xor_temp', src_a.width)
+        return [temp(Xor(src_a, src_b)), dst(temp)]
+
+
 class AluOperationAnd(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
         temp = m.Reg('and_temp', src_a.width)
         return [temp(And(src_a, src_b)), dst(temp)]
 
-
-class AluOperationSlt(AluOperationBinary):
+class AluOperationShl(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
-        temp = m.Reg('slt_temp', src_a.width)
-        return [temp(Mux(src_a < src_b, 1, 0)), dst(temp)]
+        temp = m.Reg('shl_temp', src_a.width)
+        return [temp(Sll(src_a, src_b)), dst(temp)]
 
-
-class AluOperationSgt(AluOperationBinary):
+class AluOperationShr(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
-        temp = m.Reg('sgt_temp', src_a.width)
-        return [temp(Mux(src_a > src_b, 1, 0)), dst(temp)]
-
+        temp = m.Reg('shr_temp', src_a.width)
+        return [temp(Srl(src_a, src_b)), dst(temp)]
 
 class AluOperationMulAdd(AluOperationTernary):
     def get(self, m, dst, src_a, src_b, src_c):
@@ -132,6 +139,37 @@ class AluOperationMux(AluOperationTernary):
         temp = m.Reg('mux_temp', src_a.width)
         return [temp(Mux(src_a, src_b, src_c)), dst(temp)]
 
+class AluOperationSlt(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('slt_temp', src_a.width)
+        return [temp(Mux(src_a < src_b, 1, 0)), dst(temp)]
+
+
+class AluOperationSgt(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('sgt_temp', src_a.width)
+        return [temp(Mux(src_a > src_b, 1, 0)), dst(temp)]
+    
+    
+class AluOperationSeq(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('seq_temp', src_a.width)
+        return [temp(Mux(src_a == src_b, 1, 0)), dst(temp)]
+    
+class AluOperationSne(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('sne_temp', src_a.width)
+        return [temp(Mux(src_a != src_b, 1, 0)), dst(temp)]
+
+class AluOperationMax(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('max_temp', src_a.width)
+        return [temp(Mux(src_a > src_b, src_a, src_b)), dst(temp)]
+
+class AluOperationMin(AluOperationBinary):
+    def get(self, m, dst, src_a, src_b):
+        temp = m.Reg('max_temp', src_a.width)
+        return [temp(Mux(src_a < src_b, src_a, src_b)), dst(temp)]
 
 class CgraAluOperations:
     @staticmethod
@@ -141,8 +179,10 @@ class CgraAluOperations:
             'sub': AluOperationSub(),
             'mul': AluOperationMul(),
             'or': AluOperationOr(),
+            'xor': AluOperationXor(),
             'and': AluOperationAnd(),
             'not': AluOperationNot(),
+            'abs': AluOperationAbs(),
             'pass': AluOperationPass(),
             'muladd': AluOperationMulAdd(),
             'mulsub': AluOperationMulSub(),
@@ -151,5 +191,11 @@ class CgraAluOperations:
             'addsub': AluOperationAddSub(),
             'mux': AluOperationMux(),
             'slt': AluOperationSlt(),
-            'sgt': AluOperationSgt()
+            'sgt': AluOperationSgt(),
+            'seq': AluOperationSeq(),
+            'sne': AluOperationSne(),
+            'shl': AluOperationShl(),
+            'shr': AluOperationShr(),
+            'max': AluOperationMax(),
+            'min': AluOperationMin(),
         }

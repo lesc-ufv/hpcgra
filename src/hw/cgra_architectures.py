@@ -88,7 +88,8 @@ def create_cgra(arch_net, shape, isa, routes, fifos, acc, data_width, conf_bus_w
                 pe_type = 'basic'
 
             neighbors = create_neighbors(shape, i, j, arch_net)
-            pe = {'id': id, 'type': pe_type, 'neighbors': neighbors, 'routes': routes, 'elastic_queue': fifos,
+            routes_min = min(len(neighbors) + 1, routes)
+            pe = {'id': id, 'type': pe_type, 'neighbors': neighbors, 'routes': routes_min, 'elastic_queue': fifos,
                   'acc': acc, 'isa': isa}
             json_arch['pe'].append(pe)
 

@@ -9,10 +9,10 @@ OperatorFactory::OperatorFactory() {
     Register("subi", &Subi::create);
     Register("and", &And::create);
     Register("andi", &Andi::create);
-    Register("beq", &Seq::create);
-    Register("beqi", &Seqi::create);
-    Register("bne", &Sne::create);
-    Register("bnei", &Snei::create);
+    Register("seq", &Seq::create);
+    Register("seqi", &Seqi::create);
+    Register("sne", &Sne::create);
+    Register("snei", &Snei::create);
     Register("input", &InputStream::create);
     Register("output", &OutputStream::create);
     Register("max", &Max::create);

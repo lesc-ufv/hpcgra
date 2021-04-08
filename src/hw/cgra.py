@@ -200,17 +200,17 @@ class Cgra:
         mux_alu_bits = bits(len(mux_alu_inputs))
         alu_in = [m.Wire('alu_in%d' % i, self.data_width) for i in range(alu_num_inputs)]
         alu_out = m.Wire('alu_out', self.data_width)
-        sel_alu_opcode = m.Wire('sel_alu_opcode', bits(num_opcodes))
-        sel_mux_alu = [m.Wire('sel_mux_alu%d' % i, mux_alu_bits) for i in range(alu_num_inputs)]
+        sel_alu_opcode = m.Reg('sel_alu_opcode', bits(num_opcodes))
+        sel_mux_alu = [m.Reg('sel_mux_alu%d' % i, mux_alu_bits) for i in range(alu_num_inputs)]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
         router = self.components.create_router(routes, len(neighbors) + 1, len(outputs))
         route_ports = router.get_ports()
         route_sel_in = None
         route_sel_out = None
         if 'sel_in' in route_ports.keys():
-            route_sel_in = m.Wire('route_sel_in', route_ports['sel_in'].width)
+            route_sel_in = m.Reg('route_sel_in', route_ports['sel_in'].width)
         if 'sel_out' in route_ports.keys():
-            route_sel_out = m.Wire('route_sel_out', route_ports['sel_out'].width)
+            route_sel_out = m.Reg('route_sel_out', route_ports['sel_out'].width)
 
         mux_alu = self.components.create_multiplexer(len(mux_alu_inputs))
         sel_elastic_pipeline = []
@@ -229,7 +229,7 @@ class Cgra:
             elastic_pipeline_to_alu = m.Wire('elastic_pipeline_to_alu%d' % i, self.data_width)
             con = [('in', alu_in[i]), ('out', elastic_pipeline_to_alu)]
             if elastic_queue[i] > 0:
-                w = m.Wire('sel_elastic_pipeline%d' % i, bits(elastic_queue[i] + 1))
+                w = m.Reg('sel_elastic_pipeline%d' % i, bits(elastic_queue[i] + 1))
                 sel_elastic_pipeline.append(w)
                 con.append(('clk', clk))
                 con.append(('en', en))
@@ -313,17 +313,22 @@ class Cgra:
 
         m.Instance(cf, 'pe_conf_reader', params, con)
 
+
+        stm = []
         last = 0
         for p in conf_array_alu:
-            p.assign(conf_alu[last:last + p.width])
+            stm.append(p(conf_alu[last:last + p.width]))
             last += p.width
 
         if conf_router_width > 0:
             last = 0
             for p in conf_array_router:
-                p.assign(conf_router[last:last + p.width])
+                stm.append(p(conf_router[last:last + p.width]))
                 last += p.width
 
+        m.Always(Posedge(clk))(
+            stm
+        )
         self.cache[name] = m
 
         return m
@@ -377,6 +382,7 @@ class Cgra:
         seq.implement()
 
         out.assign(reg_results[opcode])
+
         initialize_regs(m)
         self.cache[name] = m
         return m
@@ -399,8 +405,8 @@ class Cgra:
         reset = m.OutputReg('reset')
         conf_alu = m.OutputReg('conf_alu', conf_alu_width)
         conf_const = m.OutputReg('conf_const', self.data_width * alu_num_inputs)
-        conf_router = ''
-        conf_acc = ''
+        conf_router = None
+        conf_acc = None
         conf_width = pe_id_width + tag_bits
         if has_acc:
             conf_acc = m.OutputReg('conf_acc', self.data_width)
@@ -415,6 +421,9 @@ class Cgra:
 
         conf_bus_r = m.Reg('conf_bus_r', self.conf_bus_width + 1)
         conf_valid = m.Reg('conf_valid')
+        conf_reg0 = m.Reg('conf_reg0', conf_width)
+        conf_reg1 = m.Reg('conf_reg1', conf_width)
+        conf_reg2 = m.Reg('conf_reg2', conf_width)
         conf_reg = m.Reg('conf_reg', conf_width)
         conf_raw_reg = m.Reg('conf_raw_reg', val * self.conf_bus_width)
         count = m.Reg('count', val)
@@ -423,17 +432,24 @@ class Cgra:
         )
         m.Always(Posedge(clk))(
             conf_valid(Int(0, 1, 2)),
-            conf_reg(Int(0, conf_width, 2)),
+            conf_reg0(Int(0, conf_width, 2)),
             conf_raw_reg(Mux(conf_bus_r[0], Cat(conf_bus_r[1:], conf_raw_reg[self.conf_bus_width:]),
                              Int(0, conf_raw_reg.width, 10))),
             count(Mux(conf_bus_r[0], Cat(Int(1, 1, 2), count[1:]), Int(0, count.width, 10))),
 
             If(count[0])(
-                conf_reg(conf_raw_reg[0:conf_reg.width]),
+                conf_reg0(conf_raw_reg[0:conf_reg0.width]),
                 conf_valid(Int(1, 1, 2)),
                 count(Cat(conf_bus_r[0], Int(0, count.width - 1, 2)))
             )
         )
+
+        m.Always(Posedge(clk))(
+            conf_reg1(conf_reg0),
+            conf_reg2(conf_reg1),
+            conf_reg(conf_reg2)
+        )
+
         case = Case(conf_reg[pe_id_width:pe_id_width + tag_bits])()
 
         reset_case = When(Int(0, tag_bits, 2))(reset(Int(1, 1, 2)), conf_alu(0), conf_const(0))

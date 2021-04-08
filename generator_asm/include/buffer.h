@@ -114,11 +114,6 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
         if (results[i] >= MAXVALUE) continue;
         get_critical_path(g, SIZE_NODES, levelOrig[i]);
         dfsLvl(g, SIZE_NODES, level[i], edges_cost[i]);
-
-        /*
-        for (int j = 0; j < SIZE_NODES; ++j) {
-            printf("Node %d lvl before %d lvl after %d\n", j, levelOrig[i][j], level[i][j]);
-        }*/
     }
 
     bool *visited = new bool[SIZE_NODES];
@@ -128,10 +123,7 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
     set<int> inp;
     for (int i = 0; i < inputs.size(); ++i) inp.insert(inputs[i]);
 
-    int minNumberFifos;
-
     for (int k = 0; k < NGRIDS; k++) {
-        minNumberFifos = 100000;
         if (results[k] >= MAXVALUE) continue;
 
         //Initializing map with buffer size 0 for each edge
@@ -144,7 +136,6 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
         dfsBuffer(g, level[k], levelOrig[k], buffers[k], edges_cost[k]);
 
         int a, b, port, pe, buffer_arch;
-        int best_worst_buffer = 9999;
         pair<int, int> key;
 
         // verify buffer by edges

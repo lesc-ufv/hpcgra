@@ -148,13 +148,6 @@ int main(int argc, char **argv) {
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results,
                     h_edgeA, h_edgeB, table);
 
-#if __DEBUG
-    printf("Cost Before\n");
-    for(int i = 0; i < NGRIDS; ++i) {
-        printf("n = %d cost = %d\n", i, results[i]);
-    }
-#endif
-
     //printf("place\n");
     start = high_resolution_clock::now();
 #pragma omp parallel for
@@ -185,13 +178,6 @@ int main(int argc, char **argv) {
 
     duration = (stop - start);
     time_route = duration.count();
-
-#if __DEBUG
-    printf("New cost after routing\n");
-    for (int i = 0; i < NGRIDS; ++i) {
-        printf("Sol %d new cost: %d\n", i, results[i]);
-    }
-#endif
 
     map<pair<int, int>, int> *buffers_EDGE = new map<pair<int, int>, int>[NGRIDS];
 
@@ -242,23 +228,6 @@ int main(int argc, char **argv) {
     printf("Wire cost        : %d\n", results[best_index]);
     printf("Worst buffer     : %d\n\n", worst_fifo);
 
-#if __DEBUG
-    if (best_index != -1) {
-        printf("\nPlacement After:\n");
-        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            if (j % SIZE_GRID == 0) printf("\n");
-            printf("%3d ", grid[best_index*TOTAL_GRID_SIZE+j]);
-        }
-        printf("\n");
-
-        printf("\nGRID PE:\n");
-        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            if (j % SIZE_GRID == 0) printf("\n");
-            printf("%3d ", j);
-        }
-        printf("\n");
-    }
-#endif
 
     delete v;
     delete v_i;

@@ -415,7 +415,7 @@ class Cgra:
 
         conf_bus_r = m.Reg('conf_bus_r', self.conf_bus_width + 1)
         conf_valid = m.Reg('conf_valid')
-        conf_reg = m.Reg('conf_reg', conf_width)
+        conf_reg = m.Reg('conf_reg', conf_width,3)
         conf_raw_reg = m.Reg('conf_raw_reg', val * self.conf_bus_width)
         count = m.Reg('count', val)
         m.Always(Posedge(clk))(
@@ -423,46 +423,52 @@ class Cgra:
         )
         m.Always(Posedge(clk))(
             conf_valid(Int(0, 1, 2)),
-            conf_reg(Int(0, conf_width, 2)),
+            conf_reg[0](Int(0, conf_width, 2)),
             conf_raw_reg(Mux(conf_bus_r[0], Cat(conf_bus_r[1:], conf_raw_reg[self.conf_bus_width:]),
                              Int(0, conf_raw_reg.width, 10))),
             count(Mux(conf_bus_r[0], Cat(Int(1, 1, 2), count[1:]), Int(0, count.width, 10))),
 
             If(count[0])(
-                conf_reg(conf_raw_reg[0:conf_reg.width]),
+                conf_reg[0](conf_raw_reg[0:conf_reg.width]),
                 conf_valid(Int(1, 1, 2)),
                 count(Cat(conf_bus_r[0], Int(0, count.width - 1, 2)))
             )
         )
-        case = Case(conf_reg[pe_id_width:pe_id_width + tag_bits])()
+            
+        m.Always(Posedge(clk)(
+             conf_reg[1](conf_reg[0]),
+             conf_reg[2](conf_reg[1])
+        )    
+        
+        case = Case(conf_reg[2][pe_id_width:pe_id_width + tag_bits])()
 
         reset_case = When(Int(0, tag_bits, 2))(reset(Int(1, 1, 2)), conf_alu(0), conf_const(0))
         case.add(reset_case)
 
         alu_case = When(Int(1, tag_bits, 2))(
-            conf_alu(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + conf_alu_width]))
+            conf_alu(conf_reg[2][pe_id_width + tag_bits:pe_id_width + tag_bits + conf_alu_width]))
         case.add(alu_case)
 
         for i in range(alu_num_inputs):
             const_case = When(Int(2 + i, tag_bits, 2))(
                 conf_const[Mul(i, self.data_width):Mul((i + 1), self.data_width)](
-                    conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width]))
+                    conf_reg[2][pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width]))
             case.add(const_case)
 
         if has_router:
             router_case = When(Int(alu_num_inputs + 2, tag_bits, 2))(
-                conf_router(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + conf_router_width]))
+                conf_router(conf_reg[2][pe_id_width + tag_bits:pe_id_width + tag_bits + conf_router_width]))
             reset_case.add(conf_router(0))
             case.add(router_case)
         if has_acc:
             acc_case = When(Int(alu_num_inputs + 3, tag_bits, 2))(
-                conf_acc(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width]))
+                conf_acc(conf_reg[2][pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width]))
             reset_case.add(conf_acc(0))
             case.add(acc_case)
 
         m.Always(Posedge(clk))(
             reset(Int(0, 1, 2)),
-            If(AndList(conf_valid, pe_id == conf_reg[0:pe_id_width]))(case)
+            If(AndList(conf_valid, pe_id == conf_reg[2][0:pe_id_width]))(case)
         )
 
         initialize_regs(m)

@@ -15,7 +15,7 @@
 #include <cmath>
 #include <ctime>
 #include <chrono>
-#include <algorithm> 
+#include <algorithm>
 #include <fstream>
 #include <omp.h>
 #include <map>

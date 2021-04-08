@@ -40,25 +40,28 @@ typedef struct pe_t {
     vector<int> isa;
 } pe_t;
 
-bool read_arch(string &arch_file, vector<pe_t>& pe) {
+bool read_arch(string &arch_file, vector<pe_t> &pe) {
 
     // map to 
-    map<string,int> map_type = {{"input", 0}, {"output", 1}, {"inout", 2}, {"basic", 3}};
+    map<string, int> map_type = {{"input",  0},
+                                 {"output", 1},
+                                 {"inout",  2},
+                                 {"basic",  3}};
 
     // map to isa
-    std::map<std::string, int> map_isa = {{"add", 0},
-                                        {"sub", 1},
-                                        {"mul", 2},
-                                        {"or", 3},
-                                        {"and", 4},
-                                        {"not", 5},
-                                        {"pass", 6},
-                                        {"muladd", 7},
-                                        {"mulsub", 8},
-                                        {"addadd", 9},
-                                        {"subsub", 10},
-                                        {"addsub", 11},
-                                        {"mux", 12}};
+    std::map<std::string, int> map_isa = {{"add",    0},
+                                          {"sub",    1},
+                                          {"mul",    2},
+                                          {"or",     3},
+                                          {"and",    4},
+                                          {"not",    5},
+                                          {"pass",   6},
+                                          {"muladd", 7},
+                                          {"mulsub", 8},
+                                          {"addadd", 9},
+                                          {"subsub", 10},
+                                          {"addsub", 11},
+                                          {"mux",    12}};
 
     Json::Value data;
     std::ifstream ifs;
@@ -80,7 +83,7 @@ bool read_arch(string &arch_file, vector<pe_t>& pe) {
         pe_t aux_pe;
         aux_pe.id = data["pe"][i]["id"].asInt();
         aux_pe.type = map_type[data["pe"][i]["type"].asString()];
-        
+
         size_neighbors = data["pe"][i]["neighbors"].size();
         for (int j = 0; j < size_neighbors; ++j) {
             aux_pe.neighbors.push_back(data["pe"][i]["neighbors"][j].asInt());

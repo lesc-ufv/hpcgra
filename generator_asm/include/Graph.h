@@ -13,44 +13,68 @@
 using namespace std;
 
 class Graph {
-    public:
-        struct Vertex { int foo; };
-        Graph();
-        Graph(string filename);
-        Graph(const Graph &g);
-        ~Graph();
-        void print();
-        void print_graph_number();
-        void write(string filename="test.dot");
-        //vertex_t add_node(Vertex u); // ps da vida kkk
-        const int num_nodes();
-        const int num_edges();
-        vector<pair<int,int>> get_edges();
-        vector<pair<int,int>> get_edges_inverse();
-        vector<int> get_nodes();
-        string get_name_node(int u);
-        string get_opcode(int u);
-        int get_port(int u, int v);
-        vector<int> get_predecessors(int u);
-        vector<vector<int>> get_fanin();
-        vector<vector<int>> get_fanout();
-        vector<int> get_sucessors(int u);
-        vector<int> get_inputs();
-        vector<int> get_outputs();
-		vector<pair<int,int>> get_const(int u);
-        //vector<double> get_betweenness_centrality();
-    private:
-        vector<int> nodes;
-        vector<pair<int,int>> edges;
-        map<int,vector<int>> node_in_degree;
-        map<int,vector<int>> node_out_degree;
-        map<int,string> name_label;
-        map<int,string> opcode;
-        map<pair<int,int>,int> port;
-		map<int,vector<pair<int,int>>> constant;
+public:
+    struct Vertex {
+        int foo;
+    };
+
+    Graph();
+
+    Graph(string filename);
+
+    Graph(const Graph &g);
+
+    ~Graph();
+
+    void print();
+
+    void print_graph_number();
+
+    void write(string filename = "test.dot");
+
+    //vertex_t add_node(Vertex u); // ps da vida kkk
+    const int num_nodes();
+
+    const int num_edges();
+
+    vector<pair<int, int>> get_edges();
+
+    vector<pair<int, int>> get_edges_inverse();
+
+    vector<int> get_nodes();
+
+    string get_name_node(int u);
+
+    string get_opcode(int u);
+
+    int get_port(int u, int v);
+
+    vector<int> get_predecessors(int u);
+
+    vector<vector<int>> get_fanin();
+
+    vector<vector<int>> get_fanout();
+
+    vector<int> get_sucessors(int u);
+
+    vector<int> get_inputs();
+
+    vector<int> get_outputs();
+
+    vector<pair<int, int>> get_const(int u);
+    //vector<double> get_betweenness_centrality();
+private:
+    vector<int> nodes;
+    vector<pair<int, int>> edges;
+    map<int, vector<int>> node_in_degree;
+    map<int, vector<int>> node_out_degree;
+    map<int, string> name_label;
+    map<int, string> opcode;
+    map<pair<int, int>, int> port;
+    map<int, vector<pair<int, int>>> constant;
 };
 
-Graph::Graph() { }
+Graph::Graph() {}
 
 Graph::Graph(string filename) {
 
@@ -65,44 +89,44 @@ Graph::Graph(string filename) {
     }
     ifs.close();
 
-	int u, v;
+    int u, v;
     for (auto node : data["nodes"]) {
         u = atoi(node["id"].asCString());
         this->nodes.push_back(u);
-		this->opcode[u] = node["opcode"].asString();
-		this->name_label[u] = node["label"].asString();
-		
-		if (node.isMember("const")) {
-			for (auto c : node["const"]) {
-				this->constant[u].push_back(make_pair(atoi(c[0].asCString()),atoi(c[1].asCString())));
-			}
-		}
+        this->opcode[u] = node["opcode"].asString();
+        this->name_label[u] = node["label"].asString();
+
+        if (node.isMember("const")) {
+            for (auto c : node["const"]) {
+                this->constant[u].push_back(make_pair(atoi(c[0].asCString()), atoi(c[1].asCString())));
+            }
+        }
     }
 
-	for (auto edge : data["edges"]) {
-		u = atoi(edge["source"].asCString());
-		v = atoi(edge["target"].asCString());
+    for (auto edge : data["edges"]) {
+        u = atoi(edge["source"].asCString());
+        v = atoi(edge["target"].asCString());
         this->edges.push_back(make_pair(u, v));
-		this->port[make_pair(u, v)] = atoi(edge["port"].asCString());
-		this->node_out_degree[u].push_back(v);
-		this->node_in_degree[v].push_back(u);
+        this->port[make_pair(u, v)] = atoi(edge["port"].asCString());
+        this->node_out_degree[u].push_back(v);
+        this->node_in_degree[v].push_back(u);
     }
 }
 
 Graph::Graph(const Graph &g) {
-	this->nodes = g.nodes;
-	this->edges = g.edges;
-	this->node_in_degree = g.node_in_degree;
-	this->node_out_degree = g.node_out_degree;
-	this->name_label = g.name_label;
-	this->opcode = g.opcode;
-	this->port = g.port;
-	this->constant = g.constant;
+    this->nodes = g.nodes;
+    this->edges = g.edges;
+    this->node_in_degree = g.node_in_degree;
+    this->node_out_degree = g.node_out_degree;
+    this->name_label = g.name_label;
+    this->opcode = g.opcode;
+    this->port = g.port;
+    this->constant = g.constant;
 }
 
 Graph::~Graph() {
-	nodes.clear();
-	edges.clear();
+    nodes.clear();
+    edges.clear();
 }
 
 void Graph::print() {
@@ -110,16 +134,16 @@ void Graph::print() {
 }
 
 void Graph::write(string path) {
-	string graphName;  
-	if (path.length() < 4 && path.substr(path.find_last_of(".") + 1) != "dot") {
-		graphName = path;
-    	path.append(".dot");
-	} else {
-		graphName = path.substr(path.find_last_of(".") - 1);
-	}
+    string graphName;
+    if (path.length() < 4 && path.substr(path.find_last_of(".") + 1) != "dot") {
+        graphName = path;
+        path.append(".dot");
+    } else {
+        graphName = path.substr(path.find_last_of(".") - 1);
+    }
 
-	//ofstream dotfile (path.c_str());
-	//write_graphviz_dp(dotfile, this->graph, this->dp);
+    //ofstream dotfile (path.c_str());
+    //write_graphviz_dp(dotfile, this->graph, this->dp);
 }
 
 /*
@@ -129,7 +153,7 @@ vertex_t Graph::add_node(Vertex u) {
 */
 
 const int Graph::num_nodes() {
-	return this->nodes.size();
+    return this->nodes.size();
 }
 
 /*void Graph::add_edge(vertex_t u, vertex_t v) {
@@ -137,88 +161,88 @@ const int Graph::num_nodes() {
 }*/
 
 const int Graph::num_edges() {
-	return this->edges.size();
+    return this->edges.size();
 }
 
-vector<pair<int,int>> Graph::get_edges() {
-	return this->edges;
+vector<pair<int, int>> Graph::get_edges() {
+    return this->edges;
 }
 
 vector<int> Graph::get_nodes() {
-	return this->nodes;
+    return this->nodes;
 }
 
 string Graph::get_name_node(int u) {
-	return this->name_label[u];
+    return this->name_label[u];
 }
 
-vector<pair<int,int>> Graph::get_const(int u) {
-	return this->constant[u];
+vector<pair<int, int>> Graph::get_const(int u) {
+    return this->constant[u];
 }
 
 string Graph::get_opcode(int u) {
-	return this->opcode[u];
+    return this->opcode[u];
 }
 
 int Graph::get_port(int u, int v) {
-	return this->port[make_pair(u,v)];
+    return this->port[make_pair(u, v)];
 }
 
 vector<int> Graph::get_predecessors(int u) {
-	return this->node_in_degree[u];
+    return this->node_in_degree[u];
 }
 
 vector<int> Graph::get_sucessors(int u) {
-	return this->node_out_degree[u];
+    return this->node_out_degree[u];
 }
 
 vector<vector<int>> Graph::get_fanin() {
-	vector<vector<int>> aux;
-	for (int i = 0, n = num_nodes(); i < n; ++i)
-		aux.push_back(get_predecessors(i));
-	return aux;
+    vector<vector<int>> aux;
+    for (int i = 0, n = num_nodes(); i < n; ++i)
+        aux.push_back(get_predecessors(i));
+    return aux;
 }
 
 vector<vector<int>> Graph::get_fanout() {
-	vector<vector<int>> aux;
-	for (int i = 0, n = num_nodes(); i < n; ++i)
-		aux.push_back(get_sucessors(i));
-	return aux;
+    vector<vector<int>> aux;
+    for (int i = 0, n = num_nodes(); i < n; ++i)
+        aux.push_back(get_sucessors(i));
+    return aux;
 }
 
 vector<int> Graph::get_inputs() {
-	vector<int> aux;
-	for (int i = 0; i < num_nodes(); ++i)
-		if (get_predecessors(i).size() == 0) aux.push_back(i);
-	return aux;
+    vector<int> aux;
+    for (int i = 0; i < num_nodes(); ++i)
+        if (get_predecessors(i).size() == 0) aux.push_back(i);
+    return aux;
 }
 
 vector<int> Graph::get_outputs() {
-	vector<int> aux;
-	for (int i = 0; i < num_nodes(); ++i)
-		if (get_sucessors(i).size() == 0) aux.push_back(i);
-	return aux;
+    vector<int> aux;
+    for (int i = 0; i < num_nodes(); ++i)
+        if (get_sucessors(i).size() == 0) aux.push_back(i);
+    return aux;
 }
 
-vector<pair<int,int>> Graph::get_edges_inverse() {
-	vector<pair<int,int>> aux;
-	int u, v;
-	for(int i = num_edges()-1; i >= 0; --i){
-		u = get_edges()[i].first;
-		v = get_edges()[i].second;
-		aux.push_back(make_pair(v,u));
-	}
-	return aux;
+vector<pair<int, int>> Graph::get_edges_inverse() {
+    vector<pair<int, int>> aux;
+    int u, v;
+    for (int i = num_edges() - 1; i >= 0; --i) {
+        u = get_edges()[i].first;
+        v = get_edges()[i].second;
+        aux.push_back(make_pair(v, u));
+    }
+    return aux;
 }
 
 void Graph::print_graph_number() {
-	vector<pair<int,int>> edges;
+    vector<pair<int, int>> edges;
 
-	cout << "digraph G {" << endl;
-	for (int i = 0; i < num_edges(); ++i) {
-		cout << this->edges[i].first << "->" << this->edges[i].second << endl;
-	}
-	cout << "}" << endl;
+    cout << "digraph G {" << endl;
+    for (int i = 0; i < num_edges(); ++i) {
+        cout << this->edges[i].first << "->" << this->edges[i].second << endl;
+    }
+    cout << "}" << endl;
 
 }
 

@@ -1,15 +1,13 @@
 #ifndef __ROUTING_H
 #define __ROUTING_H
 
-//
-
 typedef struct route_t {
     vector<int> *path;
 } route_t;
 
 void remove_element(int pe_a, int pe_b, vector<int> *grid_route) {
-    grid_route[pe_a].erase(remove(grid_route[pe_a].begin(), 
-        grid_route[pe_a].end(), pe_b), grid_route[pe_a].end());
+    grid_route[pe_a].erase(remove(grid_route[pe_a].begin(),
+                                  grid_route[pe_a].end(), pe_b), grid_route[pe_a].end());
 }
 
 /*
@@ -82,17 +80,25 @@ typedef pair<int, int> pd;
 // Structure of the condition for sorting 
 // the pair by its second elements
 struct spq {
-    constexpr bool operator()(pair<int, int> const& a, 
-        pair<int, int> const& b) const noexcept {
+    constexpr bool operator()(pair<int, int> const &a,
+                              pair<int, int> const &b) const noexcept {
         return a.second > b.second; // min, to max change signal
     }
 };
 
-bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
-    int a, int b, vector<int> *grid_route,
-    map<pair<int,int>,vector<int>> &route, int &results, 
-    map<pair<int,int>,int> &edges_cost, int **table) {
-    
+bool try_route_aStar(
+        const int TOTAL_GRID_SIZE,
+        int pe_a,
+        int pe_b,
+        int a,
+        int b,
+        vector<int> *grid_route,
+        map<pair<int, int>, vector<int>> &route,
+        int &results,
+        map<pair<int, int>, int> &edges_cost,
+        int **table
+) {
+
     int node, cost, cost_g, cost_h;
 
     // shortest distance between pes
@@ -104,7 +110,7 @@ bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
     open.push(make_pair(pe_a, table[pe_a][pe_b]));
 
     bool found = false;
-    map<pd,int> closed;
+    map<pd, int> closed;
     int cost_b, index_b;
 
     //printf("PE %d -> PE %d\n", pe_a, pe_b);
@@ -124,26 +130,28 @@ bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
             cost_h = table[n_son[j]][pe_b];
             cost_g = edges_cost[key];
             cost = cost_h + cost_g;
-            
+
             if (closed.find(key) == closed.end()) { // not in closed 
-                open.push(make_pair(n_son[j], cost_h+cost_g));
+                open.push(make_pair(n_son[j], cost_h + cost_g));
                 closed[key] = cost;
 
                 if (cost_b > cost) {
                     cost_b = cost;
                     index_b = j;
                 }
-                
-                if (n_son[j] == pe_b){ 
+
+                if (n_son[j] == pe_b) {
                     index_b = j;
                     found = true;
                     break;
                 }
-            } else if (closed[key] > cost_h+cost_g) {
-                closed[key] = cost_h+cost_g;
+            } else if (closed[key] > cost_h + cost_g) {
+                closed[key] = cost_h + cost_g;
             }
         }
-        path.push_back(make_pair(node,n_son[index_b]));
+        if (index_b >= 0) {
+            path.push_back(make_pair(node, n_son[index_b]));
+        }
         if (found) break;
     }
 
@@ -154,9 +162,9 @@ bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
     printf("\n");*/
 
     if (found) {
-        vector<pair<int,int>> new_path;
+        vector<pair<int, int>> new_path;
         int nodo = pe_b;
-        for(int i = path.size()-1; i > -1; --i) {
+        for (int i = path.size() - 1; i > -1; --i) {
             if (path[i].first == pe_a) {
                 new_path.push_back(make_pair(pe_a, nodo));
                 break;
@@ -168,13 +176,13 @@ bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
 
         // update values
         //printf("%d %d %d\n", results, new_path.size(), edges_cost[make_pair(a,b)]);
-        results += new_path.size()-edges_cost[make_pair(a,b)];
-        edges_cost[make_pair(a,b)] = new_path.size();
+        results += new_path.size() - edges_cost[make_pair(a, b)];
+        edges_cost[make_pair(a, b)] = new_path.size();
 
-        for (int i = new_path.size()-1; i > -1; --i) {
+        for (int i = new_path.size() - 1; i > -1; --i) {
             //printf("%d %d, ", new_path[i].first, new_path[i].second);
-            route[make_pair(a,b)].push_back(new_path[i].first);
-            route[make_pair(a,b)].push_back(new_path[i].second);
+            route[make_pair(a, b)].push_back(new_path[i].first);
+            route[make_pair(a, b)].push_back(new_path[i].second);
             remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
         //printf("\n");
@@ -184,11 +192,11 @@ bool try_route_aStar(const int TOTAL_GRID_SIZE, int pe_a, int pe_b,
 }
 
 void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
-    const int TOTAL_GRID_SIZE, map<pair<int,int>,int> *edges_cost, int *results, int *pos,
-    int *h_edgeA, int *h_edgeB, map<pair<int,int>,vector<int>> *route, vector<pe_t> &pe,
-    int **table) {
+             const int TOTAL_GRID_SIZE, map<pair<int, int>, int> *edges_cost, int *results, int *pos,
+             int *h_edgeA, int *h_edgeB, map<pair<int, int>, vector<int>> *route, vector<pe_t> &pe,
+             int **table) {
 
-    vector<pair<int,int>> edge[NGRIDS];
+    vector<pair<int, int>> edge[NGRIDS];
     route_t grid_route[NGRIDS];
 
     for (int i = 0; i < NGRIDS; ++i) {
@@ -197,24 +205,24 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
             grid_route[i].path[j] = get_neighbors(pe, j);
         }
     }
-    
+
     int a, b, pe_a, pe_b;
     // resolve first to edges of cost 1
     for (int j = 0; j < NGRIDS; ++j) {
         for (int i = 0; i < SIZE_EDGES; ++i) {
             a = h_edgeA[i];
             b = h_edgeB[i];
-            if (edges_cost[j][make_pair(a,b)] == 1) {
-                pe_a = pos[a+j*SIZE_NODES];
-                pe_b = pos[b+j*SIZE_NODES];
-                
+            if (edges_cost[j][make_pair(a, b)] == 1) {
+                pe_a = pos[a + j * SIZE_NODES];
+                pe_b = pos[b + j * SIZE_NODES];
+
                 // remove of the grid, get the pos(a) and remove the link with pos(b)
                 remove_element(pe_a, pe_b, grid_route[j].path);
                 //printf("%d %d\n", pe_a, pe_b);
-                route[j][make_pair(a,b)].push_back(pe_a);
-                route[j][make_pair(a,b)].push_back(pe_b);
+                route[j][make_pair(a, b)].push_back(pe_a);
+                route[j][make_pair(a, b)].push_back(pe_b);
             } else {
-                edge[j].push_back(make_pair(a,b));
+                edge[j].push_back(make_pair(a, b));
             }
         }
     }
@@ -237,13 +245,13 @@ void routing(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
         for (int i = 0; i < edge[j].size(); ++i) {
             a = edge[j][i].first;
             b = edge[j][i].second;
-            pe_a = pos[a+j*SIZE_NODES];
-            pe_b = pos[b+j*SIZE_NODES];
+            pe_a = pos[a + j * SIZE_NODES];
+            pe_b = pos[b + j * SIZE_NODES];
             //printf("%d [%d] -> %d [%d] cost: %d\n", a, pe_a, b, pe_b, edges_cost[j][make_pair(a,b)]);
             if (!try_route_aStar(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route[j].path,
-                route[j], results[j], edges_cost[j], table)) {
-                    results[j] = MAXVALUE;
-                    break; // it not possible 
+                                 route[j], results[j], edges_cost[j], table)) {
+                results[j] = MAXVALUE;
+                break; // it not possible
             }
             //printf("new cost: %d\n", edges_cost[j][make_pair(a,b)]);
         }

@@ -4,19 +4,19 @@
 #include <Graph.h>
 #include <get_critical_path.h>
 
-void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int,int>,int> &buffers, 
-    map<pair<int,int>,int> &edges){
-    std::queue<pair<int,int>> q;
+void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int, int>, int> &buffers,
+               map<pair<int, int>, int> &edges) {
+    std::queue<pair<int, int>> q;
     int node, nodeLvl;
     vector<int> outputs;
     pair<int, int> key, keyInv;
 
     outputs = g.get_outputs();
-    
+
     for (int i = 0; i < outputs.size(); ++i)
-        q.push(make_pair(outputs[i],level[outputs[i]]));
-    
-    while(!q.empty()) {
+        q.push(make_pair(outputs[i], level[outputs[i]]));
+
+    while (!q.empty()) {
         node = q.front().first;
         nodeLvl = q.front().second;
         int nodeLvlOrig = levelOrig[node];
@@ -26,45 +26,45 @@ void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int,int>,int> &buff
         vector<int> parents = g.get_predecessors(node);
         vector<int> parentLvl(parents.size()), parentLvlOrig(parents.size());
         vector<int> diffLvl(parents.size());
-        
+
         int min = INT_MAX;
-        for(int i = 0; i < parents.size(); i++){
+        for (int i = 0; i < parents.size(); i++) {
             if (node == parents[i]) continue;
             key.first = parents[i];
             key.second = node;
             int edgeCost;
             edgeCost = edges[key];
-            
-            parentLvl[i] = level[parents[i]]; 
+
+            parentLvl[i] = level[parents[i]];
             parentLvlOrig[i] = levelOrig[parents[i]];
 
             diffLvl[i] = (nodeLvl - nodeLvlOrig) - (parentLvl[i] - parentLvlOrig[i]) - edgeCost + 1;
-            
-            if(diffLvl[i] < 0) diffLvl[i] = 0;
+
+            if (diffLvl[i] < 0) diffLvl[i] = 0;
             //set buffer size
-            pair<int,int> aux_edge = make_pair(parents[i],node);
-            if(diffLvl[i] > buffers[aux_edge]) buffers[aux_edge] = diffLvl[i];
-            q.push(make_pair(parents[i],level[parents[i]]));
+            pair<int, int> aux_edge = make_pair(parents[i], node);
+            if (diffLvl[i] > buffers[aux_edge]) buffers[aux_edge] = diffLvl[i];
+            q.push(make_pair(parents[i], level[parents[i]]));
         }
     }
 }
 
-void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int,int>,int> &edges) {
-    std::queue<pair<int,int>> q;
+void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>, int> &edges) {
+    std::queue<pair<int, int>> q;
     vector<int> son, inputs;
     int dad, child, big_sum, new_cost, cost;
-    pair<int,int> key, keyInv;
+    pair<int, int> key, keyInv;
 
     inputs = g.get_inputs();
 
     for (int i = 0; i < NODE_SIZE; ++i)
         critical_path[i] = -1;
-    
+
     for (int i = 0; i < inputs.size(); ++i)
-        q.push(make_pair(inputs[i],0));
-    
+        q.push(make_pair(inputs[i], 0));
+
     big_sum = 0;
-    while(!q.empty()) {
+    while (!q.empty()) {
         dad = q.front().first;
         cost = q.front().second;
         q.pop();
@@ -79,9 +79,9 @@ void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int,int>,
             keyInv.second = dad;
             key.second = child;
             keyInv.first = child;
-            if(edges.count(key)>0) new_cost = cost + edges[key];
-            else if (edges.count(keyInv)>0) new_cost = cost + edges[keyInv];
-            q.push(make_pair(child,new_cost));
+            if (edges.count(key) > 0) new_cost = cost + edges[key];
+            else if (edges.count(keyInv) > 0) new_cost = cost + edges[keyInv];
+            q.push(make_pair(child, new_cost));
             if (new_cost > big_sum) big_sum = new_cost;
         }
     }
@@ -98,20 +98,20 @@ int manhattan_dist(int pos_a_i, int pos_a_j, int pos_b_i, int pos_b_j) {
 }*/
 
 void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGES,
-    int *h_edgeA, int *h_edgeB, int *results, map<pair<int,int>,int> *edges_cost, 
-    map<pair<int,int>,int> *buffers, vector<pe_t> &arch, int* pos) {
+            int *h_edgeA, int *h_edgeB, int *results, map<pair<int, int>, int> *edges_cost,
+            map<pair<int, int>, int> *buffers, vector<pe_t> &arch, int *pos) {
 
-    int** levelOrig = new int*[NGRIDS];
-    int** level = new int*[NGRIDS];
+    int **levelOrig = new int *[NGRIDS];
+    int **level = new int *[NGRIDS];
 
-    for(int i = 0; i < NGRIDS; ++i) {
+    for (int i = 0; i < NGRIDS; ++i) {
         levelOrig[i] = new int[SIZE_NODES];
         level[i] = new int[SIZE_NODES];
     }
 
     //Gets level of each node given edges costs
-    for(int i=0; i < NGRIDS; i++){
-        if(results[i] >= MAXVALUE) continue;
+    for (int i = 0; i < NGRIDS; i++) {
+        if (results[i] >= MAXVALUE) continue;
         get_critical_path(g, SIZE_NODES, levelOrig[i]);
         dfsLvl(g, SIZE_NODES, level[i], edges_cost[i]);
 
@@ -119,24 +119,24 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
         for (int j = 0; j < SIZE_NODES; ++j) {
             printf("Node %d lvl before %d lvl after %d\n", j, levelOrig[i][j], level[i][j]);
         }*/
-    } 
+    }
 
     bool *visited = new bool[SIZE_NODES];
     vector<int> outputs = g.get_outputs();
     vector<int> inputs = g.get_inputs();
-    
+
     set<int> inp;
-    for(int i=0; i < inputs.size(); ++i) inp.insert(inputs[i]);
-    
+    for (int i = 0; i < inputs.size(); ++i) inp.insert(inputs[i]);
+
     int minNumberFifos;
 
-    for(int k = 0; k < NGRIDS; k++){
+    for (int k = 0; k < NGRIDS; k++) {
         minNumberFifos = 100000;
-        if(results[k] >= MAXVALUE) continue;
+        if (results[k] >= MAXVALUE) continue;
 
         //Initializing map with buffer size 0 for each edge
-        for(int i = 0; i < SIZE_EDGES; i++){
-            pair<int,int> aux = make_pair(h_edgeA[i], h_edgeB[i]);
+        for (int i = 0; i < SIZE_EDGES; i++) {
+            pair<int, int> aux = make_pair(h_edgeA[i], h_edgeB[i]);
             buffers[k][aux] = 0;
         }
 
@@ -145,13 +145,13 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
 
         int a, b, port, pe, buffer_arch;
         // verify buffer by edges
-        for(int i = 0; i < SIZE_EDGES; i++){
+        for (int i = 0; i < SIZE_EDGES; i++) {
             a = h_edgeA[i];
             b = h_edgeB[i];
-            port = g.get_port(a,b);
-            pe = pos[k*SIZE_NODES+b];
+            port = g.get_port(a, b);
+            pe = pos[k * SIZE_NODES + b];
             buffer_arch = arch[pe].elastic_queue[port];
-            pair<int,int> key = make_pair(a, b);
+            pair<int, int> key = make_pair(a, b);
 #if __DEBUG
             printf("%d -> %d %d port: %d arch: %d buffer: %d\n", a, b, buffers[k][key], port, buffer_arch, buffers[k][key]);
 #endif

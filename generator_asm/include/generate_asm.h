@@ -28,7 +28,8 @@ void generate_asm(Graph g,
     vector<int> outputs = g.get_outputs();
     vector<int> son, grandfather;
 
-    bool visited[SIZE_NODES] = {false};
+    bool visited[SIZE_NODES];
+    for (int i = 0; i < SIZE_NODES; ++i) visited[i] = false;
 
     for (int i = 0; i < inputs.size(); ++i)
         q.push(make_pair(inputs[i], 0));

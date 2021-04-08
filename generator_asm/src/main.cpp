@@ -41,25 +41,6 @@ int main(int argc, char **argv) {
     const int TOTAL_GRID_SIZE = pe.size();
     const int SIZE_GRID = ceil(sqrt(TOTAL_GRID_SIZE));
 
-    /*
-    for (int i = 0; i < SIZE_NODES; ++i) {
-        printf("%d %s\n", i, g.get_name_node(i).c_str());
-    }
-    printf("\n");
-    for (int i = 0; i < SIZE_NODES; ++i) {
-        printf("%d %s\n", i, g.get_opcode(i).c_str());
-    }*/
-
-    /*
-    for (int i = 0; i < SIZE_NODES; ++i) {
-        printf("%d %s\n", i, g.get_name_node(i).c_str());
-        if (g.get_const(i).size() > 0) {
-            for (auto c : g.get_const(i)) {
-                printf("%d %d\n", c.first, c.second);
-            }
-        }
-    }*/
-
     int *table_pe = new int[TOTAL_GRID_SIZE];
 
     int id;

@@ -144,6 +144,9 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
         dfsBuffer(g, level[k], levelOrig[k], buffers[k], edges_cost[k]);
 
         int a, b, port, pe, buffer_arch;
+        int best_worst_buffer = 9999;
+        pair<int, int> key;
+
         // verify buffer by edges
         for (int i = 0; i < SIZE_EDGES; i++) {
             a = h_edgeA[i];
@@ -151,13 +154,10 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
             port = g.get_port(a, b);
             pe = pos[k * SIZE_NODES + b];
             buffer_arch = arch[pe].elastic_queue[port];
-            pair<int, int> key = make_pair(a, b);
-#if __DEBUG
-            printf("%d -> %d %d port: %d arch: %d buffer: %d\n", a, b, buffers[k][key], port, buffer_arch, buffers[k][key]);
-#endif
+            key = make_pair(a, b);
+
             if (buffers[k][key] > buffer_arch) {
                 results[k] = MAXVALUE;
-                break;
             }
         }
     }

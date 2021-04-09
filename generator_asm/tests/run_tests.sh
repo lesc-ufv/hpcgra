@@ -1,31 +1,28 @@
 #!/bin/bash
 
-set -e
+# set -e
 
 ARCH=(
 #./cgra_16x16_8_2.json
 # ./cgra_mesh_3x3.json
 # ./cgra_mesh_2x2.json
-./cgra_16x16_8_4.json
+#./cgra_16x16_8_4.json
+./cgra_16x16_8.json 
 )
 
 BENCH=(
-#../json/fir4.json
-../json/fir64.json
-# ../json/poly5.json !Deu ruim
-#../json/mux.json
-# ../json/poly8.json  !Deu ruim
-#../json/chebyshev.json
-# ../json/sgfilter.json !Deu ruim, teve uma vez que deu bom
-# ../json/qspline.json !Deu ruim
-#../json/loopback_8.json
-#../json/sum_vector.json
-# ../json/sobel_filter.json !Deu ruim
-#../json/kmeans_2_2.json
-# ../json/kmeans_4_4.json !Deu ruim
-#../json/mibench.json
-# ../json/paeth.json  !não achou solução
-# ../json/poly6.json !Deu ruim
+../json/toys/chebyshev.json
+../json/toys/fir64.json  #No solution found! deu uns segmentation fault tbm!
+../json/toys/kmeans_4_4.json
+../json/toys/loopback_8.json 
+../json/toys/mibench.json
+../json/toys/paeth.json  #terminate called after throwing an instance of 'std::bad_alloc'
+../json/toys/poly5.json
+../json/toys/poly6.json
+../json/toys/poly8.json
+../json/toys/qspline.json
+../json/toys/sgfilter.json # Ficou travado
+../json/toys/sobel_filter.json
 )
 
 rm -rf build

@@ -3,6 +3,7 @@ from math import ceil
 
 from veriloggen import *
 
+from hw.cgra_conf_tag import ConfTag
 from src.hw.cgra_alu_operations import CgraAluOperations
 from src.hw.components import Components
 from src.hw.utils import bits, initialize_regs, create_conf_path
@@ -17,7 +18,7 @@ class Cgra:
         self.arch = {}
         self.array_pe = {}
         self.array_pe_arch = {}
-        self.pe_conf_width = {}
+        self.conf_raw_bits = 0
         self.data_width = 0
         self.pe_id_width = 0
         self.conf_bus_width = 0
@@ -96,7 +97,9 @@ class Cgra:
             neighbors = self.array_pe_arch[pe]['neighbors']
             neighbors.sort()
             ports = self.array_pe[pe].get_ports()
-            params = [('id', pe + 1)]
+
+            params = [('id', pe + 1), ('conf_raw_bits', self.conf_raw_bits)]
+
             con = [('clk', clk), ('en', en), ('conf_bus', wires['conf_bus_reg_out'][pe])]
             if self.array_pe_arch[pe]['type'] == 'input' or self.array_pe_arch[pe]['type'] == 'inout':
                 con.append(('stream_in', array_pe_stream[pe]))
@@ -161,6 +164,7 @@ class Cgra:
         m = Module(name)
         # Module parameters:
         id = m.Parameter('id', 0)
+        conf_raw_bits = m.Parameter('conf_raw_bits', 0)
         # Module ports:
         clk = m.Input('clk')
         en = m.Input('en')
@@ -294,11 +298,19 @@ class Cgra:
             conf_router_width += w.width
 
         # This is used in CgraConfigurations class!
-        self.pe_conf_width[name] = max(conf_alu_width, conf_router_width)
+        # self.pe_conf_width[name] =
+        conf_tag_bits = ConfTag(alu_num_inputs).bits
+        self.conf_raw_bits = max(conf_alu_width + self.pe_id_width + conf_tag_bits,
+                                 conf_router_width + self.pe_id_width + conf_tag_bits,
+                                 self.data_width + self.pe_id_width + conf_tag_bits,
+                                 self.conf_raw_bits)
+
+        self.conf_raw_bits = ceil(self.conf_raw_bits/self.conf_bus_width) * self.conf_bus_width
+
 
         conf_alu = m.Wire('conf_alu', conf_alu_width)
         conf_router = ''
-        params = [('pe_id', id)]
+        params = [('pe_id', id), ('conf_raw_bits', conf_raw_bits)]
         con = [('clk', clk), ('conf_bus', conf_bus), ('reset', reset), ('conf_alu', conf_alu),
                ('conf_const', pe_const)]
         if conf_router_width > 0:
@@ -312,7 +324,6 @@ class Cgra:
                                           conf_router_width)
 
         m.Instance(cf, 'pe_conf_reader', params, con)
-
 
         stm = []
         last = 0
@@ -329,6 +340,8 @@ class Cgra:
         m.Always(Posedge(clk))(
             stm
         )
+
+        initialize_regs(m)
         self.cache[name] = m
 
         return m
@@ -389,7 +402,7 @@ class Cgra:
 
     def __create_pe_conf_reader(self, has_acc, has_router, pe_id_width, conf_alu_width, alu_num_inputs,
                                 conf_router_width=0):
-        tag_bits = 3
+        tag_bits = ConfTag(alu_num_inputs).bits
         acc = '_acc' if has_acc else ''
         name = 'pe_conf_reader%s_alu_in_%d_alu_w_%d_router_w_%d' % (
             acc, alu_num_inputs, conf_alu_width, conf_router_width)
@@ -399,6 +412,7 @@ class Cgra:
 
         m = Module(name)
         pe_id = m.Parameter('pe_id', 0)
+        conf_raw_bits = m.Parameter('conf_raw_bits', 0)
 
         clk = m.Input('clk')
         conf_bus = m.Input('conf_bus', self.conf_bus_width + 1)
@@ -417,37 +431,41 @@ class Cgra:
         else:
             conf_width += max(conf_alu_width, self.data_width)
 
-        val = int(ceil(conf_width / self.conf_bus_width))
-
         conf_bus_r = m.Reg('conf_bus_r', self.conf_bus_width + 1)
+        conf_valid0 = m.Reg('conf_valid0')
+        conf_valid1 = m.Reg('conf_valid1')
+        conf_valid2 = m.Reg('conf_valid2')
         conf_valid = m.Reg('conf_valid')
         conf_reg0 = m.Reg('conf_reg0', conf_width)
         conf_reg1 = m.Reg('conf_reg1', conf_width)
         conf_reg2 = m.Reg('conf_reg2', conf_width)
         conf_reg = m.Reg('conf_reg', conf_width)
-        conf_raw_reg = m.Reg('conf_raw_reg', val * self.conf_bus_width)
-        count = m.Reg('count', val)
+        conf_raw_reg = m.Reg('conf_raw_reg', conf_raw_bits)
+        count = m.Reg('count', Div(conf_raw_bits, self.conf_bus_width))
         m.Always(Posedge(clk))(
             conf_bus_r(conf_bus)
         )
         m.Always(Posedge(clk))(
-            conf_valid(Int(0, 1, 2)),
+            conf_valid0(Int(0, 1, 2)),
             conf_reg0(Int(0, conf_width, 2)),
             conf_raw_reg(Mux(conf_bus_r[0], Cat(conf_bus_r[1:], conf_raw_reg[self.conf_bus_width:]),
-                             Int(0, conf_raw_reg.width, 10))),
-            count(Mux(conf_bus_r[0], Cat(Int(1, 1, 2), count[1:]), Int(0, count.width, 10))),
+                             Repeat(Int(0, 1, 2), conf_raw_bits))),
+            count(Mux(conf_bus_r[0], Cat(Int(1, 1, 2), count[1:]), Repeat(Int(0, 1, 2), count.width))),
 
             If(count[0])(
                 conf_reg0(conf_raw_reg[0:conf_reg0.width]),
-                conf_valid(Int(1, 1, 2)),
-                count(Cat(conf_bus_r[0], Int(0, count.width - 1, 2)))
+                conf_valid0(Int(1, 1, 2)),
+                count(Cat(conf_bus_r[0], Repeat(Int(0, 1, 2), count.width - 1)))
             )
         )
 
         m.Always(Posedge(clk))(
             conf_reg1(conf_reg0),
             conf_reg2(conf_reg1),
-            conf_reg(conf_reg2)
+            conf_reg(conf_reg2),
+            conf_valid1(conf_valid0),
+            conf_valid2(conf_valid1),
+            conf_valid(conf_valid2)
         )
 
         case = Case(conf_reg[pe_id_width:pe_id_width + tag_bits])()

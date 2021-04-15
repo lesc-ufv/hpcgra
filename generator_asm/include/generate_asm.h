@@ -13,10 +13,7 @@ void generate_asm(Graph g,
                   map<pair<int, int>, int> *edges_cost
 ) {
 
-    if (best_index == -1) {
-        printf("No solution found!\n");
-        return;
-    }
+    if (best_index == -1) return;
 
     ofstream myfile;
     myfile.open(path + ".asm");
@@ -38,6 +35,8 @@ void generate_asm(Graph g,
         dad = q.front().first;
         cost = q.front().second;
         q.pop();
+
+        printf("dad %d\n", dad);
 
         if (visited[dad]) continue;
 

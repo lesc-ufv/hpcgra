@@ -66,6 +66,10 @@ public:
     vector<int> get_outputs();
 
     vector<pair<int, int>> get_const(int u);
+
+    bool get_ok() {
+        return this->ok;
+    }
     //vector<double> get_betweenness_centrality();
 private:
     vector<int> nodes;
@@ -77,9 +81,12 @@ private:
     map<pair<int, int>, int> port;
     map<int, vector<pair<int, int>>> constant;
     int sum_inputs;
+    bool ok;
 };
 
-Graph::Graph() {}
+Graph::Graph() {
+    this->ok = true;
+}
 
 Graph::Graph(string filename) {
 
@@ -90,6 +97,7 @@ Graph::Graph(string filename) {
     JSONCPP_STRING errs;
     if (!parseFromStream(builder, ifs, &data, &errs)) {
         std::cout << errs << std::endl;
+        this->ok = false;
         return;
     }
     ifs.close();
@@ -119,6 +127,7 @@ Graph::Graph(string filename) {
         this->node_out_degree[u].push_back(v);
         this->node_in_degree[v].push_back(u);
     }
+    this->ok = true;
 }
 
 Graph::Graph(const Graph &g) {
@@ -130,6 +139,7 @@ Graph::Graph(const Graph &g) {
     this->opcode = g.opcode;
     this->port = g.port;
     this->constant = g.constant;
+    this->ok = g.ok;
 }
 
 Graph::~Graph() {

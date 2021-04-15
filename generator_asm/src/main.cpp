@@ -15,8 +15,8 @@ int main(int argc, char **argv) {
         path_dot = argv[2];
         path_arch = argv[3];
     } else {
-        printf("ERROR: ./place <name> <path_to_dot.dot> <path_to_arch.json>\n");
-        printf("./place mac ../dot/mac.dot ../arch/cgra_4x4.json \n");
+        printf("ERROR: ./place <name> <path_to_dot.json> <path_to_arch.json>\n");
+        printf("./place mac ../json/mac.json ../arch/cgra_4x4.json \n");
         return 1;
     }
     if (argc > 4) {
@@ -32,9 +32,17 @@ int main(int argc, char **argv) {
     vector<pe_t> pe;
 
     // read arch
-    if (!read_arch(path_arch, pe)) return 1;
+    if (!read_arch(path_arch, pe)) {
+        printf("Architecture format wrong!\n");
+        return 1;
+    }
 
     Graph g(path_dot);
+
+    if (!g.get_ok()) { // verify if graph format it's ok
+        printf("bad format of graph json\n");
+        return 1;
+    }
 
     const int SIZE_NODES = g.num_nodes();
     const int SIZE_EDGES = g.num_edges();
@@ -100,14 +108,6 @@ int main(int argc, char **argv) {
               basic, pe_in, pe_out, pe_basic, v, v_i, h_edgeA, h_edgeB, A,
               g.get_edges());
 
-#if __DEBUG
-    printf("EDGES\n");
-    for (int i = 0; i < SIZE_EDGES; ++i) {
-        printf("%d -> %d\n", h_edgeA[i], h_edgeB[i]);
-    }
-    printf("\n");
-#endif
-
     int **table = new int *[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
@@ -120,17 +120,6 @@ int main(int argc, char **argv) {
 
     std::chrono::duration<double, std::milli> duration = (stop - start);
     time_table = duration.count();
-
-#if __DEBUG
-    printf("matrix de distance\n");
-    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-        printf("%2d: ", i);
-        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            printf("%2d ", table[i][j]);
-        }
-        printf("\n");
-    }
-#endif
 
     // update all position from grid
     update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,
@@ -148,7 +137,6 @@ int main(int argc, char **argv) {
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results,
                     h_edgeA, h_edgeB, table);
 
-    //printf("place\n");
     start = high_resolution_clock::now();
 #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
@@ -191,26 +179,11 @@ int main(int argc, char **argv) {
     duration = (stop - start);
     time_buffer = duration.count();
 
-#if __DEBUG
-    for (int k = 0; k < NGRIDS; ++k) {
-        printf("Sol: %d", k);
-        if (results[k] >= MAXVALUE) { 
-            printf("No routed!\n");
-            continue;
-        }
-        printf("\n");
-        for (int i = 0; i < SIZE_EDGES; ++i) {
-            int a = h_edgeA[i];
-            int b = h_edgeB[i];
-            printf("%d -> %d cost: %2d buffer_EDGE: %2d\n", a, b, edges_cost[k][make_pair(a,b)], buffers_EDGE[k][make_pair(a,b)]);
-        }
-    }
-#endif
-
     int worst_fifo;
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, worst_fifo,
                                       results, h_edgeA, h_edgeB, buffers_EDGE);
 
+    // generate assembly code
     generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
                  path_asm, route, edges_cost);
 
@@ -219,23 +192,24 @@ int main(int argc, char **argv) {
     duration = (stop_total - start_total);
     time_total = duration.count();
 
-    printf("\nTime spent TABLE : %.4lf\n", time_table);
-    printf("Time spent PLACE : %.4lf\n", time_place);
-    printf("Time spent ROUTE : %.4lf\n", time_route);
-    printf("Time spent BUFFER: %.4lf\n", time_buffer);
-    printf("Time spent TOTAL : %.4lf\n", time_total);
-    printf("Best index       : %d\n", best_index);
-    printf("Wire cost        : %d\n", results[best_index]);
-    printf("Worst buffer     : %d\n\n", worst_fifo);
+    // print the time and the best results
+    print_results(time_table, time_place, time_route, time_buffer, time_total,
+                  best_index, worst_fifo, results);
 
-
+    // clean memory
     delete v;
     delete v_i;
     delete grid;
-    //delete edges_cost;
+    delete h_edgeA;
+    delete h_edgeB;
+    delete [] edges_cost;
     delete buffers;
     delete pos;
     delete results;
+
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i)
+        delete [] table[i];
+    delete [] table;
 
     return 0;
 }

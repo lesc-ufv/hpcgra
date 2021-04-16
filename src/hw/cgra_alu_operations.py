@@ -51,7 +51,7 @@ class AluOperationNot(AluOperationUnary):
 class AluOperationAbs(AluOperationUnary):
     def get(self, m, dst, src_a):
         temp = m.Reg('abs_temp', src_a.width)
-        return [temp(Abs(src_a)), dst(temp)]
+        return [temp(Mux(src_a[src_a.width-1],~src_a + 1,src_a)), dst(temp)]
 
 class AluOperationPass(AluOperationUnary):
     def get(self, m, dst, src_a):

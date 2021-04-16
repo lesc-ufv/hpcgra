@@ -149,6 +149,7 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
 
             if (buffers[k][key] > buffer_arch) {
                 results[k] = MAXVALUE;
+                break;
             }
         }
     }

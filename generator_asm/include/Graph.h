@@ -49,6 +49,10 @@ public:
 
     int get_port(int u, int v);
 
+    const int get_number_inputs() {
+        return this->sum_inputs;
+    }
+
     vector<int> get_predecessors(int u);
 
     vector<vector<int>> get_fanin();
@@ -62,6 +66,10 @@ public:
     vector<int> get_outputs();
 
     vector<pair<int, int>> get_const(int u);
+
+    bool get_ok() {
+        return this->ok;
+    }
     //vector<double> get_betweenness_centrality();
 private:
     vector<int> nodes;
@@ -72,9 +80,13 @@ private:
     map<int, string> opcode;
     map<pair<int, int>, int> port;
     map<int, vector<pair<int, int>>> constant;
+    int sum_inputs;
+    bool ok;
 };
 
-Graph::Graph() {}
+Graph::Graph() {
+    this->ok = true;
+}
 
 Graph::Graph(string filename) {
 
@@ -85,16 +97,20 @@ Graph::Graph(string filename) {
     JSONCPP_STRING errs;
     if (!parseFromStream(builder, ifs, &data, &errs)) {
         std::cout << errs << std::endl;
+        this->ok = false;
         return;
     }
     ifs.close();
 
     int u, v;
+    this->sum_inputs = 0;
     for (auto node : data["nodes"]) {
         u = atoi(node["id"].asCString());
         this->nodes.push_back(u);
         this->opcode[u] = node["opcode"].asString();
         this->name_label[u] = node["label"].asString();
+
+        if (node["opcode"].asString() == "input") this->sum_inputs++;
 
         if (node.isMember("const")) {
             for (auto c : node["const"]) {
@@ -111,6 +127,7 @@ Graph::Graph(string filename) {
         this->node_out_degree[u].push_back(v);
         this->node_in_degree[v].push_back(u);
     }
+    this->ok = true;
 }
 
 Graph::Graph(const Graph &g) {
@@ -122,6 +139,7 @@ Graph::Graph(const Graph &g) {
     this->opcode = g.opcode;
     this->port = g.port;
     this->constant = g.constant;
+    this->ok = g.ok;
 }
 
 Graph::~Graph() {
@@ -213,7 +231,7 @@ vector<vector<int>> Graph::get_fanout() {
 vector<int> Graph::get_inputs() {
     vector<int> aux;
     for (int i = 0; i < num_nodes(); ++i)
-        if (get_predecessors(i).size() == 0) aux.push_back(i);
+        if (get_opcode(i) == "input") aux.push_back(i);
     return aux;
 }
 

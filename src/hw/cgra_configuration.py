@@ -1,16 +1,7 @@
 from veriloggen import Complement2
 
+from hw.cgra_conf_tag import ConfTag
 from src.hw.utils import bits
-
-
-class ConfTag:
-    def __init__(self, alu_num_inputs):
-        self.bits = 3
-        self.reset = format(0, '0%db' % self.bits)
-        self.alu = format(1, '0%db' % self.bits)
-        self.const = [format(2 + i, '0%db' % self.bits) for i in range(alu_num_inputs)]
-        self.router = format(2 + alu_num_inputs, '0%db' % self.bits)
-        self.acc_reset = format(3 + alu_num_inputs, '0%db' % self.bits)
 
 
 class CgraConfiguration:
@@ -25,9 +16,7 @@ class CgraConfiguration:
         isa = self.cgra.array_pe_arch[id]['isa']
         alu_num_inputs = self.cgra.get_max_operands(isa)
         conf_tag = ConfTag(alu_num_inputs)
-
-        pe_conf_bits = self.cgra.pe_conf_width[self.cgra.array_pe[id].name]
-        conf_bits = conf_tag.bits + self.cgra.pe_id_width + max(self.cgra.data_width, pe_conf_bits)
+        conf_bits = self.cgra.conf_raw_bits
         id_bits = format(int(bin(id + 1)[2:], 2), '0%db' % self.cgra.pe_id_width)
         raw_conf = format(int(conf_tag.reset + id_bits, 2), '0%db' % conf_bits)
         return True, [raw_conf]
@@ -45,9 +34,8 @@ class CgraConfiguration:
         isa.sort()
         neighbors.sort()
         alu_num_inputs = self.cgra.get_max_operands(isa)
-        pe_conf_bits = self.cgra.pe_conf_width[self.cgra.array_pe[id].name]
         conf_tag = ConfTag(alu_num_inputs)
-        conf_bits = conf_tag.bits + self.cgra.pe_id_width + max(self.cgra.data_width, pe_conf_bits)
+        conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
 
         if op is not None:
@@ -130,9 +118,7 @@ class CgraConfiguration:
         isa = self.cgra.array_pe_arch[id]['isa']
         alu_num_inputs = self.cgra.get_max_operands(isa)
         conf_tag = ConfTag(alu_num_inputs)
-
-        pe_conf_bits = self.cgra.pe_conf_width[self.cgra.array_pe[id].name]
-        conf_bits = conf_tag.bits + self.cgra.pe_id_width + max(self.cgra.data_width, pe_conf_bits)
+        conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
         if const < 0:
             const = Complement2(const)
@@ -151,10 +137,9 @@ class CgraConfiguration:
         neighbors = self.cgra.array_pe_arch[id]['neighbors']
         isa.sort()
         neighbors.sort()
-        pe_conf_bits = self.cgra.pe_conf_width[self.cgra.array_pe[id].name]
         alu_num_inputs = self.cgra.get_max_operands(isa)
         conf_tag = ConfTag(alu_num_inputs)
-        conf_bits = conf_tag.bits + self.cgra.pe_id_width + max(self.cgra.data_width, pe_conf_bits)
+        conf_bits = self.cgra.conf_raw_bits
 
         routes_needed = 0
         for i, o in routing.items():
@@ -246,9 +231,7 @@ class CgraConfiguration:
         isa = self.cgra.array_pe_arch[id]['isa']
         alu_num_inputs = self.cgra.get_max_operands(isa)
         conf_tag = ConfTag(alu_num_inputs)
-
-        pe_conf_bits = self.cgra.pe_conf_width[self.cgra.array_pe[id].name]
-        conf_bits = conf_tag.bits + self.cgra.pe_id_width + max(self.cgra.data_width, pe_conf_bits)
+        conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
         val = format(val, '0%db' % self.cgra.data_width)
         raw_conf = format(int(val + conf_tag.acc_reset + id_bits, 2), '0%db' % conf_bits)

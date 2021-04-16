@@ -1,12 +1,13 @@
 #!/bin/bash
 
-set -e
+# set -e
 
 ARCH=(
 #./cgra_16x16_8_2.json
 # ./cgra_mesh_3x3.json
 # ./cgra_mesh_2x2.json
 #./cgra_16x16_8_4.json
+<<<<<<< HEAD
 cgra_16x16_8.json
 )
 
@@ -23,6 +24,24 @@ BENCH=(
 ../json/toys/mibench.json
 ../json/toys/paeth.json
 ../json/toys/poly6.json
+=======
+./cgra_16x16_8.json 
+)
+
+BENCH=(
+../json/toys/chebyshev.json
+../json/toys/fir64.json  #No solution found! deu uns segmentation fault tbm!
+../json/toys/kmeans_4_4.json
+../json/toys/loopback_8.json 
+../json/toys/mibench.json
+../json/toys/paeth.json  #terminate called after throwing an instance of 'std::bad_alloc'
+../json/toys/poly5.json
+../json/toys/poly6.json
+../json/toys/poly8.json
+../json/toys/qspline.json
+../json/toys/sgfilter.json # Ficou travado
+../json/toys/sobel_filter.json
+>>>>>>> 1bbb17183d5acdc2b4ea14e8bf6f2e4a1f22ccd3
 )
 
 rm -rf build

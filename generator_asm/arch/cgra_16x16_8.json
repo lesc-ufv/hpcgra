@@ -1,0 +1,8262 @@
+{
+    "conf_bus_width": 8,
+    "pe": [
+        {
+            "id": 0,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 5,
+            "acc": false,
+            "neighbors": [
+                1,
+                2,
+                16,
+                32
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 1,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                0,
+                2,
+                3,
+                17,
+                33
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 2,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                0,
+                1,
+                3,
+                4,
+                18,
+                34
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 3,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                1,
+                2,
+                4,
+                5,
+                19,
+                35
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 4,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                2,
+                3,
+                5,
+                6,
+                20,
+                36
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 5,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                3,
+                4,
+                6,
+                7,
+                21,
+                37
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 6,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                4,
+                5,
+                7,
+                8,
+                22,
+                38
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 7,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                5,
+                6,
+                8,
+                9,
+                23,
+                39
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 8,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                6,
+                7,
+                9,
+                10,
+                24,
+                40
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 9,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                7,
+                8,
+                10,
+                11,
+                25,
+                41
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 10,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                8,
+                9,
+                11,
+                12,
+                26,
+                42
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 11,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                9,
+                10,
+                12,
+                13,
+                27,
+                43
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 12,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                10,
+                11,
+                13,
+                14,
+                28,
+                44
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 13,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                11,
+                12,
+                14,
+                15,
+                29,
+                45
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 14,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                12,
+                13,
+                15,
+                30,
+                46
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 15,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 5,
+            "acc": false,
+            "neighbors": [
+                13,
+                14,
+                31,
+                47
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 16,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                0,
+                17,
+                18,
+                32,
+                48
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 17,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                1,
+                16,
+                18,
+                19,
+                33,
+                49
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 18,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                2,
+                16,
+                17,
+                19,
+                20,
+                34,
+                50
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 19,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                3,
+                17,
+                18,
+                20,
+                21,
+                35,
+                51
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 20,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                4,
+                18,
+                19,
+                21,
+                22,
+                36,
+                52
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 21,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                5,
+                19,
+                20,
+                22,
+                23,
+                37,
+                53
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 22,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                6,
+                20,
+                21,
+                23,
+                24,
+                38,
+                54
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 23,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                7,
+                21,
+                22,
+                24,
+                25,
+                39,
+                55
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 24,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                8,
+                22,
+                23,
+                25,
+                26,
+                40,
+                56
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 25,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                9,
+                23,
+                24,
+                26,
+                27,
+                41,
+                57
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 26,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                10,
+                24,
+                25,
+                27,
+                28,
+                42,
+                58
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 27,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                11,
+                25,
+                26,
+                28,
+                29,
+                43,
+                59
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 28,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                12,
+                26,
+                27,
+                29,
+                30,
+                44,
+                60
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 29,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                13,
+                27,
+                28,
+                30,
+                31,
+                45,
+                61
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 30,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                14,
+                28,
+                29,
+                31,
+                46,
+                62
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 31,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                15,
+                29,
+                30,
+                47,
+                63
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 32,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                0,
+                16,
+                33,
+                34,
+                48,
+                64
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 33,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                1,
+                17,
+                32,
+                34,
+                35,
+                49,
+                65
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 34,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                2,
+                18,
+                32,
+                33,
+                35,
+                36,
+                50,
+                66
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 35,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                3,
+                19,
+                33,
+                34,
+                36,
+                37,
+                51,
+                67
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 36,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                4,
+                20,
+                34,
+                35,
+                37,
+                38,
+                52,
+                68
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 37,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                5,
+                21,
+                35,
+                36,
+                38,
+                39,
+                53,
+                69
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 38,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                6,
+                22,
+                36,
+                37,
+                39,
+                40,
+                54,
+                70
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 39,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                7,
+                23,
+                37,
+                38,
+                40,
+                41,
+                55,
+                71
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 40,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                8,
+                24,
+                38,
+                39,
+                41,
+                42,
+                56,
+                72
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 41,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                9,
+                25,
+                39,
+                40,
+                42,
+                43,
+                57,
+                73
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 42,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                10,
+                26,
+                40,
+                41,
+                43,
+                44,
+                58,
+                74
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 43,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                11,
+                27,
+                41,
+                42,
+                44,
+                45,
+                59,
+                75
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 44,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                12,
+                28,
+                42,
+                43,
+                45,
+                46,
+                60,
+                76
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 45,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                13,
+                29,
+                43,
+                44,
+                46,
+                47,
+                61,
+                77
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 46,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                14,
+                30,
+                44,
+                45,
+                47,
+                62,
+                78
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 47,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                15,
+                31,
+                45,
+                46,
+                63,
+                79
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 48,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                16,
+                32,
+                49,
+                50,
+                64,
+                80
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 49,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                17,
+                33,
+                48,
+                50,
+                51,
+                65,
+                81
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 50,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                18,
+                34,
+                48,
+                49,
+                51,
+                52,
+                66,
+                82
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 51,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                19,
+                35,
+                49,
+                50,
+                52,
+                53,
+                67,
+                83
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 52,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                20,
+                36,
+                50,
+                51,
+                53,
+                54,
+                68,
+                84
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 53,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                21,
+                37,
+                51,
+                52,
+                54,
+                55,
+                69,
+                85
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 54,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                22,
+                38,
+                52,
+                53,
+                55,
+                56,
+                70,
+                86
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 55,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                23,
+                39,
+                53,
+                54,
+                56,
+                57,
+                71,
+                87
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 56,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                24,
+                40,
+                54,
+                55,
+                57,
+                58,
+                72,
+                88
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 57,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                25,
+                41,
+                55,
+                56,
+                58,
+                59,
+                73,
+                89
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 58,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                26,
+                42,
+                56,
+                57,
+                59,
+                60,
+                74,
+                90
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 59,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                27,
+                43,
+                57,
+                58,
+                60,
+                61,
+                75,
+                91
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 60,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                28,
+                44,
+                58,
+                59,
+                61,
+                62,
+                76,
+                92
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 61,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                29,
+                45,
+                59,
+                60,
+                62,
+                63,
+                77,
+                93
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 62,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                30,
+                46,
+                60,
+                61,
+                63,
+                78,
+                94
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 63,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                31,
+                47,
+                61,
+                62,
+                79,
+                95
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 64,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                32,
+                48,
+                65,
+                66,
+                80,
+                96
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 65,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                33,
+                49,
+                64,
+                66,
+                67,
+                81,
+                97
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 66,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                34,
+                50,
+                64,
+                65,
+                67,
+                68,
+                82,
+                98
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 67,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                35,
+                51,
+                65,
+                66,
+                68,
+                69,
+                83,
+                99
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 68,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                36,
+                52,
+                66,
+                67,
+                69,
+                70,
+                84,
+                100
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 69,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                37,
+                53,
+                67,
+                68,
+                70,
+                71,
+                85,
+                101
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 70,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                38,
+                54,
+                68,
+                69,
+                71,
+                72,
+                86,
+                102
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 71,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                39,
+                55,
+                69,
+                70,
+                72,
+                73,
+                87,
+                103
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 72,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                40,
+                56,
+                70,
+                71,
+                73,
+                74,
+                88,
+                104
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 73,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                41,
+                57,
+                71,
+                72,
+                74,
+                75,
+                89,
+                105
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 74,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                42,
+                58,
+                72,
+                73,
+                75,
+                76,
+                90,
+                106
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 75,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                43,
+                59,
+                73,
+                74,
+                76,
+                77,
+                91,
+                107
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 76,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                44,
+                60,
+                74,
+                75,
+                77,
+                78,
+                92,
+                108
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 77,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                45,
+                61,
+                75,
+                76,
+                78,
+                79,
+                93,
+                109
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 78,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                46,
+                62,
+                76,
+                77,
+                79,
+                94,
+                110
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 79,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                47,
+                63,
+                77,
+                78,
+                95,
+                111
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 80,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                48,
+                64,
+                81,
+                82,
+                96,
+                112
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 81,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                49,
+                65,
+                80,
+                82,
+                83,
+                97,
+                113
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 82,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                50,
+                66,
+                80,
+                81,
+                83,
+                84,
+                98,
+                114
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 83,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                51,
+                67,
+                81,
+                82,
+                84,
+                85,
+                99,
+                115
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 84,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                52,
+                68,
+                82,
+                83,
+                85,
+                86,
+                100,
+                116
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 85,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                53,
+                69,
+                83,
+                84,
+                86,
+                87,
+                101,
+                117
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 86,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                54,
+                70,
+                84,
+                85,
+                87,
+                88,
+                102,
+                118
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 87,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                55,
+                71,
+                85,
+                86,
+                88,
+                89,
+                103,
+                119
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 88,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                56,
+                72,
+                86,
+                87,
+                89,
+                90,
+                104,
+                120
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 89,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                57,
+                73,
+                87,
+                88,
+                90,
+                91,
+                105,
+                121
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 90,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                58,
+                74,
+                88,
+                89,
+                91,
+                92,
+                106,
+                122
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 91,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                59,
+                75,
+                89,
+                90,
+                92,
+                93,
+                107,
+                123
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 92,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                60,
+                76,
+                90,
+                91,
+                93,
+                94,
+                108,
+                124
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 93,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                61,
+                77,
+                91,
+                92,
+                94,
+                95,
+                109,
+                125
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 94,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                62,
+                78,
+                92,
+                93,
+                95,
+                110,
+                126
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 95,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                63,
+                79,
+                93,
+                94,
+                111,
+                127
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 96,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                64,
+                80,
+                97,
+                98,
+                112,
+                128
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 97,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                65,
+                81,
+                96,
+                98,
+                99,
+                113,
+                129
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 98,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                66,
+                82,
+                96,
+                97,
+                99,
+                100,
+                114,
+                130
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 99,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                67,
+                83,
+                97,
+                98,
+                100,
+                101,
+                115,
+                131
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 100,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                68,
+                84,
+                98,
+                99,
+                101,
+                102,
+                116,
+                132
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 101,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                69,
+                85,
+                99,
+                100,
+                102,
+                103,
+                117,
+                133
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 102,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                70,
+                86,
+                100,
+                101,
+                103,
+                104,
+                118,
+                134
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 103,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                71,
+                87,
+                101,
+                102,
+                104,
+                105,
+                119,
+                135
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 104,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                72,
+                88,
+                102,
+                103,
+                105,
+                106,
+                120,
+                136
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 105,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                73,
+                89,
+                103,
+                104,
+                106,
+                107,
+                121,
+                137
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 106,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                74,
+                90,
+                104,
+                105,
+                107,
+                108,
+                122,
+                138
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 107,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                75,
+                91,
+                105,
+                106,
+                108,
+                109,
+                123,
+                139
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 108,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                76,
+                92,
+                106,
+                107,
+                109,
+                110,
+                124,
+                140
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 109,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                77,
+                93,
+                107,
+                108,
+                110,
+                111,
+                125,
+                141
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 110,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                78,
+                94,
+                108,
+                109,
+                111,
+                126,
+                142
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 111,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                79,
+                95,
+                109,
+                110,
+                127,
+                143
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 112,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                80,
+                96,
+                113,
+                114,
+                128,
+                144
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 113,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                81,
+                97,
+                112,
+                114,
+                115,
+                129,
+                145
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 114,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                82,
+                98,
+                112,
+                113,
+                115,
+                116,
+                130,
+                146
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 115,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                83,
+                99,
+                113,
+                114,
+                116,
+                117,
+                131,
+                147
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 116,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                84,
+                100,
+                114,
+                115,
+                117,
+                118,
+                132,
+                148
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 117,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                85,
+                101,
+                115,
+                116,
+                118,
+                119,
+                133,
+                149
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 118,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                86,
+                102,
+                116,
+                117,
+                119,
+                120,
+                134,
+                150
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 119,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                87,
+                103,
+                117,
+                118,
+                120,
+                121,
+                135,
+                151
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 120,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                88,
+                104,
+                118,
+                119,
+                121,
+                122,
+                136,
+                152
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 121,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                89,
+                105,
+                119,
+                120,
+                122,
+                123,
+                137,
+                153
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 122,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                90,
+                106,
+                120,
+                121,
+                123,
+                124,
+                138,
+                154
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 123,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                91,
+                107,
+                121,
+                122,
+                124,
+                125,
+                139,
+                155
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 124,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                92,
+                108,
+                122,
+                123,
+                125,
+                126,
+                140,
+                156
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 125,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                93,
+                109,
+                123,
+                124,
+                126,
+                127,
+                141,
+                157
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 126,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                94,
+                110,
+                124,
+                125,
+                127,
+                142,
+                158
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 127,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                95,
+                111,
+                125,
+                126,
+                143,
+                159
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 128,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                96,
+                112,
+                129,
+                130,
+                144,
+                160
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 129,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                97,
+                113,
+                128,
+                130,
+                131,
+                145,
+                161
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 130,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                98,
+                114,
+                128,
+                129,
+                131,
+                132,
+                146,
+                162
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 131,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                99,
+                115,
+                129,
+                130,
+                132,
+                133,
+                147,
+                163
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 132,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                100,
+                116,
+                130,
+                131,
+                133,
+                134,
+                148,
+                164
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 133,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                101,
+                117,
+                131,
+                132,
+                134,
+                135,
+                149,
+                165
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 134,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                102,
+                118,
+                132,
+                133,
+                135,
+                136,
+                150,
+                166
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 135,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                103,
+                119,
+                133,
+                134,
+                136,
+                137,
+                151,
+                167
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 136,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                104,
+                120,
+                134,
+                135,
+                137,
+                138,
+                152,
+                168
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 137,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                105,
+                121,
+                135,
+                136,
+                138,
+                139,
+                153,
+                169
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 138,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                106,
+                122,
+                136,
+                137,
+                139,
+                140,
+                154,
+                170
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 139,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                107,
+                123,
+                137,
+                138,
+                140,
+                141,
+                155,
+                171
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 140,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                108,
+                124,
+                138,
+                139,
+                141,
+                142,
+                156,
+                172
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 141,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                109,
+                125,
+                139,
+                140,
+                142,
+                143,
+                157,
+                173
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 142,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                110,
+                126,
+                140,
+                141,
+                143,
+                158,
+                174
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 143,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                111,
+                127,
+                141,
+                142,
+                159,
+                175
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 144,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                112,
+                128,
+                145,
+                146,
+                160,
+                176
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 145,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                113,
+                129,
+                144,
+                146,
+                147,
+                161,
+                177
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 146,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                114,
+                130,
+                144,
+                145,
+                147,
+                148,
+                162,
+                178
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 147,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                115,
+                131,
+                145,
+                146,
+                148,
+                149,
+                163,
+                179
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 148,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                116,
+                132,
+                146,
+                147,
+                149,
+                150,
+                164,
+                180
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 149,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                117,
+                133,
+                147,
+                148,
+                150,
+                151,
+                165,
+                181
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 150,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                118,
+                134,
+                148,
+                149,
+                151,
+                152,
+                166,
+                182
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 151,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                119,
+                135,
+                149,
+                150,
+                152,
+                153,
+                167,
+                183
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 152,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                120,
+                136,
+                150,
+                151,
+                153,
+                154,
+                168,
+                184
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 153,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                121,
+                137,
+                151,
+                152,
+                154,
+                155,
+                169,
+                185
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 154,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                122,
+                138,
+                152,
+                153,
+                155,
+                156,
+                170,
+                186
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 155,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                123,
+                139,
+                153,
+                154,
+                156,
+                157,
+                171,
+                187
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 156,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                124,
+                140,
+                154,
+                155,
+                157,
+                158,
+                172,
+                188
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 157,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                125,
+                141,
+                155,
+                156,
+                158,
+                159,
+                173,
+                189
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 158,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                126,
+                142,
+                156,
+                157,
+                159,
+                174,
+                190
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 159,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                127,
+                143,
+                157,
+                158,
+                175,
+                191
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 160,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                128,
+                144,
+                161,
+                162,
+                176,
+                192
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 161,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                129,
+                145,
+                160,
+                162,
+                163,
+                177,
+                193
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 162,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                130,
+                146,
+                160,
+                161,
+                163,
+                164,
+                178,
+                194
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 163,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                131,
+                147,
+                161,
+                162,
+                164,
+                165,
+                179,
+                195
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 164,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                132,
+                148,
+                162,
+                163,
+                165,
+                166,
+                180,
+                196
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 165,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                133,
+                149,
+                163,
+                164,
+                166,
+                167,
+                181,
+                197
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 166,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                134,
+                150,
+                164,
+                165,
+                167,
+                168,
+                182,
+                198
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 167,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                135,
+                151,
+                165,
+                166,
+                168,
+                169,
+                183,
+                199
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 168,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                136,
+                152,
+                166,
+                167,
+                169,
+                170,
+                184,
+                200
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 169,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                137,
+                153,
+                167,
+                168,
+                170,
+                171,
+                185,
+                201
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 170,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                138,
+                154,
+                168,
+                169,
+                171,
+                172,
+                186,
+                202
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 171,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                139,
+                155,
+                169,
+                170,
+                172,
+                173,
+                187,
+                203
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 172,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                140,
+                156,
+                170,
+                171,
+                173,
+                174,
+                188,
+                204
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 173,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                141,
+                157,
+                171,
+                172,
+                174,
+                175,
+                189,
+                205
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 174,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                142,
+                158,
+                172,
+                173,
+                175,
+                190,
+                206
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 175,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                143,
+                159,
+                173,
+                174,
+                191,
+                207
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 176,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                144,
+                160,
+                177,
+                178,
+                192,
+                208
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 177,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                145,
+                161,
+                176,
+                178,
+                179,
+                193,
+                209
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 178,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                146,
+                162,
+                176,
+                177,
+                179,
+                180,
+                194,
+                210
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 179,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                147,
+                163,
+                177,
+                178,
+                180,
+                181,
+                195,
+                211
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 180,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                148,
+                164,
+                178,
+                179,
+                181,
+                182,
+                196,
+                212
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 181,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                149,
+                165,
+                179,
+                180,
+                182,
+                183,
+                197,
+                213
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 182,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                150,
+                166,
+                180,
+                181,
+                183,
+                184,
+                198,
+                214
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 183,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                151,
+                167,
+                181,
+                182,
+                184,
+                185,
+                199,
+                215
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 184,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                152,
+                168,
+                182,
+                183,
+                185,
+                186,
+                200,
+                216
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 185,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                153,
+                169,
+                183,
+                184,
+                186,
+                187,
+                201,
+                217
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 186,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                154,
+                170,
+                184,
+                185,
+                187,
+                188,
+                202,
+                218
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 187,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                155,
+                171,
+                185,
+                186,
+                188,
+                189,
+                203,
+                219
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 188,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                156,
+                172,
+                186,
+                187,
+                189,
+                190,
+                204,
+                220
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 189,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                157,
+                173,
+                187,
+                188,
+                190,
+                191,
+                205,
+                221
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 190,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                158,
+                174,
+                188,
+                189,
+                191,
+                206,
+                222
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 191,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                159,
+                175,
+                189,
+                190,
+                207,
+                223
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 192,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                160,
+                176,
+                193,
+                194,
+                208,
+                224
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 193,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                161,
+                177,
+                192,
+                194,
+                195,
+                209,
+                225
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 194,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                162,
+                178,
+                192,
+                193,
+                195,
+                196,
+                210,
+                226
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 195,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                163,
+                179,
+                193,
+                194,
+                196,
+                197,
+                211,
+                227
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 196,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                164,
+                180,
+                194,
+                195,
+                197,
+                198,
+                212,
+                228
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 197,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                165,
+                181,
+                195,
+                196,
+                198,
+                199,
+                213,
+                229
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 198,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                166,
+                182,
+                196,
+                197,
+                199,
+                200,
+                214,
+                230
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 199,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                167,
+                183,
+                197,
+                198,
+                200,
+                201,
+                215,
+                231
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 200,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                168,
+                184,
+                198,
+                199,
+                201,
+                202,
+                216,
+                232
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 201,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                169,
+                185,
+                199,
+                200,
+                202,
+                203,
+                217,
+                233
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 202,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                170,
+                186,
+                200,
+                201,
+                203,
+                204,
+                218,
+                234
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 203,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                171,
+                187,
+                201,
+                202,
+                204,
+                205,
+                219,
+                235
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 204,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                172,
+                188,
+                202,
+                203,
+                205,
+                206,
+                220,
+                236
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 205,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                173,
+                189,
+                203,
+                204,
+                206,
+                207,
+                221,
+                237
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 206,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                174,
+                190,
+                204,
+                205,
+                207,
+                222,
+                238
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 207,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                175,
+                191,
+                205,
+                206,
+                223,
+                239
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 208,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                176,
+                192,
+                209,
+                210,
+                224,
+                240
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 209,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                177,
+                193,
+                208,
+                210,
+                211,
+                225,
+                241
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 210,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                178,
+                194,
+                208,
+                209,
+                211,
+                212,
+                226,
+                242
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 211,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                179,
+                195,
+                209,
+                210,
+                212,
+                213,
+                227,
+                243
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 212,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                180,
+                196,
+                210,
+                211,
+                213,
+                214,
+                228,
+                244
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 213,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                181,
+                197,
+                211,
+                212,
+                214,
+                215,
+                229,
+                245
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 214,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                182,
+                198,
+                212,
+                213,
+                215,
+                216,
+                230,
+                246
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 215,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                183,
+                199,
+                213,
+                214,
+                216,
+                217,
+                231,
+                247
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 216,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                184,
+                200,
+                214,
+                215,
+                217,
+                218,
+                232,
+                248
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 217,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                185,
+                201,
+                215,
+                216,
+                218,
+                219,
+                233,
+                249
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 218,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                186,
+                202,
+                216,
+                217,
+                219,
+                220,
+                234,
+                250
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 219,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                187,
+                203,
+                217,
+                218,
+                220,
+                221,
+                235,
+                251
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 220,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                188,
+                204,
+                218,
+                219,
+                221,
+                222,
+                236,
+                252
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 221,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 9,
+            "acc": false,
+            "neighbors": [
+                189,
+                205,
+                219,
+                220,
+                222,
+                223,
+                237,
+                253
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 222,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                190,
+                206,
+                220,
+                221,
+                223,
+                238,
+                254
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 223,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                191,
+                207,
+                221,
+                222,
+                239,
+                255
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 224,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                192,
+                208,
+                225,
+                226,
+                240
+            ],
+            "type": "input",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 225,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                193,
+                209,
+                224,
+                226,
+                227,
+                241
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 226,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                194,
+                210,
+                224,
+                225,
+                227,
+                228,
+                242
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 227,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                195,
+                211,
+                225,
+                226,
+                228,
+                229,
+                243
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 228,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                196,
+                212,
+                226,
+                227,
+                229,
+                230,
+                244
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 229,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                197,
+                213,
+                227,
+                228,
+                230,
+                231,
+                245
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 230,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                198,
+                214,
+                228,
+                229,
+                231,
+                232,
+                246
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 231,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                199,
+                215,
+                229,
+                230,
+                232,
+                233,
+                247
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 232,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                200,
+                216,
+                230,
+                231,
+                233,
+                234,
+                248
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 233,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                201,
+                217,
+                231,
+                232,
+                234,
+                235,
+                249
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 234,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                202,
+                218,
+                232,
+                233,
+                235,
+                236,
+                250
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 235,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                203,
+                219,
+                233,
+                234,
+                236,
+                237,
+                251
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 236,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                204,
+                220,
+                234,
+                235,
+                237,
+                238,
+                252
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 237,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 8,
+            "acc": false,
+            "neighbors": [
+                205,
+                221,
+                235,
+                236,
+                238,
+                239,
+                253
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 238,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                206,
+                222,
+                236,
+                237,
+                239,
+                254
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 239,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                207,
+                223,
+                237,
+                238,
+                255
+            ],
+            "type": "output",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 240,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 5,
+            "acc": false,
+            "neighbors": [
+                208,
+                224,
+                241,
+                242
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 241,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                209,
+                225,
+                240,
+                242,
+                243
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 242,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                210,
+                226,
+                240,
+                241,
+                243,
+                244
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 243,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                211,
+                227,
+                241,
+                242,
+                244,
+                245
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 244,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                212,
+                228,
+                242,
+                243,
+                245,
+                246
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 245,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                213,
+                229,
+                243,
+                244,
+                246,
+                247
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 246,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                214,
+                230,
+                244,
+                245,
+                247,
+                248
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 247,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                215,
+                231,
+                245,
+                246,
+                248,
+                249
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 248,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                216,
+                232,
+                246,
+                247,
+                249,
+                250
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 249,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                217,
+                233,
+                247,
+                248,
+                250,
+                251
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 250,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                218,
+                234,
+                248,
+                249,
+                251,
+                252
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 251,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                219,
+                235,
+                249,
+                250,
+                252,
+                253
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 252,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                220,
+                236,
+                250,
+                251,
+                253,
+                254
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 253,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 7,
+            "acc": false,
+            "neighbors": [
+                221,
+                237,
+                251,
+                252,
+                254,
+                255
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 254,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 6,
+            "acc": false,
+            "neighbors": [
+                222,
+                238,
+                252,
+                253,
+                255
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        },
+        {
+            "id": 255,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "routes": 5,
+            "acc": false,
+            "neighbors": [
+                223,
+                239,
+                253,
+                254
+            ],
+            "type": "basic",
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ]
+        }
+    ],
+    "data_width": 16
+}

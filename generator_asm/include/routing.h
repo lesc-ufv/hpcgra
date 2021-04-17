@@ -96,7 +96,6 @@ bool try_route_aStar(
             if (son == pe_b) {
                 index_b = j;
                 found = true;
-                //printf("OPAAAAA\n");
                 break;
             }
 
@@ -120,7 +119,6 @@ bool try_route_aStar(
     }
 
     if (found) {
-        //printf("opaaaa2\n");
         vector<pair<int, int>> new_path;
         int nodo = pe_b;
         for (int i = path.size() - 1; i > -1; --i) {

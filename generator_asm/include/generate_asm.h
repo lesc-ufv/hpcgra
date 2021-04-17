@@ -36,7 +36,7 @@ void generate_asm(Graph g,
         cost = q.front().second;
         q.pop();
 
-        printf("dad %d\n", dad);
+        //printf("dad %d\n", dad);
 
         if (visited[dad]) continue;
 

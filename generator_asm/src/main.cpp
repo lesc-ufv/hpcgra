@@ -2,11 +2,8 @@
 
 int main(int argc, char **argv) {
     srand(time(nullptr));
-    double *randomvec = new double[1000000];
-    for (int i = 0; i < 1000000; i++) {
-        randomvec[i] = (double) rand() / (double) (RAND_MAX);
-    }
-    //Cria a estrutura do grafo com os vetores (A, v e v_i) à partir do grafo g
+
+    // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
     string path_dot = "", name = "", path_arch = "", path_asm = "";
     int NGRIDS = 1000;
 
@@ -15,8 +12,7 @@ int main(int argc, char **argv) {
         path_dot = argv[2];
         path_arch = argv[3];
     } else {
-        printf("ERROR: ./place <name> <path_to_dot.json> <path_to_arch.json>\n");
-        printf("./place mac ../json/mac.json ../arch/cgra_4x4.json \n");
+        printf("ERROR: ./place <name> <path_to_dot.json> <path_to_arch.json> <number_trying>\n");
         return 1;
     }
     if (argc > 4) {
@@ -73,6 +69,7 @@ int main(int argc, char **argv) {
     // print mapping of json
     print_inputs_outputs_json(g, name);
 
+    double *randomvec = new double[RANDOM_SIZE];
     int *h_edgeA = new int[SIZE_EDGES];
     int *h_edgeB = new int[SIZE_EDGES];
     vector<int> A;
@@ -89,7 +86,6 @@ int main(int argc, char **argv) {
     int *results = new int[NGRIDS];
 
     double time_total, time_place, time_route, time_buffer, time_table;
-    int cost_min = -1;
 
     vector<int> inputs = g.get_inputs();
     vector<int> outputs = g.get_outputs();
@@ -105,15 +101,14 @@ int main(int argc, char **argv) {
     // fill the data
     fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
               grid, edges_cost, buffers, pos, inputs, outputs,
-              basic, pe_in, pe_out, pe_basic, v, v_i, h_edgeA, h_edgeB, A,
-              g.get_edges());
+              basic, pe_in, pe_out, pe_basic, v, v_i, h_edgeA,
+              h_edgeB, randomvec, A,g.get_edges());
 
     int **table = new int *[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
     auto start = high_resolution_clock::now();
-    // create the table that measure the distance between 
-    //create_table(i, TOTAL_GRID_SIZE, table, pe);
+    // create the table that measure the distance grid to grid
     create_table_floyd_warshall(TOTAL_GRID_SIZE, table, pe);
     // end table
     auto stop = high_resolution_clock::now();
@@ -150,13 +145,10 @@ int main(int argc, char **argv) {
     duration = (stop - start);
     time_place = duration.count();
 
-
-    //printf("edge_cost\n");
     // get each value of edge, to routing
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB,
                   pos, table, edges_cost);
 
-    //printf("routing\n");
     start = high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
@@ -184,8 +176,8 @@ int main(int argc, char **argv) {
                                       results, h_edgeA, h_edgeB, buffers_EDGE);
 
     // generate assembly code
-    generate_asm(g, best_index, SIZE_NODES, pos, buffers_EDGE,
-                 path_asm, route, edges_cost);
+    generate_asm(g, best_index, SIZE_NODES, pos,
+                 buffers_EDGE,path_asm, route, edges_cost);
 
     auto stop_total = high_resolution_clock::now();
 
@@ -193,10 +185,11 @@ int main(int argc, char **argv) {
     time_total = duration.count();
 
     // print the time and the best results
-    print_results(time_table, time_place, time_route, time_buffer, time_total,
-                  best_index, worst_fifo, results);
+    print_results(time_table, time_place, time_route, time_buffer,
+                  time_total, best_index, worst_fifo, results);
 
     // clean memory
+    delete randomvec;
     delete v;
     delete v_i;
     delete grid;

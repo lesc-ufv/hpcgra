@@ -31,12 +31,15 @@ void fill_data(const int TOTAL_GRID_SIZE, const int NGRIDS,
                map<pair<int, int>, int> *edges_cost, int *buffers, int *pos,
                vector<int> &inputs, vector<int> &outputs, vector<int> &basic,
                vector<int> &pe_in, vector<int> &pe_out, vector<int> &pe_basic,
-               int *v, int *v_i, int *h_edgeA, int *h_edgeB, vector<int> &A,
-               vector<pair<int, int>> edge_list) {
+               int *v, int *v_i, int *h_edgeA, int *h_edgeB, double *randomvec,
+               vector<int> &A, vector<pair<int, int>> edge_list) {
 
     // clean the data
     clean_data(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
                edges_cost, buffers, pos, grid, v, v_i, h_edgeA, h_edgeB);
+
+    for (int i = 0; i < RANDOM_SIZE; ++i)
+        randomvec[i] = (double) rand() / (double) (RAND_MAX);
 
     //Preenche a estrutura do grafo
     int n1, n2;

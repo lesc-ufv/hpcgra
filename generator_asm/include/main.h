@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #define MAXVALUE 9999
-#define __DEBUG false
+#define RANDOM_SIZE 1000000
 
 #include <Graph.h>
 #include <cstdio>

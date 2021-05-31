@@ -66,19 +66,19 @@ class Bitstream:
         mask_input = to_hex(self.mask_input, 64)
         mask_output = to_hex(self.mask_output, 64)
         self.initial_conf = to_hex(int(mask_output + mask_input + size, 16), 512)
-        ignore_conf = [to_hex(0, 16) for _ in range(self.align_bits // 16)]
-        ignore_loop_conf = [to_hex(0, 16) for _ in range(self.align_bits // 16)]
-        for line, i, v in self.assembler.ostream_ignore:
-            idx = self.cgra.output_ids.index(i)
-            ignore_conf[idx] = to_hex(v, 16)
-        for line, i, v in self.assembler.ostream_ignore_loop:
-            idx = self.cgra.output_ids.index(i)
-            ignore_loop_conf[idx] = to_hex(v, 16)
+        # ignore_conf = [to_hex(0, 16) for _ in range(self.align_bits // 16)]
+        # ignore_loop_conf = [to_hex(0, 16) for _ in range(self.align_bits // 16)]
+        # for line, i, v in self.assembler.ostream_ignore:
+        #     idx = self.cgra.output_ids.index(i)
+        #     ignore_conf[idx] = to_hex(v, 16)
+        # for line, i, v in self.assembler.ostream_ignore_loop:
+        #     idx = self.cgra.output_ids.index(i)
+        #     ignore_loop_conf[idx] = to_hex(v, 16)
 
-        self.initial_conf += '\n'
-        self.initial_conf += "".join(reversed(ignore_conf))
-        self.initial_conf += '\n'
-        self.initial_conf += "".join(reversed(ignore_loop_conf))
+        # self.initial_conf += '\n'
+        # self.initial_conf += "".join(reversed(ignore_conf))
+        # self.initial_conf += '\n'
+        # self.initial_conf += "".join(reversed(ignore_loop_conf))
         self.initial_conf += conf_pes
 
     def get(self):

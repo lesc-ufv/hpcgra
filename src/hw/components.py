@@ -374,19 +374,19 @@ class Components:
 
         read_fifo_mask = m.OutputReg('read_fifo_mask', num_pe_io_in)
         write_fifo_mask = m.OutputReg('write_fifo_mask', num_pe_io_out)
-        write_fifo_ignore = m.OutputReg('write_fifo_ignore', num_pe_io_out * 16)
-        write_fifo_loop_ignore = m.OutputReg('write_fifo_loop_ignore', num_pe_io_out * 16)
+        # write_fifo_ignore = m.OutputReg('write_fifo_ignore', num_pe_io_out * 16)
+        # write_fifo_loop_ignore = m.OutputReg('write_fifo_loop_ignore', num_pe_io_out * 16)
 
         done = m.OutputReg('done')
 
         FSM_INIT_CTRL_IDLE = m.Localparam('FSM_INIT_CTRL_IDLE', 0)
         FSM_INIT_CTRL_INIT = m.Localparam('FSM_INIT_CTRL_INIT', 1)
-        FSM_INIT_CTRL_INIT2 = m.Localparam('FSM_INIT_CTRL_INIT2', 2)
-        FSM_INIT_CTRL_INIT3 = m.Localparam('FSM_INIT_CTRL_INIT3', 3)
-        FSM_SEND_INIT_CONF_PE = m.Localparam('FSM_SEND_INIT_CONF_PE', 4)
-        FSM_INIT_CTRL_REQ_DATA = m.Localparam('FSM_INIT_CTRL_REQ_DATA', 5)
-        FSM_WAIT_ALL_CONF_FINISH = m.Localparam('FSM_WAIT_ALL_CONF_FINISH', 6)
-        FSM_INIT_CONF_DONE = m.Localparam('FSM_INIT_CONF_DONE', 7)
+        # FSM_INIT_CTRL_INIT2 = m.Localparam('FSM_INIT_CTRL_INIT2', 2)
+        # FSM_INIT_CTRL_INIT3 = m.Localparam('FSM_INIT_CTRL_INIT3', 3)
+        FSM_SEND_INIT_CONF_PE = m.Localparam('FSM_SEND_INIT_CONF_PE', 2)
+        FSM_INIT_CTRL_REQ_DATA = m.Localparam('FSM_INIT_CTRL_REQ_DATA', 3)
+        FSM_WAIT_ALL_CONF_FINISH = m.Localparam('FSM_WAIT_ALL_CONF_FINISH', 4)
+        FSM_INIT_CONF_DONE = m.Localparam('FSM_INIT_CONF_DONE', 5)
 
         m.EmbeddedCode('')
         fsm_conf_ctrl = m.Reg('fsm_conf_ctrl', 3)
@@ -411,7 +411,7 @@ class Components:
                 conf_req_data(0),
                 send_conf(0),
                 conf_counter(0),
-                conf_counter_cl(CONF_SIZE),
+                conf_counter_cl(0),
                 done(0),
                 read_fifo_mask(0),
                 write_fifo_mask(0),
@@ -432,17 +432,17 @@ class Components:
                         read_fifo_mask(conf_cl[32:32 + num_pe_io_in]),
                         write_fifo_mask(conf_cl[96:96 + num_pe_io_out]),
                         fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
-                        fsm_conf_ctrl_next(FSM_INIT_CTRL_INIT2)
+                        fsm_conf_ctrl_next(FSM_SEND_INIT_CONF_PE)
                     ),
-                    When(FSM_INIT_CTRL_INIT2)(
-                        write_fifo_ignore(conf_cl[0:num_pe_io_out * 16]),
-                        fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
-                        fsm_conf_ctrl_next(FSM_INIT_CTRL_INIT3)
-                    ),
-                    When(FSM_INIT_CTRL_INIT3)(
-                        write_fifo_loop_ignore(conf_cl[0:num_pe_io_out * 16]),
-                        fsm_conf_ctrl(FSM_SEND_INIT_CONF_PE),
-                    ),
+                    # When(FSM_INIT_CTRL_INIT2)(
+                    #     write_fifo_ignore(conf_cl[0:num_pe_io_out * 16]),
+                    #     fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
+                    #     fsm_conf_ctrl_next(FSM_INIT_CTRL_INIT3)
+                    # ),
+                    # When(FSM_INIT_CTRL_INIT3)(
+                    #     write_fifo_loop_ignore(conf_cl[0:num_pe_io_out * 16]),
+                    #     fsm_conf_ctrl(FSM_SEND_INIT_CONF_PE),
+                    # ),
                     When(FSM_SEND_INIT_CONF_PE)(
                         If(conf_counter >= qtd_conf)(
                             fsm_conf_ctrl(FSM_WAIT_ALL_CONF_FINISH)
@@ -511,18 +511,20 @@ class Components:
 
         read_fifo_mask = m.Input('read_fifo_mask', num_pe_io_in)
         write_fifo_mask = m.Input('write_fifo_mask', num_pe_io_out)
-        write_fifo_ignore = m.Input('write_fifo_ignore', num_pe_io_out * 16)
-        write_fifo_loop_ignore = m.Input('write_fifo_loop_ignore', num_pe_io_out * 16)
 
-        available_pop = m.Input('available_pop', num_pe_io_in)
-        available_push = m.Input('available_push', num_pe_io_out)
+        # write_fifo_ignore = m.Input('write_fifo_ignore', num_pe_io_out * 16)
+        # write_fifo_loop_ignore = m.Input('write_fifo_loop_ignore', num_pe_io_out * 16)
+
+        # available_pop = m.Input('available_pop', num_pe_io_in)
+        # available_push = m.Input('available_push', num_pe_io_out)
 
         read_fifo_done = m.Input('read_fifo_done', num_pe_io_in)
         write_fifo_done = m.Input('write_fifo_done', num_pe_io_out)
 
-        en = m.Output('en')
-        en_pop = m.Output('en_pop', num_pe_io_in)
-        en_push = m.Output('en_push', num_pe_io_out)
+        en = m.OutputReg('en')
+        # en_pop = m.Output('en_pop', num_pe_io_in)
+        # en_push = m.Output('en_push', num_pe_io_out)
+
         done = m.Output('done')
 
         FSM_IDLE = m.Localparam('FSM_IDLE', 0)
@@ -532,30 +534,36 @@ class Components:
         m.EmbeddedCode('')
 
         fsm_state = m.Reg('fsm_state', 2)
+
         read_fifo_mask_r = m.Reg('read_fifo_mask_r', num_pe_io_in)
         write_fifo_mask_r = m.Reg('write_fifo_mask_r', num_pe_io_out)
-        write_fifo_ignore_r = m.Reg('write_fifo_ignore_r', num_pe_io_out * 16)
-        write_fifo_loop_ignore_r = m.Reg('write_fifo_loop_ignore_r', num_pe_io_out * 16)
-        available_pop_masked = m.Reg('available_pop_masked', num_pe_io_in)
-        available_push_masked = m.Reg('available_push_masked', num_pe_io_out)
+
+        # write_fifo_ignore_r = m.Reg('write_fifo_ignore_r', num_pe_io_out * 16)
+        # write_fifo_loop_ignore_r = m.Reg('write_fifo_loop_ignore_r', num_pe_io_out * 16)
+        # available_pop_masked = m.Reg('available_pop_masked', num_pe_io_in)
+        # available_push_masked = m.Reg('available_push_masked', num_pe_io_out)
+
         read_fifo_done_masked = m.Reg('read_fifo_done_masked', num_pe_io_in)
         write_fifo_done_masked = m.Reg('write_fifo_done_masked', num_pe_io_out)
 
-        en_r = m.Reg('en_r')
-        en_pop_r = m.Reg('en_pop_r', num_pe_io_in)
-        en_push_r = m.Reg('en_push_r', num_pe_io_out)
+        # en_r = m.Reg('en_r')
+        # en_pop_r = m.Reg('en_pop_r', num_pe_io_in)
+        # en_push_r = m.Reg('en_push_r', num_pe_io_out)
+
         done_r = m.Reg('done_r')
         read_fifo_done_r = m.Reg('read_fifo_done_r', num_pe_io_in)
         write_fifo_done_r = m.Reg('write_fifo_done_r', num_pe_io_out)
-        ignore_counter_out = m.Wire('ignore_counter_out', num_pe_io_out)
-        en_counters = m.Reg('en_counter', num_pe_io_out)
+
+        # ignore_counter_out = m.Wire('ignore_counter_out', num_pe_io_out)
+        # en_counters = m.Reg('en_counter', num_pe_io_out)
+
         start_r = m.Reg('start_r')
         flag_initial = m.Reg('flag_initial')
 
         m.EmbeddedCode('')
-        en.assign(en_r)
-        en_pop.assign(en_pop_r)
-        en_push.assign(And(ignore_counter_out, en_push_r))
+        # en.assign(en_r)
+        # en_pop.assign(en_pop_r)
+        # en_push.assign(And(ignore_counter_out, en_push_r))
         done.assign(done_r)
 
         m.Always(Posedge(clk))(
@@ -569,26 +577,26 @@ class Components:
         m.Always(Posedge(clk))(
             read_fifo_mask_r(read_fifo_mask),
             write_fifo_mask_r(write_fifo_mask),
-            write_fifo_ignore_r(write_fifo_ignore),
-            write_fifo_loop_ignore_r(write_fifo_loop_ignore),
+            # write_fifo_ignore_r(write_fifo_ignore),
+            # write_fifo_loop_ignore_r(write_fifo_loop_ignore),
             read_fifo_done_r(read_fifo_done),
             write_fifo_done_r(write_fifo_done)
         )
 
         m.Always(Posedge(clk))(
             If(rst)(
-                available_pop_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
-                available_push_masked(Repeat(Int(0, 1, 2), num_pe_io_out)),
+                # available_pop_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
+                # available_push_masked(Repeat(Int(0, 1, 2), num_pe_io_out)),
                 read_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
                 write_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_out))
             ).Elif(start_r)(
-                available_pop_masked(Or(available_pop, Unot(read_fifo_mask_r))),
-                available_push_masked(Or(available_push, Unot(write_fifo_mask_r))),
+                # available_pop_masked(Or(available_pop, Unot(read_fifo_mask_r))),
+                # available_push_masked(Or(available_push, Unot(write_fifo_mask_r))),
                 write_fifo_done_masked(Or(write_fifo_done_r, Unot(write_fifo_mask_r))),
                 read_fifo_done_masked(Or(read_fifo_done_r, Unot(read_fifo_mask_r)))
             ).Else(
-                available_pop_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
-                available_push_masked(Repeat(Int(0, 1, 2), num_pe_io_out)),
+                # available_pop_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
+                # available_push_masked(Repeat(Int(0, 1, 2), num_pe_io_out)),
                 read_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
                 write_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_out))
             )
@@ -597,39 +605,47 @@ class Components:
         m.Always(Posedge(clk))(
             If(rst)(
                 fsm_state(FSM_IDLE),
+                en(Int(0, 1, 2)),
                 done_r(Int(0, 1, 2)),
-                en_r(Int(0, 1, 2)),
-                en_pop_r(Repeat(Int(0, 1, 2), num_pe_io_in)),
-                en_push_r(Repeat(Int(0, 1, 2), num_pe_io_in)),
-                en_counters(Repeat(Int(0, 1, 2), num_pe_io_out)),
+
+                # en_r(Int(0, 1, 2)),
+                # en_pop_r(Repeat(Int(0, 1, 2), num_pe_io_in)),
+                # en_push_r(Repeat(Int(0, 1, 2), num_pe_io_in)),
+                # en_counters(Repeat(Int(0, 1, 2), num_pe_io_out)),
                 flag_initial(Int(0, 1, 2))
             ).Else(
-                en_r(Int(0, 1, 2)),
-                en_counters(Repeat(Int(0, 1, 2), num_pe_io_out)),
-                en_pop_r(Repeat(Int(0, 1, 2), num_pe_io_in)),
-                en_push_r(Repeat(Int(0, 1, 2), num_pe_io_out)),
+                # en_r(Int(0, 1, 2)),
+                # en_counters(Repeat(Int(0, 1, 2), num_pe_io_out)),
+                # en_pop_r(Repeat(Int(0, 1, 2), num_pe_io_in)),
+                # en_push_r(Repeat(Int(0, 1, 2), num_pe_io_out)),
+                en(Int(0, 1, 2)),
                 done_r(Int(0, 1, 2)),
                 Case(fsm_state)(
                     When(FSM_IDLE)(
                         If(start)(
-                            fsm_state(FSM_PROCESS)
+                            fsm_state(FSM_PROCESS),
                         )
                     ),
                     When(FSM_PROCESS)(
-                        If(Land(Uand(available_push_masked), Uand(available_pop_masked)))(
-                            en_r(Int(1, 1, 2)),
-                            en_counters(Repeat(Int(1, 1, 2), num_pe_io_out)),
-                            en_pop_r(Repeat(Int(1, 1, 2), num_pe_io_in)),
-                            en_push_r(Repeat(Int(1, 1, 2), num_pe_io_in)),
-                            flag_initial(Int(1, 1, 2))
-                        ).Elif(Uand(write_fifo_done_masked))(
+                        en(Int(1, 1, 2)),
+                        If(Uand(write_fifo_done_masked))(
                             fsm_state(FSM_DONE),
                             done_r(Int(1, 1, 2))
-                        ).Elif(AndList(Uand(available_push_masked), flag_initial, Uand(read_fifo_done_masked)))(
-                            en_r(Int(1, 1, 2)),
-                            en_push_r(Repeat(Int(1, 1, 2), num_pe_io_out)),
-                            en_counters(Repeat(Int(1, 1, 2), num_pe_io_out))
                         )
+                        # If(Land(Uand(available_push_masked), Uand(available_pop_masked)))(
+                        #     en_r(Int(1, 1, 2)),
+                        #     en_counters(Repeat(Int(1, 1, 2), num_pe_io_out)),
+                        #     en_pop_r(Repeat(Int(1, 1, 2), num_pe_io_in)),
+                        #     en_push_r(Repeat(Int(1, 1, 2), num_pe_io_in)),
+                        #     flag_initial(Int(1, 1, 2))
+                        # ).Elif(Uand(write_fifo_done_masked))(
+                        #     fsm_state(FSM_DONE),
+                        #     done_r(Int(1, 1, 2))
+                        # ).Elif(AndList(Uand(available_push_masked), flag_initial, Uand(read_fifo_done_masked)))(
+                        #     en_r(Int(1, 1, 2)),
+                        #     en_push_r(Repeat(Int(1, 1, 2), num_pe_io_out)),
+                        #     en_counters(Repeat(Int(1, 1, 2), num_pe_io_out))
+                        # )
                     ),
                     When(FSM_DONE)(
                         If(~start)(
@@ -639,15 +655,15 @@ class Components:
                 )
             )
         )
-        j = m.Genvar('j')
-        genfor = m.GenerateFor(j(0), j < num_pe_io_out, j.inc(), 'genfor_ignore')
-        igc = self.create_ignore_counter()
-        params = [('width', 16)]
-        con = [('clk', clk), ('rst', rst), ('start', en_counters[j]),
-               ('limit', write_fifo_ignore[j * 16:(j + 1) * 16]),
-               ('loop_limit', write_fifo_loop_ignore[j * 16:(j + 1) * 16]), ('out', ignore_counter_out[j])]
-
-        genfor.Instance(igc, 'ignore_counter', params, con)
+        # j = m.Genvar('j')
+        # genfor = m.GenerateFor(j(0), j < num_pe_io_out, j.inc(), 'genfor_ignore')
+        # igc = self.create_ignore_counter()
+        # params = [('width', 16)]
+        # con = [('clk', clk), ('rst', rst), ('start', en_counters[j]),
+        #        ('limit', write_fifo_ignore[j * 16:(j + 1) * 16]),
+        #        ('loop_limit', write_fifo_loop_ignore[j * 16:(j + 1) * 16]), ('out', ignore_counter_out[j])]
+        #
+        # genfor.Instance(igc, 'ignore_counter', params, con)
 
         initialize_regs(m, {'fsm_state': FSM_IDLE})
 
@@ -1121,4 +1137,193 @@ class Components:
         )
         initialize_regs(m)
         self.cache[name] = m
+        return m
+
+    def calc_and_tree_size_helper(self, num_input, fanout):
+        stack1 = []
+        stack2 = []
+        r = 0
+        for i in range(num_input):
+            stack1.append(1)
+
+        flag = 1
+        while len(stack1) > 1 or len(stack2) > 1:
+            if flag:
+                for i in range(fanout):
+                    if len(stack1) > 0:
+                        stack1.pop(0)
+                stack2.append(1)
+                r += 1
+                if len(stack1) <= 1:
+                    flag = 0
+                    if len(stack1) > 0:
+                        stack2.append(1)
+                        r += 1
+                        stack1.pop(0)
+            else:
+                for i in range(fanout):
+                    if len(stack2) > 0:
+                        stack2.pop(0)
+                stack1.append(1)
+                r += 1
+                if len(stack2) <= 1:
+                    flag = 1
+                    if len(stack2) > 0:
+                        stack1.append(1)
+                        r += 1
+                        stack2.pop(0)
+        return r
+
+    def create_tree_array(self, radix, num_input, array):
+        if radix < 2:
+            return [[num_input]]
+        m_array = []
+        while num_input > radix:
+            m_array.append(radix)
+            num_input = num_input - radix
+        else:
+            m_array.append(num_input)
+
+        array.append(m_array)
+        if len(m_array) == 1:
+            return array
+        else:
+            return self.create_tree_array(radix, len(m_array), array)
+
+    def create_reg_tree(self, fanin, num_output, extra_pipeline=0):
+        name = 'reg_tree_%d_%d_%d' % (fanin, num_output, extra_pipeline)
+        if name in self.cache.keys():
+            return self.cache[name]
+
+        array = list(reversed(self.create_tree_array(fanin, num_output, [])))
+        for i in range(extra_pipeline):
+            array.append([1 for j in range(num_output)])
+
+        r = 1
+        rr = 0
+        code = 'r[0] <= in;\n'
+
+        for a in array:
+            for b in a:
+                for c in range(b):
+                    code = code + 'r[%d] <= r[%d];\n' % (r, rr)
+                    r = r + 1
+                rr = rr + 1
+
+        m = Module(name)
+        DATA_WIDTH = m.Parameter('DATA_WIDTH', 16)
+        clk = m.Input('clk')
+        _ = m.Input('in', DATA_WIDTH)
+        outputs = []
+        for i in range(num_output):
+            name = 'out_%d' % i
+            outputs.append(m.Output(name, DATA_WIDTH))
+
+        regs = m.Reg('r', DATA_WIDTH, r)
+
+        m.Always(Posedge(clk))(
+            EmbeddedCode(code)
+        )
+        for i in range(r - num_output, r):
+            outputs[i - r].assign(regs[i])
+
+        initialize_regs(m)
+        self.cache[name] = m
+
+        return m
+
+    def create_and_tree(self, fanout, num_input):
+        name = 'and_tree_%d_%d' % (fanout, num_input)
+        if name in self.cache.keys():
+            return self.cache[name]
+
+        m = Module(name)
+        clk = m.Input('clk')
+        inn = [m.Input('in_%d' % i) for i in range(num_input)]
+        out = m.Output('out')
+        s = self.calc_and_tree_size_helper(num_input, fanout)
+        reg = m.Reg('r', s)
+        stack1 = []
+        stack2 = []
+        stm = []
+        r = 0
+        for i in range(num_input):
+            stack1.append(inn[i])
+
+        flag = 1
+        while len(stack1) > 1 or len(stack2) > 1:
+            if flag:
+                # stm.append(reg[r](AndList(*stack1[0:fanout])))
+                stm.append(reg[r](Uand(Cat(*stack1[0:fanout]))))
+                for i in range(fanout):
+                    if len(stack1) > 0:
+                        stack1.pop(0)
+                stack2.append(reg[r])
+                r += 1
+                if len(stack1) <= 1:
+                    flag = 0
+                    if len(stack1) > 0:
+                        stm.append(reg[r](stack1[0]))
+                        stack2.append(reg[r])
+                        r += 1
+                        stack1.pop(0)
+            else:
+                # stm.append(reg[r](AndList(*stack2[0:fanout])))
+                stm.append(reg[r](Uand(Cat(*stack2[0:fanout]))))
+                for i in range(fanout):
+                    if len(stack2) > 0:
+                        stack2.pop(0)
+                stack1.append(reg[r])
+                r += 1
+                if len(stack2) <= 1:
+                    flag = 1
+                    if len(stack2) > 0:
+                        stm.append(reg[r](stack2[0]))
+                        stack1.append(reg[r])
+                        r += 1
+                        stack2.pop(0)
+
+        m.Always(Posedge(clk))(
+            stm
+        )
+
+        out.assign(reg[r - 1])
+
+        initialize_regs(m)
+        self.cache[name] = m
+
+        return m
+
+    def create_control_data_flow(self, num_inputs, num_outputs, and_tree_fanout, reg_tree_fanin):
+        name = 'control_data_flow_%d_%d_%d_%d' % (num_inputs, num_outputs, and_tree_fanout, reg_tree_fanin)
+        if name in self.cache.keys():
+            return self.cache[name]
+        m = Module(name)
+
+        clk = m.Input('clk')
+
+        inputs_ready = [m.Input('inputs_ready_%d' % i) for i in range(num_inputs)]
+        outputs_ready = [m.Input('outputs_ready_%d' % i) for i in range(num_outputs)]
+        inputs_enables = [m.Output('inputs_enables_%d' % i) for i in range(num_inputs)]
+
+        and_tree = self.create_and_tree(and_tree_fanout, num_inputs + num_outputs)
+        reg_tree = self.create_reg_tree(reg_tree_fanin, num_inputs)
+
+        and_tree_to_reg_tree = m.Wire('and_tree_to_reg_tree')
+
+        con = [('clk', clk)]
+        con += [('in_%d' % i, inputs_ready[i]) for i in range(num_inputs)]
+        con += [('in_%d' % (i + num_inputs), outputs_ready[i]) for i in range(num_outputs)]
+        con += [('out', and_tree_to_reg_tree)]
+        params = []
+        m.Instance(and_tree, 'and_tree', params, con)
+
+        con = [('clk', clk), ('in', and_tree_to_reg_tree)]
+        con += [('out_%d' % i, inputs_enables[i]) for i in range(num_inputs)]
+        params = [('DATA_WIDTH', 1)]
+        m.Instance(reg_tree, 'reg_tree', params, con)
+
+        initialize_regs(m)
+        self.cache[name] = m
+
         return m

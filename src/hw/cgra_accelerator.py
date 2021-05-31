@@ -20,11 +20,18 @@ class CgraAccelerator:
 
     def create_cgra_accelerator(self):
         comp = Components()
+
         fd = comp.create_fecth_data()
+
         dd = comp.create_dispath_data()
+
+        reg_tree = comp.create_reg_tree(4, self.num_in + 1)
+
         control_conf = comp.create_control_conf(self.cgra.id, self.cgra.conf_bus_width, self.num_in, self.num_out,
                                                 len(self.cgra.arch['pe']) * 4)
         control_exec = comp.create_control_exec(self.cgra.id, self.num_in, self.num_out)
+
+        control_data_flow = comp.create_control_data_flow(self.num_in + 1, self.num_out, 4, 4)
 
         m = Module('cgra_acc')
         INTERFACE_DATA_WIDTH = m.Parameter('INTERFACE_DATA_WIDTH', 512)
@@ -57,24 +64,38 @@ class CgraAccelerator:
         conf_out_bus = m.Wire('conf_out_bus', self.cgra.conf_bus_width + 1)
         read_fifo_mask = m.Wire('read_fifo_mask', self.num_in)
         write_fifo_mask = m.Wire('write_fifo_mask', self.num_out)
-        write_fifo_ignore = m.Wire('write_fifo_ignore', self.num_out * 16)
-        write_fifo_loop_ignore = m.Wire('write_fifo_loop_ignore', self.num_out * 16)
+        # write_fifo_ignore = m.Wire('write_fifo_ignore', self.num_out * 16)
+        # write_fifo_loop_ignore = m.Wire('write_fifo_loop_ignore', self.num_out * 16)
 
         conf_done = m.Wire('conf_done')
+        reg_tree_conf_done = m.Wire('reg_tree_conf_done', 1 + self.num_in)
+
         genv = m.Genvar('genv')
         if self.num_in > 1:
             acc_user_request_read[1:].assign(request_read[1:])
         acc_user_request_read[0].assign(request_read[0] | conf_control_req_rd_data)
+
+        param = [('DATA_WIDTH', 1)]
+        con = [('clk', clk), ('in', conf_done)]
+        con += [('out_%d' % i, reg_tree_conf_done[i]) for i in range(self.num_in + 1)]
+        m.Instance(reg_tree, 'reg_tree_conf', param, con)
+
+        param = []
+        con = [('clk', clk), ('inputs_ready_0', en)]
+        con += [('inputs_ready_%d' % (i + 1), available_pop[i] | ~read_fifo_mask[i]) for i in range(self.num_in)]
+        con += [('outputs_ready_%d' % (i), available_push[i] | ~write_fifo_mask[i]) for i in range(self.num_out)]
+        con += [('inputs_enables_%d' % i, en_pop[i]) for i in range(self.num_out)]
+        m.Instance(control_data_flow, 'control_data_flow', param, con)
 
         genInstFor1 = m.GenerateFor(genv(0), genv < self.num_in, genv.inc(), 'inst_fecth_data')
         genInstFor2 = m.GenerateFor(genv(0), genv < self.num_out, genv.inc(), 'inst_dispath_data')
 
         params = [('INPUT_DATA_WIDTH', INTERFACE_DATA_WIDTH), ('OUTPUT_DATA_WIDTH', self.cgra.data_width)]
         con = [
-            ('clk', clk), ('rst', rst), ('start', conf_done),
+            ('clk', clk), ('rst', rst), ('start', reg_tree_conf_done[genv + 1]),
             ('request_read', request_read[genv]), ('data_valid', acc_user_read_data_valid[genv]),
             ('read_data', acc_user_read_data[Mul(genv, INTERFACE_DATA_WIDTH):Mul(genv + 1, INTERFACE_DATA_WIDTH)]),
-            ('pop_data', en_pop[genv]),
+            ('pop_data', en_pop[genv] & read_fifo_mask[genv]),
             ('available_pop', available_pop[genv]),
             ('data_out', fifo_in_data[Mul(genv, self.cgra.data_width):Mul(genv + 1, self.cgra.data_width)])
         ]
@@ -85,7 +106,7 @@ class CgraAccelerator:
                ('available_write', acc_user_available_write[genv]),
                ('request_write', acc_user_request_write[genv]),
                ('write_data', acc_user_write_data[Mul(genv, INTERFACE_DATA_WIDTH):Mul(genv + 1, INTERFACE_DATA_WIDTH)]),
-               ('push_data', en_push[genv]),
+               ('push_data', en_push[genv] & write_fifo_mask[genv]),
                ('available_push', available_push[genv]),
                ('data_in', fifo_out_data[Mul(genv, self.cgra.data_width):Mul(genv + 1, self.cgra.data_width)])
                ]
@@ -98,40 +119,44 @@ class CgraAccelerator:
             ('rd_data_valid', acc_user_read_data_valid[0]), ('conf_out_bus', conf_out_bus),
             ('read_fifo_mask', read_fifo_mask),
             ('write_fifo_mask', write_fifo_mask),
-            ('write_fifo_ignore', write_fifo_ignore),
-            ('write_fifo_loop_ignore', write_fifo_loop_ignore),
+            # ('write_fifo_ignore', write_fifo_ignore),
+            # ('write_fifo_loop_ignore', write_fifo_loop_ignore),
             ('done', conf_done)
         ]
         m.Instance(control_conf, 'control_conf', params, con)
 
         params = []
-        con = [('clk', clk), ('rst', rst), ('start', conf_done),
+        con = [('clk', clk),
+               ('rst', rst),
+               ('start', reg_tree_conf_done[0]),
                ('read_fifo_mask', read_fifo_mask),
                ('write_fifo_mask', write_fifo_mask),
-               ('write_fifo_ignore', write_fifo_ignore),
-               ('write_fifo_loop_ignore', write_fifo_loop_ignore),
-               ('available_pop', available_pop),
-               ('available_push', available_push),
+               # ('write_fifo_ignore', write_fifo_ignore),
+               # ('write_fifo_loop_ignore', write_fifo_loop_ignore),
+               # ('available_pop', available_pop),
+               # ('available_push', available_push),
                ('read_fifo_done', acc_user_done_rd_data),
                ('write_fifo_done', acc_user_done_wr_data),
                ('en', en),
-               ('en_pop', en_pop),
-               ('en_push', en_push),
+               # ('en_pop', en_pop),
+               # ('en_push', en_push),
                ('done', acc_user_done)
                ]
         m.Instance(control_exec, 'control_exec', params, con)
 
         params = []
-        con = [('clk', clk), ('en', en), ('conf_bus', conf_out_bus)]
+        con = [('clk', clk), ('conf_bus', conf_out_bus)]
 
         j = 0
         for i in self.cgra.input_ids:
-            con.append(('in_stream%d' % i, fifo_in_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)]))
+            con.append(('in_stream%d' % i,
+                        Cat(en_pop[j]&read_fifo_mask[j], fifo_in_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
             j += 1
 
         j = 0
         for i in self.cgra.output_ids:
-            con.append(('out_stream%d' % i, fifo_out_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)]))
+            con.append(('out_stream%d' % i,
+                        Cat(en_push[j], fifo_out_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
             j += 1
 
         m.Instance(self.cgra.get(), 'cgra', params, con)

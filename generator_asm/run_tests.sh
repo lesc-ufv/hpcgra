@@ -7,8 +7,7 @@ ARCH=(
 # ./cgra_mesh_3x3.json
 # ./cgra_mesh_2x2.json
 #./cgra_16x16_8_4.json
-<<<<<<< HEAD
-cgra_16x16_8.json
+../arch/cgra_16x16_8.json
 )
 
 BENCH=(
@@ -24,8 +23,6 @@ BENCH=(
 ../json/toys/mibench.json
 ../json/toys/paeth.json
 ../json/toys/poly6.json
-=======
-./cgra_16x16_8.json 
 )
 
 BENCH=(
@@ -41,11 +38,14 @@ BENCH=(
 ../json/toys/qspline.json
 ../json/toys/sgfilter.json # Ficou travado
 ../json/toys/sobel_filter.json
->>>>>>> 1bbb17183d5acdc2b4ea14e8bf6f2e4a1f22ccd3
 )
 
+
+mkdir test
+cd test
+
 rm -rf build
-mkdir build
+mkdir build 
 cd build
 cmake ../..
 make -j $(nproc)

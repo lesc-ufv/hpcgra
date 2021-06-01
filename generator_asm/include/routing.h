@@ -51,7 +51,7 @@ bool try_route_aStar(
     bool found = false, multicast;
     map<pd, int> closed;
 
-    int cost_b, index_b, son, pe_origin, pe_destiny;
+    int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
     //printf("\nPE %d -> PE %d\n", pe_a, pe_b);
 
@@ -73,20 +73,30 @@ bool try_route_aStar(
             key = make_pair(node, son);
             //printf("%d -> %d MIN_ROUTE_PE %d\n", node, son, min_rota[node]);
 
-            if (min_rota[node] == 0) {
-                // verify multicast
-                multicast = false;
-                for (int k = 0; k < pe_route[node].size();  ++k) {
-                    pe_origin = pe_route[node][k].first;
-                    pe_destiny = pe_route[node][k].second;
-                    //printf("pe_o %d pe_d %d\n", pe_origin, pe_destiny);
-                    if (pe_origin == node && pe_destiny == son) {
-                        multicast = true;
-                        break;
+            if (pe_route[node].size() > 0) {
+                pe_start = pe_route[node][0].first;
+                //printf("%d %d\n", pe_start, node);
+                if (min_rota[node] == 0) {
+                    multicast = false;
+                    for (int k = 0; k < pe_route[node].size(); ++k) {
+                        pe_origin = pe_route[node][k].first;
+                        pe_destiny = pe_route[node][k].second;
+                        // verify multicast
+                        if (pe_origin == node && pe_destiny == son) {
+                            multicast = true;
+                            break;
+                        }
                     }
+                    // if not multicast, and not have route port, you can't go this path
+                    if (!multicast) continue;
+                } else {
+                    /*for (int k = 0; k < pe_route[node].size(); ++k) {
+                        printf("%d %d, ", pe_route[node][k].first, pe_route[node][k].second);
+                    }
+                    printf("\n");*/
+                    // correct the source node, ALU ou neighbor
+                    if (pe_start != pe_a) continue;
                 }
-                // if not multicast, and not have route port, you can't go this way
-                if (!multicast) continue;
             }
 
             cost_h = table[son][pe_b];

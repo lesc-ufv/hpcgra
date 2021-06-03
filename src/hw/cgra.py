@@ -372,16 +372,37 @@ class Cgra:
         inputs = [m.Input('in%d' % i, Add(width, 1)) for i in range(num_inputs)]
         out = m.Output('out', Add(width, 1))
 
-        or_en = m.Reg('or_en', 3)
-
         inputs_reg = [m.Reg('in%d_reg' % i, width) for i in range(num_inputs)]
         reg_results = m.Reg('reg_results', width, num_opcodes)
-
+        valid_result = m.Reg('valid_result', num_inputs)
         seq = Seq(m, 'seq_reg', clk)
+        regs_val = []
+        and_valid = {}
         v = [i[width] for i in inputs]
-        seq.add(or_en[0](Ors(*v)))
-        seq.add(or_en[1](or_en[0]))
-        seq.add(or_en[2](or_en[1]))
+
+        for i in range(num_inputs):
+            r = m.Reg('reg_val_%d' % i)
+            seq.add(r(v[i]))
+            regs_val.append(r)
+
+        for i in isa:
+            t = self.alu_ops[i].get_type()
+            a = and_valid.keys()
+            if t == 'unary':
+                if 'and_valid_1' not in a:
+                    r = m.Reg('and_valid_1')
+                    seq.add(r(regs_val[0]))
+                    and_valid[r.name] = r
+            if t == 'binary':
+                if 'and_valid_2' not in a:
+                    r = m.Reg('and_valid_2')
+                    seq.add(r(And(regs_val[0], regs_val[1])))
+                    and_valid[r.name] = r
+            if t == 'ternary':
+                if 'and_valid_3' not in a:
+                    r = m.Reg('and_valid_3')
+                    seq.add(r(And(And(regs_val[0], regs_val[1]), regs_val[2])))
+                    and_valid[r.name] = r
 
         for i in range(num_inputs):
             seq.add(inputs_reg[i](inputs[i][0:width]))
@@ -392,18 +413,18 @@ class Cgra:
             t = self.alu_ops[i].get_type()
             if t == 'unary':
                 seq.add(op(m, reg_results[opc], inputs_reg[0]))
-
+                seq.add(valid_result[opc](and_valid['and_valid_1']))
             if t == 'binary':
                 seq.add(op(m, reg_results[opc], inputs_reg[0], inputs_reg[1]))
-
+                seq.add(valid_result[opc](and_valid['and_valid_2']))
             if t == 'ternary':
                 seq.add(op(m, reg_results[opc], inputs_reg[0], inputs_reg[1], inputs_reg[2]))
-
+                seq.add(valid_result[opc](and_valid['and_valid_3']))
             opc += 1
 
         seq.implement()
 
-        out.assign(Cat(or_en[2], reg_results[opcode]))
+        out.assign(Cat(valid_result[opcode], reg_results[opcode]))
 
         initialize_regs(m)
         self.cache[name] = m

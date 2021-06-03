@@ -183,12 +183,12 @@ class Cgra:
         acc_rst = None
         conf_acc = None
         if has_acc:
-            acc_wire = m.Wire('acc_wire', self.data_width)
+            acc_wire = m.Wire('acc_wire', self.data_width + 1)
             acc_rst = m.Wire('acc_rst')
             conf_acc = m.Wire('conf_acc', self.data_width)
             mux_alu_inputs.append(acc_wire)
 
-        pe_const = m.Wire('pe_const', Mul(alu_num_inputs, self.data_width))
+        pe_const = m.Wire('pe_const', Mul(alu_num_inputs, self.data_width + 1))
 
         mux_alu_inputs.append(pe_const)
 
@@ -221,10 +221,10 @@ class Cgra:
             con = [('sel', sel_mux_alu[i])]
             for j in range(len(mux_alu_inputs)):
                 if mux_alu_inputs[j].name == 'acc_wire':
-                    con.append(('in%d' % j, Cat(Int(0, 1, 2), mux_alu_inputs[j])))
+                    con.append(('in%d' % j, mux_alu_inputs[j]))
                 elif mux_alu_inputs[j].name == 'pe_const':
-                    const_ = mux_alu_inputs[j][Mul(i, self.data_width):Mul((i + 1), self.data_width)]
-                    con.append(('in%d' % j, Cat(Int(0, 1, 2), const_)))
+                    const_ = mux_alu_inputs[j][Mul(i, self.data_width + 1):Mul((i + 1), self.data_width + 1)]
+                    con.append(('in%d' % j, const_))
                 else:
                     con.append(('in%d' % j, mux_alu_inputs[j]))
             con.append(('out', alu_in[i]))
@@ -374,7 +374,7 @@ class Cgra:
 
         inputs_reg = [m.Reg('in%d_reg' % i, width) for i in range(num_inputs)]
         reg_results = m.Reg('reg_results', width, num_opcodes)
-        valid_result = m.Reg('valid_result', num_inputs)
+        valid_result = m.Reg('valid_result', num_opcodes)
         seq = Seq(m, 'seq_reg', clk)
         regs_val = []
         and_valid = {}
@@ -448,7 +448,7 @@ class Cgra:
         conf_bus = m.Input('conf_bus', self.conf_bus_width + 1)
         reset = m.OutputReg('reset')
         conf_alu = m.OutputReg('conf_alu', conf_alu_width)
-        conf_const = m.OutputReg('conf_const', self.data_width * alu_num_inputs)
+        conf_const = m.OutputReg('conf_const', (self.data_width + 1) * alu_num_inputs)
         conf_router = None
         conf_acc = None
         conf_width = pe_id_width + tag_bits
@@ -509,8 +509,9 @@ class Cgra:
 
         for i in range(alu_num_inputs):
             const_case = When(Int(2 + i, tag_bits, 2))(
-                conf_const[Mul(i, self.data_width):Mul((i + 1), self.data_width)](
-                    conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width]))
+                conf_const[Mul(i, self.data_width + 1):Mul((i + 1), self.data_width + 1)](
+                    Cat(Int(1, 1, 2),
+                        conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width])))
             case.add(const_case)
 
         if has_router:

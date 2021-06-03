@@ -90,19 +90,14 @@ class CgraConfiguration:
         sel_alu = ''.join(sel_alu)
 
         elastic_queue_latency = []
-        elastic_queue_latency_bits = []
-        offset_elastic = 0
-        for i in range(alu_num_inputs):
+        alu_delay_idx = [0 for _ in range(alu_num_inputs)]
+        for p, d in alu_delay:
+            alu_delay_idx[p] = d
+
+        for i, v in zip(range(alu_num_inputs), alu_delay_idx):
             if elastic_queue[i] > 0:
                 lbits = bits(elastic_queue[i] + 1)
-                elastic_queue_latency_bits.append(lbits)
-                elastic_queue_latency.append(format(0, '0%db' % lbits))
-            else:
-                offset_elastic += 1
-
-        for i, v in alu_delay:
-            idx = i - offset_elastic
-            elastic_queue_latency[idx] = format(v,'0%db' % elastic_queue_latency_bits[idx])
+                elastic_queue_latency.append(format(v, '0%db' % lbits))
 
         elastic_queue_latency.reverse()
         elastic_queue_latency = ''.join(elastic_queue_latency)
@@ -176,12 +171,12 @@ class CgraConfiguration:
 
         if routes > 0:
             if routes == 1:
-                    for _, i in routing.items():
-                        if i == 'alu':
-                            route_sel_in = format(0, '0%db' % route_sel_in_bits)
-                        else:
-                            iidx = neighbors.index(i) + 1  # the first port is always alu
-                            route_sel_in = format(iidx, '0%db' % route_sel_in_bits)
+                for _, i in routing.items():
+                    if i == 'alu':
+                        route_sel_in = format(0, '0%db' % route_sel_in_bits)
+                    else:
+                        iidx = neighbors.index(i) + 1  # the first port is always alu
+                        route_sel_in = format(iidx, '0%db' % route_sel_in_bits)
             else:
                 if len(routing.keys()) > routes:
                     return False, 'PE %s can perform only %d routing.' % (id, routes)

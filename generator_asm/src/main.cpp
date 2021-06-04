@@ -3,7 +3,7 @@
 int main(int argc, char **argv) {
     //srand(time(nullptr));
     auto timetime = time(nullptr);
-    printf("%ld\n", timetime);
+    //printf("%ld\n", timetime);
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
@@ -27,7 +27,6 @@ int main(int argc, char **argv) {
     path_asm = name;
 
     vector<int> pe_in, pe_out, pe_basic;
-    map<pair<int, int>, vector<int>> *route = new map<pair<int, int>, vector<int>>[NGRIDS];
     vector<pe_t> pe;
 
     // read arch
@@ -151,6 +150,8 @@ int main(int argc, char **argv) {
     // get each value of edge, to routing
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB,
                   pos, table, edges_cost);
+
+    map<pair<int, int>, vector<int>> *route = new map<pair<int, int>, vector<int>>[NGRIDS];
 
     start = high_resolution_clock::now();
     // verify and return path of routing

@@ -16,7 +16,7 @@ BENCH=(
 #../json/toys/kmeans_4_4.json
 #../json/toys/loopback_8.json 
 #../json/toys/mibench.json
-#../json/toys/paeth.json  #terminate called after throwing an instance of 'std::bad_alloc'
+../json/toys/paeth.json  #terminate called after throwing an instance of 'std::bad_alloc'
 #../json/toys/poly5.json
 #../json/toys/poly6.json
 #../json/toys/poly8.json
@@ -38,17 +38,14 @@ cd ..
 
 EXEC="./build/place"
 
-for ((k = 0; k < 10; k++)); do
-	for ((i = 0; i < ${#BENCH[@]}; i++)); do
-	  bench_name=$(basename -s .json ${BENCH[i]})
-	  echo "+ "${bench_name}
-	  for ((j = 0; j < ${#ARCH[@]}; j++)); do
-		arch_name=$(basename -s .json ${ARCH[j]})
-		echo " - "${arch_name}
-		NAME=${bench_name}"_"${arch_name}
-		$EXEC $NAME ${BENCH[i]} ${ARCH[j]} 1000
-	  done
-	  python3 ../get_problem.py $NAME.asm
+for ((i = 0; i < ${#BENCH[@]}; i++)); do
+	bench_name=$(basename -s .json ${BENCH[i]})
+	echo "+ "${bench_name}
+	for ((j = 0; j < ${#ARCH[@]}; j++)); do
+	arch_name=$(basename -s .json ${ARCH[j]})
+	echo " - "${arch_name}
+	NAME=${bench_name}"_"${arch_name}
+	$EXEC $NAME ${BENCH[i]} ${ARCH[j]} 1000
 	done
-	sleep 1
+	#python3 ../get_problem.py $NAME.asm
 done

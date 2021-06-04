@@ -15,19 +15,32 @@ using namespace std;
     "basic" = 3
 */
 /*
-    'add'   : 0
-    'sub'   : 1
-    'mul'   : 2
-    'or'    : 3
-    'and'   : 4
-    'not'   : 5
-    'pass'  : 6
-    'muladd': 7
-    'mulsub': 8
-    'addadd': 9
-    'subsub': 10
-    'addsub': 11
-    'mux'   : 12
+    'NDEF': 0
+    'add': 1
+    'sub': 2
+    'mul': 3
+    'or': 4    
+    'xor': 5
+    'and': 6
+    'not': 7
+    'abs': 8
+    'pass': 9
+    'muladd': 10 
+    'mulsub': 11
+    'addadd': 12
+    'subsub': 13
+    'addsub': 14
+    'mux': 15
+    'slt': 16
+    'sgt': 17
+    'seq': 18
+    'sne': 19
+    'shl': 20
+    'shr': 21
+    'max': 22
+    'min': 23
+
+    
 */
 
 typedef struct pe_t {
@@ -49,19 +62,29 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
                                  {"basic",  3}};
 
     // map to isa
-    std::map<std::string, int> map_isa = {{"add",    0},
-                                          {"sub",    1},
-                                          {"mul",    2},
-                                          {"or",     3},
-                                          {"and",    4},
-                                          {"not",    5},
-                                          {"pass",   6},
-                                          {"muladd", 7},
-                                          {"mulsub", 8},
-                                          {"addadd", 9},
-                                          {"subsub", 10},
-                                          {"addsub", 11},
-                                          {"mux",    12}};
+    std::map<std::string, int> map_isa = {{"add", 1},
+                                            {"sub", 2},
+                                            {"mul", 3},
+                                            {"or", 4},    
+                                            {"xor", 5},
+                                            {"and", 6},
+                                            {"not", 7},
+                                            {"abs", 8},
+                                            {"pass", 9},
+                                            {"muladd", 10}, 
+                                            {"mulsub", 11},
+                                            {"addadd", 12},
+                                            {"subsub", 13},
+                                            {"addsub", 14},
+                                            {"mux", 15},
+                                            {"slt", 16},
+                                            {"sgt", 17},
+                                            {"seq", 18},
+                                            {"sne", 19},
+                                            {"shl", 20},
+                                            {"shr", 21},
+                                            {"max", 22},
+                                            {"min", 23}};
 
     Json::Value data;
     std::ifstream ifs;
@@ -105,7 +128,8 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
             }
             pe.push_back(aux_pe);
         }
-    } catch (...) {
+    } catch (exception& e) {
+        cout << "Standard exception: " << e.what() << endl;
         return false;
     }
 

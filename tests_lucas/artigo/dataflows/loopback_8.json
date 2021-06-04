@@ -1,0 +1,126 @@
+{
+  "edges": [
+    {
+      "port": "1",
+      "source": "0",
+      "target": "1"
+    },
+    {
+      "port": "1",
+      "source": "2",
+      "target": "3"
+    },
+    {
+      "port": "1",
+      "source": "4",
+      "target": "5"
+    },
+    {
+      "port": "1",
+      "source": "6",
+      "target": "7"
+    },
+    {
+      "port": "1",
+      "source": "8",
+      "target": "9"
+    },
+    {
+      "port": "1",
+      "source": "10",
+      "target": "11"
+    },
+    {
+      "port": "1",
+      "source": "12",
+      "target": "13"
+    },
+    {
+      "port": "1",
+      "source": "14",
+      "target": "15"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "0",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "1",
+      "label": "output",
+      "opcode": "output"
+    },
+    {
+      "id": "2",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "3",
+      "label": "output",
+      "opcode": "output"
+    },
+    {
+      "id": "4",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "5",
+      "label": "output",
+      "opcode": "output"
+    },
+    {
+      "id": "6",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "7",
+      "label": "output",
+      "opcode": "output"
+    },
+    {
+      "id": "8",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "9",
+      "label": "output",
+      "opcode": "output"
+    },
+    {
+      "id": "10",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "11",
+      "label": "output",
+      "opcode": "output"
+    },
+    {
+      "id": "12",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "13",
+      "label": "output",
+      "opcode": "output"
+    },
+    {
+      "id": "14",
+      "label": "input",
+      "opcode": "input"
+    },
+    {
+      "id": "15",
+      "label": "output",
+      "opcode": "output"
+    }
+  ]
+}

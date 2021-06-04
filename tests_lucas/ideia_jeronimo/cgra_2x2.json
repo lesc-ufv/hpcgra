@@ -1,0 +1,98 @@
+{
+    "data_width": 8,
+    "conf_bus_width": 8,
+    "pe": [
+        {
+            "id": 0,
+            "type": "input",
+            "neighbors": [
+                1,
+                2
+            ],
+            "routes": 3,
+            "elastic_queue": [
+                2,
+                2,
+                2
+            ],
+            "acc": false,
+            "isa": [
+                "add",
+                "mux",
+                "sgt",
+                "slt",
+                "sub",
+                "not"
+            ]
+        },
+        {
+            "id": 1,
+            "type": "output",
+            "neighbors": [
+                0,
+                3
+            ],
+            "routes": 3,
+            "elastic_queue": [
+                2,
+                2,
+                2
+            ],
+            "acc": false,
+            "isa": [
+                "add",
+                "mux",
+                "sgt",
+                "slt",
+                "sub",
+                "not"
+            ]
+        },
+        {
+            "id": 2,
+            "type": "input",
+            "neighbors": [
+                0,
+                3
+            ],
+            "routes": 3,
+            "elastic_queue": [
+                2,
+                2,
+                2
+            ],
+            "acc": false,
+            "isa": [
+                "add",
+                "mux",
+                "sgt",
+                "slt",
+                "sub",
+                "not"
+            ]
+        },
+        {
+            "id": 3,
+            "type": "output",
+            "neighbors": [
+                1,
+                2
+            ],
+            "routes": 3,
+            "elastic_queue": [
+                2,
+                2,
+                2
+            ],
+            "acc": false,
+            "isa": [
+                "add",
+                "mux",
+                "sgt",
+                "slt",
+                "sub",
+                "not"
+            ]
+        }
+    ]
+}

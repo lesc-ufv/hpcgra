@@ -1,0 +1,11 @@
+{
+	"input":
+	{
+		"input": 4,
+		"input": 5
+	},
+	"output":
+	{
+		"output": 6
+	}
+}

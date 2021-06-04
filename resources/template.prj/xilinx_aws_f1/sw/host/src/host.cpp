@@ -11,38 +11,48 @@ int main(int argc, char *argv[]){
     std::string binaryFile = argv[1];
     std::string kernel_name = argv[2];
     std::string bitstreamFile = argv[3];
-    vector_u16 inputs[1];
-    vector_u16 outputs[1];
+    vector_u16 inputs[NUM_CHANNELS];
+    vector_u16 outputs[NUM_CHANNELS];
     
     int size;
-    int out_id = (NUM_CHANNELS % 2) == 0 ? 0 : NUM_CHANNELS-1;
        
     auto cgra_acc = CgraFpga(NUM_CHANNELS,NUM_CHANNELS);
     cgra_acc.cgra_fpga_init(binaryFile, kernel_name, bitstreamFile);
     
-    read_file("in0.txt",inputs[0]);
-    cgra_acc.createInputQueue(0,inputs[0].size()*2);
-    auto ptr_in = cgra_acc.getInputQueue(0);
-    memcpy(ptr_in,inputs[0].data(),inputs[0].size()*2); 
-    
-    read_file("out0.txt",outputs[0]);
-    cgra_acc.createOutputQueue(out_id,outputs[0].size()*2);
+    for(int i = 0; i < NUM_CHANNELS;i++){
+        std::stringstream ssin;
+        ssin << "in" << i << ".txt";
+        read_file(ssin.str(),inputs[i]);
+        cgra_acc.createInputQueue(i,inputs[i].size()*2);
+        auto ptr_in = cgra_acc.getInputQueue(i);
+        memcpy(ptr_in,inputs[i].data(),inputs[i].size()*2);
+        
+        std::stringstream ssout;
+        ssout << "out" << i << ".txt";
+        read_file(ssout.str(),outputs[i]);
+        cgra_acc.createOutputQueue(i,outputs[i].size()*2);
+        
+    }
+
     cgra_acc.cgra_execute();
     
-    std::cout << std::endl << "IN0: ";
-    size = inputs[0].size();
-    for (int i = 0; i < size; i++) {
-        std::cout << inputs[0][i] << " ";
-    }
-    std::cout << std::endl;
+     for(int c = 0; c < NUM_CHANNELS;c++){
+    
+        std::cout << std::endl << "IN"<< c << ": ";
+        size = inputs[c].size();
+        for (int i = 0; i < size; i++) {
+            std::cout << inputs[c][i] << " ";
+        }
+        std::cout << std::endl;
 
-    std::cout << std::endl << "OUT0: ";
-    size = outputs[0].size();
-    auto ptr_out = (short *)cgra_acc.getOutputQueue(out_id);
-    for (int i = 0; i < size; i++) {
-        std::cout << ptr_out[i] << " ";
+        std::cout << std::endl << "OUT" << c << ": ";
+        size = outputs[c].size();
+        auto ptr_out = (short *)cgra_acc.getOutputQueue(c);
+        for (int i = 0; i < size; i++) {
+            std::cout << ptr_out[i] << " ";
+        }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
     
     cgra_acc.print_report();
     cgra_acc.cleanup();

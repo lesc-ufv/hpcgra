@@ -8,3 +8,8 @@
 **/*build
 **/*cmake-build-debug
 **/*cmake-build-release
+**/*tests
+**/*.asm
+**/*.bit
+**/*intel_harp2 
+**/*xilinx_aws_f1

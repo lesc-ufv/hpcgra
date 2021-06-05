@@ -4,6 +4,9 @@ set -e
 
 place="../../generator_asm/test/build/place"
 
+rm -rf assembly
+mkdir assembly
+
 for i in dataflows/*.json; do
     name=$(basename -s .json $i)
     echo "Running Place & Route: $name..."
@@ -11,5 +14,5 @@ for i in dataflows/*.json; do
 done
 
 mv *.asm assembly
-mv *.map assembly
+rm -rf *.map 
 

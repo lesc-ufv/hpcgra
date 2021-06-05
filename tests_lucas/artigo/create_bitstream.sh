@@ -2,6 +2,9 @@
 
 set -e
 
+rm -rf bitstream
+mkdir bitstream
+
 for i in assembly/*.asm; do
     name=$(basename -s .asm $i)
     echo "Compiling $name..."

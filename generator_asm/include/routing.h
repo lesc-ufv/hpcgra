@@ -18,9 +18,9 @@ typedef map<pair<int, int>, int> map_pair_int;
 // Structure of the condition for sorting 
 // the pair by its second elements
 struct spq {
-    constexpr bool operator()(pair<int, int> const &a,
-                              pair<int, int> const &b) const noexcept {
-        return a.second > b.second; // min, to max change signal
+    constexpr bool operator()(tuple<int,int,int> const &a,
+                              tuple<int,int,int> const &b) const noexcept {
+        return get<2>(a) > get<2>(b); // min, to max change signal
     }
 };
 
@@ -33,35 +33,38 @@ bool try_route_aStar(
         vector<int> *grid_route,
         map_pair_vector_int &route,
         int &results,
-        map_pair_int &edges_cost,
+        map<pair<int, int>, int> edges_cost,
         int **table,
         int *min_rota,
-        vector<pair<int,int>> *pe_route
+        vector<pair<int,int>> *pe_route,
+        map<int,map<int,int>> &map_pe
 ) {
-    int node, cost, cost_g, cost_h;
+    int node, cost, cost_g, cost_h, before;
 
     // shortest distance between pes
-    vector<pd> path;
+    vector<tuple<int,int,int>> path;
     vector<int> n_son;
     pd key;
 
-    priority_queue<pd, vector<pd>, spq> open;
-    open.push(make_pair(pe_a, table[pe_a][pe_b]));
+    priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, spq> open;
+    open.push(make_tuple(pe_a, pe_a, table[pe_a][pe_b]));
+    //open.push(make_pair(make_pair(pe_a, pe_a), table[pe_a][pe_b]));
 
     bool found = false, multicast;
     map<pd, int> closed;
 
     int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
-    //printf("\nPE %d -> PE %d\n", pe_a, pe_b);
+    //printf("\nPE %d (%d) -> PE %d (%d)\n", pe_a, a, pe_b, b);
 
     // loop while the open is not empty
     while (!open.empty()) {
-        node = open.top().first;
-        cost = open.top().second;
+        before = get<0>(open.top());
+        node = get<1>(open.top());
+        cost = get<2>(open.top());
         open.pop();
 
-        //printf("node choose: %d\n", node);
+        //printf("\nnode choose: %d\n", node);
 
         cost_b = 9999;
         index_b = -1;
@@ -70,38 +73,17 @@ bool try_route_aStar(
         for (int j = 0, n = n_son.size(); j < n; ++j) {
 
             son = n_son[j];
+            //printf("son %d, ", son);
             key = make_pair(node, son);
-            //printf("%d -> %d MIN_ROUTE_PE %d\n", node, son, min_rota[node]);
 
-            if (pe_route[node].size() > 0) {
-                pe_start = pe_route[node][0].first;
-                //printf("%d %d\n", pe_start, node);
-                if (min_rota[node] == 0) {
-                    multicast = false;
-                    for (int k = 0; k < pe_route[node].size(); ++k) {
-                        pe_origin = pe_route[node][k].first;
-                        pe_destiny = pe_route[node][k].second;
-                        // verify multicast
-                        if (pe_origin == node && pe_destiny == son) {
-                            multicast = true;
-                            break;
-                        }
-                    }
-                    // if not multicast, and not have route port, you can't go this path
-                    if (!multicast) continue;
-                } else {
-                    /*for (int k = 0; k < pe_route[node].size(); ++k) {
-                        printf("%d %d, ", pe_route[node][k].first, pe_route[node][k].second);
-                    }
-                    printf("\n");*/
-                    // correct the source node, ALU ou neighbor
-                    if (pe_start != pe_a) continue;
-                }
-            }
+            //printf(" node %d son %d PE_START %d PE_A %d map_pe %d\n", node, son, pe_start, pe_a, map_pe[node][son]);
+            if(map_pe[node][son] != -1 && map_pe[node][son] != a && son != pe_a) continue;
 
             cost_h = table[son][pe_b];
-            cost_g = edges_cost[key];
+            cost_g = 0;
+
             cost = cost_h + cost_g;
+            //printf("ch: %d, cg: %d, cost: %d \n", cost_h, cost_g, cost);
 
             if (son == pe_b) {
                 index_b = j;
@@ -110,20 +92,20 @@ bool try_route_aStar(
             }
 
             if (closed.find(key) == closed.end()) { // not in closed
-                open.push(make_pair(son, cost_h + cost_g));
+                open.push(make_tuple(node, son, cost_h + cost_g));
                 closed[key] = cost;
 
                 if (cost_b > cost) {
                     cost_b = cost;
                     index_b = j;
                 }
-
             } else if (closed[key] > cost_h + cost_g) {
                 closed[key] = cost_h + cost_g;
             }
         }
         if (index_b >= 0) {
-            path.push_back(make_pair(node, n_son[index_b]));
+            //printf("\npath inside = %d %d\n", node, n_son[index_b]);
+            path.push_back(make_tuple(before, node, n_son[index_b]));
         }
         if (found) break;
     }
@@ -131,21 +113,31 @@ bool try_route_aStar(
     if (found) {
         vector<pair<int, int>> new_path;
         int nodo = pe_b;
+        //printf("NEW-PATH: ");
         for (int i = path.size() - 1; i > -1; --i) {
-            if (path[i].first == pe_a) {
-                new_path.push_back(make_pair(pe_a, nodo));
+            //printf("%d -> %d -> %d, ", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]));
+            if (get<1>(path[i]) == pe_a) {
+                new_path.push_back(make_pair(pe_a, get<2>(path[i])));
                 break;
-            } else if (path[i].second == nodo) {
-                new_path.push_back(make_pair(path[i].first, nodo));
-                nodo = path[i].first;
+            } else if (get<2>(path[i]) == nodo) {
+                new_path.push_back(make_pair(get<1>(path[i]), nodo));
+                nodo = get<1>(path[i]);
             }
         }
+        //printf("\n");
 
         // update values
         //printf("%d %d %d\n", results, new_path.size(), edges_cost[make_pair(a,b)]);
         results += new_path.size() - edges_cost[make_pair(a, b)];
         edges_cost[make_pair(a, b)] = new_path.size();
 
+        /*printf("PATH: ");
+        for (int i = 0; i < new_path.size(); ++i) {
+            printf("%d %d ", new_path[i].first, new_path[i].second);
+        }
+        printf("\n");*/
+
+        //printf("Path final: ");
         int pe_aux_a, pe_aux_b;
         for (int i = new_path.size() - 1; i > -1; --i) {
             key = make_pair(a, b);
@@ -156,6 +148,7 @@ bool try_route_aStar(
             route[key].push_back(new_path[i].second);
             pe_route[pe_aux_a].push_back(make_pair(pe_aux_a, pe_aux_b));
             min_rota[pe_aux_a] -= 1;
+            map_pe[pe_aux_a][pe_aux_b] = a;
             //remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
         //printf("\n");
@@ -181,6 +174,7 @@ void routing(
 
     vector<pair<int, int>> *edge = new vector<pair<int, int>>[NGRIDS];
     vector<int> *grid_route = new vector<int>[TOTAL_GRID_SIZE];
+    map<int,map<int,int>> *map_pe = new map<int,map<int,int>>[NGRIDS];
     pair<int,int> key;
 
     int** min_rota = new int *[NGRIDS];
@@ -191,12 +185,18 @@ void routing(
         pe_route[i] = new vector<pair<int,int>>[TOTAL_GRID_SIZE];
     }
 
-    int menor = 0;
+    int menor = 0, n, elem;
     for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
         grid_route[j] = pe[j].neighbors;
-        menor = MIN(pe[j].routes, pe[j].neighbors.size());
-        for (int n = 0; n < NGRIDS; n++) {
-            min_rota[n][j] = menor;
+        n = pe[j].neighbors.size();
+        menor = MIN(pe[j].routes, n);
+        for (int i = 0; i < NGRIDS; ++i) {
+            min_rota[i][j] = menor;
+        }
+        for (int k = 0; k < NGRIDS; ++k) {
+            for (int i = 0; i < n; ++i) {
+                map_pe[k][j][pe[j].neighbors[i]] = -1;
+            }
         }
     }
 
@@ -216,6 +216,7 @@ void routing(
                 // verify if router's number is sufficiently
                 if (min_rota[j][pe_a] > 0) {
                     min_rota[j][pe_a]--;
+                    map_pe[j][pe_a][pe_b] = a;
                     pe_route[j][pe_a].push_back(make_pair(pe_a, pe_b));
                 } else { // multicast is resolved by try_route
                     edge[j].push_back(key);
@@ -255,7 +256,7 @@ void routing(
             //printf("%d [%d] -> %d [%d] cost: %d\n", a, pe_a, b, pe_b, edges_cost[j][make_pair(a,b)]);
             if (!try_route_aStar(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route,
                                  route[j], results[j], edges_cost[j], table,
-                                 min_rota[j], pe_route[j])) {
+                                 min_rota[j], pe_route[j], map_pe[j])) {
                 //printf("route not pass\n");
                 results[j] = MAXVALUE;
                 break; // it not possible

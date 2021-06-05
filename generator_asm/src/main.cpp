@@ -3,8 +3,8 @@
 int main(int argc, char **argv) {
     //srand(time(nullptr));
     auto timetime = time(nullptr);
-    //printf("%ld\n", timetime);
-    srand(timetime);
+    printf("%ld\n", timetime);
+    srand(1622854997);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
     string path_dot = "", name = "", path_arch = "", path_asm = "";

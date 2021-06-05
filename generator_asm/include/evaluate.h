@@ -42,7 +42,7 @@ void print_results(const double time_table, const double time_place, const doubl
         printf("Wire cost        : %d\n", results[best_index]);
         printf("Worst buffer     : %d\n\n", worst_fifo);
     } else {
-        printf("No solution found!\n");
+        printf("\nNo solution found!\n\n");
     }
 }
 

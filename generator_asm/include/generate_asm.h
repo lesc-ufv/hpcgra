@@ -6,6 +6,7 @@
 void generate_asm(Graph g,
                   const int best_index,
                   const int SIZE_NODES,
+                  const int SIZE_PE,
                   int *pos,
                   map<pair<int, int>, int> *buffers_EDGE,
                   string path,
@@ -24,6 +25,11 @@ void generate_asm(Graph g,
     vector<int> inputs = g.get_inputs();
     vector<int> outputs = g.get_outputs();
     vector<int> son, grandfather;
+    int routed[SIZE_PE][SIZE_PE];
+
+    for (int i = 0; i < SIZE_PE; ++i)
+        for (int j = 0; j < SIZE_PE; ++j)
+            routed[i][j] = false;
 
     bool visited[SIZE_NODES];
     for (int i = 0; i < SIZE_NODES; ++i) visited[i] = false;
@@ -39,7 +45,6 @@ void generate_asm(Graph g,
         //printf("dad %d\n", dad);
 
         if (visited[dad]) continue;
-
         visited[dad] = true;
 
         if (g.get_opcode(dad) == "input") {
@@ -73,8 +78,8 @@ void generate_asm(Graph g,
                 rota = route[best_index][key];
                 int port = g.get_port(grandfather[i], dad);
                 pe_gf = rota[rota.size() - 2]; //pos[best_index*SIZE_NODES+grandfather[i]];
+                
                 operators[port] = "";
-
                 if (buff > 0) {
                     operators[port] += "#" + to_string(buff) + " ";
                 }
@@ -93,9 +98,20 @@ void generate_asm(Graph g,
         son = g.get_sucessors(dad);
         for (int i = 0; i < son.size(); ++i) {
             if (!visited[son[i]]) {
+                routed[dad][son[i]]--;
                 rota = route[best_index][make_pair(dad, son[i])];
+                /*
+                printf("%d -> %d rota: ", dad, son[i]);
+                for (int j = 0, n = rota.size(); j < n; j += 1) {
+                    printf("%d ", rota[j]);
+                }
+                printf("\n");*/
+                // creating routing
                 for (int j = 0, n = rota.size(); j < n; j += 2) {
                     //printf("%d %d\n", rota[j], rota[j+1]);
+                    if (routed[rota[j]][rota[j+1]]) continue;
+                    routed[rota[j]][rota[j+1]] = true;
+                    
                     if (j > 1) {
                         myfile << "route $" << rota[j] << " $" << rota[j - 2] << " $" << rota[j + 1] << "\n";
                     } else {

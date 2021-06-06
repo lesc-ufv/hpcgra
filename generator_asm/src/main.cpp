@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
                                       results, h_edgeA, h_edgeB, buffers_EDGE);
 
     // generate assembly code
-    generate_asm(g, best_index, SIZE_NODES, pos,
+    generate_asm(g, best_index, SIZE_NODES, TOTAL_GRID_SIZE, pos,
                  buffers_EDGE,path_asm, route, edges_cost);
 
     auto stop_total = high_resolution_clock::now();

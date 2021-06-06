@@ -9,6 +9,7 @@
 #include <vector>
 #include <map>
 #include <stdio.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -119,11 +120,17 @@ Graph::Graph(string filename) {
         }
     }
 
-    for (auto edge : data["edges"]) {
-        u = atoi(edge["source"].asCString());
-        v = atoi(edge["target"].asCString());
-        this->edges.push_back(make_pair(u, v));
-        this->port[make_pair(u, v)] = atoi(edge["port"].asCString());
+    pair<int, int> aux_e;
+    int i = 0;
+    for (auto e : data["edges"]) {
+        u = atoi(e["source"].asCString());
+        v = atoi(e["target"].asCString());
+        aux_e = make_pair(u, v);
+        // verify if edge is same
+        //if (find(this->edges.begin(), this->edges.end(), aux_e) == this->edges.end()) {
+            this->edges.push_back(aux_e);
+        //}
+        this->port[aux_e] = atoi(e["port"].asCString());
         this->node_out_degree[u].push_back(v);
         this->node_in_degree[v].push_back(u);
     }

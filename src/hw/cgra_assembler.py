@@ -1,5 +1,6 @@
 import re
 
+from src.hw.cgra_alu_operations import CgraAluOperations
 from src.hw.cgra_configuration import CgraConfiguration
 
 
@@ -60,11 +61,10 @@ class CgraAssembler:
                         self.last_error = 'line %d: %s' % (i, v)
                         return
             i += 1
-        
+
         if len(self.used_outputs) == 0:
             self.last_error = 'line %d: %s' % (i, "No output was used, at least one output needs to be used.")
             return
-        
 
     def decode_set_inst(self, line, inst):
         try:
@@ -108,12 +108,14 @@ class CgraAssembler:
                         alu_src.append('const')
                         self.const.append((line, pe, len(alu_src) - 1, int(i)))
 
-            for i in range(len(delays)):
-                idx, v = delays[i]
-                delays[i] = (alu_src.index(alu_src[idx]), v)
+            ops = CgraAluOperations.get_operations()
+            if ops[op].get_num_operand() != len(alu_src):
+                return False, "Error in the number of operands, expected %d found %d." % (
+                ops[op].get_num_operand(), len(alu_src))
 
         except Exception as e:
             return False, str(e)
+
         if is_istream:
             self.used_inputs.append(pe)
 

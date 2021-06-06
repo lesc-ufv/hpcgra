@@ -60,6 +60,11 @@ class CgraAssembler:
                         self.last_error = 'line %d: %s' % (i, v)
                         return
             i += 1
+        
+        if len(self.used_outputs) == 0:
+            self.last_error = 'line %d: %s' % (i, "No output was used, at least one output needs to be used.")
+            return
+        
 
     def decode_set_inst(self, line, inst):
         try:

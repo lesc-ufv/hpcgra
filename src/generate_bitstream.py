@@ -36,8 +36,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
+        print("Bitstream successfully generated!")
     except Exception as e:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print('Exception in:', exc_type, fname, exc_tb.tb_lineno)
-        traceback.print_exc()
+        print(e)

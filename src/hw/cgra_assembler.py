@@ -84,12 +84,14 @@ class CgraAssembler:
             pe = int(inst[1][1:])
             alu_src = []
             delays = []
+            port = 0
             tok = inst[2:]
             is_istream = False
             for j in range(len(tok)):
                 i = tok[j]
                 if '#' in i:
-                    delays.append((j, int(i[1:])))
+                    delays.append((port, int(i[1:])))
+                    port += 1
                 else:
                     if 'alu' in i or 'istream' in i or 'acc' in i:
                         alu_src.append(i[1:])

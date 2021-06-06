@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 place="../../generator_asm/test/build/place"
 
 rm -rf assembly

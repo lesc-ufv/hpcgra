@@ -38,9 +38,9 @@ public:
 
     const int num_edges();
 
-    vector<pair<int, int>> get_edges();
+    vector<tuple<int, int, int>> get_edges();
 
-    vector<pair<int, int>> get_edges_inverse();
+    vector<tuple<int, int, int>> get_edges_inverse();
 
     vector<int> get_nodes();
 
@@ -48,7 +48,7 @@ public:
 
     string get_opcode(int u);
 
-    int get_port(int u, int v);
+    vector<int> get_port(pair<int,int> v);
 
     const int get_number_inputs() {
         return this->sum_inputs;
@@ -74,12 +74,12 @@ public:
     //vector<double> get_betweenness_centrality();
 private:
     vector<int> nodes;
-    vector<pair<int, int>> edges;
+    map<pair<int,int>, vector<int>> port; 
+    vector<tuple<int,int,int>> edges;
     map<int, vector<int>> node_in_degree;
     map<int, vector<int>> node_out_degree;
     map<int, string> name_label;
     map<int, string> opcode;
-    map<pair<int, int>, int> port;
     map<int, vector<pair<int, int>>> constant;
     int sum_inputs;
     bool ok;
@@ -120,17 +120,15 @@ Graph::Graph(string filename) {
         }
     }
 
-    pair<int, int> aux_e;
+    tuple<int, int, int> aux_e;
     int i = 0;
     for (auto e : data["edges"]) {
         u = atoi(e["source"].asCString());
         v = atoi(e["target"].asCString());
-        aux_e = make_pair(u, v);
+        aux_e = make_tuple(u, v, atoi(e["port"].asCString()));
+        this->port[make_pair(u,v)].push_back(atoi(e["port"].asCString()));
         // verify if edge is same
-        //if (find(this->edges.begin(), this->edges.end(), aux_e) == this->edges.end()) {
-            this->edges.push_back(aux_e);
-        //}
-        this->port[aux_e] = atoi(e["port"].asCString());
+        this->edges.push_back(aux_e);
         this->node_out_degree[u].push_back(v);
         this->node_in_degree[v].push_back(u);
     }
@@ -144,9 +142,9 @@ Graph::Graph(const Graph &g) {
     this->node_out_degree = g.node_out_degree;
     this->name_label = g.name_label;
     this->opcode = g.opcode;
-    this->port = g.port;
     this->constant = g.constant;
     this->ok = g.ok;
+    this->port = g.port;
 }
 
 Graph::~Graph() {
@@ -189,7 +187,7 @@ const int Graph::num_edges() {
     return this->edges.size();
 }
 
-vector<pair<int, int>> Graph::get_edges() {
+vector<tuple<int, int, int>> Graph::get_edges() {
     return this->edges;
 }
 
@@ -207,10 +205,6 @@ vector<pair<int, int>> Graph::get_const(int u) {
 
 string Graph::get_opcode(int u) {
     return this->opcode[u];
-}
-
-int Graph::get_port(int u, int v) {
-    return this->port[make_pair(u, v)];
 }
 
 vector<int> Graph::get_predecessors(int u) {
@@ -249,26 +243,30 @@ vector<int> Graph::get_outputs() {
     return aux;
 }
 
-vector<pair<int, int>> Graph::get_edges_inverse() {
-    vector<pair<int, int>> aux;
+vector<tuple<int, int, int>> Graph::get_edges_inverse() {
+    vector<tuple<int, int, int>> aux;
     int u, v;
     for (int i = num_edges() - 1; i >= 0; --i) {
-        u = get_edges()[i].first;
-        v = get_edges()[i].second;
-        aux.push_back(make_pair(v, u));
+        u = get<0>(this->edges[i]);
+        v = get<1>(this->edges[i]);
+        aux.push_back(make_tuple(v, u, get<2>(this->edges[i])));
     }
     return aux;
 }
 
 void Graph::print_graph_number() {
-    vector<pair<int, int>> edges;
+    vector<tuple<int, int, int>> edges;
 
     cout << "digraph G {" << endl;
     for (int i = 0; i < num_edges(); ++i) {
-        cout << this->edges[i].first << "->" << this->edges[i].second << endl;
+        cout << get<0>(this->edges[i]) << "->" << get<1>(this->edges[i]) << endl;
     }
     cout << "}" << endl;
 
+}
+
+vector<int> Graph::get_port(pair<int,int> u){
+    return this->port[u];
 }
 
 /*

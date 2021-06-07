@@ -3,8 +3,8 @@
 int main(int argc, char **argv) {
     //srand(time(nullptr));
     auto timetime = time(nullptr);
-    printf("%ld\n", timetime);
-    srand(1622854997);
+    //printf("%ld\n", timetime);
+    srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
     string path_dot = "", name = "", path_arch = "", path_asm = "";
@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
     fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
               grid, edges_cost, buffers, pos, inputs, outputs,
               basic, pe_in, pe_out, pe_basic, v, v_i, h_edgeA,
-              h_edgeB, randomvec, A,g.get_edges());
+              h_edgeB, randomvec, A, g.get_edges());
 
     int **table = new int *[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];

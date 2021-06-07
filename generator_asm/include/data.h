@@ -32,7 +32,7 @@ void fill_data(const int TOTAL_GRID_SIZE, const int NGRIDS,
                vector<int> &inputs, vector<int> &outputs, vector<int> &basic,
                vector<int> &pe_in, vector<int> &pe_out, vector<int> &pe_basic,
                int *v, int *v_i, int *h_edgeA, int *h_edgeB, double *randomvec,
-               vector<int> &A, vector<pair<int, int>> edge_list) {
+               vector<int> &A, vector<tuple<int, int, int>> edge_list) {
 
     // clean the data
     clean_data(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
@@ -44,8 +44,8 @@ void fill_data(const int TOTAL_GRID_SIZE, const int NGRIDS,
     //Preenche a estrutura do grafo
     int n1, n2;
     for (int i = 0; i < SIZE_EDGES; i++) {
-        n1 = edge_list[i].first;
-        n2 = edge_list[i].second;
+        n1 = get<0>(edge_list[i]);
+        n2 = get<1>(edge_list[i]);
         h_edgeA[i] = n1;
         h_edgeB[i] = n2;
         v[n1]++;

@@ -19,9 +19,10 @@ void generate_asm(Graph g,
     ofstream myfile;
     myfile.open(path + ".asm");
 
-    int dad, new_cost, cost, pe_gf, pe, buff;
+    int dad, new_cost, cost, pe_gf, pe, buff, port, oper_size;
     vector<int> rota;
     std::queue<pair<int, int>> q;
+    pair<int, int> key;
     vector<int> inputs = g.get_inputs();
     vector<int> outputs = g.get_outputs();
     vector<int> son, grandfather;
@@ -41,8 +42,6 @@ void generate_asm(Graph g,
         dad = q.front().first;
         cost = q.front().second;
         q.pop();
-
-        //printf("dad %d\n", dad);
 
         if (visited[dad]) continue;
         visited[dad] = true;
@@ -66,33 +65,48 @@ void generate_asm(Graph g,
             myfile << "set $" << pe << " $ostream_loop 0\n";
         } else {
             grandfather = g.get_predecessors(dad);
-            int oper_size = grandfather.size() + g.get_const(dad).size();
+            oper_size = grandfather.size() + g.get_const(dad).size();
             string operators[oper_size];
 
             pe = pos[best_index * SIZE_NODES + dad];
             myfile << g.get_opcode(dad).c_str() << " $" << pe << " ";
 
+            //cout << g.get_opcode(dad).c_str() << " $" << pe;
+            //printf(" oper_size = %d n_avo %ld\n", oper_size, grandfather.size());
+
             for (int i = 0; i < grandfather.size(); ++i) {
-                pair<int, int> key = make_pair(grandfather[i], dad);
+                key = make_pair(grandfather[i], dad);
                 buff = buffers_EDGE[best_index][key];
                 rota = route[best_index][key];
-                int port = g.get_port(grandfather[i], dad);
-                pe_gf = rota[rota.size() - 2]; //pos[best_index*SIZE_NODES+grandfather[i]];
                 
-                operators[port] = "";
-                if (buff > 0) {
-                    operators[port] += "#" + to_string(buff) + " ";
+                pe_gf = rota[rota.size() - 2];
+
+                //printf(" %d -> %d pe_gf %d ", key.first, key.second, pe_gf);
+                
+                for (int i = 0; i < g.get_port(key).size(); ++i) {
+                    port = g.get_port(key)[i];
+                    //cout << port << oper_size << endl;
+                    //printf("%d -> %d\n", grandfather[i], dad);
+                    operators[port] = "";
+                    if (buff > 0) {
+                        operators[port] += "#" + to_string(buff) + " ";
+                    }
+                    //cout << "$" + to_string(pe_gf) + " port =" << port;
+                    operators[port] += "$" + to_string(pe_gf) + " ";
                 }
-                operators[port] += "$" + to_string(pe_gf) + " ";
             }
+                     
             for (auto c : g.get_const(dad)) {
+                //printf("c.first = %d c.sencond %d ", c.first, c.second);
                 operators[c.first] = to_string(c.second) + " ";
             }
 
-            for (auto op: operators) {
-                myfile << op;
+            for (int i = 0; i < oper_size; ++i) {
+                //cout << operators[i] << " ";
+                myfile << operators[i];
             }
             myfile << "\n";
+            //printf("\n"); 
         }
 
         son = g.get_sucessors(dad);

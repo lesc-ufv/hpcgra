@@ -10,7 +10,8 @@ digraph poly8{
  8 [ label = mul]
  9 [ label = mul]
  10 [ label = mul]
- 11 [ label = mul]
+ 11 [ label = muli, value = "[[1,1]]"]
+ "11.1"[ label = 1 ]
  12 [ label = mul]
  13 [ label = mul]
  14 [ label = sub]
@@ -132,6 +133,7 @@ digraph poly8{
  8 -> 20
  9 -> 21
  10 -> 19
+ "11.1" -> 11
  11 -> 18
  12 -> 60
  13 -> 25

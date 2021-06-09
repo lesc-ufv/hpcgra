@@ -2,7 +2,16 @@
 
 
 int main(int argc, char *argv[]) {
-    int taps = 64;
+    
+    test(16);
+    test(32);
+    test(64);
+    
+    return 0;
+}
+
+void test(int taps){
+
     unsigned short coef[taps];
     for(int i =0; i < taps;i++){
         coef[i] = i+1;
@@ -29,7 +38,8 @@ int main(int argc, char *argv[]) {
 //    std::cout << std::endl;
 
     delete df;
-    return 0;
+    
+    
 }
 
 DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps) {

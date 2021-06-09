@@ -2,8 +2,41 @@
 
 int main(int argc, char *argv[]) {
     auto df = createDataFlow(0,1);
+    
+    auto data_in = new unsigned short[8][1024];
+    auto data_out = new unsigned short[1024];
+    
+    for(int i = 0; i < 8;i++){
+        for (int k = 0; k < 1024; ++k) {
+            data_in[i][k] = k+1; 
+        }
+    }
+    
+    for (int k = 0; k < 1024; ++k) {
+        data_out[k] = 0;
+    }
+    
+    for (int i = 0,j=0; i < 9; ++i) {
+        if (i != 4){
+            auto in = reinterpret_cast<InputStream *>(df->getOp(i));
+            in->setData(data_in[j++],1024);
+        }
+    }
+    
+    auto out = reinterpret_cast<OutputStream *>(df->getOp(8));
+    out->setData(data_out,1024);
+    
+    df->compute();
+    
     df->toJSON("../sobel_filter.json");
+    
     df->toDOT("../sobel_filter.dot");
+    
+//  for (int k = 0; k < 1024; ++k) {
+//     cout << data_out[k] << " ";
+//  }
+//     cout << endl;
+    
     delete df;
     return 0;
 }
@@ -26,24 +59,26 @@ DataFlow *createDataFlow(int id, int copies) {
     }
     output[0] = new OutputStream(idx++,nullptr,0);
 
-    for (int i = 0; i < 9; ++i) {
-        if (i == 4) {
-            auto r = new Addi(idx++, 0);
-            inputs[i] = r;
-        } else {
-            auto r = new Addi(idx++,0);
-            df->connect(inputs[i], r, 1);
-            inputs[i] = r;
-        }
-    }
+//     for (int i = 0; i < 9; ++i) {
+//         if (i == 4) {
+//             auto r = new Addi(idx++, 0);
+//             inputs[i] = r;
+//         } else {
+//             auto r = new Addi(idx++,0);
+//             df->connect(inputs[i], r, 0);
+//             inputs[i] = r;
+//         }
+//     }
 
     for (auto &l : gx_gy) {
         aux0.clear();
         aux1.clear();
         for (int j = 0; j < 9; ++j) {
-            auto mul = new Muli(idx++, l[9 - j - 1]);
-            df->connect(inputs[j], mul, 0);
-            aux0.push_back(mul);
+            if(l[9 - j - 1] != 0){
+                auto mul = new Muli(idx++, l[9 - j - 1]);
+                df->connect(inputs[j], mul, 0);
+                aux0.push_back(mul);
+            }
         }
         while (aux0.size() > 1) {
             int r = 0;

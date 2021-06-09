@@ -4,14 +4,25 @@ int main(int argc, char *argv[]) {
 
     int num_clusters=4;
     int num_dim=4;
-
     auto df = createDataFlow(0,num_clusters,num_dim);
-
     df->toJSON("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".json");
     df->toDOT("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".dot");
-
+    delete df;
+    
+    num_clusters=8;
+    num_dim=8;
+    df = createDataFlow(0,num_clusters,num_dim);
+    df->toJSON("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".json");
+    df->toDOT("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".dot");
     delete df;
 
+    num_clusters=16;
+    num_dim=8;
+    df = createDataFlow(0,num_clusters,num_dim);
+    df->toJSON("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".json");
+    df->toDOT("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".dot");
+    delete df;
+    
     return 0;
 }
 

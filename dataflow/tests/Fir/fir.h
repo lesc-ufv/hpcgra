@@ -11,6 +11,8 @@ using namespace std;
 
 DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps);
 
+void test(int taps);
+
 int main(int argc, char *argv[]);
 
 #endif //FIR_FIR_H

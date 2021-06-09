@@ -3,28 +3,28 @@
 
 #include <vector>
 #include <string>
+#include <utility>
+#include <assert.h>
+#include <cstdlib>
+#include<map>
 
 class Operator {
 
 private:
-    int id;
-    int level;
-    std::string opCode;
-    int type;
-    short val;
-    std::vector<int *> constants;
-    Operator *srcA;
-    Operator *srcB;
-    Operator *branchIn;
-    std::vector<Operator *> dst;
-    int dataFlowId;
-    std::string label;
-    bool isEnd;
-
+    int m_id;
+    int m_data_flow_id;
+    int m_level;
+    int m_type;
+    unsigned short m_val;
+    bool m_is_end;
+    std::string m_op_code;
+    std::string m_label;
+    std::map<int,unsigned short> m_constants;
+    std::map<int, Operator*> m_src;
+    std::vector<std::pair<int, Operator*>> m_dst;
+    
 public:
     Operator(int id, std::string op_code, int type, std::string label);
-
-    Operator(int id, std::string op_code, int type, std::string label, std::vector<int *> constant);
 
     ~Operator();
 
@@ -43,30 +43,26 @@ public:
     short getVal() const;
 
     void setVal(int val);
+    
+    void setSrc(Operator *src, int port);
+    
+    Operator *getSrc(int port);
+    
+    void addDst(Operator * op_dst, int port);
+    
+    std::vector<std::pair<int, Operator*>> &getDst();
 
-    Operator *getSrcA() const;
+    void setConst(int  port, unsigned short value);
 
-    void setSrcA(Operator *srcA);
-
-    Operator *getSrcB() const;
-
-    void setSrcB(Operator *srcB);
-
-    Operator *getBranchIn() const;
-
-    void setBranchIn(Operator *branchIn);
-
-    std::vector<Operator *> &getDst();
-
-    std::vector<int *> &getConst();
-
-    void setConst(int port, int value);
-
+    unsigned short getConst(int port);
+    
+    std::map<int, unsigned short> &getConst();
+    
     void setLevel(int level);
 
     int getLevel() const;
 
-    void setDataFlowId(int dataFlowId);
+    void setDataFlowId(int data_flow_id);
 
     int getDataFlowId() const;
 

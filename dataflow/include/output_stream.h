@@ -8,10 +8,10 @@
 class OutputStream : public Operator {
 private:
     int index;
-    short *data;
+    unsigned short *data;
     int size;
 public:
-    explicit OutputStream(int id, short *data, int size) : Operator(id, "output", OP_OUT, "output"),
+    explicit OutputStream(int id,unsigned short *data, int size) : Operator(id, "output", OP_OUT, "output"),
                                                          index(0),
                                                          data(data),
                                                          size(size) {}
@@ -20,7 +20,7 @@ public:
         return new OutputStream(params.id, params.data, params.size);
     }
 
-    void setData(short *data, int size) {
+    void setData(unsigned short *data, int size) {
         OutputStream::data = data;
         OutputStream::size = size;
     }
@@ -29,7 +29,7 @@ public:
         delete [] OutputStream::data;
     }
 
-    short * getData(){
+    unsigned short * getData(){
         return OutputStream::data;
     }
     
@@ -43,11 +43,8 @@ public:
     }
 
     void compute() override {
-        if (Operator::getSrcA()) {
-            auto v = Operator::getSrcA()->getVal();
-            Operator::setVal(v);
-        } else if (Operator::getSrcB()) {
-            auto v = Operator::getSrcB()->getVal();
+        if (Operator::getSrc(0)) {
+            auto v = Operator::getSrc(0)->getVal();
             Operator::setVal(v);
         }
         if (data) {

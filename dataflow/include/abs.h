@@ -14,11 +14,8 @@ public:
         return new Abs(params.id);
     }
     void compute() override {
-        if (Operator::getSrcA()) {
-            auto v = abs(Operator::getSrcA()->getVal());
-            Operator::setVal(v);
-        } else if (Operator::getSrcB()) {
-            auto v = abs(Operator::getSrcB()->getVal());
+        if(Operator::getSrc(0)){
+            auto v = abs(Operator::getSrc(0)->getVal());
             Operator::setVal(v);
         }
     }

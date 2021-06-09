@@ -34,10 +34,10 @@ digraph sgfilter{
  "17.0"[ label = 0 ]
  18 [ label = muli, value = "[[1,92]]"]
  "18.92"[ label = 92 ]
- 19 [ label = muli, value = "[[1,-984]]"]
- "19.-984"[ label = -984 ]
- 20 [ label = muli, value = "[[1,-76]]"]
- "20.-76"[ label = -76 ]
+ 19 [ label = muli, value = "[[1,64552]]"]
+ "19.64552"[ label = 64552 ]
+ 20 [ label = muli, value = "[[1,65460]]"]
+ "20.65460"[ label = 65460 ]
  21 [ label = muli, value = "[[1,7]]"]
  "21.7"[ label = 7 ]
  22 [ label = subi, value = "[[1,46]]"]
@@ -101,9 +101,9 @@ digraph sgfilter{
  17 -> 34
  "18.92" -> 18
  18 -> 23
- "19.-984" -> 19
+ "19.64552" -> 19
  19 -> 22
- "20.-76" -> 20
+ "20.65460" -> 20
  20 -> 24
  "21.7" -> 21
  21 -> 24

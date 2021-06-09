@@ -6,9 +6,12 @@ int main(int argc, char *argv[]) {
     int num_dim=4;
 
     auto df = createDataFlow(0,num_clusters,num_dim);
+
     df->toJSON("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".json");
     df->toDOT("../kmeans_"+to_string(num_dim)+"_"+to_string(num_clusters)+".dot");
+
     delete df;
+
     return 0;
 }
 
@@ -42,8 +45,6 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
                 df->connect(inputs[i], subs[j][i], 0);
             }
             for (auto s:subs[j]) {
-                //auto a = new Abs(idx++);
-                //df->connect(s, a, a->getPortA());
                 abs[j].push_back(s);
             }
             aux.clear();
@@ -102,7 +103,7 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
                     mux_reduz.push(mux);
                 } else {
                     auto slt = new Slt(idx++);
-                    auto mux = new Muxi(idx++,l,l+1);
+                    auto mux = new Muxii(idx++,l,l+1);
                     df->connect(aux[l], slt, 0);
                     df->connect(aux[l + 1], slt, 1);
                     df->connect(slt, mux, 0);
@@ -126,14 +127,12 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
                 rr = r;
             }
             auto sltEnd = new Slt(idx++);
-            auto muxEnd = new Mux(idx++);
-            auto reg1 = new Addi(idx++, num_clusters - 1);
+            auto muxEnd = new Muxi(idx++,num_clusters - 1);
 
             df->connect(aux[0], sltEnd,0);
             df->connect(rr, sltEnd, 1);
             df->connect(sltEnd, muxEnd, 0);
-            df->connect(mux_reduz.front(), muxEnd, 0);
-            df->connect(reg1, muxEnd, 1);
+            df->connect(mux_reduz.front(), muxEnd, 1);
             auto out = new OutputStream(outId,nullptr,0);
             df->connect(muxEnd, out, 0);
         } else {
@@ -143,9 +142,9 @@ DataFlow *createDataFlow(int id, int num_clusters, int num_dim) {
     } else {
         auto in = new InputStream(idx++,nullptr,0);
         auto out = new OutputStream(idx++,nullptr,0);
-        auto reg = new Addi(idx, 0);
-        df->connect(in, out, 1);
-        df->connect(reg, out, 0);
+        auto muli = new Muli(idx, 0);
+        df->connect(in, muli, 0);
+        df->connect(muli, out, 0);
     }
 
     return df;

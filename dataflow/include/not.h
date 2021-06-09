@@ -14,12 +14,11 @@ public:
     }
 
     void compute() override {
-        if (Operator::getSrcA() && Operator::getSrcB()) {
-            auto v = ~Operator::getSrcA()->getVal();
+        if (Operator::getSrc(0)) {
+            auto v = ~Operator::getSrc(0)->getVal();
             Operator::setVal(v);
         }
     }
-
 };
 
 

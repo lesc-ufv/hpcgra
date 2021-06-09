@@ -91,14 +91,18 @@ void DataFlow::toDOT(const std::string &fileNamePath) {
             myfile << " [ label = " << op.second->getOpCode() << "i";
             myfile << ", value = \"[";
             auto v = op.second->getConst();
-            for(int i = 0;i < v.size()-1;i++){
-                    myfile << "[" << v[i][0] <<","<<v[i][1] << "],";
+            int i=0;
+            for(auto c : v){
+                if(i < v.size()-1)
+                    myfile << "[" << c.first <<","<< c.second << "],";
+                else
+                    myfile << "[" << c.first <<","<< c.second << "]";
+                i++;
             }
-            myfile << "[" << v[v.size()-1][0] <<","<<v[v.size()-1][1] << "]";
             myfile << "]\"]" << std::endl;
 
-            for(auto c : op.second->getConst()) {
-                myfile << " \"" << op.first << "." << c[1] << "\"[ label = " << c[1] << " ]" << std::endl;
+            for(auto c : v) {
+                myfile << " \"" << op.first << "." << c.second << "\"[ label = " << c.second << " ]" << std::endl;
             }
 
         } else {
@@ -109,11 +113,11 @@ void DataFlow::toDOT(const std::string &fileNamePath) {
     for (auto op:DataFlow::op_array) {
         if (op.second->getType() == OP_IMMEDIATE) {
             for(auto c : op.second->getConst()){
-                myfile << " \"" << op.first << "." << c[1] << "\" -> " << op.first << std::endl;
+                myfile << " \"" << op.first << "." << c.second << "\" -> " << op.first << std::endl;
             }
         }
         for (auto op_dst:op.second->getDst()) {
-            myfile << " " << op.first << " -> " << op_dst->getId() << std::endl;
+            myfile << " " << op.first << " -> " << op_dst.second->getId() << std::endl;
         }
     }
     myfile << "}" << std::endl;
@@ -124,7 +128,6 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
     Json::Value df;
     Json::Value node;
     Json::Value edge;
-    int port;
     std::map<std::tuple<int, int, int>, bool> map_port;
 
     for (auto const item : op_array) {
@@ -133,11 +136,12 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
         node["opcode"] = op->getOpCode();
         node["label"] = op->getLabel();
         if(op->getType() == OP_IMMEDIATE){
-            for(auto t : op->getConst()){
-                Json::Value c;
-                c.append(std::to_string(t[0]));
-                c.append(std::to_string(t[1]));
-                node["const"].append(c);
+            auto v = op->getConst();
+            for(auto c : v){
+                Json::Value j;
+                j.append(std::to_string(c.first));
+                j.append(std::to_string(c.second));
+                node["const"].append(j);
             }
         }
 
@@ -146,34 +150,10 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
     }
     for (auto item:DataFlow::op_array) {
         auto op = item.second;
-        for (auto neighbor:op->getDst()) {
-            port = -1;
-            if (neighbor->getSrcA()) {
-                if (neighbor->getSrcA()->getId() == op->getId()) {
-                    auto key = std::tuple<int, int, int>(op->getId(), neighbor->getId(), 0);
-                    if (map_port.find(key) == map_port.end()) {
-                        port = 0;
-                        map_port[key] = true;
-                    }
-                }
-            }
-            if (neighbor->getSrcB() && port == -1) {
-                if (neighbor->getSrcB()->getId() == op->getId()) {
-                    auto key = std::tuple<int, int, int>(op->getId(), neighbor->getId(), 1);
-                    if (map_port.find(key) == map_port.end()) {
-                        port = 1;
-                        map_port[key] = true;
-                    }
-                }
-            }
-            if (neighbor->getBranchIn()) {
-                if (neighbor->getBranchIn()->getId() == op->getId()) {
-                    port = 2;
-                }
-            }
+        for (auto neighbor:op->getDst()) {           
             edge["source"] = std::to_string(op->getId());
-            edge["target"] = std::to_string(neighbor->getId());
-            edge["port"] = std::to_string(port);
+            edge["target"] = std::to_string(neighbor.second->getId());
+            edge["port"] = std::to_string(neighbor.first);
             df["edges"].append(edge);
             edge.clear();
         }
@@ -191,16 +171,8 @@ void DataFlow::connect(Operator *src, Operator *dst, int dstPort) {
     DataFlow::addOperator(src);
     DataFlow::addOperator(dst);
     DataFlow::graph[src->getId()].push_back(dst->getId());
-
-    src->getDst().push_back(dst);
-
-    if (dstPort == 0) {
-        dst->setSrcA(src);
-    } else if (dstPort == 1) {
-        dst->setSrcB(src);
-    } else if (dstPort == 2) {
-        dst->setBranchIn(src);
-    }
+    src->addDst(dst,dstPort);
+    dst->setSrc(src,dstPort);
     DataFlow::updateOpLevel();
 }
 

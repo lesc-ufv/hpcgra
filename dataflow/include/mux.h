@@ -14,9 +14,9 @@ public:
     }
 
     void compute() override {
-        if (Operator::getSrcA() && Operator::getSrcB() && Operator::getBranchIn()) {
-            auto v = Operator::getBranchIn()->getVal() ? Operator::getSrcA()->getVal()
-                                                       : Operator::getSrcB()->getVal();
+        if (Operator::getSrc(0) && Operator::getSrc(1) && Operator::getSrc(2)) {
+            auto v = Operator::getSrc(0)->getVal() ? Operator::getSrc(1)->getVal()
+                                                       : Operator::getSrc(2)->getVal();
             Operator::setVal(v);
         }
     }
@@ -24,21 +24,38 @@ public:
 
 class Muxi : public Operator {
 public:
-    Muxi(int id, int constant1, int constant2) : Operator(id, "mux", OP_IMMEDIATE, "muxi") {
-        setConst(1,constant1);
-        setConst(2,constant2);
+    Muxi(int id, int constant) : Operator(id, "mux", OP_IMMEDIATE, "muxi") {
+        setConst(2,constant);
     }
 
     static Operator *create(Params params) {
-        return new Muxi(params.id, params.constants[0][1],params.constants[1][1]);
+        return new Muxi(params.id, params.constant0);
     }
 
     void compute() override {
-        if (Operator::getSrcA() && Operator::getBranchIn()) {
-            auto v = Operator::getBranchIn()->getVal() ? Operator::getSrcA()->getVal() : Operator::getConst()[0][1];
+        if (Operator::getSrc(0) && Operator::getSrc(1)) {
+            auto v = Operator::getSrc(0)->getVal() ? Operator::getSrc(1)->getVal() : Operator::getConst(2);
             Operator::setVal(v);
         }
     }
 };
 
+class Muxii : public Operator {
+public:
+    Muxii(int id, unsigned short constant1, unsigned short constant2) : Operator(id, "mux", OP_IMMEDIATE, "muxii") {
+        setConst(1,constant1);
+        setConst(2,constant2);
+    }
+
+    static Operator *create(Params params) {
+        return new Muxii(params.id, params.constant0,params.constant1);
+    }
+
+    void compute() override {
+        if (Operator::getSrc(0)) {
+            auto v = Operator::getSrc(0)->getVal() ? Operator::getConst(1) : Operator::getConst(2);
+            Operator::setVal(v);
+        }
+    }
+};
 #endif //MAIN_MUX_H

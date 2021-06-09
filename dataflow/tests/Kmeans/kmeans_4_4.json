@@ -559,7 +559,7 @@
 				]
 			],
 			"id" : "34",
-			"label" : "muxi",
+			"label" : "muxii",
 			"opcode" : "mux"
 		},
 		{
@@ -580,7 +580,7 @@
 				]
 			],
 			"id" : "36",
-			"label" : "muxi",
+			"label" : "muxii",
 			"opcode" : "mux"
 		},
 		{

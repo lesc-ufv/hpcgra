@@ -2,7 +2,7 @@
 	"edges" : 
 	[
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "0",
 			"target" : "26"
 		},
@@ -12,7 +12,7 @@
 			"target" : "4"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "1",
 			"target" : "35"
 		},
@@ -22,7 +22,7 @@
 			"target" : "5"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "2",
 			"target" : "42"
 		},
@@ -42,12 +42,12 @@
 			"target" : "7"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "4",
 			"target" : "16"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "5",
 			"target" : "18"
 		},
@@ -102,7 +102,7 @@
 			"target" : "50"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "16",
 			"target" : "17"
 		},
@@ -112,7 +112,7 @@
 			"target" : "21"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "18",
 			"target" : "19"
 		},
@@ -167,12 +167,12 @@
 			"target" : "51"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "26",
 			"target" : "27"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "27",
 			"target" : "28"
 		},
@@ -182,32 +182,32 @@
 			"target" : "8"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "28",
 			"target" : "29"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "29",
 			"target" : "30"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "30",
 			"target" : "31"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "31",
 			"target" : "32"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "32",
 			"target" : "33"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "33",
 			"target" : "34"
 		},
@@ -217,7 +217,7 @@
 			"target" : "49"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "35",
 			"target" : "36"
 		},
@@ -227,67 +227,67 @@
 			"target" : "6"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "36",
 			"target" : "37"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "37",
 			"target" : "38"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "38",
 			"target" : "39"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "39",
 			"target" : "40"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "40",
 			"target" : "41"
 		},
 		{
-			"port" : "-1",
+			"port" : "1",
 			"source" : "41",
 			"target" : "25"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "42",
 			"target" : "43"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "43",
 			"target" : "44"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "44",
 			"target" : "45"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "45",
 			"target" : "46"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "46",
 			"target" : "47"
 		},
 		{
-			"port" : "1",
+			"port" : "0",
 			"source" : "47",
 			"target" : "48"
 		},
 		{
-			"port" : "1",
+			"port" : "2",
 			"source" : "48",
 			"target" : "25"
 		},
@@ -389,7 +389,7 @@
 				]
 			],
 			"id" : "12",
-			"label" : "muxi",
+			"label" : "muxii",
 			"opcode" : "mux"
 		},
 		{
@@ -405,7 +405,7 @@
 				]
 			],
 			"id" : "13",
-			"label" : "muxi",
+			"label" : "muxii",
 			"opcode" : "mux"
 		},
 		{
@@ -421,7 +421,7 @@
 				]
 			],
 			"id" : "14",
-			"label" : "muxi",
+			"label" : "muxii",
 			"opcode" : "mux"
 		},
 		{

@@ -1,137 +1,114 @@
 #include <operator.h>
+
 #include <utility>
 
-Operator::Operator(int id, std::string op_code, int type, std::string label) :
-        id(id),
-        opCode(std::move(op_code)),
-        type(type),
-        srcA(nullptr),
-        srcB(nullptr),
-        branchIn(nullptr),
-        level(0),
-        dataFlowId(-1),
-        val(0),
-        isEnd(false),
-        label(std::move(label)) {
+Operator::Operator(int id, std::string op_code, int type, std::string label){
 
-}
-
-Operator::Operator(int id, std::string op_code, int type, std::string label, std::vector<int*> constants) :
-        id(id),
-        opCode(std::move(op_code)),
-        type(type),
-        srcA(nullptr),
-        srcB(nullptr),
-        branchIn(nullptr),
-        constants(std::move(constants)),
-        level(0),
-        dataFlowId(-1),
-        label(std::move(label)),
-        val(0),
-        isEnd(false) {
-
+    m_id = id;
+    m_data_flow_id = -1;
+    m_op_code = std::move(op_code);
+    m_level = -1;
+    m_type = type;
+    m_val = 0;
+    m_is_end = false;
+    m_label = std::move(label);
 }
 
 Operator::~Operator() {
-    Operator::dst.clear();
+    m_constants.clear();
+    m_src.clear();
+    m_dst.clear();
 }
 
 int Operator::getId() const {
-    return Operator::id;
+    return m_id;
 }
 
 void Operator::setId(int id) {
-    Operator::id = id;
+    m_id = id;
 }
 
 std::string Operator::getOpCode() const {
-    return Operator::opCode;
+    return m_op_code;
 }
 
 void Operator::setOpCode(std::string op_code) {
-    Operator::opCode = op_code;
+    m_op_code = op_code;
 }
 
 int Operator::getType() const {
-    return Operator::type;
+    return m_type;
 }
 
 void Operator::setType(int type) {
-    Operator::type = type;
-}
-
-short Operator::getVal() const {
-    return Operator::val;
+    m_type = type;
 }
 
 void Operator::setVal(int val) {
-    Operator::val = val;
+    m_val = val;
 }
 
-std::vector<Operator *> &Operator::getDst() {
-    return Operator::dst;
+short Operator::getVal() const {
+    return m_val;
 }
 
-Operator *Operator::getSrcA() const {
-    return Operator::srcA;
+void Operator::setSrc(Operator *src, int port) {
+    assert(port < 3);
+    m_src[port] = src;
 }
 
-void Operator::setSrcA(Operator *srcA) {
-    Operator::srcA = srcA;
+Operator * Operator::getSrc(int port){
+   assert(port < 3);
+   return m_src[port];
 }
 
-Operator *Operator::getSrcB() const {
-    return Operator::srcB;
+void Operator::addDst(Operator * op_dst, int port){
+    m_dst.emplace_back(port,op_dst);
 }
 
-void Operator::setSrcB(Operator *srcB) {
-    Operator::srcB = srcB;
+std::vector<std::pair<int,Operator*>> &Operator::getDst() {
+    return Operator::m_dst;
 }
 
-std::vector<int *> &Operator::getConst(){
-    return constants;
+void Operator::setConst(int port, unsigned short value) {
+    assert(port < 3);
+    m_constants[port] = value;
 }
 
-void Operator::setConst(int port, int value) {
-    auto c = new int[2];
-    c[0] = port;
-    c[1] = value;
-    Operator::constants.emplace_back(c);
+unsigned short Operator::getConst(int port){
+    assert(port < 3);
+    return m_constants[port];
+}
+
+std::map<int,unsigned short> &Operator::getConst() {
+    return m_constants;
 }
 
 void Operator::setLevel(int level) {
-    Operator::level = level;
+    m_level = level;
 }
 
 int Operator::getLevel() const {
-    return Operator::level;
-}
-
-Operator *Operator::getBranchIn() const {
-    return Operator::branchIn;
-}
-
-void Operator::setBranchIn(Operator *branchIn) {
-    Operator::branchIn = branchIn;
+    return m_level;
 }
 
 void Operator::setDataFlowId(int dataFlowId) {
-    Operator::dataFlowId = dataFlowId;
+    m_data_flow_id = dataFlowId;
 }
 
 int Operator::getDataFlowId() const {
-    return Operator::dataFlowId;
+    return m_data_flow_id;
 }
 
 const std::string &Operator::getLabel() const {
-    return Operator::label;
+    return m_label;
 }
 
 int Operator::getIsEnd() const {
-    return Operator::isEnd;
+    return m_is_end;
 }
 
 void Operator::setIsEnd(bool isEnd) {
-    Operator::isEnd = isEnd;
+    m_is_end = isEnd;
 }
 

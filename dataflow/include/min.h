@@ -14,12 +14,12 @@ public:
     }
 
     void compute() override {
-        if (Operator::getSrcA() && Operator::getSrcB()) {
-            if (Operator::getSrcA()->getVal() < Operator::getSrcB()->getVal()) {
-                auto v = Operator::getSrcA()->getVal();
+        if (Operator::getSrc(0) && Operator::getSrc(1)) {
+            if (Operator::getSrc(0)->getVal() < Operator::getSrc(1)->getVal()) {
+                auto v = Operator::getSrc(0)->getVal();
                 Operator::setVal(v);
             } else {
-                auto v = Operator::getSrcB()->getVal();
+                auto v = Operator::getSrc(0)->getVal();
                 Operator::setVal(v);
             }
         }
@@ -28,22 +28,22 @@ public:
 
 class Mini : public Operator {
 public:
-    Mini(int id, int constant) : Operator(id, "min", OP_IMMEDIATE, "mini") {
+    Mini(int id, unsigned short constant) : Operator(id, "min", OP_IMMEDIATE, "mini") {
         setConst(1,constant);
     }
 
     static Operator *create(Params params) {
-        return new Mini(params.id, params.constants[0][1]);
+        return new Mini(params.id, params.constant0);
     }
 
     void compute() override {
-        if (Operator::getSrcA()) {
-            if (Operator::getSrcA()->getVal() < Operator::getConst()[0][1]) {
-                auto v = Operator::getSrcA()->getVal();
+        if (Operator::getSrc(0)) {
+            if (Operator::getSrc(0)->getVal() < Operator::getConst(1)) {
+                auto v = Operator::getSrc(0)->getVal();
                 Operator::setVal(v);
             } else {
-                auto v = Operator::getConst();
-                Operator::setVal(v[0][1]);
+                auto v = Operator::getConst(1);
+                Operator::setVal(v);
             }
         }
     }

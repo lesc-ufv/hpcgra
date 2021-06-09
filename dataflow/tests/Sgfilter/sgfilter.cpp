@@ -92,7 +92,7 @@ DataFlow *createDataFlow(int id, int copies) {
         df->connect(add4, Mul9, 0);
         df->connect(reg10, Mul9, 1);
         df->connect(Mul9, add5, 0);
-        df->connect(Mul8, reg14, 1);
+        df->connect(Mul8, reg14, 0);
         df->connect(reg14, reg15, 0);
         df->connect(reg15, add5, 1);
         df->connect(add5, sub4, 0);

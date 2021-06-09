@@ -16,12 +16,12 @@ public:
     }
 
     void compute() override {
-        if (Operator::getSrcA() && Operator::getSrcB()) {
-            if (Operator::getSrcA()->getVal() > Operator::getSrcB()->getVal()) {
-                auto v = Operator::getSrcA()->getVal();
+        if (Operator::getSrc(0) && Operator::getSrc(1)) {
+            if (Operator::getSrc(0)->getVal() > Operator::getSrc(0)->getVal()) {
+                auto v = Operator::getSrc(0)->getVal();
                 Operator::setVal(v);
             } else {
-                auto v = Operator::getSrcB()->getVal();
+                auto v = Operator::getSrc(0)->getVal();
                 Operator::setVal(v);
             }
         }
@@ -30,26 +30,25 @@ public:
 
 class Maxi : public Operator {
 public:
-    Maxi(int id, int constant) : Operator(id, "max", OP_IMMEDIATE, "maxi") {
+    Maxi(int id, unsigned short constant) : Operator(id, "max", OP_IMMEDIATE, "maxi") {
         setConst(1,constant);
     }
 
     static Operator *create(Params params) {
-        return new Maxi(params.id, params.constants[0][1]);
+        return new Maxi(params.id, params.constant0);
     }
 
     void compute() override {
-        if (Operator::getSrcA()) {
-            if (Operator::getSrcA()->getVal() > Operator::getConst()[0][1]) {
-                auto v = Operator::getSrcA()->getVal();
+        if (Operator::getSrc(0)) {
+            if (Operator::getSrc(0)->getVal() > Operator::getConst(1)) {
+                auto v = Operator::getSrc(0)->getVal();
                 Operator::setVal(v);
             } else {
-                auto v = Operator::getConst();
-                Operator::setVal(v[0][0]);
+                auto v = Operator::getConst(1);
+                Operator::setVal(v);
             }
         }
     }
 };
-
 
 #endif //MAX_H

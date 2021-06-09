@@ -14,8 +14,8 @@ public:
     }
 
     void compute() override {
-        if (Operator::getSrcA() && Operator::getSrcB()) {
-            auto v = Operator::getSrcA()->getVal() | Operator::getSrcB()->getVal();
+        if (Operator::getSrc(0) && Operator::getSrc(1)) {
+            auto v = Operator::getSrc(0)->getVal() | Operator::getSrc(1)->getVal();
             Operator::setVal(v);
         }
     }
@@ -23,17 +23,17 @@ public:
 
 class Ori : public Operator {
 public:
-    explicit Ori(int id,int constant) : Operator(id, "or", OP_IMMEDIATE, "ori") {
+    explicit Ori(int id,unsigned short constant) : Operator(id, "or", OP_IMMEDIATE, "ori") {
         setConst(1,constant);
     }
 
     static Operator *create(Params params) {
-        return new Ori(params.id, params.constants[0][1]);
+        return new Ori(params.id, params.constant0);
     }
 
     void compute() override {
-        if (Operator::getSrcA()) {
-            auto v = Operator::getSrcA()->getVal() | Operator::getConst()[0][1];
+        if (Operator::getSrc(0)) {
+            auto v = Operator::getSrc(0)->getVal() | Operator::getConst(1);
             Operator::setVal(v);
         }
     }

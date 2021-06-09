@@ -15,8 +15,8 @@ public:
     }
 
     void compute() override {
-        if (Operator::getSrcA() && Operator::getSrcB()) {
-            auto v = Operator::getSrcA()->getVal() & Operator::getSrcB()->getVal();
+        if (Operator::getSrc(0) && Operator::getSrc(1)) {
+            auto v = Operator::getSrc(0)->getVal() & Operator::getSrc(0)->getVal();
             Operator::setVal(v);
         }
     }
@@ -24,17 +24,17 @@ public:
 
 class Andi : public Operator {
 public:
-    Andi(int id, int constant) : Operator(id, "and", OP_IMMEDIATE, "andi") {
+    Andi(int id, unsigned short constant) : Operator(id, "and", OP_IMMEDIATE, "andi") {
         setConst(1,constant);
     }
 
     static Operator *create(Params params) {
-        return new Andi(params.id, params.constants[0][1]);
+        return new Andi(params.id, params.constant0);
     }
 
     void compute() override {
-        if (Operator::getSrcA()) {
-            auto v = Operator::getSrcA()->getVal() & Operator::getConst()[0][1];
+        if (Operator::getSrc(0)) {
+            auto v = Operator::getSrc(0)->getVal() & Operator::getConst(1);
             Operator::setVal(v);
         }
     }

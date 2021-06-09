@@ -1,18 +1,15 @@
 #include "chebyshev.h"
 
 int main(int argc, char *argv[]) {
-    
-    auto df = createDataFlow(0,1);
-    
-    auto data_in = new short[1024];
-    auto data_out = new short[1024];
+
+    auto dataFlow = createDataFlow(0, 1);
+    auto data_in = new unsigned short[1024];
+    auto data_out = new unsigned short[1024];
 
     for (int k = 0; k < 1024; ++k) {
         data_in[k] = k+1;
         data_out[k] = 0;
     }
-
-    auto dataFlow = createDataFlow(0, 1);
 
     auto in = reinterpret_cast<InputStream *>(dataFlow->getOp(0));
     auto out = reinterpret_cast<OutputStream *>(dataFlow->getOp(1));
@@ -21,15 +18,16 @@ int main(int argc, char *argv[]) {
     out->setData(data_out,1024);
     
     dataFlow->compute();
-    df->toJSON("../chebyshev.json");
-    df->toDOT("../chebyshev.dot");
+
+    dataFlow->toJSON("../chebyshev.json");
+    dataFlow->toDOT("../chebyshev.dot");
     
-    for(int i=0;i < 1024;i++){
-      std::cout << data_out[i] << " ";
-    }
-    std::cout << std::endl;
+//    for(int i=0;i < 1024;i++){
+//      std::cout << data_out[i] << " ";
+//    }
+//    std::cout << std::endl;
     
-    delete df;
+    delete dataFlow;
 
     return 0;
 }

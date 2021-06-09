@@ -1,5 +1,5 @@
-#ifndef CGRASCHEDULER_DATAFLOWDEFS_H
-#define CGRASCHEDULER_DATAFLOWDEFS_H
+#ifndef DATAFLOW_H
+#define DATAFLOW_H
 
 typedef enum {
     OP_BASIC,
@@ -8,4 +8,4 @@ typedef enum {
     OP_OUT
 } op_type_t;
 
-#endif //CGRASCHEDULER_DATAFLOWDEFS_H
+#endif //DATAFLOW_H

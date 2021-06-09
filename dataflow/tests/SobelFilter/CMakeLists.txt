@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(sobel_filter)
+project(sobelfilter)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -16,6 +16,6 @@ file(GLOB H_SRCS *.h)
 
 add_library(dataflow SHARED ${DF_CXX_SRCS} ${DF_H_SRCS})
 
-add_executable(sobel_filter ${CPP_SRCS} ${H_SRCS})
+add_executable(sobelfilter ${CPP_SRCS} ${H_SRCS})
 
-target_link_libraries(sobel_filter dataflow)
+target_link_libraries(sobelfilter dataflow)

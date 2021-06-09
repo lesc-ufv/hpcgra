@@ -33,7 +33,7 @@ DataFlow *createDataFlow(int id, int copies) {
         auto mul_n9 = new Mul(idx++);//8
         auto mul_n10 = new Mul(idx++);//9
         auto mul_n16 = new Mul(idx++);//10
-        auto mul_n27 = new Mul(idx++);//11
+        auto mul_n27 = new Muli(idx++,1);//11 //gambi pra funcionar!
         auto mul_n30 = new Mul(idx++);//12
         auto mul_n31 = new Mul(idx++);//13
         auto sub_n15 = new Sub(idx++);//14

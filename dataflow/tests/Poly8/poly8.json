@@ -470,8 +470,15 @@
 			"opcode" : "mul"
 		},
 		{
+			"const" : 
+			[
+				[
+					"1",
+					"1"
+				]
+			],
 			"id" : "11",
-			"label" : "mul",
+			"label" : "muli",
 			"opcode" : "mul"
 		},
 		{

@@ -35,9 +35,8 @@ void annealing(const int N,
     int randomctrl = 0;
     double T = 100.0;
 
-    int delta = ceil(SIZE_EDGES * 0.10);
-
-    //printf("Placement\n");
+    const int delta = SIZE_EDGES * (TOTAL_GRID_SIZE/SIZE_EDGES/2); // 1.0 == perfect solution
+    //printf("value delta %d\n", delta);
 
     while (T >= 0.00001) {
         for (int i = 0; i < TOTAL_GRID_SIZE - 1; ++i) {
@@ -125,11 +124,11 @@ void annealing(const int N,
                     localGrid[i] = node1;
                 }
             }
-            //printf("cust: %d size_edges %d\n", currentCost, SIZE_EDGES+delta);
-            if (currentCost <= SIZE_EDGES+delta) break;
+            //printf("cust: %d size_edges %d\n", currentCost, SIZE_EDGES*delta);
+            if (currentCost <= delta) break;
             T *= 0.999;
         }
-        if (currentCost <= SIZE_EDGES+delta) break;
+        if (currentCost <= delta) break;
     }
 
     // update the results

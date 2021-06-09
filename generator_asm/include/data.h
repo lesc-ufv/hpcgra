@@ -87,8 +87,8 @@ void fill_data(const int TOTAL_GRID_SIZE,
             }
         }
     }
-
-    /*for (int i = 0; i < pe.size(); ++i) {
+    /*
+    for (int i = 0; i < pe.size(); ++i) {
         printf("PE %d, ALU: ", i);
         for (int j = 0; j < pe[i].isa.size(); ++j) {
             printf("%d ", pe[i].isa[j]);
@@ -133,32 +133,42 @@ void fill_data(const int TOTAL_GRID_SIZE,
         //pe_basic
         random_shuffle(pe_aux.begin(), pe_aux.end());
 
-        /*printf("basic: ");
+        /*printf("\nbasic: ");
         for (int i = 0; i < basic.size(); ++i) {
-            printf("%d type: %d", basic[i], g.get_code(basic[i]));
+            printf("%d type: %d\n", basic[i], g.get_code(basic[i]));
         }
         printf("\n");*/
 
+        trying = true;
         // pegar os nodos do tipo pe_basic!!!!
         for (int j = 0; j < basic.size(); ++j) {
             int node = basic[j];
             trying = false;
             for (int i = 0; i < pe_aux.size(); ++i) {
                 pe_pos = pe_aux[i];
-                //printf("pe_pos = %d pe_aux.size %d\n", pe_pos, pe_aux.size());
+                /*
+                printf("node = %d type_node = %d pe_pos = %d isa: ", node, g.get_code(node), pe_pos, pe_aux.size());
+                for (int k = 0; k < pe[pe_pos].isa.size(); ++k) {
+                    printf("%d ", pe[pe_pos].isa[k]);
+                }
+                printf("\n");*/
                 if (find(pe[pe_pos].isa.begin(), pe[pe_pos].isa.end(),
                          g.get_code(node)) != pe[pe_pos].isa.end() &&
                     grid[n * TOTAL_GRID_SIZE + pe_pos] == -1) {
                     grid[n * TOTAL_GRID_SIZE + pe_pos] = node;
+                    pe_aux.erase(pe_aux.begin()+i); // remove the element
+                    //printf("accepted\n");
                     trying = true;
                     break;
                 }
             }
         }
 
-        /*printf("\nSol %d: ", n);
+        /*
+        printf("\nSol %d: \n", n);
         for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-            printf("%d ", grid[n * TOTAL_GRID_SIZE + i]);
+            if (i % (int) ceil(sqrt(TOTAL_GRID_SIZE)) == 0) printf("\n");
+            printf("%2d ", grid[n * TOTAL_GRID_SIZE + i]);
         }
         printf("\n");*/
 

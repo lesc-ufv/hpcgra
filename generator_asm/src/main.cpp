@@ -1,7 +1,7 @@
 #include <main.h>
 
 int main(int argc, char **argv) {
-    //srand(time(nullptr));
+
     auto timetime = time(nullptr);
     //printf("%ld\n", timetime);
     srand(timetime);
@@ -65,8 +65,8 @@ int main(int argc, char **argv) {
 
     // Verify about arch and graph
     if (!verify(SIZE_NODES, TOTAL_GRID_SIZE, SIZE_GRAPH_IN,
-                SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT))
-        return 1;
+                SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT,
+                pe , g)) return 1;
 
     // print mapping of json
     print_inputs_outputs_json(g, name);

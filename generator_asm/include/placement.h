@@ -10,38 +10,6 @@ vector<int> get_neighbors(vector<pe_t> &arch, const int id) {
     return vector<int>();
 }
 
-/*
-void create_table(const int i, const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {
-
-    std::queue<pair<int,int>> q; 
-    vector<int> aux;
-    bool visited[TOTAL_GRID_SIZE];
-    int n_dad, dist;
-
-    for (int j = 0; j < TOTAL_GRID_SIZE; ++j) visited[j] = false;
-    
-    q.push(make_pair(i,0));
-    table[i][i] = 0;
-
-    // shortest distance between i and j
-    while (!q.empty()) {
-        n_dad = q.front().first;
-        dist = q.front().second;
-        q.pop();
-        visited[n_dad] = true;
-
-        aux = get_neighbors(arch, n_dad);
-        for (int j = 0, n = aux.size(); j < n; ++j) {
-            if (!visited[aux[j]]) {
-                table[i][aux[j]] = dist + 1;
-                q.push(make_pair(aux[j],dist+1));
-            }
-        }
-    }
-}
-*/
-
-
 void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {
     /*
     let dist be a |V| × |V| array of minimum distances initialized to ∞ (infinity)

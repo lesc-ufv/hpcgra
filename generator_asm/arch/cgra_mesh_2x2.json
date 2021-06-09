@@ -36,7 +36,6 @@
       ],
       "acc": true,
       "isa": [
-        "add",
         "sub",
         "mul",
         "and",

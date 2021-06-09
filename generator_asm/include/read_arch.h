@@ -61,6 +61,7 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
             for (int j = 0; j < size_isa; ++j) {
                 aux_pe.isa.push_back(map_type[data["pe"][i]["isa"][j].asString()]);
             }
+            sort(aux_pe.isa.begin(), aux_pe.isa.end());
 
             pe.push_back(aux_pe);
         }

@@ -12,17 +12,17 @@ ARCH=(
 
 BENCH=(
 ../json/toys/chebyshev.json
-#../json/toys/fir64.json  #No solution found! deu uns segmentation fault tbm!
-#../json/toys/kmeans_4_4.json
-#../json/toys/loopback_8.json 
-#../json/toys/mibench.json
+../json/toys/fir64.json  #No solution found! deu uns segmentation fault tbm!
+../json/toys/kmeans_4_4.json
+../json/toys/loopback_8.json 
+../json/toys/mibench.json
 ../json/toys/paeth.json  #terminate called after throwing an instance of 'std::bad_alloc'
-#../json/toys/poly5.json
-#../json/toys/poly6.json
-#../json/toys/poly8.json
-#../json/toys/qspline.json
-#../json/toys/sgfilter.json # Ficou travado
-#../json/toys/sobel_filter.json
+../json/toys/poly5.json
+../json/toys/poly6.json
+../json/toys/poly8.json
+../json/toys/qspline.json
+../json/toys/sgfilter.json # Ficou travado
+../json/toys/sobel_filter.json
 )
 
 

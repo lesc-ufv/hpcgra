@@ -125,7 +125,7 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
     for (int i = 0; i < inputs.size(); ++i) inp.insert(inputs[i]);
 
     for (int k = 0; k < NGRIDS; k++) {
-        if (results[k] >= MAXVALUE) continue;
+        if (results[k] == MAXVALUE) continue;
 
         //Initializing map with buffer size 0 for each edge
         for (int i = 0; i < SIZE_EDGES; i++) {

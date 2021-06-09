@@ -4,9 +4,12 @@
 #define MAXVALUE 9999
 #define RANDOM_SIZE 1000000
 
-#include <Graph.h>
 #include <cstdio>
 #include <string>
+#include <chrono>
+#include <map>
+#include <type.h>
+#include <Graph.h>
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
@@ -15,11 +18,9 @@
 #include <vector>
 #include <cmath>
 #include <ctime>
-#include <chrono>
 #include <algorithm>
 #include <fstream>
 #include <omp.h>
-#include <map>
 #include <read_arch.h>
 #include <data.h>
 #include <verify.h>

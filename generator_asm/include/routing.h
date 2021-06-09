@@ -203,6 +203,7 @@ void routing(
     int a, b, pe_a, pe_b, value_rota;
     // resolve first to edges of cost 1
     for (int j = 0; j < NGRIDS; ++j) {
+        if (results[j] == MAXVALUE) continue;
         for (int i = 0; i < SIZE_EDGES; ++i) {
             a = h_edgeA[i];
             b = h_edgeB[i];
@@ -247,6 +248,7 @@ void routing(
 
     // resolve the cost greater than 1
     for (int j = 0; j < NGRIDS; ++j) {
+        if (results[j] == MAXVALUE) continue;
         //printf("\ntry: %d\n", j);
         for (int i = 0; i < edge[j].size(); ++i) {
             a = edge[j][i].first;

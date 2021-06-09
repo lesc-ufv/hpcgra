@@ -47,6 +47,7 @@ public:
     string get_name_node(int u);
 
     string get_opcode(int u);
+    const int get_code(int u);
 
     vector<int> get_port(pair<int,int> v);
 
@@ -80,6 +81,7 @@ private:
     map<int, vector<int>> node_out_degree;
     map<int, string> name_label;
     map<int, string> opcode;
+    map<int, int> code;
     map<int, vector<pair<int, int>>> constant;
     int sum_inputs;
     bool ok;
@@ -109,6 +111,7 @@ Graph::Graph(string filename) {
         u = atoi(node["id"].asCString());
         this->nodes.push_back(u);
         this->opcode[u] = node["opcode"].asString();
+        this->code[u] = map_type[node["opcode"].asString()];
         this->name_label[u] = node["label"].asString();
 
         if (node["opcode"].asString() == "input") this->sum_inputs++;
@@ -142,6 +145,7 @@ Graph::Graph(const Graph &g) {
     this->node_out_degree = g.node_out_degree;
     this->name_label = g.name_label;
     this->opcode = g.opcode;
+    this->code = g.code;
     this->constant = g.constant;
     this->ok = g.ok;
     this->port = g.port;
@@ -205,6 +209,10 @@ vector<pair<int, int>> Graph::get_const(int u) {
 
 string Graph::get_opcode(int u) {
     return this->opcode[u];
+}
+
+const int Graph::get_code(int u) {
+    return this->code[u];
 }
 
 vector<int> Graph::get_predecessors(int u) {

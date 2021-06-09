@@ -121,6 +121,7 @@ void get_all_results(const int NGRIDS, const int SIZE_EDGE, const int SIZE_NODES
 
     int sum, pos_global_A, pos_global_B, edgeA, edgeB;
     for (int n = 0; n < NGRIDS; ++n) {
+        if (results[n] == MAXVALUE) continue;
         sum = 0;
         for (int i = 0; i < SIZE_EDGE; ++i) {
             edgeA = h_edgeA[i];
@@ -145,11 +146,19 @@ int get_result(const int N, const int SIZE_EDGE, const int SIZE_NODES,
     return sum;
 }
 
-void get_edge_cost(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
-                   int *h_edgeA, int *h_edgeB, int *pos, int **table, map<pair<int, int>, int> *edges_cost) {
+void get_edge_cost(const int NGRIDS,
+                   const int SIZE_EDGES,
+                   const int SIZE_NODES,
+                   int *h_edgeA,
+                   int *h_edgeB,
+                   int *pos,
+                   int **table,
+                   map<pair<int, int>, int> *edges_cost,
+                   int * results) {
 
     int a, b;
     for (int i = 0; i < NGRIDS; ++i) {
+        if (results[i] == MAXVALUE) continue;
         for (int j = 0; j < SIZE_EDGES; ++j) {
             a = h_edgeA[j];
             b = h_edgeB[j];
@@ -158,7 +167,6 @@ void get_edge_cost(const int NGRIDS, const int SIZE_EDGES, const int SIZE_NODES,
         }
         //printf("\n");
     }
-
 }
 
 #endif

@@ -46,10 +46,10 @@ void generate_asm(Graph g,
         if (visited[dad]) continue;
         visited[dad] = true;
 
-        if (g.get_opcode(dad) == "input") {
+        if (g.get_code(dad) == 0 /*input*/) {
             //printf("add $%d $istream 0\n", pos[best_index*SIZE_NODES+dad]);
             myfile << "add $" << pos[best_index * SIZE_NODES + dad] << " $istream 0\n";
-        } else if (g.get_opcode(dad) == "output") {
+        } else if (g.get_code(dad) == 1 /*output*/) {
 
             grandfather = g.get_predecessors(dad);
             pe = pos[best_index * SIZE_NODES + dad];

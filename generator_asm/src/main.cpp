@@ -104,7 +104,8 @@ int main(int argc, char **argv) {
     fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
               grid, edges_cost, buffers, pos, inputs, outputs,
               basic, pe_in, pe_out, pe_basic, v, v_i, h_edgeA,
-              h_edgeB, randomvec, A, g.get_edges());
+              h_edgeB, randomvec, A, g.get_edges(), pe, g,
+              results);
 
     int **table = new int *[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
@@ -137,10 +138,11 @@ int main(int argc, char **argv) {
     start = high_resolution_clock::now();
 #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
-        if (results[i] == SIZE_EDGES) continue; // Found perfect solution!
+        if (results[i] == SIZE_EDGES || results[i] == MAXVALUE) continue; // Found perfect solution!
 
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE,
-                  grid, pos, v_i, v, A, randomvec, results, table, table_pe, pe);
+                  grid, pos, v_i, v, A, randomvec, results, table,
+                  table_pe, pe, g);
     }
     stop = high_resolution_clock::now();
 
@@ -149,7 +151,7 @@ int main(int argc, char **argv) {
 
     // get each value of edge, to routing
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB,
-                  pos, table, edges_cost);
+                  pos, table, edges_cost, results);
 
     map<pair<int, int>, vector<int>> *route = new map<pair<int, int>, vector<int>>[NGRIDS];
 

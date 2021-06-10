@@ -33,7 +33,7 @@ void annealing(const int N,
     double T = 100.0;
     const double LIMIT = 0.00001;
 
-    const int delta = SIZE_EDGES * (TOTAL_GRID_SIZE/SIZE_EDGES/2); // 1.0 == perfect solution
+    const int delta = SIZE_EDGES * (TOTAL_GRID_SIZE/SIZE_EDGES/4); // 1.0 == perfect solution
     //printf("value delta %d\n", delta);
 
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {

@@ -3,7 +3,7 @@
 int main(int argc, char **argv) {
 
     auto timetime = time(nullptr);
-    //printf("%ld\n", timetime);
+    printf("%ld\n", timetime);
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g

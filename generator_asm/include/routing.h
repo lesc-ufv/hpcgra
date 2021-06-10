@@ -47,7 +47,7 @@ bool try_route_aStar(
     pd key;
 
     priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, spq> open;
-    open.push(make_tuple(pe_a, pe_a, table[pe_a][pe_b]));
+    open.push(make_tuple(-1, pe_a, table[pe_a][pe_b]));
     //open.push(make_pair(make_pair(pe_a, pe_a), table[pe_a][pe_b]));
 
     bool found = false, multicast;
@@ -77,7 +77,10 @@ bool try_route_aStar(
             key = make_pair(node, son);
 
             //printf(" node %d son %d PE_START %d PE_A %d map_pe %d\n", node, son, pe_start, pe_a, map_pe[node][son]);
-            if(map_pe[node][son] != -1 && map_pe[node][son] != a && son != pe_a) continue;
+            if(map_pe[node][son] != -1 && map_pe[node][son] != a && son != pe_a) { 
+                //printf("nao posso por esse caminho!");    
+                continue;
+            }
 
             cost_h = table[son][pe_b];
             cost_g = 0;
@@ -113,14 +116,23 @@ bool try_route_aStar(
     if (found) {
         vector<pair<int, int>> new_path;
         int nodo = pe_b;
-        //printf("NEW-PATH: ");
+
+        /*printf("NEW-PATH: ");
         for (int i = path.size() - 1; i > -1; --i) {
-            //printf("%d -> %d -> %d, ", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]));
-            if (get<1>(path[i]) == pe_a) {
-                new_path.push_back(make_pair(pe_a, get<2>(path[i])));
+            printf("%d %d %d, ", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]));
+        }
+        printf("\n");*/
+
+        for (int i = path.size() - 1; i > -1; --i) {
+            //printf("%d -> %d -> %d nodo %d\n", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]), nodo);
+            if (nodo == pe_a || get<0>(path[i]) == -1) {
+                //new_path.push_back(make_pair(pe_a, get<2>(path[i])));
                 break;
             } else if (get<2>(path[i]) == nodo) {
-                new_path.push_back(make_pair(get<1>(path[i]), nodo));
+                new_path.push_back(make_pair(get<1>(path[i]), get<2>(path[i])));
+                new_path.push_back(make_pair(get<0>(path[i]), get<1>(path[i])));
+                //printf("%d -> %d\n", get<1>(path[i]), get<2>(path[i]));
+                //printf("%d -> %d\n", get<0>(path[i]), get<1>(path[i]));
                 nodo = get<1>(path[i]);
             }
         }
@@ -151,7 +163,7 @@ bool try_route_aStar(
             map_pe[pe_aux_a][pe_aux_b] = a;
             //remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
-        //printf("\n");
+        //printf("\n\n");
         return true;
     }
     return false;

@@ -1,0 +1,1926 @@
+{
+    "conf_bus_width": 8,
+    "pe": [
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 0,
+            "neighbors": [
+                1,
+                8
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 3,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 1,
+            "neighbors": [
+                0,
+                2,
+                3,
+                9,
+                17
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 2,
+            "neighbors": [
+                1,
+                3,
+                10
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 3,
+            "neighbors": [
+                1,
+                2,
+                4,
+                5,
+                11,
+                19
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 4,
+            "neighbors": [
+                3,
+                5,
+                12
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 5,
+            "neighbors": [
+                3,
+                4,
+                6,
+                7,
+                13,
+                21
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 6,
+            "neighbors": [
+                5,
+                7,
+                14
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 7,
+            "neighbors": [
+                5,
+                6,
+                15,
+                23
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 8,
+            "neighbors": [
+                0,
+                9,
+                16
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 9,
+            "neighbors": [
+                1,
+                8,
+                10,
+                11,
+                17,
+                25
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 10,
+            "neighbors": [
+                2,
+                9,
+                11,
+                18
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 11,
+            "neighbors": [
+                3,
+                9,
+                10,
+                12,
+                13,
+                19,
+                27
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 12,
+            "neighbors": [
+                4,
+                11,
+                13,
+                20
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 13,
+            "neighbors": [
+                5,
+                11,
+                12,
+                14,
+                15,
+                21,
+                29
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 14,
+            "neighbors": [
+                6,
+                13,
+                15,
+                22
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 15,
+            "neighbors": [
+                7,
+                13,
+                14,
+                23,
+                31
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 16,
+            "neighbors": [
+                8,
+                17,
+                24
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 17,
+            "neighbors": [
+                1,
+                9,
+                16,
+                18,
+                19,
+                25,
+                33
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 18,
+            "neighbors": [
+                10,
+                17,
+                19,
+                26
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 19,
+            "neighbors": [
+                3,
+                11,
+                17,
+                18,
+                20,
+                21,
+                27,
+                35
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 20,
+            "neighbors": [
+                12,
+                19,
+                21,
+                28
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 21,
+            "neighbors": [
+                5,
+                13,
+                19,
+                20,
+                22,
+                23,
+                29,
+                37
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 22,
+            "neighbors": [
+                14,
+                21,
+                23,
+                30
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 23,
+            "neighbors": [
+                7,
+                15,
+                21,
+                22,
+                31,
+                39
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 24,
+            "neighbors": [
+                16,
+                25,
+                32
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 25,
+            "neighbors": [
+                9,
+                17,
+                24,
+                26,
+                27,
+                33,
+                41
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 26,
+            "neighbors": [
+                18,
+                25,
+                27,
+                34
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 27,
+            "neighbors": [
+                11,
+                19,
+                25,
+                26,
+                28,
+                29,
+                35,
+                43
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 28,
+            "neighbors": [
+                20,
+                27,
+                29,
+                36
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 29,
+            "neighbors": [
+                13,
+                21,
+                27,
+                28,
+                30,
+                31,
+                37,
+                45
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 30,
+            "neighbors": [
+                22,
+                29,
+                31,
+                38
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 31,
+            "neighbors": [
+                15,
+                23,
+                29,
+                30,
+                39,
+                47
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 32,
+            "neighbors": [
+                24,
+                33,
+                40
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 33,
+            "neighbors": [
+                17,
+                25,
+                32,
+                34,
+                35,
+                41,
+                49
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 34,
+            "neighbors": [
+                26,
+                33,
+                35,
+                42
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 35,
+            "neighbors": [
+                19,
+                27,
+                33,
+                34,
+                36,
+                37,
+                43,
+                51
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 36,
+            "neighbors": [
+                28,
+                35,
+                37,
+                44
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 37,
+            "neighbors": [
+                21,
+                29,
+                35,
+                36,
+                38,
+                39,
+                45,
+                53
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 38,
+            "neighbors": [
+                30,
+                37,
+                39,
+                46
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 39,
+            "neighbors": [
+                23,
+                31,
+                37,
+                38,
+                47,
+                55
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 40,
+            "neighbors": [
+                32,
+                41,
+                48
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 41,
+            "neighbors": [
+                25,
+                33,
+                40,
+                42,
+                43,
+                49,
+                57
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 42,
+            "neighbors": [
+                34,
+                41,
+                43,
+                50
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 43,
+            "neighbors": [
+                27,
+                35,
+                41,
+                42,
+                44,
+                45,
+                51,
+                59
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 44,
+            "neighbors": [
+                36,
+                43,
+                45,
+                52
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 45,
+            "neighbors": [
+                29,
+                37,
+                43,
+                44,
+                46,
+                47,
+                53,
+                61
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 46,
+            "neighbors": [
+                38,
+                45,
+                47,
+                54
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 47,
+            "neighbors": [
+                31,
+                39,
+                45,
+                46,
+                55,
+                63
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 48,
+            "neighbors": [
+                40,
+                49,
+                56
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 49,
+            "neighbors": [
+                33,
+                41,
+                48,
+                50,
+                51,
+                57
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 50,
+            "neighbors": [
+                42,
+                49,
+                51,
+                58
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 51,
+            "neighbors": [
+                35,
+                43,
+                49,
+                50,
+                52,
+                53,
+                59
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 52,
+            "neighbors": [
+                44,
+                51,
+                53,
+                60
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 53,
+            "neighbors": [
+                37,
+                45,
+                51,
+                52,
+                54,
+                55,
+                61
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 54,
+            "neighbors": [
+                46,
+                53,
+                55,
+                62
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 55,
+            "neighbors": [
+                39,
+                47,
+                53,
+                54,
+                63
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 56,
+            "neighbors": [
+                48,
+                57
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 3,
+            "type": "input"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 57,
+            "neighbors": [
+                41,
+                49,
+                56,
+                58,
+                59
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 58,
+            "neighbors": [
+                50,
+                57,
+                59
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 59,
+            "neighbors": [
+                43,
+                51,
+                57,
+                58,
+                60,
+                61
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 60,
+            "neighbors": [
+                52,
+                59,
+                61
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 61,
+            "neighbors": [
+                45,
+                53,
+                59,
+                60,
+                62,
+                63
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 62,
+            "neighbors": [
+                54,
+                61,
+                63
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "basic"
+        },
+        {
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ],
+            "id": 63,
+            "neighbors": [
+                47,
+                55,
+                61,
+                62
+            ],
+            "elastic_queue": [
+                4,
+                4,
+                0
+            ],
+            "routes": 4,
+            "type": "output"
+        }
+    ],
+    "data_width": 16
+}

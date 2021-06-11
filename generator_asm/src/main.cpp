@@ -49,87 +49,48 @@ int main(int argc, char **argv) {
 
     int *table_pe = new int[TOTAL_GRID_SIZE];
 
-    int id;
-    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-        id = pe[i].id;
-        table_pe[id] = pe[id].type;
-        if (pe[id].type == 0 || pe[id].type == 2) pe_in.push_back(pe[id].id);
-        else if (pe[id].type == 1 || pe[id].type == 2) pe_out.push_back(pe[id].id);
-        pe_basic.push_back(pe[id].id);
-    }
-
-    const int SIZE_PE_IN = pe_in.size();
-    const int SIZE_PE_OUT = pe_out.size();
-    const int SIZE_GRAPH_IN = g.get_inputs().size();
-    const int SIZE_GRAPH_OUT = g.get_outputs().size();
-
-    // Verify about arch and graph
-    if (!verify(SIZE_NODES, TOTAL_GRID_SIZE, SIZE_GRAPH_IN,
-                SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT,
-                pe , g)) return 1;
-
     // print mapping of json
     print_inputs_outputs_json(g, name);
 
     double *randomvec = new double[RANDOM_SIZE];
     int *h_edgeA = new int[SIZE_EDGES];
     int *h_edgeB = new int[SIZE_EDGES];
-    vector<int> A;
     int *v = new int[SIZE_NODES];
     int *v_i = new int[SIZE_NODES];
-
-    //Variáveis para o placement
-    int cost = 100000;
-
     int *grid = new int[TOTAL_GRID_SIZE * NGRIDS];
-    map<pair<int, int>, int> *edges_cost = new map<pair<int, int>, int>[NGRIDS];
     int *buffers = new int[SIZE_EDGES * NGRIDS];
     int *pos = new int[SIZE_NODES * NGRIDS];
     int *results = new int[NGRIDS];
+    vector<int> A;
+    map<pair<int, int>, int> *edges_cost = new map<pair<int, int>, int>[NGRIDS];
 
-    double time_total, time_place, time_route, time_buffer, time_table;
+    double time_data, time_total, time_place, time_route, time_buffer, time_table;
 
-    vector<int> inputs = g.get_inputs();
-    vector<int> outputs = g.get_outputs();
-    vector<int> basic;
-
-    for (int i = 0; i < SIZE_NODES; ++i) {
-        if (find(inputs.begin(), inputs.end(), i) == inputs.end()
-            && find(outputs.begin(), outputs.end(), i) == outputs.end()) {
-            basic.push_back(i);
-        }
-    }
-
+    auto start = high_resolution_clock::now();
     // fill the data
-    fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
-              grid, edges_cost, buffers, pos, inputs, outputs,
-              basic, pe_in, pe_out, pe_basic, v, v_i, h_edgeA,
-              h_edgeB, randomvec, A, g.get_edges(), pe, g,
-              results);
+    if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
+              grid, edges_cost, buffers, pos, pe_in, pe_out, 
+              pe_basic, v, v_i, h_edgeA, h_edgeB, randomvec, 
+              A, g.get_edges(), pe, g, results)) return 1;
+    auto stop = high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration = (stop - start);
+    time_data = duration.count();
 
     int **table = new int *[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
-    auto start = high_resolution_clock::now();
+    start = high_resolution_clock::now();
     // create the table that measure the distance grid to grid
     create_table_floyd_warshall(TOTAL_GRID_SIZE, table, pe);
     // end table
-    auto stop = high_resolution_clock::now();
+    stop = high_resolution_clock::now();
 
-    std::chrono::duration<double, std::milli> duration = (stop - start);
+    duration = (stop - start);
     time_table = duration.count();
 
     // update all position from grid
     update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,
                          NGRIDS, pos, grid);
-
-    /*
-    for (int n = 0; n < NGRIDS; ++n) {
-        for (int i = 0; i < SIZE_NODES; ++i) {
-            printf("%2d: [%2d] ", i, pos[n*SIZE_NODES+i]);
-        }
-        printf("\n");
-    }*/
 
     // get all results and put in results array
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results,
@@ -141,8 +102,7 @@ int main(int argc, char **argv) {
         if (results[i] == SIZE_EDGES || results[i] == MAXVALUE) continue; // Found perfect solution!
 
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE,
-                  grid, pos, v_i, v, A, randomvec, results, table,
-                  table_pe, pe, g);
+                  grid, pos, v_i, v, A, randomvec, results, table, pe, g);
     }
     stop = high_resolution_clock::now();
 
@@ -191,7 +151,7 @@ int main(int argc, char **argv) {
     time_total = duration.count();
 
     // print the time and the best results
-    print_results(time_table, time_place, time_route, time_buffer,
+    print_results(time_data, time_table, time_place, time_route, time_buffer,
                   time_total, best_index, worst_fifo, results);
 
     // clean memory

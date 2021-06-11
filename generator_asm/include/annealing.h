@@ -14,7 +14,6 @@ void annealing(const int N,
                double *randomvec,
                int *results,
                int **table,
-               int *table_pe,
                vector<pe_t> &pe,
                Graph g) {
 

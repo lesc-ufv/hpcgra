@@ -7,6 +7,8 @@
 
 ../../bin/hpcgra --arch chess -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 32 64 96 128 160 192 224 --output 15 47 79 111 143 175 207 239 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_16x16_8_4.json
 
+../../bin/hpcgra --arch one-hop -s 12x12 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 12 24 36 48 60 72 84 --output 11 23 35 47 59 71 83 95 --routes 4 --data_width 16 -e cgra_archs/cgra_one_hop_12x12_8_4.json
+
 ../../bin/hpcgra --arch mesh -s 8x8 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 8 16 24 32 40 48 56 --output 7 15 23 31 39 47 55 63 --routes 4 --data_width 16 -e cgra_archs/cgra_mesh_8x8_8_4.json
 
 ../../bin/hpcgra --arch one-hop -s 8x8 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 8 16 24 32 40 48 56 --output 7 15 23 31 39 47 55 63 --routes 4 --data_width 16 -e cgra_archs/cgra_one_hop_8x8_8_4.json

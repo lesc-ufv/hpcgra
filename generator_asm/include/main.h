@@ -22,8 +22,8 @@
 #include <fstream>
 #include <omp.h>
 #include <read_arch.h>
-#include <data.h>
 #include <verify.h>
+#include <data.h>
 #include <placement.h>
 #include <bits/stdc++.h>
 #include <routing.h>

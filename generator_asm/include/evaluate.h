@@ -28,10 +28,18 @@ int get_better_index(const int NGRIDS, const int SIZE_EDGES, int &best_worst_buf
     return best_index;
 }
 
-void print_results(const double time_table, const double time_place, const double time_route,
-                   const double time_buffer, const double time_total, const int best_index,
-                   const int worst_fifo, int *results) {
-    printf("\nTime spent TABLE : %.4lf\n", time_table);
+void print_results(const double time_data,
+                   const double time_table, 
+                   const double time_place, 
+                   const double time_route,
+                   const double time_buffer, 
+                   const double time_total, 
+                   const int best_index,
+                   const int worst_fifo, 
+                   int *results) {
+    
+    printf("\nTime spent DATA  : %.4lf\n", time_data);
+    printf("Time spent TABLE : %.4lf\n", time_table);
     printf("Time spent PLACE : %.4lf\n", time_place);
     printf("Time spent ROUTE : %.4lf\n", time_route);
     printf("Time spent BUFFER: %.4lf\n", time_buffer);

@@ -26,7 +26,7 @@ void clean_data(const int NGRIDS, const int SIZE_EDGES,
     }
 }
 
-void fill_data(const int TOTAL_GRID_SIZE,
+bool fill_data(const int TOTAL_GRID_SIZE,
                const int NGRIDS,
                const int SIZE_EDGES,
                const int SIZE_NODES,
@@ -34,9 +34,6 @@ void fill_data(const int TOTAL_GRID_SIZE,
                map<pair<int, int>, int> *edges_cost,
                int *buffers,
                int *pos,
-               vector<int> &inputs,
-               vector<int> &outputs,
-               vector<int> &basic,
                vector<int> &pe_in,
                vector<int> &pe_out,
                vector<int> &pe_basic,
@@ -50,6 +47,35 @@ void fill_data(const int TOTAL_GRID_SIZE,
                vector<pe_t> &pe,
                Graph g,
                int *results) {
+    
+    int id;
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
+        id = pe[i].id;
+        if (pe[id].type == 0 || pe[id].type == 2) pe_in.push_back(pe[id].id);
+        else if (pe[id].type == 1 || pe[id].type == 2) pe_out.push_back(pe[id].id);
+        pe_basic.push_back(pe[id].id);
+    }
+
+    const int SIZE_PE_IN = pe_in.size();
+    const int SIZE_PE_OUT = pe_out.size();
+    const int SIZE_GRAPH_IN = g.get_inputs().size();
+    const int SIZE_GRAPH_OUT = g.get_outputs().size();
+
+    // Verify about arch and graph
+    if (!verify(SIZE_NODES, TOTAL_GRID_SIZE, SIZE_GRAPH_IN,
+                SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT,
+                pe , g)) return false;
+    
+    vector<int> inputs = g.get_inputs();
+    vector<int> outputs = g.get_outputs();
+    vector<int> basic;
+
+    for (int i = 0; i < SIZE_NODES; ++i) {
+        if (find(inputs.begin(), inputs.end(), i) == inputs.end()
+            && find(outputs.begin(), outputs.end(), i) == outputs.end()) {
+            basic.push_back(i);
+        }
+    }
 
     // clean the data
     clean_data(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
@@ -184,6 +210,8 @@ void fill_data(const int TOTAL_GRID_SIZE,
             results[n] = MAXVALUE;
         }
     }
+
+    return true;
 }
 
 #endif

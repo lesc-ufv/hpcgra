@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
 
-    auto dataFlow = createDataFlow(0, 1);
+    auto dataFlow = createDataFlow(0, 8);
     auto data_in = new unsigned short[1024];
     auto data_out = new unsigned short[1024];
 

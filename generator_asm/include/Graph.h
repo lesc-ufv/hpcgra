@@ -67,6 +67,8 @@ public:
 
     vector<int> get_outputs();
 
+    vector<int> get_basic();
+
     vector<pair<int, int>> get_const(int u);
 
     bool get_ok() {
@@ -75,6 +77,9 @@ public:
     //vector<double> get_betweenness_centrality();
 private:
     vector<int> nodes;
+    vector<int> inputs;
+    vector<int> outputs;
+    vector<int> basic;
     map<pair<int,int>, vector<int>> port; 
     vector<tuple<int,int,int>> edges;
     map<int, vector<int>> node_in_degree;
@@ -114,7 +119,14 @@ Graph::Graph(string filename) {
         this->code[u] = map_type[node["opcode"].asString()];
         this->name_label[u] = node["label"].asString();
 
-        if (node["opcode"].asString() == "input") this->sum_inputs++;
+        if (node["opcode"].asString() == "input") { 
+            inputs.push_back(u);
+            this->sum_inputs++;
+        } else if (node["opcode"].asString() == "output") {
+            outputs.push_back(u);
+        } else {
+            basic.push_back(u);
+        } 
 
         if (node.isMember("const")) {
             for (auto c : node["const"]) {
@@ -141,6 +153,9 @@ Graph::Graph(string filename) {
 Graph::Graph(const Graph &g) {
     this->nodes = g.nodes;
     this->edges = g.edges;
+    this->inputs = g.inputs;
+    this->outputs = g.outputs;
+    this->basic = g.basic;
     this->node_in_degree = g.node_in_degree;
     this->node_out_degree = g.node_out_degree;
     this->name_label = g.name_label;
@@ -154,6 +169,9 @@ Graph::Graph(const Graph &g) {
 Graph::~Graph() {
     nodes.clear();
     edges.clear();
+    inputs.clear();
+    outputs.clear();
+    basic.clear();
 }
 
 void Graph::print() {
@@ -238,17 +256,15 @@ vector<vector<int>> Graph::get_fanout() {
 }
 
 vector<int> Graph::get_inputs() {
-    vector<int> aux;
-    for (int i = 0; i < num_nodes(); ++i)
-        if (get_opcode(i) == "input") aux.push_back(i);
-    return aux;
+    return this->inputs;
 }
 
 vector<int> Graph::get_outputs() {
-    vector<int> aux;
-    for (int i = 0; i < num_nodes(); ++i)
-        if (get_sucessors(i).size() == 0) aux.push_back(i);
-    return aux;
+    return this->outputs;
+}
+
+vector<int> Graph::get_basic() {
+    return this->basic;
 }
 
 vector<tuple<int, int, int>> Graph::get_edges_inverse() {

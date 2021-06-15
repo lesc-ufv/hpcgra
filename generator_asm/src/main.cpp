@@ -26,7 +26,6 @@ int main(int argc, char **argv) {
 
     path_asm = name;
 
-    vector<int> pe_in, pe_out, pe_basic;
     vector<pe_t> pe;
 
     // read arch
@@ -46,6 +45,7 @@ int main(int argc, char **argv) {
     const int SIZE_EDGES = g.num_edges();
     const int TOTAL_GRID_SIZE = pe.size();
     const int SIZE_GRID = ceil(sqrt(TOTAL_GRID_SIZE));
+    const int VGRID = ceil(sqrt(g.num_nodes()));
 
     int *table_pe = new int[TOTAL_GRID_SIZE];
 
@@ -68,10 +68,9 @@ int main(int argc, char **argv) {
 
     auto start = high_resolution_clock::now();
     // fill the data
-    if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
-              grid, edges_cost, buffers, pos, pe_in, pe_out, 
-              pe_basic, v, v_i, h_edgeA, h_edgeB, randomvec, 
-              A, g.get_edges(), pe, g, results)) return 1;
+    if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES, 
+              VGRID, grid, edges_cost, buffers, pos, v, v_i, h_edgeA, 
+              h_edgeB, randomvec, A, g.get_edges(), pe, g, results)) return 1;
     auto stop = high_resolution_clock::now();
     std::chrono::duration<double, std::milli> duration = (stop - start);
     time_data = duration.count();

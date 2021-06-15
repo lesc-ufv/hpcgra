@@ -3,8 +3,8 @@ from math import ceil
 
 from veriloggen import *
 
-from hw.cgra_conf_tag import ConfTag
 from src.hw.cgra_alu_operations import CgraAluOperations
+from src.hw.cgra_conf_tag import ConfTag
 from src.hw.components import Components
 from src.hw.utils import bits, initialize_regs, create_conf_path
 
@@ -148,6 +148,7 @@ class Cgra:
         neighbors = pe_arch['neighbors']
         neighbors.sort()
         routes = pe_arch['routes']
+
         s = ''
         for i in isa:
             s += i + '_'
@@ -167,12 +168,17 @@ class Cgra:
         # Module ports:
         clk = m.Input('clk')
         conf_bus = m.Input('conf_bus', self.conf_bus_width + 1)
+
         inputs = [m.Input('in%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+        inputs_reg = [m.Wire('in_reg%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+
         outputs = [m.Output('out%d' % i, self.data_width + 1) for i in range(len(neighbors))]
         mux_alu_inputs = []
         if pe_arch['type'] == 'input' or pe_arch['type'] == 'inout':
             load_pe = m.Input('stream_in', self.data_width + 1)
-            mux_alu_inputs.append(load_pe)
+            stream_in_reg = m.Wire('stream_in_reg', self.data_width + 1)
+            mux_alu_inputs.append(stream_in_reg)
+
         if pe_arch['type'] == 'output' or pe_arch['type'] == 'inout':
             store_pe = m.Output('stream_out', self.data_width + 1)
             outputs.append(store_pe)
@@ -182,6 +188,7 @@ class Cgra:
         acc_wire = None
         acc_rst = None
         conf_acc = None
+        # TODO: precisa balancear o acc!
         if has_acc:
             acc_wire = m.Wire('acc_wire', self.data_width + 1)
             acc_rst = m.Wire('acc_rst')
@@ -192,31 +199,43 @@ class Cgra:
 
         mux_alu_inputs.append(pe_const)
 
-        for i in inputs:
+        for i in inputs_reg:
             mux_alu_inputs.append(i)
 
-        inputs_regs = []
-        if routes > 0:
-            inputs_regs = [m.Wire('in_reg%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+        inputs_regs_router = [m.Wire('in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors))]
 
         mux_alu_bits = bits(len(mux_alu_inputs))
-        alu_in = [m.Wire('alu_in%d' % i, self.data_width + 1) for i in range(alu_num_inputs)]
+        alu_in = [m.Wire('mux_alu_out%d' % i, self.data_width + 1) for i in range(alu_num_inputs)]
         alu_out = m.Wire('alu_out', self.data_width + 1)
         sel_alu_opcode = m.Reg('sel_alu_opcode', bits(num_opcodes))
         sel_mux_alu = [m.Reg('sel_mux_alu%d' % i, mux_alu_bits) for i in range(alu_num_inputs)]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
+
         router = self.components.create_router(routes, len(neighbors) + 1, len(outputs))
         route_ports = router.get_ports()
         route_sel_in = None
         route_sel_out = None
         if 'sel_in' in route_ports.keys():
             route_sel_in = m.Reg('route_sel_in', route_ports['sel_in'].width)
+
         if 'sel_out' in route_ports.keys():
             route_sel_out = m.Reg('route_sel_out', route_ports['sel_out'].width)
 
+        m_reg = self.components.create_register_pipeline()
+        if pe_arch['type'] == 'input' or pe_arch['type'] == 'inout':
+            param = [('num_register', 1), ('width', self.data_width + 1)]
+            con = [('in', load_pe), ('out', stream_in_reg)]
+            m.Instance(m_reg, 'm_stream_in_reg', param, con)
+
+        m_reg = self.components.create_register_pipeline()
+        for i, j in zip(inputs, inputs_reg):
+            param = [('num_register', 1), ('width', self.data_width + 1)]
+            con = [('in', i), ('out', j)]
+            m.Instance(m_reg, i.name + '_reg', param, con)
+
         mux_alu = self.components.create_multiplexer(len(mux_alu_inputs))
         sel_elastic_pipeline = []
-        balance = 3
+        balance = 2
         for i in range(alu_num_inputs):
             con = [('sel', sel_mux_alu[i])]
             for j in range(len(mux_alu_inputs)):
@@ -265,24 +284,27 @@ class Cgra:
 
         if routes > 0:
             reg_pipe_in = self.components.create_register_pipeline()
-            for i, j in zip(inputs, inputs_regs):
+            for i, j in zip(inputs_reg, inputs_regs_router):
                 con1 = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i),
                         ('out', j)]
                 param1 = [('num_register', balance), ('width', self.data_width + 1)]
-                m.Instance(reg_pipe_in, 'in_reg%s' % i.name, param1, con1)
+                m.Instance(reg_pipe_in,i.name+'_router', param1, con1)
 
         con = []
         conf_array_router = []
         if route_sel_in:
             con.append(('sel_in', route_sel_in))
             conf_array_router.append(route_sel_in)
+
         if route_sel_out:
             con.append(('sel_out', route_sel_out))
             conf_array_router.append(route_sel_out)
+
         con.append(('in0', alu_out))
+
         if routes > 0:
             c = 1
-            for i in inputs_regs:
+            for i in inputs_regs_router:
                 con.append(('in%d' % c, i))
                 c += 1
 
@@ -290,6 +312,7 @@ class Cgra:
         for o in outputs:
             con.append(('out%d' % c, o))
             c += 1
+
         m.Instance(router, 'router', [('width', self.data_width + 1)], con)
 
         conf_array_alu += sel_elastic_pipeline
@@ -297,6 +320,7 @@ class Cgra:
         conf_router_width = 0
         for w in conf_array_alu:
             conf_alu_width += w.width
+
         for w in conf_array_router:
             conf_router_width += w.width
 
@@ -313,9 +337,11 @@ class Cgra:
         params = [('pe_id', id), ('conf_raw_bits', conf_raw_bits)]
         con = [('clk', clk), ('conf_bus', conf_bus), ('reset', reset), ('conf_alu', conf_alu),
                ('conf_const', pe_const)]
+
         if conf_router_width > 0:
             conf_router = m.Wire('conf_router', conf_router_width)
             con.append(('conf_router', conf_router))
+
         if has_acc:
             con.append(('conf_acc', conf_acc))
 

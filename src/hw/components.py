@@ -236,19 +236,19 @@ class Components:
             latency = m.Input('latency', max_latency_bits)
             din = m.Input('in', width)
             dout = m.Output('out', width)
-            shift_reg = m.Reg('shift_reg', width, 3 * max_latency)
+            shift_reg = m.Reg('shift_reg', width, 5 * max_latency)
             i = m.Integer('i')
             m.Always(Posedge(clk))(
                 If(en)(
                     shift_reg[0](din),
-                    For(i(1), i < 3 * max_latency, i.inc())(
+                    For(i(1), i < 5 * max_latency, i.inc())(
                         shift_reg[i](shift_reg[i - 1])
                     )
                 )
             )
             mux = self.create_multiplexer(max_latency + 1)
             con = [('sel', latency), ('in0', din)]
-            con += [('in%d' % j, shift_reg[(j * 3) - 1]) for j in range(1, max_latency + 1)]
+            con += [('in%d' % j, shift_reg[(j * 5) - 1]) for j in range(1, max_latency + 1)]
             con.append(('out', dout))
             params = [('width', width)]
             m.Instance(mux, 'mux' % i, params, con)
@@ -309,31 +309,55 @@ class Components:
         if name in self.cache.keys():
             return self.cache[name]
         m = Module(name)
+        clk = m.Input('clk')
         width = m.Parameter('width', 16)
 
         if routes == 0:
             in0 = m.Input('in0', width)
-            outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
-            for o in outputs:
-                o.assign(in0)
+            outputs = [m.OutputReg('out%d' % i, width) for i in range(num_out)]
+            regs = [m.Reg('r%d' % i, width) for i in range(num_out)]
+            seq = Seq(m, 'seq', clk)
+            for o, r in zip(outputs, regs):
+                seq.add(r(in0))
+                seq.add(o(r))
+
+            seq.make_always()
 
         elif routes == 1:
             mux = self.create_multiplexer(num_in)
             p = mux.get_ports()
             sel_in = m.Input('sel_in', p['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
+            inputs = [m.Input('in%d' % i, width) for i in range(num_in)]
+            outputs = [('out%d' % i, m.OutputReg('out%d' % i, width)) for i in range(num_out)]
+            in_regs = [('in%d' % i, m.Reg('in_reg%d' % i, width)) for i in range(num_in)]
             mux_out = m.Wire('mux_out', width)
-            m.Instance(mux, mux.name, [('width', width)], [('sel', sel_in)] + inputs + [('out', mux_out)])
+
+            m.Instance(mux, mux.name, [('width', width)], [('sel', sel_in)] + in_regs + [('out', mux_out)])
+            seq = Seq(m, 'seq', clk)
+
+            for r, i in zip(in_regs, inputs):
+                seq.add(r[1](i))
+
             for o in outputs:
-                o[1].assign(mux_out)
+                seq.add(o[1](mux_out))
+            seq.make_always()
+
         elif routes >= num_out:
             switch_in = self.create_switch_box(num_in, num_out)
             p = switch_in.get_ports()
             sel_in = m.Input('sel_in', p['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + outputs)
+            inputs = [m.Input('in%d' % i, width) for i in range(num_in)]
+            outputs = [m.OutputReg('out%d' % i, width) for i in range(num_out)]
+            outputs_wire = [('out%d' % i, m.OutputReg('out_wire%d' % i, width)) for i in range(num_out)]
+            in_regs = [('in%d' % i, m.Reg('in_reg%d' % i, width)) for i in range(num_in)]
+            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + in_regs + outputs_wire)
+            seq = Seq(m, 'seq', clk)
+            for r, i in zip(in_regs, inputs):
+                seq.add(r[1](i))
+            for w, o in zip(outputs_wire, outputs):
+                seq.add(o(w[1]))
+            seq.make_always()
+
         else:
             switch_in = self.create_switch_box(num_in, routes)
             switch_out = self.create_switch_box(routes, num_out)
@@ -342,13 +366,28 @@ class Components:
             sel_in = m.Input('sel_in', p_in['sel'].width)
             sel_out = m.Input('sel_out', p_out['sel'].width)
             inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
-            sin_sout_out = [('out%d' % i, m.Wire('sin_sout%d' % i, width)) for i in range(routes)]
-            sin_sout_in = [('in%d' % i, sin_sout_out[i][1]) for i in range(routes)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + sin_sout_out)
-            m.Instance(switch_out, switch_out.name, [('width', width)], [('sel', sel_out)] + sin_sout_in + outputs)
+            outputs = [m.OutputReg('out%d' % i, width) for i in range(num_out)]
+            outputs_wire = [('out%d' % i, m.Wire('out_wire%d' % i, width)) for i in range(num_out)]
 
+            sin_sout_out_reg = [m.Reg('sin_sout_reg%d' % i, width) for i in range(routes)]
+            sin_sout_out = [('out%d' % i, m.Wire('sin_sout%d' % i, width)) for i in range(routes)]
+
+            sin_sout_in = [('in%d' % i, sin_sout_out_reg[i]) for i in range(routes)]
+
+            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + sin_sout_out)
+
+            m.Instance(switch_out, switch_out.name, [('width', width)], [('sel', sel_out)] + sin_sout_in + outputs_wire)
+
+            seq = Seq(m, 'seq', clk)
+            for r, i in zip(sin_sout_out_reg, sin_sout_out):
+                seq.add(r(i[1]))
+            for w, o in zip(outputs_wire, outputs):
+                seq.add(o(w[1]))
+            seq.make_always()
+
+        initialize_regs(m)
         self.cache[name] = m
+
         return m
 
     def create_control_conf(self, cgra_id, cgra_conf_width, num_pe_io_in, num_pe_io_out, num_cicle_wait_conf_finish):
@@ -1139,7 +1178,7 @@ class Components:
         self.cache[name] = m
         return m
 
-    def calc_and_tree_size_helper(self, num_input, fanout):
+    def calc_and_tree_size_helper(self, num_input, radix):
         stack1 = []
         stack2 = []
         r = 0
@@ -1149,7 +1188,7 @@ class Components:
         flag = 1
         while len(stack1) > 1 or len(stack2) > 1:
             if flag:
-                for i in range(fanout):
+                for i in range(radix):
                     if len(stack1) > 0:
                         stack1.pop(0)
                 stack2.append(1)
@@ -1161,7 +1200,7 @@ class Components:
                         r += 1
                         stack1.pop(0)
             else:
-                for i in range(fanout):
+                for i in range(radix):
                     if len(stack2) > 0:
                         stack2.pop(0)
                 stack1.append(1)
@@ -1190,12 +1229,12 @@ class Components:
         else:
             return self.create_tree_array(radix, len(m_array), array)
 
-    def create_reg_tree(self, fanin, num_output, extra_pipeline=0):
-        name = 'reg_tree_%d_%d_%d' % (fanin, num_output, extra_pipeline)
+    def create_reg_tree(self, radix, num_output, extra_pipeline=0):
+        name = 'reg_tree_%d_%d_%d' % (radix, num_output, extra_pipeline)
         if name in self.cache.keys():
             return self.cache[name]
 
-        array = list(reversed(self.create_tree_array(fanin, num_output, [])))
+        array = list(reversed(self.create_tree_array(radix, num_output, [])))
         for i in range(extra_pipeline):
             array.append([1 for j in range(num_output)])
 
@@ -1232,8 +1271,8 @@ class Components:
 
         return m
 
-    def create_and_tree(self, fanout, num_input):
-        name = 'and_tree_%d_%d' % (fanout, num_input)
+    def create_and_tree(self, radix, num_input):
+        name = 'and_tree_%d_%d' % (radix, num_input)
         if name in self.cache.keys():
             return self.cache[name]
 
@@ -1241,7 +1280,7 @@ class Components:
         clk = m.Input('clk')
         inn = [m.Input('in_%d' % i) for i in range(num_input)]
         out = m.Output('out')
-        s = self.calc_and_tree_size_helper(num_input, fanout)
+        s = self.calc_and_tree_size_helper(num_input, radix)
         reg = m.Reg('r', s)
         stack1 = []
         stack2 = []
@@ -1253,9 +1292,9 @@ class Components:
         flag = 1
         while len(stack1) > 1 or len(stack2) > 1:
             if flag:
-                # stm.append(reg[r](AndList(*stack1[0:fanout])))
-                stm.append(reg[r](Uand(Cat(*stack1[0:fanout]))))
-                for i in range(fanout):
+                # stm.append(reg[r](AndList(*stack1[0:radix])))
+                stm.append(reg[r](Uand(Cat(*stack1[0:radix]))))
+                for i in range(radix):
                     if len(stack1) > 0:
                         stack1.pop(0)
                 stack2.append(reg[r])
@@ -1268,9 +1307,9 @@ class Components:
                         r += 1
                         stack1.pop(0)
             else:
-                # stm.append(reg[r](AndList(*stack2[0:fanout])))
-                stm.append(reg[r](Uand(Cat(*stack2[0:fanout]))))
-                for i in range(fanout):
+                # stm.append(reg[r](AndList(*stack2[0:radix])))
+                stm.append(reg[r](Uand(Cat(*stack2[0:radix]))))
+                for i in range(radix):
                     if len(stack2) > 0:
                         stack2.pop(0)
                 stack1.append(reg[r])
@@ -1294,8 +1333,8 @@ class Components:
 
         return m
 
-    def create_control_data_flow(self, num_inputs, num_outputs, and_tree_fanout, reg_tree_fanin):
-        name = 'control_data_flow_%d_%d_%d_%d' % (num_inputs, num_outputs, and_tree_fanout, reg_tree_fanin)
+    def create_control_data_flow(self, num_inputs, num_outputs, and_tree_radix, reg_tree_radix):
+        name = 'control_data_flow_%d_%d_%d_%d' % (num_inputs, num_outputs, and_tree_radix, reg_tree_radix)
         if name in self.cache.keys():
             return self.cache[name]
         m = Module(name)
@@ -1306,8 +1345,8 @@ class Components:
         outputs_ready = [m.Input('outputs_ready_%d' % i) for i in range(num_outputs)]
         inputs_enables = [m.Output('inputs_enables_%d' % i) for i in range(num_inputs)]
 
-        and_tree = self.create_and_tree(and_tree_fanout, num_inputs + num_outputs)
-        reg_tree = self.create_reg_tree(reg_tree_fanin, num_inputs)
+        and_tree = self.create_and_tree(and_tree_radix, num_inputs + num_outputs)
+        reg_tree = self.create_reg_tree(reg_tree_radix, num_inputs)
 
         and_tree_to_reg_tree = m.Wire('and_tree_to_reg_tree')
 

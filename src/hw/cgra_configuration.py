@@ -1,6 +1,6 @@
 from veriloggen import Complement2
 
-from hw.cgra_conf_tag import ConfTag
+from src.hw.cgra_conf_tag import ConfTag
 from src.hw.utils import bits
 
 

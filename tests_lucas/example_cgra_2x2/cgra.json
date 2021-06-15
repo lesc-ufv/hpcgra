@@ -14,7 +14,7 @@
         4,
         4
       ],
-      "acc": true,
+      "acc": false,
       "isa": [
         "add",
         "mul",

@@ -30,13 +30,11 @@ bool fill_data(const int TOTAL_GRID_SIZE,
                const int NGRIDS,
                const int SIZE_EDGES,
                const int SIZE_NODES,
+               const int VGRID,
                int *grid,
                map<pair<int, int>, int> *edges_cost,
                int *buffers,
                int *pos,
-               vector<int> &pe_in,
-               vector<int> &pe_out,
-               vector<int> &pe_basic,
                int *v,
                int *v_i,
                int *h_edgeA,
@@ -48,6 +46,10 @@ bool fill_data(const int TOTAL_GRID_SIZE,
                Graph g,
                int *results) {
     
+    vector<int> pe_in, pe_out, pe_basic, inputs, outputs, basic;
+
+    //pe_in = pe.get_inputs();
+
     int id;
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         id = pe[i].id;
@@ -66,16 +68,9 @@ bool fill_data(const int TOTAL_GRID_SIZE,
                 SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT,
                 pe , g)) return false;
     
-    vector<int> inputs = g.get_inputs();
-    vector<int> outputs = g.get_outputs();
-    vector<int> basic;
-
-    for (int i = 0; i < SIZE_NODES; ++i) {
-        if (find(inputs.begin(), inputs.end(), i) == inputs.end()
-            && find(outputs.begin(), outputs.end(), i) == outputs.end()) {
-            basic.push_back(i);
-        }
-    }
+    inputs = g.get_inputs();
+    outputs = g.get_outputs();
+    basic = g.get_basic();
 
     // clean the data
     clean_data(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
@@ -198,7 +193,7 @@ bool fill_data(const int TOTAL_GRID_SIZE,
         }
         printf("\n");*/
 
-        if (!trying && cnt < 100) { // case of solution is not good
+        if (!trying && cnt < 100) { // case of solution is not valid
             cnt++;
             pe_aux.clear();
             for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {

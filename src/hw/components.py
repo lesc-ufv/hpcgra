@@ -309,54 +309,32 @@ class Components:
         if name in self.cache.keys():
             return self.cache[name]
         m = Module(name)
-        clk = m.Input('clk')
         width = m.Parameter('width', 16)
 
         if routes == 0:
             in0 = m.Input('in0', width)
-            outputs = [m.OutputReg('out%d' % i, width) for i in range(num_out)]
-            regs = [m.Reg('r%d' % i, width) for i in range(num_out)]
-            seq = Seq(m, 'seq', clk)
-            for o, r in zip(outputs, regs):
-                seq.add(r(in0))
-                seq.add(o(r))
-
-            seq.make_always()
+            outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
+            for o in outputs:
+                o.assign(in0)
 
         elif routes == 1:
             mux = self.create_multiplexer(num_in)
             p = mux.get_ports()
             sel_in = m.Input('sel_in', p['sel'].width)
-            inputs = [m.Input('in%d' % i, width) for i in range(num_in)]
-            outputs = [('out%d' % i, m.OutputReg('out%d' % i, width)) for i in range(num_out)]
-            in_regs = [('in%d' % i, m.Reg('in_reg%d' % i, width)) for i in range(num_in)]
+            inputs = [('in%d'%i, m.Input('in%d' % i, width)) for i in range(num_in)]
+            outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
             mux_out = m.Wire('mux_out', width)
-
-            m.Instance(mux, mux.name, [('width', width)], [('sel', sel_in)] + in_regs + [('out', mux_out)])
-            seq = Seq(m, 'seq', clk)
-
-            for r, i in zip(in_regs, inputs):
-                seq.add(r[1](i))
-
+            m.Instance(mux, mux.name, [('width', width)], [('sel', sel_in)] + inputs + [('out', mux_out)])
             for o in outputs:
-                seq.add(o[1](mux_out))
-            seq.make_always()
+                o[1].assign(mux_out)
 
         elif routes >= num_out:
             switch_in = self.create_switch_box(num_in, num_out)
             p = switch_in.get_ports()
             sel_in = m.Input('sel_in', p['sel'].width)
-            inputs = [m.Input('in%d' % i, width) for i in range(num_in)]
-            outputs = [m.OutputReg('out%d' % i, width) for i in range(num_out)]
-            outputs_wire = [('out%d' % i, m.OutputReg('out_wire%d' % i, width)) for i in range(num_out)]
-            in_regs = [('in%d' % i, m.Reg('in_reg%d' % i, width)) for i in range(num_in)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + in_regs + outputs_wire)
-            seq = Seq(m, 'seq', clk)
-            for r, i in zip(in_regs, inputs):
-                seq.add(r[1](i))
-            for w, o in zip(outputs_wire, outputs):
-                seq.add(o(w[1]))
-            seq.make_always()
+            inputs = [('in%d'%i,m.Input('in%d' % i, width)) for i in range(num_in)]
+            outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
+            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + outputs)
 
         else:
             switch_in = self.create_switch_box(num_in, routes)
@@ -366,26 +344,12 @@ class Components:
             sel_in = m.Input('sel_in', p_in['sel'].width)
             sel_out = m.Input('sel_out', p_out['sel'].width)
             inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [m.OutputReg('out%d' % i, width) for i in range(num_out)]
-            outputs_wire = [('out%d' % i, m.Wire('out_wire%d' % i, width)) for i in range(num_out)]
-
-            sin_sout_out_reg = [m.Reg('sin_sout_reg%d' % i, width) for i in range(routes)]
+            outputs = [('out%d'%i,m.OutputReg('out%d' % i, width)) for i in range(num_out)]
             sin_sout_out = [('out%d' % i, m.Wire('sin_sout%d' % i, width)) for i in range(routes)]
-
-            sin_sout_in = [('in%d' % i, sin_sout_out_reg[i]) for i in range(routes)]
-
+            sin_sout_in = [('in%d' % i, sin_sout_out[i]) for i in range(routes)]
             m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + sin_sout_out)
+            m.Instance(switch_out, switch_out.name, [('width', width)], [('sel', sel_out)] + sin_sout_in + outputs)
 
-            m.Instance(switch_out, switch_out.name, [('width', width)], [('sel', sel_out)] + sin_sout_in + outputs_wire)
-
-            seq = Seq(m, 'seq', clk)
-            for r, i in zip(sin_sout_out_reg, sin_sout_out):
-                seq.add(r(i[1]))
-            for w, o in zip(outputs_wire, outputs):
-                seq.add(o(w[1]))
-            seq.make_always()
-
-        initialize_regs(m)
         self.cache[name] = m
 
         return m

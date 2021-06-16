@@ -173,7 +173,11 @@ class Cgra:
         inputs_reg = [m.Wire('in_reg%d' % i, self.data_width + 1) for i in range(len(neighbors))]
 
         outputs = [m.Output('out%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+        router_out = [m.Wire('router_out%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+
         mux_alu_inputs = []
+        load_pe = None
+        stream_in_reg = None
         if pe_arch['type'] == 'input' or pe_arch['type'] == 'inout':
             load_pe = m.Input('stream_in', self.data_width + 1)
             stream_in_reg = m.Wire('stream_in_reg', self.data_width + 1)
@@ -288,7 +292,7 @@ class Cgra:
                 con1 = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i),
                         ('out', j)]
                 param1 = [('num_register', balance), ('width', self.data_width + 1)]
-                m.Instance(reg_pipe_in,i.name+'_router', param1, con1)
+                m.Instance(reg_pipe_in, i.name + '_router', param1, con1)
 
         con = []
         conf_array_router = []
@@ -309,7 +313,7 @@ class Cgra:
                 c += 1
 
         c = 0
-        for o in outputs:
+        for o in router_out:
             con.append(('out%d' % c, o))
             c += 1
 
@@ -350,6 +354,12 @@ class Cgra:
                                           conf_router_width)
 
         m.Instance(cf, 'pe_conf_reader', params, con)
+
+        for o, ro in zip(outputs, router_out):
+            out_reg = self.components.create_register_pipeline()
+            param = [('num_register', 1), ('width', self.data_width + 1)]
+            con = [('in', ro), ('out', o)]
+            m.Instance(out_reg, o.name + '_reg', param, con)
 
         stm = []
         last = 0

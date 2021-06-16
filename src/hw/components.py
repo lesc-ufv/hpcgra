@@ -223,6 +223,7 @@ class Components:
         return m
 
     def create_elastic_pipeline(self, max_latency):
+        PE_LATENCY = 4
         name = 'elastic_pipeline_%d' % max_latency
         if name in self.cache.keys():
             return self.cache[name]
@@ -236,19 +237,19 @@ class Components:
             latency = m.Input('latency', max_latency_bits)
             din = m.Input('in', width)
             dout = m.Output('out', width)
-            shift_reg = m.Reg('shift_reg', width, 5 * max_latency)
+            shift_reg = m.Reg('shift_reg', width, PE_LATENCY * max_latency)
             i = m.Integer('i')
             m.Always(Posedge(clk))(
                 If(en)(
                     shift_reg[0](din),
-                    For(i(1), i < 5 * max_latency, i.inc())(
+                    For(i(1), i < PE_LATENCY * max_latency, i.inc())(
                         shift_reg[i](shift_reg[i - 1])
                     )
                 )
             )
             mux = self.create_multiplexer(max_latency + 1)
             con = [('sel', latency), ('in0', din)]
-            con += [('in%d' % j, shift_reg[(j * 5) - 1]) for j in range(1, max_latency + 1)]
+            con += [('in%d' % j, shift_reg[(j * PE_LATENCY) - 1]) for j in range(1, max_latency + 1)]
             con.append(('out', dout))
             params = [('width', width)]
             m.Instance(mux, 'mux' % i, params, con)

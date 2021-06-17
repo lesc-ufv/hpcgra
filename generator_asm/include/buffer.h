@@ -154,8 +154,8 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
                 key = make_pair(a, b);
                 
                 if (buffers[k][key] > buffer_arch) {
-                    //results[k] = MAXVALUE;
-                    //problem = true;
+                    results[k] = MAXVALUE;
+                    problem = true;
                 }
             }
             if (problem) break;

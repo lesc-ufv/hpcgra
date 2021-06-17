@@ -77,10 +77,8 @@ bool try_route_aStar(
             key = make_pair(node, son);
 
             //printf(" node %d son %d PE_START %d PE_A %d map_pe %d\n", node, son, pe_start, pe_a, map_pe[node][son]);
-            if (map_pe[node][son] != -1 && map_pe[node][son] != a && son != pe_a && min_rota[son] == 0) { 
-                //printf("nao posso por esse caminho!");    
-                continue;
-            }
+            if (map_pe[node][son] != -1 && map_pe[node][son] != a 
+                && son != pe_a && min_rota[node] == 0) continue; 
 
             cost_h = table[son][pe_b];
             cost_g = 0;

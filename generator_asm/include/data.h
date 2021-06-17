@@ -49,6 +49,8 @@ bool fill_data(const int TOTAL_GRID_SIZE,
     
     vector<int> pe_in, pe_out, pe_basic, inputs, outputs, basic;
 
+    int SIZE_GRID = ceil(sqrt(TOTAL_GRID_SIZE));
+
     int id;
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         id = pe[i].id;
@@ -164,6 +166,12 @@ bool fill_data(const int TOTAL_GRID_SIZE,
             trying = false;
             for (int i = 0; i < pe_aux.size(); ++i) {
                 pe_pos = pe_aux[i];
+
+                int x = (pe_pos / SIZE_GRID) % VGRID + 1;
+                int y = (pe_pos % SIZE_GRID) % VGRID + 1;
+
+                pe_pos = x * SIZE_GRID + y;
+
                 /*
                 printf("node = %d type_node = %d pe_pos = %d isa: ", node, g.get_code(node), pe_pos, pe_aux.size());
                 for (int k = 0; k < pe[pe_pos].isa.size(); ++k) {

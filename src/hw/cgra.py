@@ -185,7 +185,9 @@ class Cgra:
 
         if pe_arch['type'] == 'output' or pe_arch['type'] == 'inout':
             store_pe = m.Output('stream_out', self.data_width + 1)
+            store_pe_route = m.Wire('stream_out_route', self.data_width + 1)
             outputs.append(store_pe)
+            router_out.append(store_pe_route)
 
         reset = m.Wire('reset')
 

@@ -23,6 +23,7 @@
 #include <omp.h>
 #include <read_arch.h>
 #include <verify.h>
+#include <greedy_solution.h>
 #include <data.h>
 #include <placement.h>
 #include <bits/stdc++.h>

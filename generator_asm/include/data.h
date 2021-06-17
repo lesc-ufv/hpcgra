@@ -44,11 +44,10 @@ bool fill_data(const int TOTAL_GRID_SIZE,
                vector<tuple<int, int, int>> edge_list,
                vector<pe_t> &pe,
                Graph g,
-               int *results) {
+               int *results,
+               int **table) {
     
     vector<int> pe_in, pe_out, pe_basic, inputs, outputs, basic;
-
-    //pe_in = pe.get_inputs();
 
     int id;
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
@@ -85,7 +84,7 @@ bool fill_data(const int TOTAL_GRID_SIZE,
 
     //Preenche a estrutura do grafo
     int n1, n2, node;
-    for (int i = 0; i < SIZE_EDGES; i++) {
+    for (int i = 0; i < SIZE_EDGES; ++i) {
         n1 = get<0>(edge_list[i]);
         n2 = get<1>(edge_list[i]);
         h_edgeA[i] = n1;
@@ -94,7 +93,7 @@ bool fill_data(const int TOTAL_GRID_SIZE,
         if (n1 != n2) v[n2]++;
     }
 
-    for (int i = 1; i < SIZE_NODES; i++) {
+    for (int i = 1; i < SIZE_NODES; ++i) {
         v_i[i] = v_i[i - 1] + v[i - 1];
     }
 
@@ -132,18 +131,16 @@ bool fill_data(const int TOTAL_GRID_SIZE,
         random_shuffle(pe_in.begin(), pe_in.end());
         random_shuffle(pe_out.begin(), pe_out.end());
 
-        /*printf("pe_in: ");
-        for (int i = 0; i < pe_in.size(); ++i) {
-            printf("%d ", pe_in[i]);
-        }
-        printf("\n");*/
-
-        for (int j = 0; j < inputs.size(); ++j) {
+        for (int j = 0; j < SIZE_GRAPH_IN; ++j) {
             grid[n * TOTAL_GRID_SIZE + pe_in[j]] = inputs[j];
+            pos[n * SIZE_NODES + inputs[j]] = pe_in[j];
         }
-        for (int j = 0; j < outputs.size(); ++j) {
+        for (int j = 0; j < SIZE_GRAPH_OUT; ++j) {
             grid[n * TOTAL_GRID_SIZE + pe_out[j]] = outputs[j];
+            pos[n * SIZE_NODES + outputs[j]] = pe_out[j];
         }
+
+        //greedy_solution(n, SIZE_NODES, TOTAL_GRID_SIZE, pos, grid, table);
 
         for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
             if (grid[n * TOTAL_GRID_SIZE + i] == -1) {

@@ -61,31 +61,30 @@ int main(int argc, char **argv) {
     int *buffers = new int[SIZE_EDGES * NGRIDS];
     int *pos = new int[SIZE_NODES * NGRIDS];
     int *results = new int[NGRIDS];
+    int **table = new int *[TOTAL_GRID_SIZE];
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
+
     vector<int> A;
     map<pair<int, int>, int> *edges_cost = new map<pair<int, int>, int>[NGRIDS];
 
     double time_data, time_total, time_place, time_route, time_buffer, time_table;
 
     auto start = high_resolution_clock::now();
-    // fill the data
-    if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES, 
-              VGRID, grid, edges_cost, buffers, pos, v, v_i, h_edgeA, 
-              h_edgeB, randomvec, A, g.get_edges(), pe, g, results)) return 1;
-    auto stop = high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> duration = (stop - start);
-    time_data = duration.count();
-
-    int **table = new int *[TOTAL_GRID_SIZE];
-    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
-
-    start = high_resolution_clock::now();
     // create the table that measure the distance grid to grid
     create_table_floyd_warshall(TOTAL_GRID_SIZE, table, pe);
     // end table
-    stop = high_resolution_clock::now();
-
-    duration = (stop - start);
+    auto stop = high_resolution_clock::now();
+    std::chrono::duration<double, std::milli>  duration = (stop - start);
     time_table = duration.count();
+
+    start = high_resolution_clock::now();
+    // fill the data
+    if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES, 
+              VGRID, grid, edges_cost, buffers, pos, v, v_i, h_edgeA, 
+              h_edgeB, randomvec, A, g.get_edges(), pe, g, results, table)) return 1;
+    stop = high_resolution_clock::now();
+    duration = (stop - start);
+    time_data = duration.count();
 
     // update all position from grid
     update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,

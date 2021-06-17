@@ -7,7 +7,7 @@ from src.hw.utils import get_id
 
 
 class CgraAssembler:
-    def __init__(self, cgra, asm_file, output_file=None):
+    def __init__(self, cgra, asm_file, output_file=None, pr_dot=None):
         self.cgra = cgra
         self.cc = CgraConfiguration(cgra)
         self.asm_file = asm_file
@@ -24,6 +24,7 @@ class CgraAssembler:
         self.dot = ""
         self.dot_op = {}
         self.dot_edges = {}
+        self.pr_dot = pr_dot
 
     def create_dot_arch(self):
         L = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
@@ -36,7 +37,7 @@ class CgraAssembler:
                 if id in self.dot_op.keys():
                     self.dot += self.dot_op[id] % (i, j)
                 else:
-                    self.dot += "x%dy%d[label=\"%d\", fillcolor=white];\n" % (i, j,id)
+                    self.dot += "x%dy%d[label=\"%d\", fillcolor=white];\n" % (i, j, id)
 
         self.dot += "edge [constraint=false];\n"
         for i in range(L):
@@ -167,9 +168,9 @@ class CgraAssembler:
             self.used_inputs.append(pe)
 
         if "istream" in alu_src:
-            self.dot_op[pe] = "x%dy%d [label=\"" + "in\n%d" %(pe) + "\", fillcolor=snow2];\n"
+            self.dot_op[pe] = "x%dy%d [label=\"" + "in\n%d" % (pe) + "\", fillcolor=snow2];\n"
         else:
-            self.dot_op[pe] = "x%dy%d [label=\"" + "%s\n%d" %(op,pe) + "\", fillcolor=lightskyblue];\n"
+            self.dot_op[pe] = "x%dy%d [label=\"" + "%s\n%d" % (op, pe) + "\", fillcolor=lightskyblue];\n"
 
         return True, [pe, op, alu_src, delays]
 
@@ -202,6 +203,8 @@ class CgraAssembler:
         self.reset()
         self.parse()
         self.create_dot_arch()
+        if self.pr_dot:
+            self.save_dot(self.pr_dot)
         machine_code = ''
         if self.last_error == '':
             for line, conf in self.alu_inst.items():

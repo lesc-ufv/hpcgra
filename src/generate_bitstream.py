@@ -28,10 +28,12 @@ def main():
     if args.json and args.assembly:
         args.json = running_path + '/' + args.json
         args.assembly = running_path + '/' + args.assembly
-        bitstream = Bitstream(args.json, args.assembly)
-        bitstream.save(running_path + '/' + args.output)
         if args.dot:
-            bitstream.assembler.save_dot(running_path + '/' + args.dot)
+            dot_path = running_path + '/' + args.dot
+        else:
+            dot_path = ''
+        bitstream = Bitstream(args.json, args.assembly, dot_path)
+        bitstream.save(running_path + '/' + args.output)
     else:
         raise Exception('Missing parameters. Run generate_bitstream -h to see all parameters needed')
 

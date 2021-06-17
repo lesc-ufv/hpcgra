@@ -11,11 +11,16 @@ using namespace std;
 typedef struct pe_t {
     int id;
     int type;
-    vector<int> neighbors;
     int routes;
-    vector<int> elastic_queue;
     bool acc;
+    vector<int> neighbors;
+    vector<int> elastic_queue;
     vector<int> isa;
+    vector<int> inputs, outputs, basics;
+
+    vector<int> get_inputs() { return inputs; }
+    vector<int> get_outputs() { return outputs; }
+    vector<int> get_basics() { return basics; }
 } pe_t;
 
 bool read_arch(string &arch_file, vector<pe_t> &pe) {
@@ -25,6 +30,7 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
     ifs.open(arch_file);
     Json::CharReaderBuilder builder;
     JSONCPP_STRING errs;
+
     if (!parseFromStream(builder, ifs, &data, &errs)) {
         std::cout << errs << std::endl;
         return false;

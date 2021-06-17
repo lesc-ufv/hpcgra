@@ -33,7 +33,6 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
             table[i][j] = 99999;
         }
     }
-    //printf("opa\n");
 
     // fill the data
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
@@ -44,12 +43,9 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
             if (i != neigh[j]) table[i][neigh[j]] = 1;
         }
     }
-    //printf("opa2\n");
 
     const int N = aux_edge.size();
     int aux;
-
-    //printf("opa2\n");
 
     for (k = 0; k < TOTAL_GRID_SIZE; k++) {
         for (i = 0; i < TOTAL_GRID_SIZE; i++) {
@@ -59,14 +55,6 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<
             }
         }
     }
-    /*
-    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-        printf("%2d:", i);
-        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            printf("%2d ", table[i][j]);
-        }
-        printf("\n");
-    }*/
 }
 
 void update_all_positions(const int NODE_SIZE, const int GRID_SIZE,

@@ -208,7 +208,6 @@ class CgraConfiguration:
                                 route_sel_out_v[oidx] = format(oidx, '0%db' % route_sel_out_bits)
                             else:
                                 iidx = neighbors.index(i) + 1
-                                oidx = neighbors.index(o)
                                 route_sel_in_v.append(format(iidx, '0%db' % route_sel_in_bits))
                                 route_sel_out_v[oidx] = format(oidx, '0%db' % route_sel_out_bits)
                         route_sel_in_v.reverse()

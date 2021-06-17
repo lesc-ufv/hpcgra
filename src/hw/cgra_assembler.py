@@ -1,7 +1,9 @@
+import math
 import re
 
 from src.hw.cgra_alu_operations import CgraAluOperations
 from src.hw.cgra_configuration import CgraConfiguration
+from src.hw.utils import get_id
 
 
 class CgraAssembler:
@@ -19,6 +21,48 @@ class CgraAssembler:
         self.used_outputs = []
         self.ostream_ignore = []
         self.ostream_ignore_loop = []
+        self.dot = ""
+        self.dot_op = {}
+        self.dot_edges = {}
+
+    def create_dot_arch(self):
+        L = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
+        C = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
+        self.dot = "digraph layout{\nrankdir=TB;\nsplines=ortho;\n"
+        self.dot += "node [style=filled shape=square fixedsize=true width=0.5];\n"
+        for i in range(L):
+            for j in range(C):
+                id = get_id(i, j, C)
+                if id in self.dot_op.keys():
+                    self.dot += self.dot_op[id] % (i, j)
+                else:
+                    self.dot += "x%dy%d[label=\"%d\", fillcolor=white];\n" % (i, j,id)
+
+        self.dot += "edge [constraint=false];\n"
+        for i in range(L):
+            for j in range(C):
+                id_src = get_id(i, j, C)
+                for k in range(L):
+                    for l in range(C):
+                        id_dst = get_id(k, l, C)
+                        id = "%d-%d" % (id_src, id_dst)
+                        if id in self.dot_edges.keys():
+                            self.dot += self.dot_edges[id] % (i, j, k, l)
+
+        self.dot += "edge [constraint=true, style=invis];\n"
+        for i in range(L):
+            self.dot += "".join(["x%dy%d ->" % (j, i) for j in range(C - 1)]) + " x%dy%d;\n" % (C - 1, i)
+
+        for i in range(L):
+            self.dot += "rank = same {" + "".join(["x%dy%d ->" % (i, j) for j in range(C - 1)]) + "x%dy%d };\n" % (
+                i, C - 1)
+
+        self.dot += "}\n"
+
+    def save_dot(self, filename):
+        f = open(filename, 'w')
+        f.write(self.dot)
+        f.close()
 
     def reset(self):
         self.alu_inst.clear()
@@ -30,6 +74,9 @@ class CgraAssembler:
         self.used_outputs.clear()
         self.ostream_ignore.clear()
         self.ostream_ignore_loop.clear()
+        self.dot = ""
+        self.dot_op = {}
+        self.dot_edges = {}
 
     def parse(self):
         f = open(self.asm_file)
@@ -111,13 +158,18 @@ class CgraAssembler:
             ops = CgraAluOperations.get_operations()
             if ops[op].get_num_operand() != len(alu_src):
                 return False, "Error in the number of operands, expected %d found %d." % (
-                ops[op].get_num_operand(), len(alu_src))
+                    ops[op].get_num_operand(), len(alu_src))
 
         except Exception as e:
             return False, str(e)
 
         if is_istream:
             self.used_inputs.append(pe)
+
+        if "istream" in alu_src:
+            self.dot_op[pe] = "x%dy%d [label=\"" + "in\n%d" %(pe) + "\", fillcolor=snow2];\n"
+        else:
+            self.dot_op[pe] = "x%dy%d [label=\"" + "%s\n%d" %(op,pe) + "\", fillcolor=lightskyblue];\n"
 
         return True, [pe, op, alu_src, delays]
 
@@ -137,11 +189,19 @@ class CgraAssembler:
 
         if dst == 'ostream':
             self.used_outputs.append(pe)
+            self.dot_op[pe] = "x%dy%d [label=\"" + "out\n%d" % pe + "\", fillcolor=snow2];\n"
+        else:
+            if src == 'alu':
+                self.dot_edges["%d-%d" % (pe, dst)] = "x%dy%d -> x%dy%d [style=solid, color=red];\n"
+            else:
+                self.dot_edges["%d-%d" % (pe, dst)] = "x%dy%d -> x%dy%d [style=solid, color=blue];\n"
+
         return True, [pe, {dst: src}]
 
     def compile(self):
         self.reset()
         self.parse()
+        self.create_dot_arch()
         machine_code = ''
         if self.last_error == '':
             for line, conf in self.alu_inst.items():

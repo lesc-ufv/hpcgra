@@ -334,7 +334,7 @@ class Components:
             p = switch_in.get_ports()
             sel_in = m.Input('sel_in', p['sel'].width)
             inputs = [('in%d'%i,m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
+            outputs = [('out%d'%i,m.Output('out%d' % i, width)) for i in range(num_out)]
             m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + outputs)
 
         else:

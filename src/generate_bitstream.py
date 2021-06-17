@@ -15,6 +15,7 @@ def create_args():
     parser.add_argument('-j', '--json', help='CGRA architecture description JSON file', type=str)
     parser.add_argument('-a', '--assembly', help='Assembly code', type=str)
     parser.add_argument('-o', '--output', help='Bitstream File', type=str, default='a.bit')
+    parser.add_argument('-d', '--dot', help='Output place and route dot file',type=str)
 
     return parser.parse_args()
 
@@ -29,6 +30,8 @@ def main():
         args.assembly = running_path + '/' + args.assembly
         bitstream = Bitstream(args.json, args.assembly)
         bitstream.save(running_path + '/' + args.output)
+        if args.dot:
+            bitstream.assembler.save_dot(running_path + '/' + args.dot)
     else:
         raise Exception('Missing parameters. Run generate_bitstream -h to see all parameters needed')
 
@@ -39,3 +42,4 @@ if __name__ == '__main__':
         print("Bitstream successfully generated!")
     except Exception as e:
         print(e)
+        traceback.print_exc()

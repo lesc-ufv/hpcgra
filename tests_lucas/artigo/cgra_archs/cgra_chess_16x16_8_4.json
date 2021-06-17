@@ -69,8 +69,8 @@
             ],
             "routes": 4,
             "elastic_queue": [
-                15,
-                15,
+                4,
+                4,
                 0
             ],
             "acc": false,
@@ -4194,7 +4194,7 @@
                 153,
                 169
             ],
-            "routes": 8,
+            "routes": 4,
             "elastic_queue": [
                 4,
                 4,
@@ -6561,8 +6561,8 @@
             ],
             "routes": 4,
             "elastic_queue": [
-                5,
-                5,
+                4,
+                4,
                 0
             ],
             "acc": false,

@@ -230,13 +230,13 @@ class Cgra:
         m_reg = self.components.create_register_pipeline()
         if pe_arch['type'] == 'input' or pe_arch['type'] == 'inout':
             param = [('num_register', 1), ('width', self.data_width + 1)]
-            con = [('in', load_pe), ('out', stream_in_reg)]
+            con = [('en', Int(1,1,2)),('in', load_pe), ('out', stream_in_reg)]
             m.Instance(m_reg, 'm_stream_in_reg', param, con)
 
         m_reg = self.components.create_register_pipeline()
         for i, j in zip(inputs, inputs_reg):
             param = [('num_register', 1), ('width', self.data_width + 1)]
-            con = [('in', i), ('out', j)]
+            con = [('en', Int(1,1,2)),('in', i), ('out', j)]
             m.Instance(m_reg, i.name + '_reg', param, con)
 
         mux_alu = self.components.create_multiplexer(len(mux_alu_inputs))
@@ -360,7 +360,7 @@ class Cgra:
         for o, ro in zip(outputs, router_out):
             out_reg = self.components.create_register_pipeline()
             param = [('num_register', 1), ('width', self.data_width + 1)]
-            con = [('in', ro), ('out', o)]
+            con = [('en', Int(1,1,2)),('in', ro), ('out', o)]
             m.Instance(out_reg, o.name + '_reg', param, con)
 
         stm = []

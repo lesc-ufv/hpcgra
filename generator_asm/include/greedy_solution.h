@@ -58,7 +58,7 @@ bool greedy_solution(
         int dad = q.front();
         q.pop();
 
-        printf("%d %d\n", a, pos[a]);
+        printf("%d %d\n", dad, pos[dad]);
     }
 
     return true;

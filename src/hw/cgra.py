@@ -112,11 +112,15 @@ class Cgra:
             for p in inputs:
                 if 'in' == p.name[0:2]:
                     idx = int(p.name[2:])
-                    con.append((p.name, wires['pe%s_to_pe%s' % (neighbors[idx], pe)]))
+                    n = 'pe%s_to_pe%s' % (neighbors[idx], pe)
+                    if n in wires.keys():
+                        con.append((p.name, wires[n]))
             for p in outputs:
                 if 'out' == p.name[0:3]:
                     idx = int(p.name[3:])
-                    con.append((p.name, wires['pe%s_to_pe%s' % (pe, neighbors[idx])]))
+                    n = 'pe%s_to_pe%s' % (pe, neighbors[idx])
+                    if n in wires.keys():
+                        con.append((p.name, wires[n]))
 
             m.Instance(self.array_pe[pe], "pe_%d" % pe, params, con)
 

@@ -12,6 +12,33 @@ def bits(n):
     else:
         return int(math.ceil(math.log2(n)))
 
+def get_dot_color_by_op(op):
+    dic = {
+        'add': 'lightblue ',
+        'sub': 'lightblue1',
+        'mul': 'lightblue2',
+        'or': 'lightblue3',
+        'xor': 'lightblue4',
+        'and': 'lightcoral',
+        'not': 'lightcyan',
+        'abs': 'lightcyan1',
+        'pass': 'lightcyan2',
+        'muladd': 'lightcyan3',
+        'mulsub': 'lightcyan4',
+        'addadd': 'lightgoldenrod',
+        'subsub': 'lightgoldenrod1',
+        'addsub': 'lightgoldenrod2',
+        'mux': 'lightgoldenrod3',
+        'slt': 'lightgoldenrod4',
+        'sgt': 'lightgoldenrodyellow',
+        'seq': 'lightgray',
+        'sne': 'lemonchiffon',
+        'shl': 'lemonchiffon1',
+        'shr': 'lemonchiffon2',
+        'max': 'lemonchiffon3',
+        'min': 'lemonchiffon4',
+        }
+    return dic[op]
 
 def initialize_regs(module, values=None):
     regs = []

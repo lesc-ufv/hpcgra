@@ -2,12 +2,9 @@ digraph layout{
 rankdir=TB;
 splines=ortho;
 node [style=filled shape=square fixedsize=true width=0.5];
-x0y0 [label="in
-0", fillcolor=snow2];
-x0y1 [label="mul
-1", fillcolor=lightskyblue];
-x0y2 [label="mul
-2", fillcolor=lightskyblue];
+x0y0 [label="in\n0", fillcolor=snow2];
+x0y1 [label="mul\n1", fillcolor=lightblue2];
+x0y2 [label="mul\n2", fillcolor=lightblue2];
 x0y3[label="3", fillcolor=white];
 x0y4[label="4", fillcolor=white];
 x0y5[label="5", fillcolor=white];
@@ -29,8 +26,7 @@ x1y4[label="20", fillcolor=white];
 x1y5[label="21", fillcolor=white];
 x1y6[label="22", fillcolor=white];
 x1y7[label="23", fillcolor=white];
-x1y8 [label="mul
-24", fillcolor=lightskyblue];
+x1y8 [label="mul\n24", fillcolor=lightblue2];
 x1y9[label="25", fillcolor=white];
 x1y10[label="26", fillcolor=white];
 x1y11[label="27", fillcolor=white];
@@ -47,8 +43,7 @@ x2y5[label="37", fillcolor=white];
 x2y6[label="38", fillcolor=white];
 x2y7[label="39", fillcolor=white];
 x2y8[label="40", fillcolor=white];
-x2y9 [label="add
-41", fillcolor=lightskyblue];
+x2y9 [label="add\n41", fillcolor=lightblue ];
 x2y10[label="42", fillcolor=white];
 x2y11[label="43", fillcolor=white];
 x2y12[label="44", fillcolor=white];
@@ -137,25 +132,20 @@ x7y13[label="125", fillcolor=white];
 x7y14[label="126", fillcolor=white];
 x7y15[label="127", fillcolor=white];
 x8y0[label="128", fillcolor=white];
-x8y1 [label="sub
-129", fillcolor=lightskyblue];
+x8y1 [label="sub\n129", fillcolor=lightblue1];
 x8y2[label="130", fillcolor=white];
 x8y3[label="131", fillcolor=white];
 x8y4[label="132", fillcolor=white];
 x8y5[label="133", fillcolor=white];
-x8y6 [label="add
-134", fillcolor=lightskyblue];
+x8y6 [label="add\n134", fillcolor=lightblue ];
 x8y7[label="135", fillcolor=white];
-x8y8 [label="add
-136", fillcolor=lightskyblue];
+x8y8 [label="add\n136", fillcolor=lightblue ];
 x8y9[label="137", fillcolor=white];
 x8y10[label="138", fillcolor=white];
-x8y11 [label="add
-139", fillcolor=lightskyblue];
+x8y11 [label="add\n139", fillcolor=lightblue ];
 x8y12[label="140", fillcolor=white];
 x8y13[label="141", fillcolor=white];
-x8y14 [label="add
-142", fillcolor=lightskyblue];
+x8y14 [label="add\n142", fillcolor=lightblue ];
 x8y15[label="143", fillcolor=white];
 x9y0[label="144", fillcolor=white];
 x9y1[label="145", fillcolor=white];
@@ -166,8 +156,7 @@ x9y5[label="149", fillcolor=white];
 x9y6[label="150", fillcolor=white];
 x9y7[label="151", fillcolor=white];
 x9y8[label="152", fillcolor=white];
-x9y9 [label="add
-153", fillcolor=lightskyblue];
+x9y9 [label="add\n153", fillcolor=lightblue ];
 x9y10[label="154", fillcolor=white];
 x9y11[label="155", fillcolor=white];
 x9y12[label="156", fillcolor=white];
@@ -191,8 +180,7 @@ x10y13[label="173", fillcolor=white];
 x10y14[label="174", fillcolor=white];
 x10y15[label="175", fillcolor=white];
 x11y0[label="176", fillcolor=white];
-x11y1 [label="add
-177", fillcolor=lightskyblue];
+x11y1 [label="add\n177", fillcolor=lightblue ];
 x11y2[label="178", fillcolor=white];
 x11y3[label="179", fillcolor=white];
 x11y4[label="180", fillcolor=white];
@@ -229,8 +217,7 @@ x13y2[label="210", fillcolor=white];
 x13y3[label="211", fillcolor=white];
 x13y4[label="212", fillcolor=white];
 x13y5[label="213", fillcolor=white];
-x13y6 [label="mul
-214", fillcolor=lightskyblue];
+x13y6 [label="mul\n214", fillcolor=lightblue2];
 x13y7[label="215", fillcolor=white];
 x13y8[label="216", fillcolor=white];
 x13y9[label="217", fillcolor=white];
@@ -257,15 +244,13 @@ x14y13[label="237", fillcolor=white];
 x14y14[label="238", fillcolor=white];
 x14y15[label="239", fillcolor=white];
 x15y0[label="240", fillcolor=white];
-x15y1 [label="mul
-241", fillcolor=lightskyblue];
+x15y1 [label="mul\n241", fillcolor=lightblue2];
 x15y2[label="242", fillcolor=white];
 x15y3[label="243", fillcolor=white];
 x15y4[label="244", fillcolor=white];
 x15y5[label="245", fillcolor=white];
 x15y6[label="246", fillcolor=white];
-x15y7 [label="add
-247", fillcolor=lightskyblue];
+x15y7 [label="add\n247", fillcolor=lightblue ];
 x15y8[label="248", fillcolor=white];
 x15y9[label="249", fillcolor=white];
 x15y10[label="250", fillcolor=white];

@@ -414,32 +414,26 @@ class Cgra:
         reg_results = m.Reg('reg_results', width, num_opcodes)
         valid_result = m.Reg('valid_result', num_opcodes)
         seq = Seq(m, 'seq_reg', clk)
-        regs_val = []
         and_valid = {}
         v = [i[width] for i in inputs]
-
-        for i in range(num_inputs):
-            r = m.Reg('reg_val_%d' % i)
-            seq.add(r(v[i]))
-            regs_val.append(v[i])
 
         for i in isa:
             t = self.alu_ops[i].get_type()
             a = and_valid.keys()
             if t == 'unary':
                 if 'and_valid_1' not in a:
-                    r = m.Wire('and_valid_1')
-                    r.assign(regs_val[0])
+                    r = m.Reg('and_valid_1')
+                    seq.add(r(v[0]))
                     and_valid[r.name] = r
             if t == 'binary':
                 if 'and_valid_2' not in a:
-                    r = m.Wire('and_valid_2')
-                    r.assign(And(regs_val[0], regs_val[1]))
+                    r = m.Reg('and_valid_2')
+                    seq.add(r(And(v[0], v[1])))
                     and_valid[r.name] = r
             if t == 'ternary':
                 if 'and_valid_3' not in a:
-                    r = m.Wire('and_valid_3')
-                    r.assign(And(And(regs_val[0], regs_val[1]), regs_val[2]))
+                    r = m.Reg('and_valid_3')
+                    seq.add(r(And(And(v[0], v[1]), v[2])))
                     and_valid[r.name] = r
 
         for i in range(num_inputs):

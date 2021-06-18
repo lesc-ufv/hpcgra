@@ -3,7 +3,7 @@ import re
 
 from src.hw.cgra_alu_operations import CgraAluOperations
 from src.hw.cgra_configuration import CgraConfiguration
-from src.hw.utils import get_id
+from src.hw.utils import get_id, get_dot_color_by_op
 
 
 class CgraAssembler:
@@ -168,9 +168,10 @@ class CgraAssembler:
             self.used_inputs.append(pe)
 
         if "istream" in alu_src:
-            self.dot_op[pe] = "x%dy%d [label=\"" + "in\n%d" % (pe) + "\", fillcolor=snow2];\n"
+            self.dot_op[pe] = "x%dy%d [label=\"" + "in\\n%d" % (pe) + "\", fillcolor=snow2];\n"
         else:
-            self.dot_op[pe] = "x%dy%d [label=\"" + "%s\n%d" % (op, pe) + "\", fillcolor=lightskyblue];\n"
+            self.dot_op[pe] = "x%dy%d [label=\"" + "%s\\n%d" % (op, pe) + "\", fillcolor=" + get_dot_color_by_op(
+                op) + "];\n"
 
         return True, [pe, op, alu_src, delays]
 

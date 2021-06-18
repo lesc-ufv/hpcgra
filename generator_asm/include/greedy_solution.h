@@ -40,6 +40,7 @@ const int ADJACENCY[ADJACENCY_SIZE][2] = {
 bool greedy_solution(
     const int n,
     const int SIZE_NODE,
+    const int SIZE_GRID,
     const int TOTAL_GRID_SIZE,
     int *pos,
     int *grid,
@@ -49,16 +50,57 @@ bool greedy_solution(
 ) {
 
     queue<int> q;
+    vector<int> son;
+    bool found;
+    int a, b, pos_a, pos_a_x, pos_a_y, pos_b_x, pos_b_y, pos_b, pos_global_b, pos_local_b;
 
     for (int i = 0, e = inputs.size(); i < e; ++i) {
         q.push(inputs[i]);
     }
 
-    while (!q.empty()) {
-        int dad = q.front();
-        q.pop();
+    //printf("\nn = %d\n", n);
 
-        printf("%d %d\n", dad, pos[dad]);
+    while (!q.empty()) {
+        a = q.front();
+        q.pop();
+        pos_a = pos[n*SIZE_NODE+a];
+
+        son = g.get_sucessors(a);
+        for (int i = 0, e = son.size(); i < e; ++i) {
+
+            b = son[i];
+            pos_b = n*SIZE_NODE+b;
+
+            //printf("%d [%d] -> %d [%d]\n", a, pos_a, b, pos[pos_b]);
+            
+            if (pos[pos_b] == -1) {
+
+                pos_a_x = pos_a / SIZE_GRID;
+                pos_a_y = pos_a % SIZE_GRID;
+                found = false;
+
+                for (int j = 0; j < ADJACENCY_SIZE; ++j) {
+                    pos_b_x = pos_a_x + ADJACENCY[j][0];
+                    pos_b_y = pos_a_y + ADJACENCY[j][1];
+
+                    pos_local_b = pos_b_x * SIZE_GRID + pos_b_y;
+                    pos_global_b = n*TOTAL_GRID_SIZE + pos_local_b;
+
+                    if (pos_b_x > -1 && pos_b_x < SIZE_GRID && 
+                        pos_b_y > -1 && pos_b_y < SIZE_GRID && 
+                        grid[pos_global_b] == -1) {
+                            pos[pos_b] = pos_local_b;
+                            grid[pos_global_b] = b;
+                            found = true;
+                            break;
+                    }
+                }
+
+                if (!found) return false;
+
+                q.push(b);
+            }
+        }
     }
 
     return true;

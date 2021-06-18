@@ -32,9 +32,6 @@ void annealing(const int N,
     double T = 100.0;
     const double LIMIT = 0.00001;
 
-    const int delta = SIZE_EDGES * (TOTAL_GRID_SIZE/SIZE_EDGES/4); // 1.0 == perfect solution
-    //printf("value delta %d\n", delta);
-
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         localGrid[i] = bestGrid[i] = grid[N * TOTAL_GRID_SIZE + i];
     }
@@ -134,10 +131,8 @@ void annealing(const int N,
                 }
             }
             //printf("cust: %d size_edges %d\n", currentCost, SIZE_EDGES*delta);
-            if (currentCost <= delta) break;
             T *= 0.999;
         }
-        if (currentCost <= delta) break;
     }
 
     // update the results

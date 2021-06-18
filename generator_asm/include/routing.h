@@ -73,15 +73,19 @@ bool try_route_aStar(
         for (int j = 0, n = n_son.size(); j < n; ++j) {
 
             son = n_son[j];
-            //printf("son %d, ", son);
             key = make_pair(node, son);
 
-            //printf(" node %d son %d PE_START %d PE_A %d map_pe %d\n", node, son, pe_start, pe_a, map_pe[node][son]);
-            if (map_pe[node][son] != -1 && map_pe[node][son] != a 
-                && son != pe_a && min_rota[node] == 0) continue; 
+            //printf("node %d son %d map_pe %d a %d min_rota %d\n", node, son, map_pe[node][son], a, min_rota[node]);
+            if (map_pe[node][son] != -1 && map_pe[node][son] != a && son != pe_a) 
+                continue;    
+            if (map_pe[node][son] != a && min_rota[node] < 0) { 
+                continue;
+            }
+            //printf("passou\n");
 
             cost_h = table[son][pe_b];
-            cost_g = 0;
+            // give preference to multicast (save wire and ports)
+            cost_g = (map_pe[node][son] == a) ? -100 : 0; 
 
             cost = cost_h + cost_g;
             //printf("ch: %d, cg: %d, cost: %d \n", cost_h, cost_g, cost);
@@ -157,7 +161,7 @@ bool try_route_aStar(
             route[key].push_back(new_path[i].first);
             route[key].push_back(new_path[i].second);
             pe_route[pe_aux_a].push_back(make_pair(pe_aux_a, pe_aux_b));
-            min_rota[pe_aux_a] -= 1;
+            min_rota[pe_aux_a]--;
             map_pe[pe_aux_a][pe_aux_b] = a;
             //remove_element(new_path[i].first, new_path[i].second, grid_route);
         }

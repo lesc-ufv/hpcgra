@@ -3,13 +3,6 @@
 
 #include <annealing.h>
 
-vector<int> get_neighbors(vector<pe_t> &arch, const int id) {
-    for (int i = 0, n = arch.size(); i < n; ++i) {
-        if (arch[i].id == id) return arch[i].neighbors;
-    }
-    return vector<int>();
-}
-
 void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, int **table, vector<pe_t> &arch) {
     /*
     let dist be a |V| × |V| array of minimum distances initialized to ∞ (infinity)

@@ -2,8 +2,7 @@ digraph layout{
 rankdir=TB;
 splines=ortho;
 node [style=filled shape=square fixedsize=true width=0.5];
-x0y0 [label="in
-0", fillcolor=snow2];
+x0y0[label="0", fillcolor=white];
 x0y1[label="1", fillcolor=white];
 x0y2[label="2", fillcolor=white];
 x0y3[label="3", fillcolor=white];
@@ -20,14 +19,10 @@ x0y13[label="13", fillcolor=white];
 x0y14[label="14", fillcolor=white];
 x0y15[label="15", fillcolor=white];
 x1y0[label="16", fillcolor=white];
-x1y1 [label="add
-17", fillcolor=lightskyblue];
-x1y2 [label="add
-18", fillcolor=lightskyblue];
-x1y3 [label="add
-19", fillcolor=lightskyblue];
-x1y4 [label="mul
-20", fillcolor=lightskyblue];
+x1y1[label="17", fillcolor=white];
+x1y2[label="18", fillcolor=white];
+x1y3[label="19", fillcolor=white];
+x1y4[label="20", fillcolor=white];
 x1y5[label="21", fillcolor=white];
 x1y6[label="22", fillcolor=white];
 x1y7[label="23", fillcolor=white];
@@ -41,12 +36,9 @@ x1y14[label="30", fillcolor=white];
 x1y15[label="31", fillcolor=white];
 x2y0[label="32", fillcolor=white];
 x2y1[label="33", fillcolor=white];
-x2y2 [label="add
-34", fillcolor=lightskyblue];
-x2y3 [label="mul
-35", fillcolor=lightskyblue];
-x2y4 [label="sub
-36", fillcolor=lightskyblue];
+x2y2[label="34", fillcolor=white];
+x2y3[label="35", fillcolor=white];
+x2y4[label="36", fillcolor=white];
 x2y5[label="37", fillcolor=white];
 x2y6[label="38", fillcolor=white];
 x2y7[label="39", fillcolor=white];
@@ -57,17 +49,12 @@ x2y11[label="43", fillcolor=white];
 x2y12[label="44", fillcolor=white];
 x2y13[label="45", fillcolor=white];
 x2y14[label="46", fillcolor=white];
-x2y15 [label="out
-47", fillcolor=snow2];
+x2y15[label="47", fillcolor=white];
 x3y0[label="48", fillcolor=white];
-x3y1 [label="add
-49", fillcolor=lightskyblue];
-x3y2 [label="mul
-50", fillcolor=lightskyblue];
-x3y3 [label="add
-51", fillcolor=lightskyblue];
-x3y4 [label="add
-52", fillcolor=lightskyblue];
+x3y1[label="49", fillcolor=white];
+x3y2[label="50", fillcolor=white];
+x3y3[label="51", fillcolor=white];
+x3y4[label="52", fillcolor=white];
 x3y5[label="53", fillcolor=white];
 x3y6[label="54", fillcolor=white];
 x3y7[label="55", fillcolor=white];
@@ -81,12 +68,9 @@ x3y14[label="62", fillcolor=white];
 x3y15[label="63", fillcolor=white];
 x4y0[label="64", fillcolor=white];
 x4y1[label="65", fillcolor=white];
-x4y2 [label="mul
-66", fillcolor=lightskyblue];
-x4y3 [label="mul
-67", fillcolor=lightskyblue];
-x4y4 [label="add
-68", fillcolor=lightskyblue];
+x4y2[label="66", fillcolor=white];
+x4y3[label="67", fillcolor=white];
+x4y4[label="68", fillcolor=white];
 x4y5[label="69", fillcolor=white];
 x4y6[label="70", fillcolor=white];
 x4y7[label="71", fillcolor=white];
@@ -242,14 +226,22 @@ x13y12[label="220", fillcolor=white];
 x13y13[label="221", fillcolor=white];
 x13y14[label="222", fillcolor=white];
 x13y15[label="223", fillcolor=white];
-x14y0[label="224", fillcolor=white];
-x14y1[label="225", fillcolor=white];
-x14y2[label="226", fillcolor=white];
-x14y3[label="227", fillcolor=white];
-x14y4[label="228", fillcolor=white];
-x14y5[label="229", fillcolor=white];
-x14y6[label="230", fillcolor=white];
-x14y7[label="231", fillcolor=white];
+x14y0 [label="in
+224", fillcolor=snow2];
+x14y1 [label="mul
+225", fillcolor=lightskyblue];
+x14y2 [label="mul
+226", fillcolor=lightskyblue];
+x14y3 [label="sub
+227", fillcolor=lightskyblue];
+x14y4 [label="mul
+228", fillcolor=lightskyblue];
+x14y5 [label="mul
+229", fillcolor=lightskyblue];
+x14y6 [label="add
+230", fillcolor=lightskyblue];
+x14y7 [label="mul
+231", fillcolor=lightskyblue];
 x14y8[label="232", fillcolor=white];
 x14y9[label="233", fillcolor=white];
 x14y10[label="234", fillcolor=white];
@@ -257,14 +249,22 @@ x14y11[label="235", fillcolor=white];
 x14y12[label="236", fillcolor=white];
 x14y13[label="237", fillcolor=white];
 x14y14[label="238", fillcolor=white];
-x14y15[label="239", fillcolor=white];
-x15y0[label="240", fillcolor=white];
-x15y1[label="241", fillcolor=white];
-x15y2[label="242", fillcolor=white];
-x15y3[label="243", fillcolor=white];
-x15y4[label="244", fillcolor=white];
-x15y5[label="245", fillcolor=white];
-x15y6[label="246", fillcolor=white];
+x14y15 [label="out
+239", fillcolor=snow2];
+x15y0 [label="add
+240", fillcolor=lightskyblue];
+x15y1 [label="add
+241", fillcolor=lightskyblue];
+x15y2 [label="add
+242", fillcolor=lightskyblue];
+x15y3 [label="add
+243", fillcolor=lightskyblue];
+x15y4 [label="add
+244", fillcolor=lightskyblue];
+x15y5 [label="add
+245", fillcolor=lightskyblue];
+x15y6 [label="add
+246", fillcolor=lightskyblue];
 x15y7[label="247", fillcolor=white];
 x15y8[label="248", fillcolor=white];
 x15y9[label="249", fillcolor=white];
@@ -275,42 +275,31 @@ x15y13[label="253", fillcolor=white];
 x15y14[label="254", fillcolor=white];
 x15y15[label="255", fillcolor=white];
 edge [constraint=false];
-x0y0 -> x0y1 [style=solid, color=red];
-x0y1 -> x0y3 [style=solid, color=blue];
-x0y1 -> x2y1 [style=solid, color=blue];
-x0y3 -> x2y3 [style=solid, color=blue];
-x1y1 -> x1y3 [style=solid, color=red];
-x1y1 -> x3y1 [style=solid, color=blue];
-x1y2 -> x1y3 [style=solid, color=red];
-x1y3 -> x1y1 [style=solid, color=red];
-x1y3 -> x1y2 [style=solid, color=red];
-x1y3 -> x1y4 [style=solid, color=blue];
-x1y3 -> x2y3 [style=solid, color=blue];
-x1y4 -> x1y5 [style=solid, color=red];
-x1y5 -> x1y7 [style=solid, color=blue];
-x1y7 -> x1y9 [style=solid, color=blue];
-x1y9 -> x1y11 [style=solid, color=blue];
-x1y11 -> x1y13 [style=solid, color=blue];
-x1y13 -> x1y15 [style=solid, color=blue];
-x1y15 -> x2y15 [style=solid, color=blue];
-x2y1 -> x2y2 [style=solid, color=blue];
-x2y1 -> x4y1 [style=solid, color=blue];
-x2y2 -> x2y3 [style=solid, color=blue];
-x2y3 -> x1y3 [style=solid, color=red];
-x2y3 -> x2y4 [style=solid, color=blue];
-x2y3 -> x4y3 [style=solid, color=blue];
-x2y4 -> x2y3 [style=solid, color=red];
-x2y4 -> x3y4 [style=solid, color=blue];
-x3y1 -> x2y1 [style=solid, color=red];
-x3y2 -> x2y2 [style=solid, color=red];
-x3y3 -> x1y3 [style=solid, color=blue];
-x3y3 -> x3y2 [style=solid, color=blue];
-x3y4 -> x3y3 [style=solid, color=blue];
-x4y1 -> x4y2 [style=solid, color=blue];
-x4y2 -> x3y2 [style=solid, color=red];
-x4y3 -> x2y3 [style=solid, color=red];
-x4y3 -> x4y4 [style=solid, color=blue];
-x4y4 -> x3y4 [style=solid, color=red];
+x14y0 -> x14y1 [style=solid, color=red];
+x14y0 -> x14y2 [style=solid, color=blue];
+x14y0 -> x15y0 [style=solid, color=red];
+x14y1 -> x14y2 [style=solid, color=red];
+x14y2 -> x14y3 [style=solid, color=red];
+x14y3 -> x14y4 [style=solid, color=red];
+x14y4 -> x14y5 [style=solid, color=red];
+x14y5 -> x14y6 [style=solid, color=red];
+x14y6 -> x14y7 [style=solid, color=red];
+x14y7 -> x14y9 [style=solid, color=red];
+x14y9 -> x14y11 [style=solid, color=blue];
+x14y11 -> x14y13 [style=solid, color=blue];
+x14y13 -> x14y15 [style=solid, color=blue];
+x15y0 -> x14y0 [style=solid, color=red];
+x15y0 -> x15y1 [style=solid, color=red];
+x15y1 -> x15y2 [style=solid, color=red];
+x15y1 -> x15y3 [style=solid, color=red];
+x15y2 -> x15y4 [style=solid, color=red];
+x15y3 -> x15y4 [style=solid, color=red];
+x15y4 -> x14y4 [style=solid, color=blue];
+x15y4 -> x15y5 [style=solid, color=red];
+x15y5 -> x14y5 [style=solid, color=blue];
+x15y5 -> x15y6 [style=solid, color=red];
+x15y6 -> x15y7 [style=solid, color=red];
+x15y7 -> x14y7 [style=solid, color=blue];
 edge [constraint=true, style=invis];
 x0y0 ->x1y0 ->x2y0 ->x3y0 ->x4y0 ->x5y0 ->x6y0 ->x7y0 ->x8y0 ->x9y0 ->x10y0 ->x11y0 ->x12y0 ->x13y0 ->x14y0 -> x15y0;
 x0y1 ->x1y1 ->x2y1 ->x3y1 ->x4y1 ->x5y1 ->x6y1 ->x7y1 ->x8y1 ->x9y1 ->x10y1 ->x11y1 ->x12y1 ->x13y1 ->x14y1 -> x15y1;

@@ -136,9 +136,9 @@ bool fill_data(const int TOTAL_GRID_SIZE,
     int cnt = 0, pe_pos;
     bool trying;
 
-    for (int n = 0; n < NGRIDS; ++n) {
+    int c = 0;
 
-        jump: // label if the solution not work
+    for (int n = 0; n < NGRIDS; ++n) {
 
         random_shuffle(pe_in.begin(), pe_in.end());
         random_shuffle(pe_out.begin(), pe_out.end());
@@ -152,74 +152,14 @@ bool fill_data(const int TOTAL_GRID_SIZE,
             pos[n * SIZE_NODES + outputs[j]] = pe_out[j];
         }
 
-        //greedy_solution(n, SIZE_NODES, TOTAL_GRID_SIZE, pos, grid, table, inputs, g);
-
-        for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-            if (grid[n * TOTAL_GRID_SIZE + i] == -1) {
-                pe_aux.push_back(i);
-            }
-        }
-
-        //pe_basic
-        random_shuffle(pe_aux.begin(), pe_aux.end());
-
-        /*printf("\nbasic: ");
-        for (int i = 0; i < basic.size(); ++i) {
-            printf("%d type: %d\n", basic[i], g.get_code(basic[i]));
-        }
-        printf("\n");*/
-
-        trying = true;
-        // pegar os nodos do tipo pe_basic!!!!
-        for (int j = 0; j < basic.size(); ++j) {
-            int node = basic[j];
-            trying = false;
-            for (int i = 0; i < pe_aux.size(); ++i) {
-                pe_pos = pe_aux[i];
-
-                int x = (pe_pos / SIZE_GRID) % VGRID + 1;
-                int y = (pe_pos % SIZE_GRID) % VGRID + 1;
-
-                pe_pos = x * SIZE_GRID + y;
-
-                /*
-                printf("node = %d type_node = %d pe_pos = %d isa: ", node, g.get_code(node), pe_pos, pe_aux.size());
-                for (int k = 0; k < pe[pe_pos].isa.size(); ++k) {
-                    printf("%d ", pe[pe_pos].isa[k]);
-                }
-                printf("\n");*/
-                if (find(pe[pe_pos].isa.begin(), pe[pe_pos].isa.end(),
-                         g.get_code(node)) != pe[pe_pos].isa.end() &&
-                    grid[n * TOTAL_GRID_SIZE + pe_pos] == -1) {
-                    grid[n * TOTAL_GRID_SIZE + pe_pos] = node;
-                    pe_aux.erase(pe_aux.begin()+i); // remove the element
-                    //printf("accepted\n");
-                    trying = true;
-                    break;
-                }
-            }
-        }
-
-        /*
-        printf("\nSol %d: \n", n);
-        for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-            if (i % (int) ceil(sqrt(TOTAL_GRID_SIZE)) == 0) printf("\n");
-            printf("%2d ", grid[n * TOTAL_GRID_SIZE + i]);
-        }
-        printf("\n");*/
-
-        if (!trying && cnt < 100) { // case of solution is not valid
-            cnt++;
-            pe_aux.clear();
-            for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-                grid[n * TOTAL_GRID_SIZE + i] = -1;
-            }
-            goto jump;
-        } else if (cnt >= 100) {
-            cnt = 0;
+        if (!greedy_solution(n, SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE, 
+            pos, grid, table, inputs, g)){
             results[n] = MAXVALUE;
+            c++;
         }
     }
+
+    //printf("not solution %d\n", c);
 
     return true;
 }

@@ -18,9 +18,7 @@ int main(int argc, char **argv) {
         printf("ERROR: ./place <name> <path_to_dot.json> <path_to_arch.json> <number_trying>\n");
         return 1;
     }
-    if (argc > 4) {
-        NGRIDS = atoi(argv[4]);
-    }
+    if (argc > 4) NGRIDS = atoi(argv[4]);
 
     auto start_total = high_resolution_clock::now();
 
@@ -87,8 +85,8 @@ int main(int argc, char **argv) {
     time_data = duration.count();
 
     // update all position from grid
-    update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,
-                         NGRIDS, pos, grid);
+    //update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,
+    //                     NGRIDS, pos, grid);
 
     // get all results and put in results array
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results,
@@ -97,7 +95,7 @@ int main(int argc, char **argv) {
     start = high_resolution_clock::now();
 #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
-        if (results[i] == SIZE_EDGES || results[i] == MAXVALUE) continue; // Found perfect solution!
+        if (results[i] == MAXVALUE) continue; // Found perfect solution!
 
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE,
                   grid, pos, v_i, v, A, randomvec, results, table, pe, g);

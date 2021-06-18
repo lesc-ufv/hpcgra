@@ -1,10 +1,23 @@
 #ifndef __DATA__H
 #define __DATA__H
 
-void clean_data(const int NGRIDS, const int SIZE_EDGES,
-                const int SIZE_NODES, const int TOTAL_GRID_SIZE,
-                map<pair<int, int>, int> *edges_cost, int *buffers, int *pos,
-                int *grid, int *v, int *v_i, int *h_edgeA, int *h_edgeB) {
+void clean_data(const int NGRIDS, 
+                const int SIZE_EDGES,
+                const int SIZE_NODES, 
+                const int TOTAL_GRID_SIZE,
+                map<pair<int, int>, int> *edges_cost, 
+                int *buffers, int *pos,
+                int *grid, 
+                int *v, 
+                int *v_i, 
+                int *h_edgeA, 
+                int *h_edgeB,
+                int *results
+                ) {
+    
+    for (int i = 0; i < NGRIDS; ++i) {
+        results[i] = -1;
+    }
 
     for (int i = 0; i < SIZE_NODES; i++) {
         v[i] = 0;
@@ -75,11 +88,8 @@ bool fill_data(const int TOTAL_GRID_SIZE,
 
     // clean the data
     clean_data(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
-               edges_cost, buffers, pos, grid, v, v_i, h_edgeA, h_edgeB);
-
-    for (int i = 0; i < NGRIDS; ++i) {
-        results[i] = -1;
-    }
+               edges_cost, buffers, pos, grid, v, v_i, h_edgeA,
+               h_edgeB, results);
 
     for (int i = 0; i < RANDOM_SIZE; ++i)
         randomvec[i] = (double) rand() / (double) (RAND_MAX);
@@ -142,7 +152,7 @@ bool fill_data(const int TOTAL_GRID_SIZE,
             pos[n * SIZE_NODES + outputs[j]] = pe_out[j];
         }
 
-        //greedy_solution(n, SIZE_NODES, TOTAL_GRID_SIZE, pos, grid, table);
+        //greedy_solution(n, SIZE_NODES, TOTAL_GRID_SIZE, pos, grid, table, inputs, g);
 
         for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
             if (grid[n * TOTAL_GRID_SIZE + i] == -1) {

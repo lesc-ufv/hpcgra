@@ -153,7 +153,7 @@ bool fill_data(const int TOTAL_GRID_SIZE,
         }
 
         if (!greedy_solution(n, SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE, 
-            pos, grid, table, inputs, g)){
+            pos, grid, table, inputs, g, pe)){
             results[n] = MAXVALUE;
             c++;
         }

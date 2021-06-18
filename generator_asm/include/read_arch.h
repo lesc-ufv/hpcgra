@@ -15,12 +15,8 @@ typedef struct pe_t {
     bool acc;
     vector<int> neighbors;
     vector<int> elastic_queue;
-    vector<int> isa;
+    bool isa[SIZE_TYPE];
     vector<int> inputs, outputs, basics;
-
-    vector<int> get_inputs() { return inputs; }
-    vector<int> get_outputs() { return outputs; }
-    vector<int> get_basics() { return basics; }
 } pe_t;
 
 bool read_arch(string &arch_file, vector<pe_t> &pe) {
@@ -47,7 +43,11 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
             pe_t aux_pe;
             aux_pe.id = data["pe"][i]["id"].asInt();
             aux_pe.type = map_type[data["pe"][i]["type"].asString()];
-            aux_pe.isa.push_back(aux_pe.type);
+
+            for (int j = 0; j < SIZE_TYPE; ++j)
+                aux_pe.isa[j] = false;
+
+            aux_pe.isa[aux_pe.type] = true;
 
             size_neighbors = data["pe"][i]["neighbors"].size();
             for (int j = 0; j < size_neighbors; ++j) {
@@ -65,9 +65,8 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
 
             size_isa = data["pe"][i]["isa"].size();
             for (int j = 0; j < size_isa; ++j) {
-                aux_pe.isa.push_back(map_type[data["pe"][i]["isa"][j].asString()]);
+                aux_pe.isa[map_type[data["pe"][i]["isa"][j].asString()]] = true;
             }
-            sort(aux_pe.isa.begin(), aux_pe.isa.end());
 
             pe.push_back(aux_pe);
         }

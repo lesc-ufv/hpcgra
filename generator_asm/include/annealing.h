@@ -19,8 +19,6 @@ void annealing(const int N,
 
     int localGrid[TOTAL_GRID_SIZE];
     int localPos[SIZE_NODES];
-    int bestGrid[TOTAL_GRID_SIZE];
-    int bestPos[TOTAL_GRID_SIZE];
 
     int currentCost = results[N];
     int best_cost = currentCost;
@@ -33,10 +31,10 @@ void annealing(const int N,
     const double LIMIT = 0.00001;
 
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
-        localGrid[i] = bestGrid[i] = grid[N * TOTAL_GRID_SIZE + i];
+        localGrid[i] = grid[N * TOTAL_GRID_SIZE + i];
     }
     for (int i = 0; i < SIZE_NODES; ++i) {
-        localPos[i] = bestPos[i] = pos[N * SIZE_NODES + i];
+        localPos[i] = pos[N * SIZE_NODES + i];
     }
 
     while (T >= LIMIT) {
@@ -46,16 +44,12 @@ void annealing(const int N,
                 node1 = localGrid[i];
                 node2 = localGrid[j];
 
-                //printf("%d %d\n", node1, node2);
                 //if we're looking at 2 empty spaces, skip                   
                 if (node1 == -1 && node2 == -1)
                     continue;
-
-                //printf("i=%d j=%d\n", i,  j);
-
-                if (node2 != -1 && find(pe[i].isa.begin(), pe[i].isa.end(), g.get_code(node2)) != pe[i].isa.begin())
+                if (node2 != -1 && !pe[i].isa[g.get_code(node2)])
                     continue;
-                if (node1 != -1 && find(pe[j].isa.begin(), pe[j].isa.end(), g.get_code(node1)) != pe[j].isa.begin())
+                if (node1 != -1 && !pe[j].isa[g.get_code(node1)])
                     continue;
 
                 /*printf("Sol: ");
@@ -110,15 +104,6 @@ void annealing(const int N,
                 random = randomvec[randomctrl++];
                 if (randomctrl == 1000000) randomctrl = 0;
 
-                // Improvement: save the better results
-                if (best_cost > nextCost) {
-                    best_cost = nextCost;
-                    if (node1 != -1) bestPos[node1] = j;
-                    if (node2 != -1) bestPos[node2] = i;
-                    bestGrid[j] = node1;
-                    bestGrid[i] = node2;
-                }
-
                 //if cost after changes is less than before or if cost is higher 
                 //but we're in the annealing probanility range, return
                 if (nextCost <= currentCost || random <= valor) {
@@ -136,9 +121,11 @@ void annealing(const int N,
     }
 
     // update the results
-    for (int i = 0; i < TOTAL_GRID_SIZE; ++i) grid[N * TOTAL_GRID_SIZE + i] = bestGrid[i];
-    for (int i = 0; i < SIZE_NODES; ++i) pos[N * SIZE_NODES + i] = bestPos[i];
-    results[N] = currentCost;
+    if (results[N] > currentCost) {
+        for (int i = 0; i < TOTAL_GRID_SIZE; ++i) grid[N * TOTAL_GRID_SIZE + i] = localGrid[i];
+        for (int i = 0; i < SIZE_NODES; ++i) pos[N * SIZE_NODES + i] = localPos[i];
+        results[N] = currentCost;
+    }
 }
 
 #endif

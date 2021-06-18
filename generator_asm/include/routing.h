@@ -78,14 +78,14 @@ bool try_route_aStar(
             //printf("node %d son %d map_pe %d a %d min_rota %d\n", node, son, map_pe[node][son], a, min_rota[node]);
             if (map_pe[node][son] != -1 && map_pe[node][son] != a && son != pe_a) 
                 continue;    
-            if (map_pe[node][son] != a && min_rota[node] < 0) { 
+            if (map_pe[node][son] != a && min_rota[node] <= 0) { 
                 continue;
             }
             //printf("passou\n");
 
             cost_h = table[son][pe_b];
             // give preference to multicast (save wire and ports)
-            cost_g = (map_pe[node][son] == a) ? -100 : 0; 
+            cost_g = (map_pe[node][son] == a) ? -1 : 0; 
 
             cost = cost_h + cost_g;
             //printf("ch: %d, cg: %d, cost: %d \n", cost_h, cost_g, cost);
@@ -161,9 +161,9 @@ bool try_route_aStar(
             route[key].push_back(new_path[i].first);
             route[key].push_back(new_path[i].second);
             pe_route[pe_aux_a].push_back(make_pair(pe_aux_a, pe_aux_b));
-            min_rota[pe_aux_a]--;
+            // se for multicast
+            min_rota[pe_aux_a]--; 
             map_pe[pe_aux_a][pe_aux_b] = a;
-            //remove_element(new_path[i].first, new_path[i].second, grid_route);
         }
         //printf("\n\n");
         return true;

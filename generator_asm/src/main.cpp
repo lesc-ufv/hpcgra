@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
 
-    auto timetime = time(nullptr);
+    auto timetime = 1624033171; //time(nullptr);
     printf("%ld\n", timetime);
     srand(timetime);
 

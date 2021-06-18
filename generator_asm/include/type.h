@@ -34,7 +34,7 @@
 std::map<std::string, int> map_type = {{"input", 0},
                           {"output", 1},
                           {"inout", 2},
-                          {"basic", 3}, // type_
+                          {"basic", 3},
                           {"add", 4},
                           {"sub", 5},
                           {"mul", 6},
@@ -58,5 +58,7 @@ std::map<std::string, int> map_type = {{"input", 0},
                           {"shr", 24},
                           {"max", 25},
                           {"min", 26}};
+
+#define SIZE_TYPE 27
 
 #endif

@@ -46,7 +46,8 @@ bool greedy_solution(
     int *grid,
     int **table,
     vector<int> inputs,
-    Graph g
+    Graph g,
+    vector<pe_t> &pe
 ) {
 
     queue<int> q;
@@ -88,7 +89,8 @@ bool greedy_solution(
 
                     if (pos_b_x > -1 && pos_b_x < SIZE_GRID && 
                         pos_b_y > -1 && pos_b_y < SIZE_GRID && 
-                        grid[pos_global_b] == -1) {
+                        grid[pos_global_b] == -1 && 
+                        pe[pos_local_b].isa[g.get_code(b)]) {
                             pos[pos_b] = pos_local_b;
                             grid[pos_global_b] = b;
                             found = true;

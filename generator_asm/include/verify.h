@@ -29,12 +29,13 @@ bool verify(const int SIZE_NODES,
     map<int, int> alu;
     int type_alu;
     for (int i = 0; i < pe.size(); ++i) {
-        for (int j = 0; j < pe[i].isa.size(); ++j) {
-            type_alu = pe[i].isa[j];
-            if (alu.count(type_alu) > 0) {
-                alu[type_alu]++;
+        for (int j = 0; j < SIZE_TYPE; ++j) {
+            if (!pe[i].isa[j]) continue;
+            
+            if (alu.count(j) > 0) {
+                alu[j]++;
             } else {
-                alu[type_alu] = 1;
+                alu[j] = 1;
             }
         }
     }

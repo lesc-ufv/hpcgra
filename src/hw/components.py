@@ -345,7 +345,7 @@ class Components:
             sel_in = m.Input('sel_in', p_in['sel'].width)
             sel_out = m.Input('sel_out', p_out['sel'].width)
             inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [('out%d'%i,m.OutputReg('out%d' % i, width)) for i in range(num_out)]
+            outputs = [('out%d'%i,m.Output('out%d' % i, width)) for i in range(num_out)]
             sin_sout_out = [('out%d' % i, m.Wire('sin_sout%d' % i, width)) for i in range(routes)]
             sin_sout_in = [('in%d' % i, sin_sout_out[i][1]) for i in range(routes)]
             m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + sin_sout_out)

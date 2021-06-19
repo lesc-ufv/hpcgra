@@ -24,39 +24,35 @@ class CgraAssembler:
         self.dot = ""
         self.dot_op = {}
         self.dot_edges = {}
+        self.dot_tips = {}
         self.pr_dot = pr_dot
 
     def create_dot_arch(self):
-        L = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
-        C = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
         self.dot = "digraph layout{\nrankdir=TB;\nsplines=ortho;\n"
-        self.dot += "node [style=filled shape=square fixedsize=true width=0.5];\n"
-        for i in range(L):
-            for j in range(C):
-                id = get_id(i, j, C)
-                if id in self.dot_op.keys():
-                    self.dot += self.dot_op[id] % (i, j)
-                else:
-                    self.dot += "x%dy%d[label=\"%d\", fillcolor=white];\n" % (i, j, id)
+        self.dot += "node [style=filled shape=square fixedsize=false width=0.6];\n"
+
+        for id, pe in self.cgra.array_pe_arch.items():
+            if id in self.dot_op.keys():
+                self.dot += self.dot_op[id].replace("@",self.dot_tips[id])
+            else:
+                self.dot += "pe%d[label=\"%d\", fillcolor=white];\n" % (id, id)
 
         self.dot += "edge [constraint=false];\n"
-        for i in range(L):
-            for j in range(C):
-                id_src = get_id(i, j, C)
-                for k in range(L):
-                    for l in range(C):
-                        id_dst = get_id(k, l, C)
-                        id = "%d-%d" % (id_src, id_dst)
-                        if id in self.dot_edges.keys():
-                            self.dot += self.dot_edges[id] % (i, j, k, l)
+        for id, pe in self.cgra.array_pe_arch.items():
+            for n in pe['neighbors']:
+                default = "pe%d -> pe%d[style=\"penwidth(0.1)\", color=grey89];\n" % (id, n)
+                self.dot += self.dot_edges.get("%d-%d" % (id, n), default)
 
+        L = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
+        C = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
         self.dot += "edge [constraint=true, style=invis];\n"
         for i in range(L):
-            self.dot += "".join(["x%dy%d ->" % (j, i) for j in range(C - 1)]) + " x%dy%d;\n" % (C - 1, i)
+            self.dot += "".join(["pe%d ->" % get_id(j, i, C) for j in range(C - 1)]) + " pe%d;\n" % get_id(C - 1, i, C)
 
         for i in range(L):
-            self.dot += "rank = same {" + "".join(["x%dy%d ->" % (i, j) for j in range(C - 1)]) + "x%dy%d };\n" % (
-                i, C - 1)
+            self.dot += "rank = same {" + "".join(
+                ["pe%d ->" % get_id(i, j, C) for j in range(C - 1)]) + "pe%d };\n" % get_id(
+                i, C - 1, C)
 
         self.dot += "}\n"
 
@@ -78,6 +74,7 @@ class CgraAssembler:
         self.dot = ""
         self.dot_op = {}
         self.dot_edges = {}
+        self.dot_tips = {}
 
     def parse(self):
         f = open(self.asm_file)
@@ -168,10 +165,15 @@ class CgraAssembler:
             self.used_inputs.append(pe)
 
         if "istream" in alu_src:
-            self.dot_op[pe] = "x%dy%d [label=\"" + "in\\n%d" % (pe) + "\", fillcolor=snow2];\n"
+            self.dot_op[pe] = "pe%d [label=\"in\\n%d\",tooltip=\"%s\", fillcolor=snow2];\n" % (pe, pe,"@")
         else:
-            self.dot_op[pe] = "x%dy%d [label=\"" + "%s\\n%d" % (op, pe) + "\", fillcolor=" + get_dot_color_by_op(
-                op) + "];\n"
+            self.dot_op[pe] = "pe%d [label=\"%s\\n%d\",tooltip=\"%s\" ,fillcolor=%s];\n" % (
+            pe, op, pe, "@", get_dot_color_by_op(op))
+
+        if self.dot_tips.get(pe):
+            self.dot_tips[pe] += " ".join(inst) + "\\n"
+        else:
+            self.dot_tips[pe] = " ".join(inst) + "\\n"
 
         return True, [pe, op, alu_src, delays]
 
@@ -191,12 +193,17 @@ class CgraAssembler:
 
         if dst == 'ostream':
             self.used_outputs.append(pe)
-            self.dot_op[pe] = "x%dy%d [label=\"" + "out\n%d" % pe + "\", fillcolor=snow2];\n"
+            self.dot_op[pe] = "pe%d [label=\"out\\n%d\", fillcolor=snow2];\n" % (pe, pe)
         else:
             if src == 'alu':
-                self.dot_edges["%d-%d" % (pe, dst)] = "x%dy%d -> x%dy%d [style=solid, color=red];\n"
+                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [style=\"penwidth(0.1)\", color=red];\n" % (pe, dst)
             else:
-                self.dot_edges["%d-%d" % (pe, dst)] = "x%dy%d -> x%dy%d [style=solid, color=blue];\n"
+                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [style=\"penwidth(0.1)\", color=blue];\n" % (pe, dst)
+
+        if self.dot_tips.get(pe):
+            self.dot_tips[pe] += " ".join(inst) + "\\n"
+        else:
+            self.dot_tips[pe] = " ".join(inst) + "\\n"
 
         return True, [pe, {dst: src}]
 

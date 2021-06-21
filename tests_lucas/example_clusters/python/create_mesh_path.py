@@ -1,4 +1,4 @@
-FILENAME = "../asm/chess.asm"
+FILENAME = "../asm/mesh.asm"
 WRITE = "w"
 
 def main():

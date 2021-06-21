@@ -1,0 +1,24 @@
+{
+    "routes": 4,
+    "acc": false,
+    "id": 0,
+    "isa": [
+        "abs",
+        "add",
+        "and",
+        "mul",
+        "mux",
+        "or",
+        "seq",
+        "sgt",
+        "slt",
+        "sub"
+    ],
+    "neighbors": [],
+    "elastic_queue": [
+        4,
+        4,
+        0
+    ],
+    "type": "basic"
+}

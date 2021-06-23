@@ -1,9 +1,8 @@
 #!/bin/bash
 
-arch="cgra_archs/cgra_one_hop_16x16_8_4.json"
-#arch="cgra_archs/cgra_chess_16x16_8_4.json"
-
 set -e
+
+arch=$1
 
 rm -rf bitstream
 mkdir bitstream

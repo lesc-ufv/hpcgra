@@ -75,13 +75,10 @@ bool try_route_aStar(
             son = n_son[j];
             key = make_pair(node, son);
 
-            //printf("node %d son %d map_pe %d a %d min_rota %d\n", node, son, map_pe[node][son], a, min_rota[node]);
-            if (map_pe[node][son] != -1 && map_pe[node][son] != a && son != pe_a) 
+            //printf("node %d son %d map_pe = %d a = %d min_rota %d\n", node, son, map_pe[node][son], a, min_rota[node]);
+            
+            if (map_pe[node][son] != a && son != pe_a && min_rota[node] < 1) 
                 continue;    
-            if (map_pe[node][son] != a && min_rota[node] <= 0) { 
-                continue;
-            }
-            //printf("passou\n");
 
             cost_h = table[son][pe_b];
             // give preference to multicast (save wire and ports)
@@ -157,13 +154,15 @@ bool try_route_aStar(
             key = make_pair(a, b);
             pe_aux_a = new_path[i].first;
             pe_aux_b = new_path[i].second;
-            //printf("%d %d, ", new_path[i].first, new_path[i].second);
-            route[key].push_back(new_path[i].first);
-            route[key].push_back(new_path[i].second);
+            //printf("%d %d, ", pe_aux_a, pe_aux_b);
+            route[key].push_back(pe_aux_a);
+            route[key].push_back(pe_aux_b);
             pe_route[pe_aux_a].push_back(make_pair(pe_aux_a, pe_aux_b));
             // se for multicast
-            min_rota[pe_aux_a]--; 
-            map_pe[pe_aux_a][pe_aux_b] = a;
+            if (map_pe[pe_aux_a][pe_aux_b] == -1) {
+                min_rota[pe_aux_a]--; 
+                map_pe[pe_aux_a][pe_aux_b] = a;
+            }
         }
         //printf("\n\n");
         return true;
@@ -204,9 +203,8 @@ void routing(
         grid_route[j] = pe[j].neighbors;
         n = pe[j].neighbors.size();
         menor = MIN(pe[j].routes, n);
-        for (int i = 0; i < NGRIDS; ++i) {
+        for (int i = 0; i < NGRIDS; ++i)
             min_rota[i][j] = menor;
-        }
         for (int k = 0; k < NGRIDS; ++k) {
             for (int i = 0; i < n; ++i) {
                 map_pe[k][j][pe[j].neighbors[i]] = -1;
@@ -230,35 +228,20 @@ void routing(
 
                 // verify if router's number is sufficiently
                 if (min_rota[j][pe_a] > 0) {
-                    min_rota[j][pe_a]--;
+                    min_rota[j][pe_a] -= 1;
                     map_pe[j][pe_a][pe_b] = a;
                     pe_route[j][pe_a].push_back(make_pair(pe_a, pe_b));
+                    
+                    route[j][key].push_back(pe_a);
+                    route[j][key].push_back(pe_b);
                 } else { // multicast is resolved by try_route
                     edge[j].push_back(key);
                 }
-
-                // remove of the grid, get the pos(a) and remove the link with pos(b)
-                //remove_element(pe_a, pe_b, grid_route[j].path);
-                //printf("%d %d\n", pe_a, pe_b);
-                route[j][key].push_back(pe_a);
-                route[j][key].push_back(pe_b);
             } else {
                 edge[j].push_back(key);
             }
         }
     }
-
-    /*
-    for (int i = 0; i < NGRIDS; ++i) {
-        for (int j = 0; j < TOTAL_GRID_SIZE; ++j) {
-            printf("%2d: ", j);
-            for (int k = 0; k < grid_route[i].path[j].size(); ++k) {
-                printf("%d ", grid_route[i].path[j][k]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }*/
 
     // resolve the cost greater than 1
     for (int j = 0; j < NGRIDS; ++j) {

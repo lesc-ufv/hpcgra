@@ -2,8 +2,8 @@
 
 int main(int argc, char **argv) {
 
-    auto timetime = 1624033171; //time(nullptr);
-    printf("%ld\n", timetime);
+    auto timetime = time(nullptr);
+    //printf("%ld\n", timetime);
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g

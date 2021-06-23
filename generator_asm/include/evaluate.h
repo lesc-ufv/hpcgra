@@ -54,4 +54,14 @@ void print_results(const double time_data,
     }
 }
 
+bool verify_solution(int *results, const int N) {
+    int sum = 0;
+    for (int i = 0; i < N; ++i) {
+        sum += (results[i] == MAXVALUE);
+    }
+
+    if (sum == N) return false;
+    return true;
+}
+
 #endif

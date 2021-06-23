@@ -15,3 +15,4 @@
 
 ../../bin/hpcgra --arch chess -s 8x8 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 8 16 24 32 40 48 56 --output 7 15 23 31 39 47 55 63 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_8x8_8_4.json
 
+../../bin/hpcgra --arch chess -s 20x20 --isa or and seq abs sgt slt mux sub mul add --fifos 2 2 0 --input 40 100 --output 180 220 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_20x20_2_4.json

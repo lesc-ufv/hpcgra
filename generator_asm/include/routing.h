@@ -55,7 +55,7 @@ bool try_route_aStar(
 
     int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
-    //printf("\nPE %d (%d) -> PE %d (%d)\n", pe_a, a, pe_b, b);
+    //if (pe_a == 233 || pe_a == 237)
 
     // loop while the open is not empty
     while (!open.empty()) {
@@ -64,6 +64,7 @@ bool try_route_aStar(
         cost = get<2>(open.top());
         open.pop();
 
+        //if (pe_a == 233 || pe_a == 237)
         //printf("\nnode choose: %d\n", node);
 
         cost_b = 9999;
@@ -75,10 +76,13 @@ bool try_route_aStar(
             son = n_son[j];
             key = make_pair(node, son);
 
+            //if (pe_a == 233 || pe_a == 237)
             //printf("node %d son %d map_pe = %d a = %d min_rota %d\n", node, son, map_pe[node][son], a, min_rota[node]);
             
-            if (map_pe[node][son] != a && son != pe_a && min_rota[node] < 1) 
+            if (map_pe[node][son] != a && map_pe[node][son] != -1) 
                 continue;    
+            if (map_pe[node][son] != a && min_rota[node] < 1)
+                continue;
 
             cost_h = table[son][pe_b];
             // give preference to multicast (save wire and ports)

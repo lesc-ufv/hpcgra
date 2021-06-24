@@ -1,4 +1,5 @@
 #dataflow="chebyshev"
+#dataflow="fir16"
 dataflow="fir64"
 #dataflow="chebyshev_8_copy"
 

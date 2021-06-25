@@ -22,10 +22,10 @@ int main(int argc, char *argv[]) {
     dataFlow->toJSON("../chebyshev.json");
     dataFlow->toDOT("../chebyshev.dot");
     
-//    for(int i=0;i < 1024;i++){
-//      std::cout << data_out[i] << " ";
-//    }
-//    std::cout << std::endl;
+   for(int i=0;i < 1024;i++){
+     std::cout << data_out[i] << " ";
+   }
+   std::cout << std::endl;
     
     delete dataFlow;
 

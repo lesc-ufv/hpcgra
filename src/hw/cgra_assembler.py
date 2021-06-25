@@ -32,8 +32,8 @@ class CgraAssembler:
         self.dot += "node [style=filled shape=square fixedsize=false width=0.6];\n"
 
         for id, pe in self.cgra.array_pe_arch.items():
-            if id in self.dot_op.keys():
-                self.dot += self.dot_op[id].replace("@",self.dot_tips[id])
+            if self.dot_op.get(id):
+                self.dot += self.dot_op[id].replace("@", self.dot_tips[id])
             else:
                 self.dot += "pe%d[label=\"%d\", fillcolor=white];\n" % (id, id)
 
@@ -165,10 +165,10 @@ class CgraAssembler:
             self.used_inputs.append(pe)
 
         if "istream" in alu_src:
-            self.dot_op[pe] = "pe%d [label=\"in\\n%d\",tooltip=\"%s\", fillcolor=snow2];\n" % (pe, pe,"@")
+            self.dot_op[pe] = "pe%d [label=\"in\\n%d\",tooltip=\"%s\", fillcolor=lightgreen];\n" % (pe, pe, "@")
         else:
             self.dot_op[pe] = "pe%d [label=\"%s\\n%d\",tooltip=\"%s\" ,fillcolor=%s];\n" % (
-            pe, op, pe, "@", get_dot_color_by_op(op))
+                pe, op, pe, "@", get_dot_color_by_op(op))
 
         if self.dot_tips.get(pe):
             self.dot_tips[pe] += " ".join(inst) + "\\n"
@@ -193,12 +193,15 @@ class CgraAssembler:
 
         if dst == 'ostream':
             self.used_outputs.append(pe)
-            self.dot_op[pe] = "pe%d [label=\"out\\n%d\", fillcolor=snow2];\n" % (pe, pe)
+            self.dot_op[pe] = "pe%d [label=\"out\\n%d\",tooltip=\"%s\", fillcolor=lightpink];\n" % (pe, pe, "@")
         else:
+            if not self.dot_op.get(pe):
+                self.dot_op[pe] = "pe%d [label=\"%d\",tooltip=\"%s\", fillcolor=lightyellow];\n" % (pe, pe, "@")
             if src == 'alu':
                 self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [style=\"penwidth(0.1)\", color=red];\n" % (pe, dst)
             else:
-                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [style=\"penwidth(0.1)\", color=blue];\n" % (pe, dst)
+                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [style=\"penwidth(0.1)\", color=blue];\n" % (
+                    pe, dst)
 
         if self.dot_tips.get(pe):
             self.dot_tips[pe] += " ".join(inst) + "\\n"
@@ -256,18 +259,18 @@ class CgraAssembler:
         if self.last_error == '':
             routing = {}
             for line, c in self.routes_inst.items():
-                if c[0] in routing.keys():
-                    routing[c[0]].update(c[1])
+                if routing.get(c[0]):
+                    routing[c[0]].append((line, c[1]))
                 else:
-                    routing[c[0]] = c[1]
+                    routing[c[0]] = [(line, c[1])]
 
-            for line, co in self.routes_inst.items():
-                r, v = self.cc.create_router_conf(co[0], routing[co[0]])
+            for pe in routing:
+                r, lines, v = self.cc.create_router_conf(pe, routing[pe])
                 if r:
                     for c in v:
                         machine_code += c + '\n'
                 else:
-                    self.last_error = 'line %d: %s' % (line, v)
+                    self.last_error = 'line(s) %s: %s' % (lines, v)
                     break
 
         if self.last_error:

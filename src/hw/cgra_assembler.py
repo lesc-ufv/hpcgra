@@ -141,7 +141,6 @@ class CgraAssembler:
                 i = tok[j]
                 if '#' in i:
                     delays.append((port, int(i[1:])))
-                    port += 1
                 else:
                     if 'alu' in i or 'istream' in i or 'acc' in i:
                         alu_src.append(i[1:])
@@ -152,6 +151,7 @@ class CgraAssembler:
                     else:
                         alu_src.append('const')
                         self.const.append((line, pe, len(alu_src) - 1, int(i)))
+                    port += 1
 
             ops = CgraAluOperations.get_operations()
             if ops[op].get_num_operand() != len(alu_src):

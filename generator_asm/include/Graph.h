@@ -141,7 +141,9 @@ Graph::Graph(string filename) {
         u = atoi(e["source"].asCString());
         v = atoi(e["target"].asCString());
         aux_e = make_tuple(u, v, atoi(e["port"].asCString()));
+        
         this->port[make_pair(u,v)].push_back(atoi(e["port"].asCString()));
+        
         // verify if edge is same
         this->edges.push_back(aux_e);
         this->node_out_degree[u].push_back(v);

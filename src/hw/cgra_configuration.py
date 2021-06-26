@@ -124,6 +124,9 @@ class CgraConfiguration:
 
     def create_router_conf(self, id, routing):
 
+        if id == 90:
+            print()
+
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
@@ -183,14 +186,9 @@ class CgraConfiguration:
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
         route_sel_in = ''
         route_sel_out = ''
-        num_out = len(neighbors)
-        if pe_is_output:
-            num_out += 1
-        route_sel_in_bits = bits(num_out + 1)  # plus one because alu output
-        route_sel_out_bits = bits(routes)
-
         if routes > 0:
             if routes == 1:
+                route_sel_in_bits = bits(len(neighbors) + 1)  # plus one because alu output
                 for i, _ in route_tb.items():
                     if i == 'alu':
                         route_sel_in = format(0, '0%db' % route_sel_in_bits)
@@ -202,7 +200,8 @@ class CgraConfiguration:
                     return False, 'PE %s can perform only %d routing.' % (id, routes)
                 else:
                     if routes >= len(neighbors):
-                        route_sel_in_v = [format(0, '0%db' % route_sel_in_bits) for _ in range(num_out)]
+                        route_sel_in_bits = bits(len(neighbors) + 1)  # plus one because alu output
+                        route_sel_in_v = [format(0, '0%db' % route_sel_in_bits) for _ in range(len(neighbors) + 1)]
                         for i, vo in route_tb.items():
                             for o in vo:
                                 if o == 'ostream':
@@ -218,6 +217,11 @@ class CgraConfiguration:
                         route_sel_in_v.reverse()
                         route_sel_in = "".join(route_sel_in_v)
                     else:
+                        num_out = len(neighbors)
+                        if pe_is_output:
+                            num_out += 1
+                        route_sel_in_bits = bits(len(neighbors) + 1)  # plus one because alu output
+                        route_sel_out_bits = bits(routes)
                         route_sel_in_v = []
                         route_sel_out_v = [format(0, '0%db' % route_sel_out_bits) for _ in range(num_out)]
                         for i, vo in route_tb.items():

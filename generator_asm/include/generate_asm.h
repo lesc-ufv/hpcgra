@@ -125,17 +125,10 @@ void generate_asm(Graph g,
         son = g.get_sucessors(dad);
         for (int i = 0; i < son.size(); ++i) {
             if (!visited[son[i]]) {
-                routed[dad][son[i]]--;
                 rota = route[best_index][make_pair(dad, son[i])];
-                /*
-                printf("%d -> %d rota: ", dad, son[i]);
-                for (int j = 0, n = rota.size(); j < n; j += 1) {
-                    printf("%d ", rota[j]);
-                }
-                printf("\n");*/
+                
                 // creating routing
                 for (int j = 0, n = rota.size(); j < n; j += 2) {
-                    //printf("%d %d\n", rota[j], rota[j+1]);
 
                     if (routed[rota[j]][rota[j+1]]) continue;
                     routed[rota[j]][rota[j+1]] = true;

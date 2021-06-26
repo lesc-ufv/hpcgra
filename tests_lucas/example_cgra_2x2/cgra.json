@@ -9,16 +9,24 @@
         1,
         2
       ],
-      "routes": 1,
+      "routes": 4,
       "elastic_queue": [
         4,
-        4
+        4,
+        0
       ],
       "acc": false,
       "isa": [
-        "add",
-        "mul",
-        "sub"
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
       ]
     },
     {
@@ -28,16 +36,24 @@
         0,
         3
       ],
-      "routes": 1,
+      "routes": 4,
       "elastic_queue": [
         4,
-        4
+        4,
+        0
       ],
       "acc": false,
       "isa": [
-        "add",
-        "mul",
-        "sub"
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
       ]
     },
     {
@@ -47,16 +63,24 @@
         0,
         3
       ],
-      "routes": 1,
+      "routes": 4,
       "elastic_queue": [
         4,
-        4
+        4,
+        0
       ],
       "acc": false,
       "isa": [
-        "add",
-        "mul",
-        "sub"
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
       ]
     },
     {
@@ -66,16 +90,24 @@
         1,
         2
       ],
-      "routes": 1,
+      "routes": 4,
       "elastic_queue": [
         4,
-        4
+        4,
+        0
       ],
       "acc": false,
       "isa": [
-        "add",
-        "mul",
-        "sub"
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
       ]
     }
   ]

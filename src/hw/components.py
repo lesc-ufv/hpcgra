@@ -32,6 +32,7 @@ class Components:
         data_in = m.Input('in', data_width)
         data_out = m.Output('out', data_width)
 
+        m.EmbeddedCode('(* keep = "true" *)')
         regs = m.Reg('regs', data_width, num_stages)
         i = m.Integer('i')
         m.EmbeddedCode('')
@@ -237,6 +238,7 @@ class Components:
             latency = m.Input('latency', max_latency_bits)
             din = m.Input('in', width)
             dout = m.Output('out', width)
+            m.EmbeddedCode('(* keep = "true" *)')
             shift_reg = m.Reg('shift_reg', width, PE_LATENCY * max_latency)
             i = m.Integer('i')
             m.Always(Posedge(clk))(
@@ -1223,6 +1225,7 @@ class Components:
             name = 'out_%d' % i
             outputs.append(m.Output(name, DATA_WIDTH))
 
+        m.EmbeddedCode('(* keep = "true" *)')
         regs = m.Reg('r', DATA_WIDTH, r)
 
         m.Always(Posedge(clk))(
@@ -1246,6 +1249,7 @@ class Components:
         inn = [m.Input('in_%d' % i) for i in range(num_input)]
         out = m.Output('out')
         s = self.calc_and_tree_size_helper(num_input, radix)
+        m.EmbeddedCode('(* keep = "true" *)')
         reg = m.Reg('r', s)
         stack1 = []
         stack2 = []

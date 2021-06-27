@@ -172,7 +172,7 @@ class CgraAssembler:
             delays_str += "%d "%d
 
         if "istream" in alu_src:
-            self.dot_op[pe] = "pe%d [label=\"in\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=lightgreen];\n" % (pe,delays_str, pe, "@")
+            self.dot_op[pe] = "pe%d [label=\"in\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=greenyellow];\n" % (pe,delays_str, pe, "@")
         else:
             self.dot_op[pe] = "pe%d [label=\"%s\\n%s\\n%d\",tooltip=\"%s\" ,fontsize=9, fillcolor=%s];\n" % (
                 pe, op, delays_str, pe, "@", get_dot_color_by_op(op))

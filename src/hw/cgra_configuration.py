@@ -124,9 +124,6 @@ class CgraConfiguration:
 
     def create_router_conf(self, id, routing):
 
-        if id == 90:
-            print()
-
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 

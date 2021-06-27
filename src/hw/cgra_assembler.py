@@ -29,13 +29,13 @@ class CgraAssembler:
 
     def create_dot_arch(self):
         self.dot = "digraph layout{\nrankdir=TB;\nsplines=ortho;\n"
-        self.dot += "node [style=filled shape=square fixedsize=false width=0.6];\n"
+        self.dot += "node [style=filled shape=square fixedsize=true width=0.6];\n"
 
         for id, pe in self.cgra.array_pe_arch.items():
             if self.dot_op.get(id):
                 self.dot += self.dot_op[id].replace("@", self.dot_tips[id])
             else:
-                self.dot += "pe%d[label=\"%d\", fillcolor=white];\n" % (id, id)
+                self.dot += "pe%d[label=\"%d\", fontsize=8, fillcolor=white];\n" % (id, id)
 
         self.dot += "edge [constraint=false];\n"
         for id, pe in self.cgra.array_pe_arch.items():
@@ -164,11 +164,18 @@ class CgraAssembler:
         if is_istream:
             self.used_inputs.append(pe)
 
+        delays_str =''
+        delays_v = [0 for _ in range(3)]
+        for p,d in delays:
+            delays_v[p] = d
+        for d in delays_v:
+            delays_str += "%d "%d
+
         if "istream" in alu_src:
-            self.dot_op[pe] = "pe%d [label=\"in\\n%d\",tooltip=\"%s\", fillcolor=lightgreen];\n" % (pe, pe, "@")
+            self.dot_op[pe] = "pe%d [label=\"in\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=lightgreen];\n" % (pe,delays_str, pe, "@")
         else:
-            self.dot_op[pe] = "pe%d [label=\"%s\\n%d\",tooltip=\"%s\" ,fillcolor=%s];\n" % (
-                pe, op, pe, "@", get_dot_color_by_op(op))
+            self.dot_op[pe] = "pe%d [label=\"%s\\n%s\\n%d\",tooltip=\"%s\" ,fontsize=9, fillcolor=%s];\n" % (
+                pe, op, delays_str, pe, "@", get_dot_color_by_op(op))
 
         if self.dot_tips.get(pe):
             self.dot_tips[pe] += " ".join(inst) + "\\n"
@@ -193,14 +200,14 @@ class CgraAssembler:
 
         if dst == 'ostream':
             self.used_outputs.append(pe)
-            self.dot_op[pe] = "pe%d [label=\"out\\n%d\",tooltip=\"%s\", fillcolor=lightpink];\n" % (pe, pe, "@")
+            self.dot_op[pe] = "pe%d [label=\"out\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightpink];\n" % (pe, pe, "@")
         else:
             if not self.dot_op.get(pe):
-                self.dot_op[pe] = "pe%d [label=\"%d\",tooltip=\"%s\", fillcolor=lightyellow];\n" % (pe, pe, "@")
+                self.dot_op[pe] = "pe%d [label=\"router\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightyellow];\n" % (pe, pe, "@")
             if src == 'alu':
-                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [style=\"penwidth(0.1)\", color=red];\n" % (pe, dst)
+                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=red];\n" % (pe, dst)
             else:
-                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [style=\"penwidth(0.1)\", color=blue];\n" % (
+                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=blue];\n" % (
                     pe, dst)
 
         if self.dot_tips.get(pe):

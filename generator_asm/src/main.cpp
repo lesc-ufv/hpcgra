@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
 
-    auto timetime = time(nullptr);
+    auto timetime = 1624827342; //time(nullptr);
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
@@ -149,7 +149,7 @@ int main(int argc, char **argv) {
 
     // generate assembly code
     generate_asm(g, best_index, SIZE_NODES, TOTAL_GRID_SIZE, pos,
-                 buffers_EDGE,path_asm, route, edges_cost);
+                 buffers_EDGE, path_asm, route, edges_cost);
 
     auto stop_total = high_resolution_clock::now();
 
@@ -160,6 +160,8 @@ int main(int argc, char **argv) {
     // print the time and the best results
     print_results(time_data, time_table, time_place, time_route, time_buffer,
                   time_total, best_index, worst_fifo, results);
+    
+    print_pr_graph(g, pos, best_index, edges_cost, buffers_EDGE, path_asm, route);
 
     // clean memory
     delete randomvec;

@@ -137,11 +137,14 @@ bool try_route_aStar(
             
             if (nodo == pe_a) {
                 break;
+            } else if (get<0>(path[i]) == -1) {
+                /*if (find(new_path.begin(), new_path.end(), 
+                    make_pair(get<1>(path[i]), nodo)) == new_path.end())*/
+                        new_path.push_back(make_pair(get<1>(path[i]), nodo));
+                break;
             } else if (get<2>(path[i]) == nodo) {
                 new_path.push_back(make_pair(get<1>(path[i]), nodo));
-                if (get<0>(path[i]) != -1)
-                    new_path.push_back(make_pair(get<0>(path[i]), get<1>(path[i])));
-
+                new_path.push_back(make_pair(get<0>(path[i]), get<1>(path[i])));
                 /*if (pe_a == 84) {
                     printf("%d -> %d\n", get<1>(path[i]), get<2>(path[i]));
                     printf("%d -> %d\n", get<0>(path[i]), get<1>(path[i]));
@@ -156,7 +159,7 @@ bool try_route_aStar(
         results += new_path.size() - edges_cost[make_pair(a, b)];
         edges_cost[make_pair(a, b)] = new_path.size();
 
-        /*printf("PATH: ");
+        /*printf("size = %d PATH: ", new_path.size());
         for (int i = 0; i < new_path.size(); ++i) {
             printf("%d %d ", new_path[i].first, new_path[i].second);
         }

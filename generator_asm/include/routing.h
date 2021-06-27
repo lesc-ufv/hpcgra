@@ -55,7 +55,9 @@ bool try_route_aStar(
 
     int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
-    //if (pe_a == 233 || pe_a == 237)
+    /*if (pe_a == 84) {
+        printf("try: %d -> %d\n", pe_a, pe_b);
+    }*/
 
     // loop while the open is not empty
     while (!open.empty()) {
@@ -120,23 +122,31 @@ bool try_route_aStar(
         vector<pair<int, int>> new_path;
         int nodo = pe_b;
 
-        /*printf("NEW-PATH: ");
+        /*if (pe_a == 84) {
+        printf("NEW-PATH: ");
         for (int i = path.size() - 1; i > -1; --i) {
             printf("%d %d %d, ", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]));
         }
-        printf("\n");*/
+        printf("\n");
+        }*/
 
         for (int i = path.size() - 1; i > -1; --i) {
-            //printf("%d -> %d -> %d nodo %d\n", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]), nodo);
-            if (nodo == pe_a || get<0>(path[i]) == -1) {
-                //new_path.push_back(make_pair(pe_a, get<2>(path[i])));
+            /*if (pe_a == 84) {
+                printf("%d -> %d -> %d nodo choose: %d\n", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]), nodo);
+            }*/
+            
+            if (nodo == pe_a) {
                 break;
             } else if (get<2>(path[i]) == nodo) {
-                new_path.push_back(make_pair(get<1>(path[i]), get<2>(path[i])));
-                new_path.push_back(make_pair(get<0>(path[i]), get<1>(path[i])));
-                //printf("%d -> %d\n", get<1>(path[i]), get<2>(path[i]));
-                //printf("%d -> %d\n", get<0>(path[i]), get<1>(path[i]));
-                nodo = get<1>(path[i]);
+                new_path.push_back(make_pair(get<1>(path[i]), nodo));
+                if (get<0>(path[i]) != -1)
+                    new_path.push_back(make_pair(get<0>(path[i]), get<1>(path[i])));
+
+                /*if (pe_a == 84) {
+                    printf("%d -> %d\n", get<1>(path[i]), get<2>(path[i]));
+                    printf("%d -> %d\n", get<0>(path[i]), get<1>(path[i]));
+                }*/
+                nodo = get<0>(path[i]);
             }
         }
         //printf("\n");

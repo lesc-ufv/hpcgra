@@ -3,7 +3,6 @@
 int main(int argc, char **argv) {
 
     auto timetime = time(nullptr);
-    printf("%ld\n", timetime);
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
@@ -157,6 +156,7 @@ int main(int argc, char **argv) {
     duration = (stop_total - start_total);
     time_total = duration.count();
 
+    printf("\nSeed\t\t : %ld", timetime);
     // print the time and the best results
     print_results(time_data, time_table, time_place, time_route, time_buffer,
                   time_total, best_index, worst_fifo, results);

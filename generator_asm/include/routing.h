@@ -33,7 +33,7 @@ bool try_route_aStar(
         vector<int> *grid_route,
         map_pair_vector_int &route,
         int &results,
-        map<pair<int, int>, int> edges_cost,
+        map<pair<int, int>, int> &edges_cost,
         int **table,
         int *min_rota,
         vector<pair<int,int>> *pe_route,
@@ -53,11 +53,18 @@ bool try_route_aStar(
     bool found = false, multicast;
     map<pd, int> closed;
 
+    bool visited[TOTAL_GRID_SIZE];
+
+    for (int i = 0; i < TOTAL_GRID_SIZE; ++i)
+        visited[i] = false;
+
     int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
     /*if (pe_a == 84) {
         printf("try: %d -> %d\n", pe_a, pe_b);
     }*/
+
+    visited[pe_a] = true;
 
     // loop while the open is not empty
     while (!open.empty()) {
@@ -65,6 +72,8 @@ bool try_route_aStar(
         node = get<1>(open.top());
         cost = get<2>(open.top());
         open.pop();
+
+        visited[node] = true;
 
         //if (pe_a == 233 || pe_a == 237)
         //printf("\nnode choose: %d\n", node);
@@ -80,11 +89,9 @@ bool try_route_aStar(
 
             //if (pe_a == 233 || pe_a == 237)
             //printf("node %d son %d map_pe = %d a = %d min_rota %d\n", node, son, map_pe[node][son], a, min_rota[node]);
-            
-            if (map_pe[node][son] != a && map_pe[node][son] != -1) 
-                continue;    
-            if (map_pe[node][son] != a && min_rota[node] < 1)
-                continue;
+            if (visited[son]) continue;
+            if (map_pe[node][son] != a && map_pe[node][son] != -1) continue;    
+            if (map_pe[node][son] != a && min_rota[node] < 1) continue;
 
             cost_h = table[son][pe_b];
             // give preference to multicast (save wire and ports)

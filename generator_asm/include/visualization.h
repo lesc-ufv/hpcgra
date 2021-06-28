@@ -56,9 +56,23 @@ void print_pr_graph(
         pos_a = pos[best_index*SIZE_EDGES+a];
         pos_b = pos[best_index*SIZE_EDGES+b];
         myfile << "PE" << pos_a << " -> ";
-        for (int j = 1; j < route[best_index][make_pair(a,b)].size()-1; j += 2) {
+        
+        //cout << pos_a << " " << pos_b << " COST: " << edges_cost[best_index][make_pair(a,b)] << endl;
+
+        /*for (int j = 1; j < route[best_index][make_pair(a,b)].size()-1; j += 2) {
             myfile << "r" << route[best_index][make_pair(a,b)][j] << "_" << c++ << " -> ";
+        }*/
+
+        for (int j = 0; j < edges_cost[best_index][make_pair(a,b)]-1; ++j) {
+            myfile << "r" << c++ << "_" << edges_cost[best_index][make_pair(a,b)]-1 << " -> ";
         }
+
+        /*for (int j = 0; j < route[best_index][make_pair(a,b)].size(); j++) {
+            cout << route[best_index][make_pair(a,b)][j] << " ";
+        }*/
+
+        //cout << " SIZE = " << route[best_index][make_pair(a,b)].size() << endl;
+
         int bb = 0;
         for (int j = 0; j < buffers[best_index][make_pair(a,b)]; ++j) {
             myfile << "b_" << pos_b << "_" << bb++ << " -> ";

@@ -150,7 +150,8 @@ class CgraAccelerator:
         j = 0
         for i in self.cgra.input_ids:
             con.append(('in_stream%d' % i,
-                        Cat(en_pop[j]&read_fifo_mask[j], fifo_in_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
+                        Cat(en_pop[j] & read_fifo_mask[j],
+                            fifo_in_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
             j += 1
 
         j = 0

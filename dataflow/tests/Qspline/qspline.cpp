@@ -2,8 +2,55 @@
 
 int main(int argc, char *argv[]) {
     auto df = createDataFlow(0,1);
+    
+    auto data_in0 = new unsigned short[1024];
+    auto data_in1 = new unsigned short[1024];
+    auto data_in2 = new unsigned short[1024];
+    auto data_in3 = new unsigned short[1024];
+    auto data_in4 = new unsigned short[1024];
+    auto data_in5 = new unsigned short[1024];
+    auto data_in6 = new unsigned short[1024];
+    auto data_out = new unsigned short[1024];
+
+    for (int k = 0; k < 1024; ++k) {
+        data_in0[k] = k+1;
+        data_in1[k] = k+1;
+        data_in2[k] = k+1;
+        data_in3[k] = k+1;
+        data_in4[k] = k+1;
+        data_in5[k] = k+1;
+        data_in6[k] = k+1;
+        data_out[k] = 0;
+    }
+
+    auto in0 = reinterpret_cast<InputStream *>(df->getOp(0));
+    auto in1 = reinterpret_cast<InputStream *>(df->getOp(1));
+    auto in2 = reinterpret_cast<InputStream *>(df->getOp(2));
+    auto in3 = reinterpret_cast<InputStream *>(df->getOp(3));
+    auto in4 = reinterpret_cast<InputStream *>(df->getOp(4));
+    auto in5 = reinterpret_cast<InputStream *>(df->getOp(5));
+    auto in6 = reinterpret_cast<InputStream *>(df->getOp(6));
+    auto out = reinterpret_cast<OutputStream *>(df->getOp(7));
+    
+    in0->setData(data_in0,1024);
+    in1->setData(data_in1,1024);
+    in2->setData(data_in2,1024);
+    in3->setData(data_in3,1024);
+    in4->setData(data_in4,1024);
+    in5->setData(data_in5,1024);
+    in6->setData(data_in6,1024);
+    out->setData(data_out,1024);
+    
+    df->compute();
+    
     df->toJSON("../qspline.json");
     df->toDOT("../qspline.dot");
+    
+    for(int i=0;i < 1024;i++){
+     std::cout << data_out[i] << " ";
+    } 
+    std::cout << std::endl;
+    
     delete df;
     return 0;
 }

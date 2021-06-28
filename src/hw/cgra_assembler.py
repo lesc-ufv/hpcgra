@@ -164,15 +164,16 @@ class CgraAssembler:
         if is_istream:
             self.used_inputs.append(pe)
 
-        delays_str =''
+        delays_str = ''
         delays_v = [0 for _ in range(3)]
-        for p,d in delays:
+        for p, d in delays:
             delays_v[p] = d
         for d in delays_v:
-            delays_str += "%d "%d
+            delays_str += "%d " % d
 
         if "istream" in alu_src:
-            self.dot_op[pe] = "pe%d [label=\"in\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=greenyellow];\n" % (pe,delays_str, pe, "@")
+            self.dot_op[pe] = "pe%d [label=\"in\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=greenyellow];\n" % (
+            pe, delays_str, pe, "@")
         else:
             self.dot_op[pe] = "pe%d [label=\"%s\\n%s\\n%d\",tooltip=\"%s\" ,fontsize=9, fillcolor=%s];\n" % (
                 pe, op, delays_str, pe, "@", get_dot_color_by_op(op))
@@ -200,10 +201,12 @@ class CgraAssembler:
 
         if dst == 'ostream':
             self.used_outputs.append(pe)
-            self.dot_op[pe] = "pe%d [label=\"out\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightpink];\n" % (pe, pe, "@")
+            self.dot_op[pe] = "pe%d [label=\"out\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightpink];\n" % (
+            pe, pe, "@")
         else:
             if not self.dot_op.get(pe):
-                self.dot_op[pe] = "pe%d [label=\"router\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightyellow];\n" % (pe, pe, "@")
+                self.dot_op[pe] = "pe%d [label=\"router\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightyellow];\n" % (
+                pe, pe, "@")
             if src == 'alu':
                 self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=red];\n" % (pe, dst)
             else:

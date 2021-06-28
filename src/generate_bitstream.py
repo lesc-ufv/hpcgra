@@ -15,7 +15,7 @@ def create_args():
     parser.add_argument('-j', '--json', help='CGRA architecture description JSON file', type=str)
     parser.add_argument('-a', '--assembly', help='Assembly code', type=str)
     parser.add_argument('-o', '--output', help='Bitstream File', type=str, default='a.bit')
-    parser.add_argument('-d', '--dot', help='Output place and route dot file',type=str)
+    parser.add_argument('-d', '--dot', help='Output place and route dot file', type=str)
 
     return parser.parse_args()
 

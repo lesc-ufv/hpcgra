@@ -1,4 +1,4 @@
-M ,N =  map(int,input().split())
+M, N = map(int, input().split())
 for i in range(M):
     f = open('in%d.txt' % i, 'w')
     for j in range(N):

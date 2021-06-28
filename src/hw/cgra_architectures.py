@@ -71,7 +71,7 @@ def create_neighbors(shape, i, j, arch_type):
     return neighbors
 
 
-def create_cgra(arch_net, shape, isa, routes, fifos, acc, data_width, conf_bus_width, inputs, outputs):
+def create_cgra_json(arch_net, shape, isa, routes, fifos, acc, data_width, conf_bus_width, inputs, outputs):
     json_arch = {'data_width': data_width, 'conf_bus_width': conf_bus_width,
                  'pe': []}
 

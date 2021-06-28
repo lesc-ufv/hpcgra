@@ -1,6 +1,7 @@
 FILENAME = "../asm/path_through_all.asm"
 READ = "r"
 
+
 def main():
     file = open(FILENAME, READ)
 
@@ -26,7 +27,7 @@ def main():
 
     while True:
         if curr in at0:
-            curr = adj[ at0[curr] ][1]
+            curr = adj[at0[curr]][1]
             visited.append(curr)
         else:
             break
@@ -37,7 +38,6 @@ def main():
 
     file.close()
     return
-
 
 
 if __name__ == "__main__":

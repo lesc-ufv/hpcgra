@@ -1,5 +1,6 @@
 import json
 
+
 def remove_mul(all_pe, opcode):
     for pe in all_pe:
         if pe["id"] == opcode:
@@ -23,8 +24,6 @@ for i in range(16):
         else:
             if j % 3 != 2:
                 remove_mul(all_pe, opcode)
-            
-
 
 out_file = open("../json/one_hop_clusters_8x8_remove_multiplication.json", "w")
 out_file.write(json.dumps(obj, indent=4))

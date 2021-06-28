@@ -11,7 +11,7 @@ class Bitstream:
         self.mask_input = 0
         self.mask_output = 0
         self.cgra = Cgra(cgra_json)
-        self.assembler = CgraAssembler(self.cgra, assembly, pr_dot = pr_dot_path)
+        self.assembler = CgraAssembler(self.cgra, assembly, pr_dot=pr_dot_path)
 
         cgra_bitstream = self.assembler.compile()
         if cgra_bitstream is None:

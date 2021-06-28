@@ -1,5 +1,0 @@
--- Configuring done
--- Generating done
--- Build files have been written to: /home/canesche/git/hpcgra/generator_asm/test/build
-Consolidate compiler generated dependencies of target place
-[ 20%] Building CXX object CMakeFiles/place.dir/src/main.cpp.o

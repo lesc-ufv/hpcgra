@@ -59,13 +59,13 @@ void print_pr_graph(
         
         //cout << pos_a << " " << pos_b << " COST: " << edges_cost[best_index][make_pair(a,b)] << endl;
 
-        /*for (int j = 1; j < route[best_index][make_pair(a,b)].size()-1; j += 2) {
+        for (int j = 1; j < route[best_index][make_pair(a,b)].size()-1; j += 2) {
             myfile << "r" << route[best_index][make_pair(a,b)][j] << "_" << c++ << " -> ";
-        }*/
-
-        for (int j = 0; j < edges_cost[best_index][make_pair(a,b)]-1; ++j) {
-            myfile << "r" << c++ << "_" << edges_cost[best_index][make_pair(a,b)]-1 << " -> ";
         }
+
+        /*for (int j = 0; j < edges_cost[best_index][make_pair(a,b)]-1; ++j) {
+            myfile << "r" << c++ << "_" << edges_cost[best_index][make_pair(a,b)]-1 << " -> ";
+        }*/
 
         /*for (int j = 0; j < route[best_index][make_pair(a,b)].size(); j++) {
             cout << route[best_index][make_pair(a,b)][j] << " ";

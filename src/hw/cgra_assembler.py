@@ -137,6 +137,7 @@ class CgraAssembler:
             port = 0
             tok = inst[2:]
             is_istream = False
+            has_const = False
             for j in range(len(tok)):
                 i = tok[j]
                 if '#' in i:
@@ -151,6 +152,7 @@ class CgraAssembler:
                     else:
                         alu_src.append('const')
                         self.const.append((line, pe, len(alu_src) - 1, int(i)))
+                        has_const = True
                     port += 1
 
             ops = CgraAluOperations.get_operations()
@@ -175,8 +177,9 @@ class CgraAssembler:
             self.dot_op[pe] = "pe%d [label=\"in\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=greenyellow];\n" % (
             pe, delays_str, pe, "@")
         else:
+            op_label = op + 'i' if has_const else op
             self.dot_op[pe] = "pe%d [label=\"%s\\n%s\\n%d\",tooltip=\"%s\" ,fontsize=9, fillcolor=%s];\n" % (
-                pe, op, delays_str, pe, "@", get_dot_color_by_op(op))
+                pe, op_label, delays_str, pe, "@", get_dot_color_by_op(op))
 
         if self.dot_tips.get(pe):
             self.dot_tips[pe] += " ".join(inst) + "\\n"

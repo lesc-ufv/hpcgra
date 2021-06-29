@@ -357,52 +357,47 @@ class Components:
 
         return m
 
-    def create_control_conf(self, cgra_id, cgra_conf_width, num_pe_io_in, num_pe_io_out, num_cicle_wait_conf_finish):
-        name = 'cgra%d_control_conf' % cgra_id
+    def create_control_conf(self, cgra_conf_width, num_pe_io_in, num_pe_io_out, num_cicle_wait_conf_finish,
+                            axi_bus_data_width):
+        name = 'control_conf'
         if name in self.cache.keys():
             return self.cache[name]
 
         m = Module(name)
-
-        CONF_DATA_IN_WIDTH = m.Parameter('CONF_DATA_IN_WIDTH', 512)
-
-        CONF_SIZE = m.Localparam('CONF_SIZE', Div(CONF_DATA_IN_WIDTH, cgra_conf_width))
-
+        CONF_SIZE = axi_bus_data_width // cgra_conf_width
         clk = m.Input('clk')
         rst = m.Input('rst')
         start = m.Input('start')
 
         req_rd_data = m.Output('req_rd_data')
-        rd_data = m.Input('rd_data', CONF_DATA_IN_WIDTH)
+        rd_data = m.Input('rd_data', axi_bus_data_width)
         rd_data_valid = m.Input('rd_data_valid')
 
         conf_out_bus = m.OutputReg('conf_out_bus', cgra_conf_width + 1)
 
         read_fifo_mask = m.OutputReg('read_fifo_mask', num_pe_io_in)
         write_fifo_mask = m.OutputReg('write_fifo_mask', num_pe_io_out)
-        # write_fifo_ignore = m.OutputReg('write_fifo_ignore', num_pe_io_out * 16)
-        # write_fifo_loop_ignore = m.OutputReg('write_fifo_loop_ignore', num_pe_io_out * 16)
 
         done = m.OutputReg('done')
 
         FSM_INIT_CTRL_IDLE = m.Localparam('FSM_INIT_CTRL_IDLE', 0)
         FSM_INIT_CTRL_INIT = m.Localparam('FSM_INIT_CTRL_INIT', 1)
-        # FSM_INIT_CTRL_INIT2 = m.Localparam('FSM_INIT_CTRL_INIT2', 2)
-        # FSM_INIT_CTRL_INIT3 = m.Localparam('FSM_INIT_CTRL_INIT3', 3)
-        FSM_SEND_INIT_CONF_PE = m.Localparam('FSM_SEND_INIT_CONF_PE', 2)
-        FSM_INIT_CTRL_REQ_DATA = m.Localparam('FSM_INIT_CTRL_REQ_DATA', 3)
-        FSM_WAIT_ALL_CONF_FINISH = m.Localparam('FSM_WAIT_ALL_CONF_FINISH', 4)
-        FSM_INIT_CONF_DONE = m.Localparam('FSM_INIT_CONF_DONE', 5)
+        FSM_INIT_CTRL_INIT2 = m.Localparam('FSM_INIT_CTRL_INIT2', 2)
+        FSM_INIT_CTRL_INIT3 = m.Localparam('FSM_INIT_CTRL_INIT3', 3)
+        FSM_SEND_INIT_CONF_PE = m.Localparam('FSM_SEND_INIT_CONF_PE', 4)
+        FSM_INIT_CTRL_REQ_DATA = m.Localparam('FSM_INIT_CTRL_REQ_DATA', 5)
+        FSM_WAIT_ALL_CONF_FINISH = m.Localparam('FSM_WAIT_ALL_CONF_FINISH', 6)
+        FSM_INIT_CONF_DONE = m.Localparam('FSM_INIT_CONF_DONE', 7)
 
         m.EmbeddedCode('')
         fsm_conf_ctrl = m.Reg('fsm_conf_ctrl', 3)
         fsm_conf_ctrl_next = m.Reg('fsm_conf_ctrl_next', 3)
         conf_req_data = m.Reg('conf_req_data')
-        conf_cl = m.Reg('conf_cl', CONF_DATA_IN_WIDTH)
-        qtd_conf = m.Reg('qtd_conf', 32)
+        conf_cl = m.Reg('conf_cl', axi_bus_data_width)
+        qtd_conf = m.Reg('qtd_conf', 18)
         conf_data = m.Reg('conf_data', cgra_conf_width)
         send_conf = m.Reg('send_conf')
-        conf_counter = m.Reg('conf_counter', 32)
+        conf_counter = m.Reg('conf_counter', 18)
         conf_counter_cl = m.Reg('conf_counter_cl', 10)
         wait_counter = m.Reg('wait_counter', int(ceil(log2(num_cicle_wait_conf_finish))) + 1)
 
@@ -434,21 +429,20 @@ class Components:
                         )
                     ),
                     When(FSM_INIT_CTRL_INIT)(
-                        qtd_conf(conf_cl[0:18]),
-                        read_fifo_mask(conf_cl[32:32 + num_pe_io_in]),
-                        write_fifo_mask(conf_cl[96:96 + num_pe_io_out]),
+                        qtd_conf(conf_cl[0:qtd_conf.width]),
+                        fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
+                        fsm_conf_ctrl_next(FSM_INIT_CTRL_INIT2)
+                    ),
+                    When(FSM_INIT_CTRL_INIT2)(
+                        read_fifo_mask(conf_cl[0:num_pe_io_in]),
+                        fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
+                        fsm_conf_ctrl_next(FSM_INIT_CTRL_INIT3)
+                    ),
+                    When(FSM_INIT_CTRL_INIT3)(
+                        write_fifo_mask(conf_cl[0:num_pe_io_out]),
                         fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
                         fsm_conf_ctrl_next(FSM_SEND_INIT_CONF_PE)
                     ),
-                    # When(FSM_INIT_CTRL_INIT2)(
-                    #     write_fifo_ignore(conf_cl[0:num_pe_io_out * 16]),
-                    #     fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
-                    #     fsm_conf_ctrl_next(FSM_INIT_CTRL_INIT3)
-                    # ),
-                    # When(FSM_INIT_CTRL_INIT3)(
-                    #     write_fifo_loop_ignore(conf_cl[0:num_pe_io_out * 16]),
-                    #     fsm_conf_ctrl(FSM_SEND_INIT_CONF_PE),
-                    # ),
                     When(FSM_SEND_INIT_CONF_PE)(
                         If(conf_counter >= qtd_conf)(
                             fsm_conf_ctrl(FSM_WAIT_ALL_CONF_FINISH)
@@ -505,7 +499,7 @@ class Components:
 
         return m
 
-    def create_control_exec(self, cgra_id, num_pe_io_in, num_pe_io_out,watchdog_count_limit=4096):
+    def create_control_exec(self, cgra_id, num_pe_io_in, num_pe_io_out, watchdog_count_limit=1048576):
         name = 'cgra%d_control_exec' % cgra_id
         if name in self.cache.keys():
             return self.cache[name]
@@ -544,7 +538,7 @@ class Components:
         start_r = m.Reg('start_r')
         flag_initial = m.Reg('flag_initial')
 
-        watchdog_count = m.Reg('watchdog_count', bits(watchdog_count_limit)+1)
+        watchdog_count = m.Reg('watchdog_count', bits(watchdog_count_limit) + 1)
 
         m.EmbeddedCode('')
         done.assign(done_r)
@@ -594,7 +588,7 @@ class Components:
                     ),
                     When(FSM_PROCESS)(
                         en(Int(1, 1, 2)),
-                        If(Or(Uand(write_fifo_done_masked),watchdog_count > watchdog_count_limit))(
+                        If(Or(Uand(write_fifo_done_masked), watchdog_count > watchdog_count_limit))(
                             fsm_state(FSM_DONE),
                             done_r(Int(1, 1, 2))
                         ),
@@ -616,13 +610,11 @@ class Components:
 
         return m
 
-    def create_fecth_data(self):
-        name = 'fecth_data'
+    def create_fecth_data(self, input_data_width, output_data_width):
+        name = 'fecth_data_%d_%d' % (input_data_width, output_data_width)
         if name in self.cache.keys():
             return self.cache[name]
         m = Module(name)
-        INPUT_DATA_WIDTH = m.Parameter('INPUT_DATA_WIDTH', 512)
-        OUTPUT_DATA_WIDTH = m.Parameter('OUTPUT_DATA_WIDTH', 16)
 
         clk = m.Input('clk')
         start = m.Input('start')
@@ -630,25 +622,25 @@ class Components:
 
         request_read = m.OutputReg('request_read')
         data_valid = m.Input('data_valid')
-        read_data = m.Input('read_data', INPUT_DATA_WIDTH)
+        read_data = m.Input('read_data', input_data_width)
 
         pop_data = m.Input('pop_data')
         available_pop = m.OutputReg('available_pop')
-        data_out = m.Output('data_out', OUTPUT_DATA_WIDTH)
+        data_out = m.Output('data_out', output_data_width)
 
-        NUM = m.Localparam('NUM', INPUT_DATA_WIDTH / OUTPUT_DATA_WIDTH)
+        NUM = input_data_width // output_data_width
 
         fsm_read = m.Reg('fsm_read', 1)
         fsm_control = m.Reg('fsm_control', 1)
-        data = m.Reg('data', INPUT_DATA_WIDTH)
-        buffer = m.Reg('buffer', INPUT_DATA_WIDTH)
+        data = m.Reg('data', input_data_width)
+        buffer = m.Reg('buffer', input_data_width)
         count = m.Reg('count', NUM)
         has_buffer = m.Reg('has_buffer')
         buffer_read = m.Reg('buffer_read')
         en = m.Reg('en')
 
         m.EmbeddedCode('')
-        data_out.assign(data[0:OUTPUT_DATA_WIDTH])
+        data_out.assign(data[0:output_data_width])
 
         m.Always(Posedge(clk))(
             If(rst)(
@@ -705,7 +697,7 @@ class Components:
                     When(1)(
                         If(pop_data & ~count[NUM - 1])(
                             count(count << 1),
-                            data(data[OUTPUT_DATA_WIDTH:512])
+                            data(data[output_data_width:512])
                         ),
                         If(pop_data & count[NUM - 1] & has_buffer)(
                             count(1),
@@ -714,7 +706,7 @@ class Components:
                         ),
                         If(count[NUM - 1] & pop_data & ~has_buffer)(
                             count(count << 1),
-                            data(data[OUTPUT_DATA_WIDTH:512]),
+                            data(data[output_data_width:512]),
                             available_pop(0),
                             fsm_control(0)
                         )
@@ -728,31 +720,28 @@ class Components:
         self.cache[name] = m
         return m
 
-    def create_dispath_data(self):
-        name = 'dispath_data'
+    def create_dispath_data(self, input_data_width, output_data_width):
+        name = 'dispath_data_%d_%d' % (input_data_width, output_data_width)
         if name in self.cache.keys():
             return self.cache[name]
 
         m = Module(name)
-        INPUT_DATA_WIDTH = m.Parameter('INPUT_DATA_WIDTH', 16)
-        OUTPUT_DATA_WIDTH = m.Parameter('OUTPUT_DATA_WIDTH', 512)
-
         clk = m.Input('clk')
         rst = m.Input('rst')
 
         available_write = m.Input('available_write')
         request_write = m.OutputReg('request_write')
-        write_data = m.OutputReg('write_data', OUTPUT_DATA_WIDTH)
+        write_data = m.OutputReg('write_data', output_data_width)
 
         push_data = m.Input('push_data')
         available_push = m.OutputReg('available_push')
-        data_in = m.Input('data_in', INPUT_DATA_WIDTH)
+        data_in = m.Input('data_in', input_data_width)
 
-        NUM = m.Localparam('NUM', OUTPUT_DATA_WIDTH / INPUT_DATA_WIDTH)
+        NUM = output_data_width // input_data_width
         m.EmbeddedCode('')
         fsm_control = m.Reg('fsm_control', 2)
-        buffer1 = m.Reg('buffer1', OUTPUT_DATA_WIDTH)
-        buffer2 = m.Reg('buffer2', OUTPUT_DATA_WIDTH)
+        buffer1 = m.Reg('buffer1', output_data_width)
+        buffer2 = m.Reg('buffer2', output_data_width)
         count1 = m.Reg('count1', NUM)
         count2 = m.Reg('count2', NUM)
         request_write1 = m.Reg('request_write1')
@@ -791,10 +780,7 @@ class Components:
                 Case(fsm_control)(
                     When(0)(
                         If(push_data)(
-                            # buffer1(Or(Cat(data_in, Repeat(Int(0, 1, 2), OUTPUT_DATA_WIDTH - INPUT_DATA_WIDTH)),
-                            # buffer1 >> INPUT_DATA_WIDTH)),
-                            # count1(count1 << 1)
-                            buffer1(Cat(data_in, buffer1[INPUT_DATA_WIDTH:])),
+                            buffer1(Cat(data_in, buffer1[input_data_width:])),
                             count1(count1 << 1)
                         ),
                         If(count1[NUM - 1] & push_data)(
@@ -814,13 +800,8 @@ class Components:
                             fsm_control(3)
                         ),
                         If(push_data)(
-                            # buffer2(Or(Cat(data_in, Repeat(Int(0, 1, 2), OUTPUT_DATA_WIDTH - INPUT_DATA_WIDTH)),
-                            # buffer2 >> INPUT_DATA_WIDTH)),
-                            # count2(count2 << 1)
-
-                            buffer2(Cat(data_in, buffer2[INPUT_DATA_WIDTH:])),
+                            buffer2(Cat(data_in, buffer2[input_data_width:])),
                             count2(count2 << 1)
-
                         ),
                         If(count2[NUM - 2] & push_data & ~available_write)(
                             available_push(0)
@@ -828,13 +809,8 @@ class Components:
                     ),
                     When(2)(
                         If(push_data)(
-                            # buffer2(Or(Cat(data_in, Repeat(Int(0, 1, 2), OUTPUT_DATA_WIDTH - INPUT_DATA_WIDTH)),
-                            # buffer2 >> INPUT_DATA_WIDTH)),
-                            # count2(count2 << 1)
-
-                            buffer2(Cat(data_in, buffer2[INPUT_DATA_WIDTH:])),
+                            buffer2(Cat(data_in, buffer2[input_data_width:])),
                             count2(count2 << 1)
-
                         ),
                         If(count2[NUM - 1] & push_data)(
                             fsm_control(3)
@@ -853,10 +829,7 @@ class Components:
                             fsm_control(1)
                         ),
                         If(push_data)(
-                            # buffer1(Or(Cat(data_in, Repeat(Int(0, 1, 2), OUTPUT_DATA_WIDTH - INPUT_DATA_WIDTH)),
-                            # buffer1 >> INPUT_DATA_WIDTH)),
-                            # count1(count1 << 1)
-                            buffer1(Cat(data_in, buffer1[INPUT_DATA_WIDTH:])),
+                            buffer1(Cat(data_in, buffer1[input_data_width:])),
                             count1(count1 << 1)
 
                         ),

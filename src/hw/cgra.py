@@ -22,6 +22,7 @@ class Cgra:
         self.data_width = 0
         self.pe_id_width = 0
         self.conf_bus_width = 0
+        self.axi_bus_data_width = 0
         self.input_ids = []
         self.output_ids = []
         self.__module = None
@@ -49,6 +50,7 @@ class Cgra:
             self.data_width = self.arch['data_width']
             self.pe_id_width = bits(len(self.arch['pe'])) + 1
             self.conf_bus_width = self.arch['conf_bus_width']
+            self.axi_bus_data_width = self.arch['axi_bus_data_width']
             self.input_ids.clear()
             self.output_ids.clear()
             for pe in self.arch['pe']:
@@ -123,17 +125,6 @@ class Cgra:
                         con.append((p.name, wires[n]))
 
             m.Instance(self.array_pe[pe], "pe_%d" % pe, params, con)
-
-        # l, c = self.arch['shape']
-        # for i in range(l):
-        #     if i == 0:
-        #         wires['conf_bus_reg_in'][0].assign(conf_bus)
-        #     else:
-        #         wires['conf_bus_reg_in'][get_id(i, 0, c)].assign(wires['conf_bus_reg_out'][get_id(i - 1, 0, c)])
-        #
-        # for i in range(l):
-        #     for j in range(1, c):
-        #         wires['conf_bus_reg_in'][get_id(i, j, c)].assign(wires['conf_bus_reg_out'][get_id(i, j - 1, c)])
 
         wires['conf_bus_reg_in'][0].assign(conf_bus)
         p = create_conf_path(self.arch)

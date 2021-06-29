@@ -133,10 +133,10 @@ void generate_asm(Graph g,
                     if (routed[rota[j]][rota[j+1]]) continue;
                     routed[rota[j]][rota[j+1]] = true;
                     
-                    if (j > 1) {
-                        myfile << "route $" << rota[j] << " $" << rota[j - 2] << " $" << rota[j + 1] << "\n";
-                    } else {
-                        myfile << "route $" << rota[j] << " $alu $" << rota[j + 1] << "\n";
+                    if (j == 0) {
+                        myfile << "route $" << rota[j] << " $alu $" << rota[j+1] << "\n";
+                    } else if (j > 1) {
+                        myfile << "route $" << rota[j] << " $" << rota[j-2] << " $" << rota[j+1] << "\n";
                     }
                 }
                 new_cost = cost + edges_cost[best_index][make_pair(dad, son[i])];

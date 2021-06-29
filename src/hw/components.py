@@ -697,7 +697,7 @@ class Components:
                     When(1)(
                         If(pop_data & ~count[NUM - 1])(
                             count(count << 1),
-                            data(data[output_data_width:512])
+                            data(data[output_data_width:])
                         ),
                         If(pop_data & count[NUM - 1] & has_buffer)(
                             count(1),
@@ -706,7 +706,7 @@ class Components:
                         ),
                         If(count[NUM - 1] & pop_data & ~has_buffer)(
                             count(count << 1),
-                            data(data[output_data_width:512]),
+                            data(data[output_data_width:]),
                             available_pop(0),
                             fsm_control(0)
                         )

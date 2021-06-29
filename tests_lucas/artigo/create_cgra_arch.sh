@@ -20,3 +20,7 @@
 ../../bin/hpcgra --arch diagonal -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 32 64 96 128 160 192 224 --output 15 47 79 111 143 175 207 239 --routes 4 --data_width 16 -e cgra_archs/cgra_diagonal_16x16_8_4.json
 
 ../../bin/hpcgra --arch chess -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 40 100 --output 180 220 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_16x16_2_4.json
+
+../../bin/hpcgra --arch chess -s 32x32 --isa or and seq abs sgt slt mux sub mul add --fifos 3 3 3 --input 0 64 128 192 256 320 384 448 512 576 640 704 768 832 896 960 --output 32 96 160 224 288 352 416 480 544 608 672 736 800 864 928 992 --routes 4 --data_width 16 --axi_bus_width 32 -e cgra_archs/cgra_chess_32x32_8_4_32.json
+
+

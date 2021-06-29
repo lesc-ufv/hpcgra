@@ -60,9 +60,7 @@ bool try_route_aStar(
 
     int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
-    /*if (pe_a == 84) {
-        printf("try: %d -> %d\n", pe_a, pe_b);
-    }*/
+    //printf("try: %d -> %d\n", pe_a, pe_b);
 
     visited[pe_a] = true;
 
@@ -129,26 +127,28 @@ bool try_route_aStar(
         vector<pair<int, int>> new_path;
         int nodo = pe_b;
 
-        /*if (pe_a == 84) {
-        printf("NEW-PATH: ");
-        for (int i = path.size() - 1; i > -1; --i) {
-            printf("%d %d %d, ", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]));
-        }
-        printf("\n");
+        /*
+        if (pe_a == 128 && pe_b == 72) {
+            printf("NEW-PATH: ");
+            for (int i = path.size() - 1; i > -1; --i) {
+                printf("%d %d %d, ", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]));
+            }
+            printf("\n");
         }*/
 
         for (int i = path.size() - 1; i > -1; --i) {
-            /*if (pe_a == 84) {
+            /*if (pe_a == 128 && pe_b == 72) {
                 printf("%d -> %d -> %d nodo choose: %d\n", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]), nodo);
             }*/
             
-            if (nodo == pe_a) {
-                break;
-            } else if (get<0>(path[i]) == -1) {
+            if (nodo == pe_a || get<0>(path[i]) == -1) {
                 /*if (find(new_path.begin(), new_path.end(), 
-                    make_pair(get<1>(path[i]), nodo)) == new_path.end())*/
-                        new_path.push_back(make_pair(get<1>(path[i]), nodo));
+                    make_pair(get<1>(path[i]), nodo)) == new_path.end())
+                        new_path.push_back(make_pair(get<1>(path[i]), nodo));*/
                 break;
+            } else if (get<1>(path[i]) == nodo) {
+                new_path.push_back(make_pair(get<0>(path[i]), nodo));
+                nodo = nodo = get<0>(path[i]);
             } else if (get<2>(path[i]) == nodo) {
                 new_path.push_back(make_pair(get<1>(path[i]), nodo));
                 new_path.push_back(make_pair(get<0>(path[i]), get<1>(path[i])));
@@ -166,11 +166,14 @@ bool try_route_aStar(
         results += new_path.size() - edges_cost[make_pair(a, b)];
         edges_cost[make_pair(a, b)] = new_path.size();
 
-        /*printf("size = %d PATH: ", new_path.size());
-        for (int i = 0; i < new_path.size(); ++i) {
-            printf("%d %d ", new_path[i].first, new_path[i].second);
-        }
-        printf("\n");*/
+        /*
+        if (pe_a == 128 && pe_b == 72) {
+            printf("Path: ");
+            for (int i = new_path.size() - 1; i > -1; --i) {
+                printf("%d %d ", new_path[i].first, new_path[i].second);
+            }
+            printf("\n");
+        }*/
 
         //printf("Path final: ");
         int pe_aux_a, pe_aux_b;

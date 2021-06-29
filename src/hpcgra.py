@@ -9,7 +9,7 @@ if not p in sys.path:
     sys.path.insert(0, p)
 
 from src.hw.cgra import Cgra
-from src.hw.cgra_architectures import create_cgra
+from src.hw.cgra_architectures import create_cgra_json
 
 
 def create_args():
@@ -28,6 +28,7 @@ def create_args():
     parser.add_argument('--acc', help='This flag adding an accumulator to all PE.', action="store_true")
     parser.add_argument('--data_width', help='CGRA data width bits.', type=int, default=8)
     parser.add_argument('--conf_bus_width', help='CGRA configuration bus data width.', type=int, default=8)
+    parser.add_argument('--axi_bus_width', help='CGRA axi interface bus data width.', type=int, default=512)
     parser.add_argument('-j', '--json', help='Architecture JSON description file.', type=str)
     parser.add_argument('-e', '--emit', help='Emit JSON arch file.', type=str)
     parser.add_argument('-v', '--verilog', help='Verilog outputfile.', type=str, default=None)
@@ -48,9 +49,9 @@ def main():
                 v = args.shape.split('x')
                 n, m = int(v[0]), int(v[1])
                 if args.isa:
-                    json_str = create_cgra(args.arch, (n, m), args.isa, args.routes, args.fifos, args.acc,
+                    json_str = create_cgra_json(args.arch, (n, m), args.isa, args.routes, args.fifos, args.acc,
                                            args.data_width,
-                                           args.conf_bus_width, args.inputs, args.outputs)
+                                           args.conf_bus_width, args.axi_bus_width, args.inputs, args.outputs)
                     cgra.load_from_string(json_str)
                     if args.emit:
                         with open(args.emit, 'w') as f:

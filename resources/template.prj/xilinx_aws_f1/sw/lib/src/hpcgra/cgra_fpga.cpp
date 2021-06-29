@@ -56,14 +56,15 @@ int CgraFpga::cgra_fpga_init(std::string &binary_file, std::string kernel_name, 
   OCL_CHECK(err, m_kernel = cl::Kernel(m_prog,kernel_name.c_str(), &err));
   
   std::string line;
-  unsigned short aux[32];
   std::ifstream MyReadFile(cgra_bitstream);
         while(getline(MyReadFile,line)) {
-            for(int i=0,j=31;i < 128;i+=4){
+              int words = line.size()/16;
+              unsigned short aux[words];
+            for(int i=0,j=words-1;i < line.size()/4;i+=4){
                 unsigned short x = std::stoul(line.substr(i,4), nullptr, 16);
                 aux[j--] = x;
             }
-            for(int i=0;i < 32;i++){
+            for(int i=0;i < words;i++){
                 m_cgra_bitstream.push_back(aux[i]);
             }
         }

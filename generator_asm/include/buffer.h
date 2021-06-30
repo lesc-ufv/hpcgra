@@ -174,10 +174,8 @@ bool verify_buffer(
         port = g.get_port(make_pair(a,b));
         pe = pos[k * SIZE_NODES + b];
 
-        p = (port.size() == 1) ? 0 : port[i];
-
-        for (int i = 0, n = port.size(); i < n; ++i) {
-            buffer_arch = arch[pe].elastic_queue[p];
+        for (int j = 0, n = port.size(); j < n; ++j) {
+            buffer_arch = arch[pe].elastic_queue[port[j]];
             key = make_pair(a, b);
             
             if (buffers[key] > buffer_arch)

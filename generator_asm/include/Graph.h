@@ -133,7 +133,7 @@ Graph::Graph(string filename) {
                 this->constant[u].push_back(make_pair(atoi(c[0].asCString()), atoi(c[1].asCString())));
             }
         }
-    }
+    } 
 
     tuple<int, int, int> aux_e;
     int i = 0;

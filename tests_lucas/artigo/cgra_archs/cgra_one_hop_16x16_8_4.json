@@ -1,6 +1,7 @@
 {
     "data_width": 16,
     "conf_bus_width": 8,
+    "axi_bus_data_width": 512,
     "pe": [
         {
             "id": 0,

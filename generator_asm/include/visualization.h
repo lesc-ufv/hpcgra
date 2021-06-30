@@ -47,14 +47,16 @@ void print_pr_graph(
     myfile.open(path + "_pr_graph.dot");
 
     const int SIZE_EDGES = g.get_edges().size();
+    const int SIZE_NODES = g.get_nodes().size();
+
+    int a, b, pos_a, pos_b;
     int c = 0;
     myfile << "digraph G {\n";
     for (int i = 0; i < SIZE_EDGES; ++i) {
-        int a, b, pos_a, pos_b;
         a = get<0>(g.get_edges()[i]);
         b = get<1>(g.get_edges()[i]);
-        pos_a = pos[best_index*SIZE_EDGES+a];
-        pos_b = pos[best_index*SIZE_EDGES+b];
+        pos_a = pos[best_index*SIZE_NODES+a];
+        pos_b = pos[best_index*SIZE_NODES+b];
         myfile << "PE" << pos_a << " -> ";
         
         //cout << pos_a << " " << pos_b << " COST: " << edges_cost[best_index][make_pair(a,b)] << endl;

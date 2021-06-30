@@ -16,6 +16,7 @@ void generate_asm(Graph g,
 
     if (best_index == -1) return;
 
+    /*
     for (int i = 0; i < g.get_edges().size(); ++i) {
         int a = get<0>(g.get_edges()[i]);
         int b = get<1>(g.get_edges()[i]);
@@ -26,7 +27,7 @@ void generate_asm(Graph g,
             printf("%d ", t[j]);
         }
         printf("\n");
-    }
+    }*/
 
     ofstream myfile;
     myfile.open(path + ".asm");

@@ -59,7 +59,7 @@ void print_pr_graph(
         pos_b = pos[best_index*SIZE_NODES+b];
         myfile << "PE" << pos_a << " -> ";
         
-        cout << pos_a << " " << pos_b << " COST: " << edges_cost[best_index][make_pair(a,b)] << endl;
+        //cout << pos_a << " " << pos_b << " COST: " << edges_cost[best_index][make_pair(a,b)] << endl;
 
         for (int j = 1; j < route[best_index][make_pair(a,b)].size()-1; j += 2) {
             myfile << "r" << route[best_index][make_pair(a,b)][j] << "_" << c++ << " -> ";

@@ -21,6 +21,24 @@ CgraFpga::CgraFpga(int num_inputs, int num_outputs):m_input_buffer(num_inputs),
 int CgraFpga::cgra_fpga_init(std::string &binary_file, std::string kernel_name, std::string cgra_bitstream){
 
   TIMER_START(INIT_TIMER_ID);
+  
+  std::string line;
+  std::ifstream MyReadFile(cgra_bitstream);
+  while(getline(MyReadFile,line)) {
+    int c = line.size();
+    int bytes = c / 2;
+    byte aux[bytes];
+    int i=0,j=bytes-1;
+    for(i=0;i < c; i+=2){
+        aux[j] = std::stoul(line.substr(i,2), nullptr, 16);
+        j--;
+    }
+    for(int i=0;i < bytes;i++){
+        m_cgra_bitstream.push_back(aux[i]);
+    }
+  }
+  MyReadFile.close();
+    
   cl_int err;
   // get_xil_devices() is a utility API which will find the xilinx
   // platforms and will return list of devices connected to Xilinx platform
@@ -54,22 +72,6 @@ int CgraFpga::cgra_fpga_init(std::string &binary_file, std::string kernel_name, 
   }
 
   OCL_CHECK(err, m_kernel = cl::Kernel(m_prog,kernel_name.c_str(), &err));
-  
-  std::string line;
-  std::ifstream MyReadFile(cgra_bitstream);
-        while(getline(MyReadFile,line)) {
-              int words = line.size()/16;
-              unsigned short aux[words];
-            for(int i=0,j=words-1;i < line.size()/4;i+=4){
-                unsigned short x = std::stoul(line.substr(i,4), nullptr, 16);
-                aux[j--] = x;
-            }
-            for(int i=0;i < words;i++){
-                m_cgra_bitstream.push_back(aux[i]);
-            }
-        }
-        MyReadFile.close();
-  
 
   TIMER_STOP_ID(INIT_TIMER_ID);
 

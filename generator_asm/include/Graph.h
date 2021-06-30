@@ -133,7 +133,7 @@ Graph::Graph(string filename) {
                 this->constant[u].push_back(make_pair(atoi(c[0].asCString()), atoi(c[1].asCString())));
             }
         }
-    }
+    } 
 
     tuple<int, int, int> aux_e;
     int i = 0;
@@ -141,6 +141,8 @@ Graph::Graph(string filename) {
         u = atoi(e["source"].asCString());
         v = atoi(e["target"].asCString());
         aux_e = make_tuple(u, v, atoi(e["port"].asCString()));
+
+        cout << get<0>(aux_e) << " " << get<1>(aux_e) << endl;
         
         this->port[make_pair(u,v)].push_back(atoi(e["port"].asCString()));
         

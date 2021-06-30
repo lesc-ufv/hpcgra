@@ -30,7 +30,7 @@ private:
   cl::Program m_prog;
   cl::Kernel m_kernel;
   
-  std::vector<unsigned short> m_cgra_bitstream;    
+  std::vector<byte> m_cgra_bitstream;    
   std::vector<cl::Memory> m_input_buffer;
   std::vector<cl::Memory> m_output_buffer;
   

@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
 
         std::cout << std::endl << "OUT" << c << ": ";
         size = outputs[c].size();
-        auto ptr_out = (short *)cgra_acc.getOutputQueue(c);
+        auto ptr_out = (unsigned short *)cgra_acc.getOutputQueue(c);
         for (int i = 0; i < size; i++) {
             std::cout << ptr_out[i] << " ";
         }

@@ -1,6 +1,3 @@
-
-
-
 class ConfTag:
     def __init__(self, alu_num_inputs):
         self.bits = 3

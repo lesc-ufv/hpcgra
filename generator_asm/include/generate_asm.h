@@ -16,6 +16,19 @@ void generate_asm(Graph g,
 
     if (best_index == -1) return;
 
+    /*
+    for (int i = 0; i < g.get_edges().size(); ++i) {
+        int a = get<0>(g.get_edges()[i]);
+        int b = get<1>(g.get_edges()[i]);
+
+        printf("%d [%d] -> %d [%d]\n", a, pos[a+best_index*SIZE_NODES], b, pos[b+best_index*SIZE_NODES]);
+        vector<int> t = route[best_index][make_pair(a,b)];
+        for (int j = 0; j < t.size(); ++j) {
+            printf("%d ", t[j]);
+        }
+        printf("\n");
+    }*/
+
     ofstream myfile;
     myfile.open(path + ".asm");
 
@@ -112,24 +125,18 @@ void generate_asm(Graph g,
         son = g.get_sucessors(dad);
         for (int i = 0; i < son.size(); ++i) {
             if (!visited[son[i]]) {
-                routed[dad][son[i]]--;
                 rota = route[best_index][make_pair(dad, son[i])];
-                /*
-                printf("%d -> %d rota: ", dad, son[i]);
-                for (int j = 0, n = rota.size(); j < n; j += 1) {
-                    printf("%d ", rota[j]);
-                }
-                printf("\n");*/
+                
                 // creating routing
                 for (int j = 0, n = rota.size(); j < n; j += 2) {
-                    //printf("%d %d\n", rota[j], rota[j+1]);
+
                     if (routed[rota[j]][rota[j+1]]) continue;
                     routed[rota[j]][rota[j+1]] = true;
                     
-                    if (j > 1) {
-                        myfile << "route $" << rota[j] << " $" << rota[j - 2] << " $" << rota[j + 1] << "\n";
-                    } else {
-                        myfile << "route $" << rota[j] << " $alu $" << rota[j + 1] << "\n";
+                    if (j == 0) {
+                        myfile << "route $" << rota[j] << " $alu $" << rota[j+1] << "\n";
+                    } else if (j > 1) {
+                        myfile << "route $" << rota[j] << " $" << rota[j-2] << " $" << rota[j+1] << "\n";
                     }
                 }
                 new_cost = cost + edges_cost[best_index][make_pair(dad, son[i])];

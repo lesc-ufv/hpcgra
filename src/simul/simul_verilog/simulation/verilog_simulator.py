@@ -1,9 +1,9 @@
 # TODO DESCRIPTION AND COMMENTS
 from math import ceil
 
+from create_testbench_module import create_testbench_sim
 from veriloggen.simulation import simulation
 
-from create_testbench_module import create_testbench_sim
 from src.hw.cgra import Cgra
 from src.hw.cgra_accelerator import CgraAccelerator
 from src.hw.cgra_bitstream import Bitstream

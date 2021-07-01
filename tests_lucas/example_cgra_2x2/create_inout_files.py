@@ -1,5 +1,5 @@
-N = int(input())
-for i in range(2):
+M, N = map(int, input().split())
+for i in range(M):
     f = open('in%d.txt' % i, 'w')
     for j in range(N):
         f.write('%d\n' % (j + 1))

@@ -29,7 +29,7 @@ class AccAXIInterface:
 
         m = Module(name)
         C_M_AXI_ADDR_WIDTH = m.Parameter('C_M_AXI_ADDR_WIDTH', 64)
-        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', 512)
+        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', self.acc.cgra.axi_bus_data_width)
 
         ap_clk = m.Input('ap_clk')
         ap_rst_n = m.Input('ap_rst_n')
@@ -71,20 +71,11 @@ class AccAXIInterface:
             vout.append(m.Input('out%d' % i, 64))
 
         LP_NUM_EXAMPLES = m.Localparam('LP_NUM_EXAMPLES', num_m_axis)
-        LP_LENGTH_WIDTH = m.Localparam('LP_LENGTH_WIDTH', 32)
-        LP_DW_BYTES = m.Localparam('LP_DW_BYTES', Div(C_M_AXI_DATA_WIDTH, 8))
-        LP_AXI_BURST_LEN = m.Localparam('LP_AXI_BURST_LEN',
-                                        Mux(Div(4096, LP_DW_BYTES) < 256, Div(4096, LP_DW_BYTES), 256))
-
-        LP_LOG_BURST_LEN = m.Localparam('LP_LOG_BURST_LEN', EmbeddedCode("$clog2(LP_AXI_BURST_LEN)"))
-        LP_BRAM_DEPTH = m.Localparam('LP_BRAM_DEPTH', 512)
-        LP_RD_MAX_OUTSTANDING = m.Localparam('LP_RD_MAX_OUTSTANDING', Div(LP_BRAM_DEPTH, LP_AXI_BURST_LEN))
-        LP_WR_MAX_OUTSTANDING = m.Localparam('LP_WR_MAX_OUTSTANDING', 32)
+        LP_RD_MAX_OUTSTANDING = m.Localparam('LP_RD_MAX_OUTSTANDING', 16)
+        LP_WR_MAX_OUTSTANDING = m.Localparam('LP_WR_MAX_OUTSTANDING', 16)
 
         m.EmbeddedCode('(* KEEP = "yes" *)')
-
         reset = m.Reg('reset')
-        # ap_start_r = m.Reg('ap_start_r')
         ap_idle_r = m.Reg('ap_idle_r')
         ap_done_r = m.Reg('ap_done_r')
 
@@ -317,7 +308,7 @@ class AccAXIInterface:
         C_S_AXI_CONTROL_ADDR_WIDTH = m.Parameter('C_S_AXI_CONTROL_ADDR_WIDTH', 12)
         C_S_AXI_CONTROL_DATA_WIDTH = m.Parameter('C_S_AXI_CONTROL_DATA_WIDTH', 32)
         C_M_AXI_ADDR_WIDTH = m.Parameter('C_M_AXI_ADDR_WIDTH', 64)
-        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', 512)
+        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', self.acc.cgra.axi_bus_data_width)
 
         ap_clk = m.Input('ap_clk')
         ap_rst_n = m.Input('ap_rst_n')
@@ -433,7 +424,7 @@ class AccAXIInterface:
 
         m = Module(name)
         C_M_AXI_ADDR_WIDTH = m.Parameter('C_M_AXI_ADDR_WIDTH', 64)
-        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', 512)
+        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', self.acc.cgra.axi_bus_data_width)
         C_XFER_SIZE_WIDTH = m.Parameter('C_XFER_SIZE_WIDTH', C_M_AXI_ADDR_WIDTH)
         C_MAX_OUTSTANDING = m.Parameter('C_MAX_OUTSTANDING', 16)
         C_INCLUDE_DATA_FIFO = m.Parameter('C_INCLUDE_DATA_FIFO', 1)
@@ -505,9 +496,9 @@ class AccAXIInterface:
 
         m = Module(name)
         C_M_AXI_ADDR_WIDTH = m.Parameter('C_M_AXI_ADDR_WIDTH', 64)
-        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', 512)
+        C_M_AXI_DATA_WIDTH = m.Parameter('C_M_AXI_DATA_WIDTH', self.acc.cgra.axi_bus_data_width)
         C_XFER_SIZE_WIDTH = m.Parameter('C_XFER_SIZE_WIDTH', C_M_AXI_ADDR_WIDTH)
-        C_MAX_OUTSTANDING = m.Parameter('C_MAX_OUTSTANDING', 32)
+        C_MAX_OUTSTANDING = m.Parameter('C_MAX_OUTSTANDING', 16)
         C_INCLUDE_DATA_FIFO = m.Parameter('C_INCLUDE_DATA_FIFO', 1)
 
         aclk = m.Input('aclk')
@@ -1001,13 +992,13 @@ class AccAXIInterface:
         FIFO_MEMORY_TYPE = m.Parameter('FIFO_MEMORY_TYPE', "auto")
         ECC_MODE = m.Parameter('ECC_MODE', "no_ecc")
         FIFO_WRITE_DEPTH = m.Parameter('FIFO_WRITE_DEPTH', 32)
-        WRITE_DATA_WIDTH = m.Parameter('WRITE_DATA_WIDTH', 512)
+        WRITE_DATA_WIDTH = m.Parameter('WRITE_DATA_WIDTH', self.acc.cgra.axi_bus_data_width)
         WR_DATA_COUNT_WIDTH = m.Parameter('WR_DATA_COUNT_WIDTH', 6)
         PROG_FULL_THRESH = m.Parameter('PROG_FULL_THRESH', 2)
         FULL_RESET_VALUE = m.Parameter('FULL_RESET_VALUE', 1)
         READ_MODE = m.Parameter('READ_MODE', "std")
         FIFO_READ_LATENCY = m.Parameter('FIFO_READ_LATENCY', 1)
-        READ_DATA_WIDTH = m.Parameter('READ_DATA_WIDTH', 512)
+        READ_DATA_WIDTH = m.Parameter('READ_DATA_WIDTH', self.acc.cgra.axi_bus_data_width)
         RD_DATA_COUNT_WIDTH = m.Parameter('RD_DATA_COUNT_WIDTH', 6)
         PROG_EMPTY_THRESH = m.Parameter('PROG_EMPTY_THRESH', 10)
         DOUT_RESET_VALUE = m.Parameter('DOUT_RESET_VALUE', "0")

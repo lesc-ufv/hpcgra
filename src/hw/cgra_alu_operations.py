@@ -52,8 +52,9 @@ class AluOperationNot(AluOperationUnary):
 
 class AluOperationAbs(AluOperationUnary):
     def get(self, m, dst, src_a):
-        temp = m.Reg('abs_temp', src_a.width)
-        return [temp(Mux(src_a[src_a.width - 1], ~src_a + 1, src_a)), dst(temp)]
+        # temp = m.Reg('abs_temp', src_a.width)
+        # return [temp(Mux(src_a[src_a.width - 1], ~src_a + 1, src_a)), dst(temp)]
+        return [dst(Mux(src_a[src_a.width - 1], ~src_a + 1, src_a))]
 
 
 class AluOperationPass(AluOperationUnary):
@@ -67,14 +68,14 @@ class AluOperationAdd(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
         # temp = m.Reg('add_temp', src_a.width)
         # return [temp(src_a + src_b), dst(temp)]
-        return [dst(src_a+src_b)]
+        return [dst(src_a + src_b)]
 
 
 class AluOperationSub(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
         # temp = m.Reg('sub_temp', src_a.width)
         # return [temp(src_a - src_b), dst(temp)]
-        return [dst(src_a-src_b)]
+        return [dst(src_a - src_b)]
 
 
 class AluOperationMul(AluOperationBinary):
@@ -158,41 +159,42 @@ class AluOperationMux(AluOperationTernary):
     def get(self, m, dst, src_a, src_b, src_c):
         # temp = m.Reg('mux_temp', src_a.width)
         # return [temp(Mux(src_a, src_b, src_c)), dst(temp)]
-        return [dst(Mux(src_a,src_b,src_c))]
+        return [dst(Mux(src_a, src_b, src_c))]
 
 
 class AluOperationSlt(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
         # temp = m.Reg('slt_temp', src_a.width)
         # return [temp(Mux(src_a < src_b, 1, 0)), dst(temp)]
-        return [dst(Mux(src_a < src_b,1,0))]
+        return [dst(Mux(src_a < src_b, 1, 0))]
 
 
 class AluOperationSgt(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
         # temp = m.Reg('sgt_temp', src_a.width)
         # return [temp(Mux(src_a > src_b, 1, 0)), dst(temp)]
-        return [dst(Mux(src_a > src_b,1,0))]
+        return [dst(Mux(src_a > src_b, 1, 0))]
 
 
 class AluOperationSeq(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
         # temp = m.Reg('seq_temp', src_a.width)
         # return [temp(Mux(src_a == src_b, 1, 0)), dst(temp)]
-        return [dst(Mux(src_a == src_b,1,0))]
+        return [dst(Mux(src_a == src_b, 1, 0))]
 
 
 class AluOperationSne(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
         # temp = m.Reg('sne_temp', src_a.width)
         # return [temp(Mux(src_a != src_b, 1, 0)), dst(temp)]
-        return [dst(Mux(src_a != src_b,1,0))]
+        return [dst(Mux(src_a != src_b, 1, 0))]
 
 
 class AluOperationMax(AluOperationBinary):
     def get(self, m, dst, src_a, src_b):
-        temp = m.Reg('max_temp', src_a.width)
-        return [temp(Mux(src_a > src_b, src_a, src_b)), dst(temp)]
+        # temp = m.Reg('max_temp', src_a.width)
+        # return [temp(Mux(src_a > src_b, src_a, src_b)), dst(temp)]
+        return [dst(Mux(src_a > src_b, src_a, src_b))]
 
 
 class AluOperationMin(AluOperationBinary):

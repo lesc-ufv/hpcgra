@@ -7,11 +7,10 @@ from src.hw.utils import to_hex
 
 class Bitstream:
     def __init__(self, cgra_json, assembly, pr_dot_path):
-        self.align_bits = 512
         self.mask_input = 0
         self.mask_output = 0
         self.cgra = Cgra(cgra_json)
-        self.assembler = CgraAssembler(self.cgra, assembly, pr_dot = pr_dot_path)
+        self.assembler = CgraAssembler(self.cgra, assembly, pr_dot=pr_dot_path)
 
         cgra_bitstream = self.assembler.compile()
         if cgra_bitstream is None:
@@ -34,7 +33,7 @@ class Bitstream:
             align = int(ceil(len(cb) / self.cgra.conf_bus_width)) * self.cgra.conf_bus_width
             cgra_bitstream_hex.append(to_hex(int(cb, 2), align))
 
-        conf_size = self.align_bits // self.cgra.conf_bus_width
+        conf_size = self.cgra.axi_bus_data_width // self.cgra.conf_bus_width
         count = 0
         conf = []
         conf_pes = ''
@@ -45,12 +44,12 @@ class Bitstream:
                 count += len(c) // 2  # conf_size are in bytes and c are in string hex, each c has 2 bytes
             elif count + (len(c) // 2) == conf_size:
                 conf.append(c)
-                conf_pes += '\n' + to_hex(int("".join(reversed(conf)), 16), self.align_bits)
+                conf_pes += '\n' + to_hex(int("".join(reversed(conf)), 16), self.cgra.axi_bus_data_width)
                 conf_pes_size += 1
                 conf.clear()
                 count = 0
             else:
-                conf_pes += '\n' + to_hex(int("".join(reversed(conf)), 16), self.align_bits)
+                conf_pes += '\n' + to_hex(int("".join(reversed(conf)), 16), self.cgra.axi_bus_data_width)
                 conf_pes_size += 1
                 conf.clear()
                 count = 0
@@ -58,27 +57,14 @@ class Bitstream:
                 count += len(c) // 2  # conf_size are in bytes and c are in string hex, each c has 2 bytes
 
         if len(conf):
-            conf_pes += '\n' + to_hex(int("".join(reversed(conf)), 16), self.align_bits)
+            conf_pes += '\n' + to_hex(int("".join(reversed(conf)), 16), self.cgra.axi_bus_data_width)
             conf_pes_size += 1
 
         size = conf_pes_size * conf_size
-        size = to_hex(size, 32)
-        mask_input = to_hex(self.mask_input, 64)
-        mask_output = to_hex(self.mask_output, 64)
-        self.initial_conf = to_hex(int(mask_output + mask_input + size, 16), 512)
-        # ignore_conf = [to_hex(0, 16) for _ in range(self.align_bits // 16)]
-        # ignore_loop_conf = [to_hex(0, 16) for _ in range(self.align_bits // 16)]
-        # for line, i, v in self.assembler.ostream_ignore:
-        #     idx = self.cgra.output_ids.index(i)
-        #     ignore_conf[idx] = to_hex(v, 16)
-        # for line, i, v in self.assembler.ostream_ignore_loop:
-        #     idx = self.cgra.output_ids.index(i)
-        #     ignore_loop_conf[idx] = to_hex(v, 16)
-
-        # self.initial_conf += '\n'
-        # self.initial_conf += "".join(reversed(ignore_conf))
-        # self.initial_conf += '\n'
-        # self.initial_conf += "".join(reversed(ignore_loop_conf))
+        size = to_hex(size, self.cgra.axi_bus_data_width)
+        mask_input = to_hex(self.mask_input, self.cgra.axi_bus_data_width)
+        mask_output = to_hex(self.mask_output, self.cgra.axi_bus_data_width)
+        self.initial_conf = size + '\n' + mask_input + '\n' + mask_output
         self.initial_conf += conf_pes
 
     def get(self):

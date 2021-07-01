@@ -30,7 +30,7 @@
 #include <routing.h>
 #include <buffer.h>
 #include <evaluate.h>
-#include <print_out.h>
+#include <visualization.h>
 #include <generate_asm.h>
 
 using namespace std;

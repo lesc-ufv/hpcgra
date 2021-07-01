@@ -1,13 +1,12 @@
 #!/bin/python3
 
-import os
-import sys
-import json
 import glob
+import json
 
 files = glob.glob("*.json")
 
-opcodes={}
+opcodes = {}
+
 
 def read_opcodes(file):
     with open(file, "r") as read_file:
@@ -20,14 +19,10 @@ def read_opcodes(file):
                 opcodes[nodes['opcode']] += 1
             else:
                 opcodes[nodes['opcode']] = 1
+
+
 for f in files:
     read_opcodes(f)
-    
 
-print('Opcodes count:',len(opcodes))
-print(sorted(opcodes.items(),key=lambda x:x[1]))
-
-
-
-
-
+print('Opcodes count:', len(opcodes))
+print(sorted(opcodes.items(), key=lambda x: x[1]))

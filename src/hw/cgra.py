@@ -22,6 +22,7 @@ class Cgra:
         self.data_width = 0
         self.pe_id_width = 0
         self.conf_bus_width = 0
+        self.axi_bus_data_width = 0
         self.input_ids = []
         self.output_ids = []
         self.__module = None
@@ -49,6 +50,7 @@ class Cgra:
             self.data_width = self.arch['data_width']
             self.pe_id_width = bits(len(self.arch['pe'])) + 1
             self.conf_bus_width = self.arch['conf_bus_width']
+            self.axi_bus_data_width = self.arch['axi_bus_data_width']
             self.input_ids.clear()
             self.output_ids.clear()
             for pe in self.arch['pe']:
@@ -123,17 +125,6 @@ class Cgra:
                         con.append((p.name, wires[n]))
 
             m.Instance(self.array_pe[pe], "pe_%d" % pe, params, con)
-
-        # l, c = self.arch['shape']
-        # for i in range(l):
-        #     if i == 0:
-        #         wires['conf_bus_reg_in'][0].assign(conf_bus)
-        #     else:
-        #         wires['conf_bus_reg_in'][get_id(i, 0, c)].assign(wires['conf_bus_reg_out'][get_id(i - 1, 0, c)])
-        #
-        # for i in range(l):
-        #     for j in range(1, c):
-        #         wires['conf_bus_reg_in'][get_id(i, j, c)].assign(wires['conf_bus_reg_out'][get_id(i, j - 1, c)])
 
         wires['conf_bus_reg_in'][0].assign(conf_bus)
         p = create_conf_path(self.arch)
@@ -235,12 +226,14 @@ class Cgra:
         if pe_arch['type'] == 'input' or pe_arch['type'] == 'inout':
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', load_pe), ('out', stream_in_reg)]
+            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
             m.Instance(m_reg, 'm_stream_in_reg', param, con)
 
         m_reg = self.components.create_register_pipeline()
         for i, j in zip(inputs, inputs_reg):
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i), ('out', j)]
+            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
             m.Instance(m_reg, i.name + '_reg', param, con)
 
         mux_alu = self.components.create_multiplexer(len(mux_alu_inputs))
@@ -258,6 +251,7 @@ class Cgra:
                     con.append(('in%d' % j, mux_alu_inputs[j]))
             con.append(('out', alu_in[i]))
             params = [('width', self.data_width + 1)]
+            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
             m.Instance(mux_alu, 'mux_alu_in%d' % i, params, con)
             elastic_pipeline_to_alu = m.Wire('elastic_pipeline_to_alu%d' % i, self.data_width + 1)
             con = [('in', alu_in[i]), ('out', elastic_pipeline_to_alu)]
@@ -270,6 +264,7 @@ class Cgra:
 
             params = [('width', self.data_width + 1)]
             eq = self.components.create_elastic_pipeline(elastic_queue[i])
+            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
             m.Instance(eq, 'elastic_pipeline%d' % i, params, con)
             alu_in[i] = elastic_pipeline_to_alu
 
@@ -277,6 +272,7 @@ class Cgra:
         con += [('in%d' % i, alu_in[i]) for i in range(alu_num_inputs)]
         con.append(('out', alu_out))
         params = [('width', self.data_width)]
+        m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
         m.Instance(self.__create_alu(isa, alu_num_inputs), 'alu', params, con)
 
         if has_acc:
@@ -284,12 +280,14 @@ class Cgra:
             con1 = [('clk', clk), ('rst', acc_rst), ('en', alu_out[self.data_width]),
                     ('in', alu_out[0:self.data_width]), ('out', acc_wire)]
             param1 = [('num_register', 1), ('width', self.data_width)]
+            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
             m.Instance(reg_acc, 'acc_reg', param1, con1)
 
             acc_reset = self.components.create_acc_reset()
             p = [('width', self.data_width)]
             c = [('clk', clk), ('rst', reset), ('start', alu_out[self.data_width]), ('limit', conf_acc),
                  ('out', acc_rst)]
+            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
             m.Instance(acc_reset, 'acc_reset_inst', p, c)
 
         if routes > 0:
@@ -298,6 +296,7 @@ class Cgra:
                 con1 = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i),
                         ('out', j)]
                 param1 = [('num_register', balance), ('width', self.data_width + 1)]
+                m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
                 m.Instance(reg_pipe_in, i.name + '_router', param1, con1)
 
         con = []
@@ -323,6 +322,7 @@ class Cgra:
             con.append(('out%d' % c, o))
             c += 1
 
+        m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
         m.Instance(router, 'router', [('width', self.data_width + 1)], con)
 
         conf_array_alu += sel_elastic_pipeline
@@ -359,12 +359,14 @@ class Cgra:
                                           alu_num_inputs,
                                           conf_router_width)
 
+        m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
         m.Instance(cf, 'pe_conf_reader', params, con)
 
         for o, ro in zip(outputs, router_out):
             out_reg = self.components.create_register_pipeline()
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', ro), ('out', o)]
+            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
             m.Instance(out_reg, o.name + '_reg', param, con)
 
         stm = []
@@ -412,11 +414,11 @@ class Cgra:
 
         opcode = m.Input('opcode', opcode_width)
         inputs = [m.Input('in%d' % i, Add(width, 1)) for i in range(num_inputs)]
-        out = m.Output('out', Add(width, 1))
+        out = m.OutputReg('out', Add(width, 1))
 
         inputs_reg = [m.Reg('in%d_reg' % i, width) for i in range(num_inputs)]
-        reg_results = m.Reg('reg_results', width, num_opcodes)
-        valid_result = m.Reg('valid_result', num_opcodes)
+        op_results = m.Wire('op_results', width, num_opcodes)
+        valid_result = m.Wire('valid_result', num_opcodes)
         seq = Seq(m, 'seq_reg', clk)
         and_valid = {}
         v = [i[width] for i in inputs]
@@ -448,19 +450,19 @@ class Cgra:
             op = self.alu_ops[i].get
             t = self.alu_ops[i].get_type()
             if t == 'unary':
-                seq.add(op(m, reg_results[opc], inputs_reg[0]))
-                seq.add(valid_result[opc](and_valid['and_valid_1']))
+                op(m, op_results[opc].assign, inputs_reg[0])
+                valid_result[opc].assign(and_valid['and_valid_1'])
             if t == 'binary':
-                seq.add(op(m, reg_results[opc], inputs_reg[0], inputs_reg[1]))
-                seq.add(valid_result[opc](and_valid['and_valid_2']))
+                op(m, op_results[opc].assign, inputs_reg[0], inputs_reg[1])
+                valid_result[opc].assign(and_valid['and_valid_2'])
             if t == 'ternary':
-                seq.add(op(m, reg_results[opc], inputs_reg[0], inputs_reg[1], inputs_reg[2]))
-                seq.add(valid_result[opc](and_valid['and_valid_3']))
+                op(m, op_results[opc].assign, inputs_reg[0], inputs_reg[1], inputs_reg[2])
+                valid_result[opc].assign(and_valid['and_valid_3'])
             opc += 1
 
-        seq.implement()
+        seq.add(out(Cat(valid_result[opcode], op_results[opcode])))
 
-        out.assign(Cat(valid_result[opcode], reg_results[opcode]))
+        seq.implement()
 
         initialize_regs(m)
         self.cache[name] = m

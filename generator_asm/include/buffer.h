@@ -4,14 +4,19 @@
 #include <Graph.h>
 #include <get_critical_path.h>
 
-void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int, int>, int> &buffers,
-               map<pair<int, int>, int> &edges) {
+void dfsBuffer(
+    Graph g, 
+    int *level, 
+    int *levelOrig, 
+    map<pair<int, int>, int> &buffers,
+    map<pair<int, int>, int> &edges
+) {
+
     std::queue<pair<int, int>> q;
-    int node, nodeLvl;
-    int edgeCost;
-    int min = INT_MAX;
+    int node, nodeLvl, edgeCost, min = INT_MAX;
     vector<int> outputs;
     pair<int, int> key, keyInv;
+    vector<int> parents;
 
     outputs = g.get_outputs();
 
@@ -25,12 +30,13 @@ void dfsBuffer(Graph g, int *level, int *levelOrig, map<pair<int, int>, int> &bu
         q.pop();
 
         //Get the level in which each parent is, and the differences
-        vector<int> parents = g.get_predecessors(node);
+        parents = g.get_predecessors(node);
         vector<int> parentLvl(parents.size()), parentLvlOrig(parents.size());
         vector<int> diffLvl(parents.size());
 
-        for (int i = 0; i < parents.size(); i++) {
+        for (int i = 0, n = parents.size(); i < n; i++) {
             if (node == parents[i]) continue;
+            
             key.first = parents[i];
             key.second = node;
             
@@ -88,19 +94,108 @@ void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>
     }
 }
 
-/*
-int manhattan_dist(int pos_a_i, int pos_a_j, int pos_b_i, int pos_b_j) {
-    if (pos_a_i == pos_b_i && pos_a_j == pos_b_j) return 1;
+void optimizeBuffer(
+    const int k,
+    const int SIZE_NODES,
+    int *pos,
+    Graph g, 
+    map<pair<int, int>, int> &buffers,
+    vector<pe_t> &arch
+) {
 
-    int diff_i = abs(pos_a_i - pos_b_i);
-    int diff_j = abs(pos_a_j - pos_b_j);
+    std::queue<int> q;
+    int node, buffer_arch, pe, diff, p;
+    vector<int> outputs, parents, port, ancestors;
+    pair<int, int> key;
 
-    return (diff_i + diff_j);
-}*/
+    outputs = g.get_outputs();
 
-void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGES,
-            int *h_edgeA, int *h_edgeB, int *results, map<pair<int, int>, int> *edges_cost,
-            map<pair<int, int>, int> *buffers, vector<pe_t> &arch, int *pos) {
+    for (int i = 0; i < outputs.size(); ++i)
+        q.push(outputs[i]);
+
+    while (!q.empty()) {
+        node = q.front();
+        q.pop();
+
+        pe = pos[k * SIZE_NODES + node];
+
+        parents = g.get_predecessors(node);
+        for (int i = 0, n = parents.size(); i < n; ++i) {
+            if (parents[i] == node) continue;
+
+            key = make_pair(parents[i], node);
+            port = g.get_port(key);
+
+            p = (port.size() == 1) ? 0 : port[i];
+
+            buffer_arch = arch[pe].elastic_queue[p];
+
+            diff = buffers[key] - buffer_arch;
+
+            if (diff > 0) {
+                ancestors = g.get_predecessors(parents[i]);
+
+                if (ancestors.size() > 0) {
+
+                    buffers[key] = buffer_arch;
+
+                    for (int j = 0; j < ancestors.size(); ++j) {
+                        buffers[make_pair(ancestors[j], parents[i])] += diff;
+                    }
+                }
+            }
+            
+            //printf("%3d -> %3d pe: %3d port: %d buffer: %2d buffer_arch: %2d\n", parents[i], node, pe, port[p], buffers[key], buffer_arch);
+            q.push(parents[i]);
+        }
+    }
+
+}
+
+bool verify_buffer(
+    const int k,
+    const int SIZE_EDGES,
+    const int SIZE_NODES,
+    int *h_edgeA,
+    int *h_edgeB,
+    int *pos,
+    Graph g,
+    vector<pe_t> &arch, 
+    map<pair<int, int>, int> &buffers
+) {
+
+    int a, b, pe, buffer_arch, p;
+    pair<int, int> key;
+    vector<int> port;
+    
+    for (int i = 0; i < SIZE_EDGES; i++) {
+        a = h_edgeA[i];
+        b = h_edgeB[i];
+        port = g.get_port(make_pair(a,b));
+        pe = pos[k * SIZE_NODES + b];
+
+        for (int j = 0, n = port.size(); j < n; ++j) {
+            buffer_arch = arch[pe].elastic_queue[port[j]];
+            key = make_pair(a, b);
+            
+            if (buffers[key] > buffer_arch)
+                return false;
+        }
+    }
+    return true;
+}
+
+void buffer(Graph g, 
+            const int NGRIDS, 
+            const int SIZE_NODES, 
+            const int SIZE_EDGES,
+            int *h_edgeA, 
+            int *h_edgeB, 
+            int *results, 
+            map<pair<int, int>, int> *edges_cost,
+            map<pair<int, int>, int> *buffers, 
+            vector<pe_t> &arch, 
+            int *pos) {
 
     int **levelOrig = new int *[NGRIDS];
     int **level = new int *[NGRIDS];
@@ -124,41 +219,26 @@ void buffer(Graph g, const int NGRIDS, const int SIZE_NODES, const int SIZE_EDGE
     set<int> inp;
     for (int i = 0; i < inputs.size(); ++i) inp.insert(inputs[i]);
 
+    pair<int, int> aux;
     for (int k = 0; k < NGRIDS; k++) {
         if (results[k] == MAXVALUE) continue;
 
         //Initializing map with buffer size 0 for each edge
         for (int i = 0; i < SIZE_EDGES; i++) {
-            pair<int, int> aux = make_pair(h_edgeA[i], h_edgeB[i]);
+            aux = make_pair(h_edgeA[i], h_edgeB[i]);
             buffers[k][aux] = 0;
         }
 
         // Find number of buffers needed on each edge
         dfsBuffer(g, level[k], levelOrig[k], buffers[k], edges_cost[k]);
 
-        int a, b, pe, buffer_arch;
-        pair<int, int> key;
-        vector<int> port;
-        bool problem;
+        //optimize buffer
+        optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
 
         // verify buffer by edges
-        for (int i = 0; i < SIZE_EDGES; i++) {
-            a = h_edgeA[i];
-            b = h_edgeB[i];
-            port = g.get_port(make_pair(a,b));
-            pe = pos[k * SIZE_NODES + b];
-            problem = false;
-
-            for (int i = 0; i < port.size(); ++i) {
-                buffer_arch = arch[pe].elastic_queue[port[i]];
-                key = make_pair(a, b);
-                
-                if (buffers[k][key] > buffer_arch) {
-                    results[k] = MAXVALUE;
-                    problem = true;
-                }
-            }
-            if (problem) break;
+        if (!verify_buffer(k, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
+            pos, g, arch, buffers[k])) {
+            results[k] = MAXVALUE;
         }
     }
 

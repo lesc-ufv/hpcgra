@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
 
-    auto dataFlow = createDataFlow(0, 8);
+    auto df = createDataFlow(0, 8);
     auto data_in = new unsigned short[1024];
     auto data_out = new unsigned short[1024];
 
@@ -11,23 +11,23 @@ int main(int argc, char *argv[]) {
         data_out[k] = 0;
     }
 
-    auto in = reinterpret_cast<InputStream *>(dataFlow->getOp(0));
-    auto out = reinterpret_cast<OutputStream *>(dataFlow->getOp(1));
+    auto in = reinterpret_cast<InputStream *>(df->getOp(0));
+    auto out = reinterpret_cast<OutputStream *>(df->getOp(1));
     
     in->setData(data_in,1024);
     out->setData(data_out,1024);
     
-    dataFlow->compute();
+    df->compute();
 
-    dataFlow->toJSON("../chebyshev.json");
-    dataFlow->toDOT("../chebyshev.dot");
+    df->toJSON("../chebyshev.json");
+    df->toDOT("../chebyshev.dot");
     
-//    for(int i=0;i < 1024;i++){
-//      std::cout << data_out[i] << " ";
-//    }
-//    std::cout << std::endl;
+   for(int i=0;i < 1024;i++){
+     std::cout << data_out[i] << " ";
+   }
+   std::cout << std::endl;
     
-    delete dataFlow;
+    delete df;
 
     return 0;
 }

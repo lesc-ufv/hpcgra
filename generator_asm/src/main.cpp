@@ -2,8 +2,7 @@
 
 int main(int argc, char **argv) {
 
-    auto timetime = time(nullptr);
-    //printf("%ld\n", timetime);
+    auto timetime = 1624898814; //time(nullptr);
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
@@ -28,14 +27,14 @@ int main(int argc, char **argv) {
 
     // read arch
     if (!read_arch(path_arch, pe)) {
-        printf("Architecture format wrong!\n");
+        printf("Architecture format wrong!\n\n");
         return 1;
     }
 
     Graph g(path_dot);
 
     if (!g.get_ok()) { // verify if graph format it's ok
-        printf("bad format of graph json\n");
+        printf("bad format of graph json\n\n");
         return 1;
     }
 
@@ -84,9 +83,10 @@ int main(int argc, char **argv) {
     duration = (stop - start);
     time_data = duration.count();
 
-    // update all position from grid
-    //update_all_positions(SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,
-    //                     NGRIDS, pos, grid);
+    if (!verify_solution(results, NGRIDS)) {
+        printf("Initial Solution invalid for all trying\n\n");
+        return 1;
+    }
 
     // get all results and put in results array
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results,
@@ -121,6 +121,11 @@ int main(int argc, char **argv) {
     duration = (stop - start);
     time_route = duration.count();
 
+    if (!verify_solution(results, NGRIDS)) {
+        printf("Routing invalid for all trying\n\n");
+        return 1;
+    }
+
     map<pair<int, int>, int> *buffers_EDGE = new map<pair<int, int>, int>[NGRIDS];
 
     start = high_resolution_clock::now();
@@ -133,22 +138,30 @@ int main(int argc, char **argv) {
     duration = (stop - start);
     time_buffer = duration.count();
 
+    if (!verify_solution(results, NGRIDS)) {
+        printf("Buffer invalid for all trying\n\n");
+        return 1;
+    }
+
     int worst_fifo;
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, worst_fifo,
                                       results, h_edgeA, h_edgeB, buffers_EDGE);
 
     // generate assembly code
     generate_asm(g, best_index, SIZE_NODES, TOTAL_GRID_SIZE, pos,
-                 buffers_EDGE,path_asm, route, edges_cost);
+                 buffers_EDGE, path_asm, route, edges_cost);
 
     auto stop_total = high_resolution_clock::now();
 
     duration = (stop_total - start_total);
     time_total = duration.count();
 
+    printf("\nSeed\t\t : %ld", timetime);
     // print the time and the best results
     print_results(time_data, time_table, time_place, time_route, time_buffer,
                   time_total, best_index, worst_fifo, results);
+    
+    print_pr_graph(g, pos, best_index, edges_cost, buffers_EDGE, path_asm, route);
 
     // clean memory
     delete randomvec;

@@ -68,8 +68,8 @@ bool fill_data(const int TOTAL_GRID_SIZE,
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) {
         id = pe[i].id;
         if (pe[id].type == 0 || pe[id].type == 2) pe_in.push_back(pe[id].id);
-        else if (pe[id].type == 1 || pe[id].type == 2) pe_out.push_back(pe[id].id);
-        pe_basic.push_back(pe[id].id);
+        if (pe[id].type == 1 || pe[id].type == 2) pe_out.push_back(pe[id].id);
+        if (pe[id].type != 0 && pe[id].type != 1 && pe[id].type == 2) pe_basic.push_back(pe[id].id);
     }
 
     const int SIZE_PE_IN = pe_in.size();

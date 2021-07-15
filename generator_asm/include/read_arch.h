@@ -48,6 +48,10 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
                 aux_pe.isa[j] = false;
 
             aux_pe.isa[aux_pe.type] = true;
+            if (aux_pe.type == 2) {
+                aux_pe.isa[0] = true;
+                aux_pe.isa[1] = true;
+            }
 
             size_neighbors = data["pe"][i]["neighbors"].size();
             for (int j = 0; j < size_neighbors; ++j) {

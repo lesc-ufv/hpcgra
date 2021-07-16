@@ -1,26 +1,54 @@
 
-../../bin/hpcgra --arch chess -s 32x32 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 32 64 96 128 160 192 224  --output 31 63 95 127 159 191 223 255 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_32x32_8_4.json
+hpcgra=../../bin/hpcgra
 
-../../bin/hpcgra --arch mesh -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 32 64 96 128 160 192 224 --output 15 47 79 111 143 175 207 239 --routes 4 --data_width 16 -e cgra_archs/cgra_mesh_16x16_8_4.json
+isa="--isa or and seq abs sgt slt mux sub mul add"
+axi_bus_width="--axi_bus_width 64"
+routes="--routes 4"
+data_width="--data_width 16"
+fifos="--fifos 4 2 2"
 
-../../bin/hpcgra --arch one-hop -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 32 64 96 128 160 192 224 --output 15 47 79 111 143 175 207 239 --routes 4 --data_width 16 -e cgra_archs/cgra_one_hop_16x16_8_4.json
+in_pes="--input 0 12 24 36 48 60 72 84 96 108 120 132"
+out_pes="--output 132 133 134 135 136 137 138 139 140 141 142 143"
 
-../../bin/hpcgra --arch chess -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 32 64 96 128 160 192 224 --output 15 47 79 111 143 175 207 239 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_16x16_8_4.json
+$hpcgra --arch mesh -s 12x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_mesh_12x12_12_4.json
 
-../../bin/hpcgra --arch one-hop -s 12x12 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 12 24 36 48 60 72 84 --output 11 23 35 47 59 71 83 95 --routes 4 --data_width 16 -e cgra_archs/cgra_one_hop_12x12_8_4.json
+$hpcgra --arch one-hop -s 12x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_one-hop_12x12_12_4.json
 
-../../bin/hpcgra --arch mesh -s 8x8 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 8 16 24 32 40 48 56 --output 7 15 23 31 39 47 55 63 --routes 4 --data_width 16 -e cgra_archs/cgra_mesh_8x8_8_4.json
+$hpcgra --arch chess -s 12x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_chess_12x12_12_4.json
 
-../../bin/hpcgra --arch one-hop -s 8x8 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 8 16 24 32 40 48 56 --output 7 15 23 31 39 47 55 63 --routes 4 --data_width 16 -e cgra_archs/cgra_one_hop_8x8_8_4.json
+$hpcgra --arch diagonal -s 12x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_diagonal_12x12_12_4.json
 
-../../bin/hpcgra --arch chess -s 8x8 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 8 16 24 32 40 48 56 --output 7 15 23 31 39 47 55 63 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_8x8_8_4.json
+$hpcgra --arch hexagonal -s 12x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_hexagonal_12x12_12_4.json
 
-../../bin/hpcgra --arch chess -s 20x20 --isa or and seq abs sgt slt mux sub mul add --fifos 2 2 0 --input 40 100 --output 180 220 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_20x20_2_2.json
+in_pes="--input 0 36 72 108 126 144 162 180 198 216 234 252"
+out_pes="--output 306 307 308 309 310 311 312 313 314 315 316 319"
 
-../../bin/hpcgra --arch diagonal -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 0 32 64 96 128 160 192 224 --output 15 47 79 111 143 175 207 239 --routes 4 --data_width 16 -e cgra_archs/cgra_diagonal_16x16_8_4.json
+$hpcgra --arch mesh -s 18x18 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_mesh_18x18_12_4.json
 
-../../bin/hpcgra --arch chess -s 16x16 --isa or and seq abs sgt slt mux sub mul add --fifos 4 4 0 --input 40 100 --output 180 220 --routes 4 --data_width 16 -e cgra_archs/cgra_chess_16x16_2_4.json
+$hpcgra --arch one-hop -s 18x18 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_one-hop_18x18_12_4.json
 
-../../bin/hpcgra --arch chess -s 32x32 --isa or and seq abs sgt slt mux sub mul add --fifos 3 3 3 --input 0 64 128 192 256 320 384 448 512 576 640 704 768 832 896 960 --output 32 96 160 224 288 352 416 480 544 608 672 736 800 864 928 992 --routes 4 --data_width 16 --axi_bus_width 32 -e cgra_archs/cgra_chess_32x32_8_4_32.json
+$hpcgra --arch chess -s 18x18 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_chess_18x18_12_4.json
+
+$hpcgra --arch diagonal -s 18x18 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_diagonal_18x18_12_4.json
+
+$hpcgra --arch hexagonal -s 18x18 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_hexagonal_18x18_12_4.json
+
+in_pes="--input 0 12 24 36 48 60 72 84 96 108 120 132 144 156 168 180 192"
+out_pes="--output 348 349 350 351 352 353 354 355 356 357 358 359"
+
+$hpcgra --arch mesh -s 30x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_mesh_30x12_16_4.json
+
+$hpcgra --arch one-hop -s 30x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_one-hop_30x12_16_4.json
+
+$hpcgra --arch chess -s 30x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_chess_30x12_16_4.json
+
+$hpcgra --arch diagonal -s 30x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_diagonal_30x12_16_4.json
+
+$hpcgra --arch hexagonal -s 30x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_hexagonal_30x12_16_4.json
+
+
+
+
+
 
 

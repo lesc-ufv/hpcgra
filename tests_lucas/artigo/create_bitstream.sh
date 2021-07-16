@@ -3,9 +3,12 @@
 set -e
 arch=$1
 asm=$2
-mkdir -p bitstream
-mkdir -p grid
+dir=$3
+
+mkdir -p bitstream/$dir
+mkdir -p grid/$dir
+
 name=$(basename -s .asm $asm)
 echo "Compiling $name..."
-../../bin/generate_bitstream -j $arch -a $asm -o "bitstream/$name.bit" -d "grid/$name.dot"
-dot -Tsvg "grid/$name.dot" -o "grid/$name.svg" &> /dev/null
+../../bin/generate_bitstream -j $arch -a $asm -o "bitstream/$dir/$name.bit" -d "grid/$dir/$name.dot"
+dot -Tsvg "grid/$dir/$name.dot" -o "grid/$dir/$name.svg" &> /dev/null

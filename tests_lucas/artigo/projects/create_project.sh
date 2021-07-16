@@ -1,4 +1,4 @@
 #!/bin/bash
 
-name=$(basename -s .json $1)
+name=$(echo $(basename -s .json $1) | tr "-" "_")
 ../../../bin/create_project -j $1 -n $name -o .

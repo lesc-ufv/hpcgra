@@ -242,6 +242,10 @@ void buffer(Graph g,
         }
     }
 
+    for (int i = 0; i < SIZE_NODES; ++i) {
+        printf("%d = %s level_origin %d\n", i, g.get_name_node(i).c_str(), levelOrig[0][i]);
+    }
+
 }
 
 #endif

@@ -242,8 +242,14 @@ void buffer(Graph g,
         }
     }
 
+    printf("graph original\n");
     for (int i = 0; i < SIZE_NODES; ++i) {
         printf("%d = %s level_origin %d\n", i, g.get_name_node(i).c_str(), levelOrig[0][i]);
+    }
+
+    printf("graph with distance\n");
+    for (int i = 0; i < SIZE_NODES; ++i) {
+        printf("%d = %s level %d\n", i, g.get_name_node(i).c_str(), level[0][i]);
     }
 
 }

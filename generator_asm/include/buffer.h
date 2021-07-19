@@ -56,10 +56,41 @@ void dfsBuffer(
     }
 }
 
+void getBuffer(
+    Graph g,
+    int *level,
+    int *levelOrig,
+    map<pair<int, int>, int> &buffers,
+    map<int, vector<int>> map_level
+) {
+
+  int key;
+  vector<int> value;
+  map<int, int> max_value;
+
+  for(map<int, vector<int>>::const_iterator it = map_level.begin();
+      it != map_level.end(); it++) {
+    key = it->first;
+    value = it->second;
+    max_value[key] = -1;
+    for (int i = 0, n = value.size(); i < n; ++i) {
+      if (max_value[key] < level[value[i]]) max_value[key] = level[value[i]];
+    }
+  }
+
+  int a, b;
+  for (int i = 0, n = g.get_edges().size(); i < n; ++i) {
+    a = get<0>(g.get_edges()[i]);
+    b = get<1>(g.get_edges()[i]);
+    printf("%d -> %d\n", a, b);
+  }
+
+}
+
 void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>, int> &edges) {
     std::queue<pair<int, int>> q;
     vector<int> son, inputs;
-    int dad, child, big_sum, new_cost, cost;
+    int dad, child, new_cost, cost;
     pair<int, int> key, keyInv;
 
     inputs = g.get_inputs();
@@ -70,7 +101,7 @@ void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>
     for (int i = 0; i < inputs.size(); ++i)
         q.push(make_pair(inputs[i], 0));
 
-    big_sum = 0;
+
     while (!q.empty()) {
         dad = q.front().first;
         cost = q.front().second;
@@ -89,7 +120,6 @@ void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>
             if (edges.count(key) > 0) new_cost = cost + edges[key];
             else if (edges.count(keyInv) > 0) new_cost = cost + edges[keyInv];
             q.push(make_pair(child, new_cost));
-            if (new_cost > big_sum) big_sum = new_cost;
         }
     }
 }
@@ -144,7 +174,6 @@ void optimizeBuffer(
                     }
                 }
             }
-            
             //printf("%3d -> %3d pe: %3d port: %d buffer: %2d buffer_arch: %2d\n", parents[i], node, pe, port[p], buffers[key], buffer_arch);
             q.push(parents[i]);
         }
@@ -197,27 +226,28 @@ void buffer(Graph g,
             vector<pe_t> &arch, 
             int *pos) {
 
-    int **levelOrig = new int *[NGRIDS];
+    int *levelOrig = new int[SIZE_NODES];
     int **level = new int *[NGRIDS];
+    map<int, vector<int>> map_level;
 
     for (int i = 0; i < NGRIDS; ++i) {
-        levelOrig[i] = new int[SIZE_NODES];
         level[i] = new int[SIZE_NODES];
     }
 
     //Gets level of each node given edges costs
     for (int i = 0; i < NGRIDS; i++) {
         if (results[i] >= MAXVALUE) continue;
-        get_critical_path(g, SIZE_NODES, levelOrig[i]);
+        get_critical_path(g, SIZE_NODES, levelOrig);
         dfsLvl(g, SIZE_NODES, level[i], edges_cost[i]);
+    }
+
+    for(int i = 0; i < SIZE_NODES; ++i) {
+        map_level[levelOrig[i]].push_back(i);
     }
 
     bool *visited = new bool[SIZE_NODES];
     vector<int> outputs = g.get_outputs();
     vector<int> inputs = g.get_inputs();
-
-    set<int> inp;
-    for (int i = 0; i < inputs.size(); ++i) inp.insert(inputs[i]);
 
     pair<int, int> aux;
     for (int k = 0; k < NGRIDS; k++) {
@@ -230,10 +260,11 @@ void buffer(Graph g,
         }
 
         // Find number of buffers needed on each edge
-        dfsBuffer(g, level[k], levelOrig[k], buffers[k], edges_cost[k]);
+        dfsBuffer(g, level[k], levelOrig, buffers[k], edges_cost[k]);
+        //getBuffer (g, level[k], levelOrig, buffers[k], map_level);
 
         //optimize buffer
-        optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
+        //optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
 
         // verify buffer by edges
         if (!verify_buffer(k, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
@@ -244,7 +275,7 @@ void buffer(Graph g,
 
     printf("graph original\n");
     for (int i = 0; i < SIZE_NODES; ++i) {
-        printf("%d = %s level_origin %d\n", i, g.get_name_node(i).c_str(), levelOrig[0][i]);
+        printf("%d = %s level_origin %d\n", i, g.get_name_node(i).c_str(), levelOrig[i]);
     }
 
     printf("graph with distance\n");

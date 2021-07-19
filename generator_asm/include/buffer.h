@@ -13,7 +13,7 @@ void dfsBuffer(
 ) {
 
     std::queue<pair<int, int>> q;
-    int node, nodeLvl, edgeCost, min = INT_MAX;
+    int node, nodeLvl, edgeCost, nodeLvlOrig, min = INT_MAX;
     vector<int> outputs;
     pair<int, int> key, keyInv;
     vector<int> parents;
@@ -26,7 +26,7 @@ void dfsBuffer(
     while (!q.empty()) {
         node = q.front().first;
         nodeLvl = q.front().second;
-        int nodeLvlOrig = levelOrig[node];
+        nodeLvlOrig = levelOrig[node];
         q.pop();
 
         //Get the level in which each parent is, and the differences
@@ -78,11 +78,14 @@ void getBuffer(
     }
   }
 
-  int a, b;
+  int a, b, v;
   for (int i = 0, n = g.get_edges().size(); i < n; ++i) {
     a = get<0>(g.get_edges()[i]);
     b = get<1>(g.get_edges()[i]);
-    printf("%d -> %d\n", a, b);
+    //printf("%d -> %d custo: %d custo_max: %d\n", a, b, level[b], max_value[level[b]]);
+    v = max_value[level[b]] - level[b];
+    if (v < 0) v = 0;
+    buffers[make_pair(a,b)] = v;
   }
 
 }
@@ -260,11 +263,11 @@ void buffer(Graph g,
         }
 
         // Find number of buffers needed on each edge
-        dfsBuffer(g, level[k], levelOrig, buffers[k], edges_cost[k]);
-        //getBuffer (g, level[k], levelOrig, buffers[k], map_level);
+        //dfsBuffer(g, level[k], levelOrig, buffers[k], edges_cost[k]);
+        getBuffer (g, level[k], levelOrig, buffers[k], map_level);
 
         //optimize buffer
-        //optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
+        optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
 
         // verify buffer by edges
         if (!verify_buffer(k, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 
@@ -273,6 +276,7 @@ void buffer(Graph g,
         }
     }
 
+    /*
     printf("graph original\n");
     for (int i = 0; i < SIZE_NODES; ++i) {
         printf("%d = %s level_origin %d\n", i, g.get_name_node(i).c_str(), levelOrig[i]);
@@ -281,7 +285,7 @@ void buffer(Graph g,
     printf("graph with distance\n");
     for (int i = 0; i < SIZE_NODES; ++i) {
         printf("%d = %s level %d\n", i, g.get_name_node(i).c_str(), level[0][i]);
-    }
+    }*/
 
 }
 

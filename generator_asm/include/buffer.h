@@ -56,6 +56,40 @@ void dfsBuffer(
     }
 }
 
+void update_values(
+    Graph g, 
+    map<int, int> &max_value,
+    int *levelOrig,
+    int *level, 
+    int node,
+    int value
+) {
+
+    queue<int> q;
+    q.push(node);
+    
+    bool visited[g.get_nodes().size()];
+    for(int i = 0; i < g.get_nodes().size(); ++i)
+        visited[i] = false;
+    
+    int dad;
+    while (!q.empty()) {
+        dad = q.front();
+        q.pop();
+
+        if (visited[dad]) continue;
+        visited[dad] = true;
+
+        for (auto son : g.get_sucessors(dad)) {
+            if (level[son] < max_value[levelOrig[son]]) {
+                //printf("son: %d\n", son);
+                q.push(son);
+                level[son] += value;
+            }
+        }
+    }
+}
+
 void getBuffer(
     Graph g,
     int *level,
@@ -64,30 +98,55 @@ void getBuffer(
     map<int, vector<int>> map_level
 ) {
 
-  int key;
-  vector<int> value;
-  map<int, int> max_value;
+    int key;
+    vector<int> value;
+    map<int, int> max_value;
 
-  for(map<int, vector<int>>::const_iterator it = map_level.begin();
-      it != map_level.end(); it++) {
-    key = it->first;
-    value = it->second;
-    max_value[key] = -1;
-    for (int i = 0, n = value.size(); i < n; ++i) {
-      if (max_value[key] < level[value[i]]) max_value[key] = level[value[i]];
+    for(auto it : map_level) {
+        key = it.first;
+        value = it.second;
+        max_value[key] = -1;
+        
+        for (int i = 0, n = value.size(); i < n; ++i) {
+            if (max_value[key] < level[value[i]]) { 
+                max_value[key] = level[value[i]];
+            }
+        }
     }
-  }
 
-  int a, b, v;
-  for (int i = 0, n = g.get_edges().size(); i < n; ++i) {
-    a = get<0>(g.get_edges()[i]);
-    b = get<1>(g.get_edges()[i]);
-    //printf("%d -> %d custo: %d custo_max: %d\n", a, b, level[b], max_value[level[b]]);
-    v = max_value[level[b]] - level[b];
-    if (v < 0) v = 0;
-    buffers[make_pair(a,b)] = v;
-  }
+    int v;
+    queue<int> q;
 
+    for (auto in : g.get_inputs()) {
+        q.push(in);
+    }
+
+    bool visited[g.get_nodes().size()];
+    for(int i = 0; i < g.get_nodes().size(); ++i)
+        visited[i] = false;
+
+    int dad;
+    while (!q.empty()) {
+        dad = q.front();
+        q.pop();
+
+        if (visited[dad]) continue;
+        visited[dad] = true;
+
+        for (auto son : g.get_sucessors(dad)) {
+            v = max_value[levelOrig[son]] - level[son];
+
+            //printf("%d -> %d buffer: %d\n", dad, son, v);
+            
+            q.push(son);
+
+            buffers[make_pair(dad,son)] = v;
+            if (v > 0 && g.get_sucessors(son).size() > 0) {
+                level[son] = max_value[levelOrig[son]];
+                update_values(g, max_value, levelOrig, level, son, v);
+            }
+        }
+    }
 }
 
 void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>, int> &edges) {
@@ -267,7 +326,7 @@ void buffer(Graph g,
         getBuffer (g, level[k], levelOrig, buffers[k], map_level);
 
         //optimize buffer
-        optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
+        //optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
 
         // verify buffer by edges
         if (!verify_buffer(k, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 

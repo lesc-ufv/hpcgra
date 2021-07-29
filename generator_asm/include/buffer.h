@@ -322,11 +322,11 @@ void buffer(Graph g,
         }
 
         // Find number of buffers needed on each edge
-        //dfsBuffer(g, level[k], levelOrig, buffers[k], edges_cost[k]);
-        getBuffer (g, level[k], levelOrig, buffers[k], map_level);
+        dfsBuffer(g, level[k], levelOrig, buffers[k], edges_cost[k]);
+        //getBuffer (g, level[k], levelOrig, buffers[k], map_level);
 
         //optimize buffer
-        //optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
+        optimizeBuffer(k, SIZE_NODES, pos, g, buffers[k], arch);
 
         // verify buffer by edges
         if (!verify_buffer(k, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB, 

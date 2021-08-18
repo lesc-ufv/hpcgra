@@ -1,34 +1,3 @@
-//===-- cfgPrintPass.cpp ---------------------------------------*- C++ -*-===//
-/* MIT License
-
-    Copyright (c) 2021 Michael Canesche, Caio Raposo
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
-*/
-//===----------------------------------------------------------------------===//
-/*
-    \file
-    This file contains the implementation of the cfgPrintPass, which use
-    it to print CFG.
-*/
-//===----------------------------------------------------------------------===//
-
 #include "cfgPrint.h"
 
 using namespace llvm;
@@ -44,8 +13,8 @@ namespace cfgPrint {
     // get label of register and set on number map 
     string cfgPrinterPass::getName(const Value *v) {
         string s = getLabel(v);
-        if (opInstr.count(s) > 0)
-            return opInstr[s];
+        //if (opInstr.count(s) > 0)
+        //    return opInstr[s];
         return s;
     }
 
@@ -54,6 +23,7 @@ namespace cfgPrint {
         for (Function::iterator bb = F.begin(), e = F.end(); bb != e; ++bb) {
             opInstr[getLabel(&(*bb))] = to_string(counter++);
             for (BasicBlock::iterator I = bb->begin(), e = bb->end(); I != e; ++I) {
+                errs() << *I << "\n";
                 if (!isa<SExtInst>(*I) && !isa<BranchInst>(*I) && !isa<PHINode>(*I) 
                     && !isa<ReturnInst>(*I) && !isa<StoreInst>(*I)) {
                     opInstr[getLabel(&(*I))] = to_string(counter++);
@@ -69,7 +39,7 @@ namespace cfgPrint {
         get_map_label(F);
 
         outFile.open(F.getName().str()+".dot");
-        outFile << "digraph \"CFG for '" << F.getName().str() << "' function\" {\n";
+        outFile << "digraph G {\n";
         for (Function::iterator bb = F.begin(), e = F.end(); bb != e; ++bb) {
             runBasicBlock(bb);
         }
@@ -84,18 +54,18 @@ namespace cfgPrint {
 
         string block_name = getName(&(*bb)); 
         
-        outFile << "\tAA" << block_name <<" [shape=record, label=\"{";
-        outFile << "BB" << block_name << ":\\l\\l ";
+        //outFile << "\tAA" << block_name <<" [shape=record, label=\"{";
+        //outFile << "BB" << block_name << ":\\l\\l ";
         
         vector<string> target;
         for (BasicBlock::iterator I = bb->begin(), e = bb->end(); I != e; ++I) {
             runInstruction(I, target);
         }
-        outFile << "}\"];\n";
+        //outFile << "}\"];\n";
 
-        for (vector<string>::iterator it = target.begin(), end = target.end(); it != end; ++it) {
+        /*for (vector<string>::iterator it = target.begin(), end = target.end(); it != end; ++it) {
             outFile << "\tAA" << block_name << " -> AA" << *it << "\n";
-        }
+        }*/
     }
 
     // Executing Instruction
@@ -105,7 +75,13 @@ namespace cfgPrint {
         int opcode = I->getOpcode();
         
         switch (opcode) {
-            case Instruction::Br: // Branch
+            case Instruction::Add:
+                AddNode(I);
+                break;
+            case Instruction::Ret: // Return
+                RetNode(I); 
+                break;
+            /*case Instruction::Br: // Branch
                 BrNode(I, target); 
                 break;
             case Instruction::PHI: // PHINODE
@@ -123,8 +99,9 @@ namespace cfgPrint {
             case Instruction::Store: // Store
                 StoreNode(I);
                 break;
+            */
             default: // other type
-                OtherNode(I); 
+                //OtherNode(I); 
                 break;
         }
     }
@@ -143,6 +120,12 @@ namespace cfgPrint {
             }
         }
         outFile << "\\l"; 
+    }
+
+    void cfgPrinterPass::AddNode(BasicBlock::iterator I) {
+        for (int i = 0; i < I->getNumOperands(); ++i) {
+            outFile << getName(I->getOperand(i)) << " -> " << getLabel(&(*I)) << "\n";
+        }
     }
 
     void cfgPrinterPass::PhiNode(BasicBlock::iterator I) {
@@ -165,14 +148,16 @@ namespace cfgPrint {
     }
 
     void cfgPrinterPass::RetNode(BasicBlock::iterator I) {
-        outFile << " " << I->getOpcodeName() << " "; 
-        if (I->getNumOperands() == 0) outFile << "void";
-        for (int i = 0; i < I->getNumOperands(); ++i) {
-            if (isa<Constant>(I->getOperand(i))) {
-                outFile << dyn_cast<ConstantInt>(I->getOperand(i))->getZExtValue();
-            }
+        
+        errs() << *I << "\n";
+
+        if (I->getNumOperands() == 0) return;
+        else if (isa<Constant>(I->getOperand(0)))
+            return;
+        else {
+            
+            outFile << getName(I->getOperand(0)) << " -> " << "output" << "\n";
         }
-        outFile << "\\l";
     }
 
     void cfgPrinterPass::SExtNode(BasicBlock::iterator I) {

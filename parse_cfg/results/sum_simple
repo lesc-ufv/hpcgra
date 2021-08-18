@@ -1,3 +1,5 @@
-digraph "CFG for '_Z3sumii' function" {
-	AA0 [shape=record, label="{BB0:\l\l  %1 = add-nsw %a,  %b\l ret \l}"];
+digraph G {
+a -> add
+b -> add
+add -> output
 }

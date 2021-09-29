@@ -30,4 +30,4 @@ Example command to create a homogeneous CGRA 4x4 mesh JSON architecture file:
 ```
 $HOME/workspace/hpcgra/bin/hpcgra --arch mesh --shape 4x4 --isa add sub mul or and --fifos 2 2 --inputs 0 4 8 12 --outputs 3 9 11 15 --data_width 16 --emit cgra_4x4.json
 ```
-## Creating custom architecture description
+## Creating custom architecture description...

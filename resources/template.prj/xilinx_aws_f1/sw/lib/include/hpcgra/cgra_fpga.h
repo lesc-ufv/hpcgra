@@ -45,15 +45,15 @@ private:
   void ** m_inputs_ptr;
   void ** m_outputs_ptr;
 
-  void cgra_set_args();
+  void set_args();
   
-  void * cgra_allocate_mem_align(size_t size);
+  void * allocate_mem_align(size_t size);
       
 public:
         
   CgraFpga(int num_inputs, int num_outputs);  
   
-  int cgra_fpga_init(std::string &binary_file, std::string kernel_name, std::string cgra_bitstream);
+  int fpga_init(std::string &binary_file, std::string kernel_name, std::string cgra_bitstream);
   
   void createInputQueue(int input_id, size_t size);
   
@@ -63,7 +63,7 @@ public:
   
   void * getOutputQueue(int output_id);
   
-  int cgra_execute();
+  int execute();
      
   int cleanup();
       

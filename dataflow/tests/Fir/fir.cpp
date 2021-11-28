@@ -2,7 +2,7 @@
 
 
 int main(int argc, char *argv[]) {
-    test(4);
+    
     test(16);
     test(32);
     test(64);
@@ -32,10 +32,10 @@ void test(int taps){
     df->toJSON("../fir"+to_string(taps)+".json");
     df->toDOT("../fir"+to_string(taps)+".dot");
 
-   for(int i=0;i < 1024;i++){
-       std::cout << data_out[i] << " ";
-   }
-   std::cout << std::endl;
+    for(int i=0;i < 1024;i++){
+        std::cout << data_out[i] << " ";
+    }
+    std::cout << std::endl << std::endl;
 
     delete df;
     

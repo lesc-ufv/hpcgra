@@ -47,16 +47,8 @@ $hpcgra --arch diagonal -s 30x12 $isa $fifos $in_pes $out_pes $routes $data_widt
 $hpcgra --arch hexagonal -s 30x12 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_hexagonal_30x12_16_4.json
 
 
-isa="--isa seq abs sgt slt mux sub mul add"
-axi_bus_width="--axi_bus_width 64"
-routes="--routes 4"
-data_width="--data_width 8"
-fifos="--fifos 4 2 2"
 
-in_pes="--input 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226"
-out_pes="--output 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268"
 
-$hpcgra --arch chess -s 16x32 $isa $fifos $in_pes $out_pes $routes $data_width $axi_bus_width -e cgra_archs/cgra_chess_16x32_8_4.json
 
 
 

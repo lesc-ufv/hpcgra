@@ -149,11 +149,7 @@ void CgraFpga::cgra_set_args(){
     int id = m_num_inputs + m_num_outputs;
     for(int i = 0; i < m_num_inputs;++i){
          if(m_input_size_bytes[i] == 0){
-             if(i == 0){
                 createInputQueue(i,64);
-             }else{
-                createInputQueue(i,64);
-             }
          }        
          OCL_CHECK(err, err = m_kernel.setArg(i, sizeof(cl_int),(void *)& m_input_size_bytes[i]));  
          OCL_CHECK(err, err = m_kernel.setArg(id, m_input_buffer[i]));

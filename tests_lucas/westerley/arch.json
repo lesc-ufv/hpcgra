@@ -1,0 +1,60 @@
+{
+    "data_width": 16,
+    "conf_bus_width": 8,
+    "axi_bus_data_width": 64,
+    "pe": [
+        {
+            "id": 0,
+            "type": "input",
+            "neighbors": [
+                1
+            ],
+            "routes": 1,
+            "elastic_queue": [
+                4,
+                2,
+                2
+            ],
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ]
+        },
+	{
+            "id": 1,
+            "type": "output",
+            "neighbors": [
+                0
+            ],
+            "routes": 1,
+            "elastic_queue": [
+                4,
+                2,
+                2
+            ],
+            "acc": false,
+            "isa": [
+                "abs",
+                "add",
+                "and",
+                "mul",
+                "mux",
+                "or",
+                "seq",
+                "sgt",
+                "slt",
+                "sub"
+            ]
+        }
+
+    ]
+}

@@ -1,15 +1,24 @@
 ISA
-
-'add'   : 0
-'sub'   : 1
-'mul'   : 2
-'or'    : 3
-'and'   : 4
-'not'   : 5
-'pass'  : 6
-'muladd': 7
-'mulsub': 8
-'addadd': 9
-'subsub': 10
-'addsub': 11
-'mux'   : 12
+'add'
+'sub'
+'mul'
+'or'
+'xor'
+'and'
+'not'
+'abs'
+'pass'
+'muladd'
+'mulsub'
+'addadd'
+'subsub'
+'addsub'
+'mux'
+'slt'
+'sgt'
+'seq'
+'sne'
+'shl'
+'shr'
+'max'
+'min'

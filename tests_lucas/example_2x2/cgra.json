@@ -1,5 +1,6 @@
 {
   "data_width": 16,
+  "axi_bus_data_width": 64,
   "conf_bus_width": 8,
   "pe": [
     {
@@ -75,7 +76,8 @@
       "isa": [
         "add",
         "mul",
-        "sub"
+        "sub",
+        "knn"
       ]
     }
   ]

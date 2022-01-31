@@ -42,7 +42,8 @@ def get_dot_color_by_op(op):
     return dic[op]
 
 
-def initialize_regs(module, values=None):
+
+def initialize_regs(module: Module, values=None):
     regs = []
     if values is None:
         values = {}
@@ -62,9 +63,9 @@ def initialize_regs(module, values=None):
                 if r[0] in values.keys():
                     value = values[r[0]]
                 else:
-                    value = 0
+                    value = module.get_vars()[r[0]].initval if module.get_vars()[r[0]].initval else 0
             else:
-                value = 0
+                value = module.get_vars()[r[0]].initval if module.get_vars()[r[0]].initval else 0
             if r[1].dims:
                 genfor = For(i(0), i < r[1].dims[0], i.inc())(
                     r[1][i](value)

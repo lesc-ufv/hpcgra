@@ -1,0 +1,60 @@
+{
+    "data_width": 16,
+    "axi_bus_data_width": 64,
+    "conf_bus_width": 8,
+    "operations": [
+        {
+            "opcode": "my_accumulator",
+            "inputs": ["in"],
+            "output": "checker",
+            "vars": [
+                {
+                    "name": "sum",
+                    "value": "adder",
+                    "initval": 0
+                },
+                {
+                    "name": "counter",
+                    "value": "increment",
+                    "initval": 0
+                }
+            ],
+            "dataflow": [
+                {
+                    "type": "my_add",
+                    "label": "adder",
+                    "ports": ["in", "sum"]
+                },
+                {
+                    "type": "add",
+                    "label": "increment",
+                    "ports": ["counter", 1]
+                },
+                {
+                    "type": "mux",
+                    "label": "checker",
+                    "ports": ["is_eq", "sum", null]
+                },
+                {
+                    "type": "mux",
+                    "label": "is_eq",
+                    "ports": ["counter", 10]
+                }
+            ]
+        },
+        {
+            "opcode": "my_add",
+            "inputs": ["in1", "in2"],
+            "output": "sum",
+            "vars": [],
+            "dataflow": [
+                {
+                    "type": "add",
+                    "label": "sum",
+                    "ports": ["in1", "in2"]
+                }
+            ]
+        }
+    ],
+    "pe": []
+}

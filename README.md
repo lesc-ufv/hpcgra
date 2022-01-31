@@ -45,3 +45,26 @@ To create a custom architecture, you must manually create the architecture descr
 9. Unary: "not", "abs", "pass".
 10. Binary: "add", "sub", "mul", "or", "xor", "and", "slt", "sgt", "seq", "sne", "shl", "shr", "max", "min".
 11. Ternary: "muladd", "mulsub", "addadd", "subsub", "addsub", "mux".
+
+
+## creating custom operator
+To create a custom operator, you must write it in the "operator" list inside the json architecture file
+
+1. The **operator** has to be an unnamed object with the parameters: 
+    - "opcode": string that represents the typename of the new operator (must be unique over all operators)
+    - "inputs": array of strings representing the name of the inputs
+    - "output": string that defines where the output value comes from
+    - "vars": list of variables
+    - "dataflow": list of nodes in the dataflow for this operator
+
+
+2. The **variables** are represented with an object that contains the folowing parameters:
+    - "name": string variable name
+    - "value": the new value of the variable after a rising edge of the clock. This value can be a constant or a string name of the origin value.
+    - "initval": Should be a constant for the initial value
+
+
+3. The **dataflow** is a list of object nodes that contains the parameters:
+    - "type": type must be a predefined type or a custom type
+    - "label": label is the name used for the result of the operation
+    - "ports": is a list of input ports for this type. The number of inputs passed has to match exactly the number of inputs for this type. Values can be constants or string name of the origin

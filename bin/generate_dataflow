@@ -1,0 +1,3 @@
+#!/bin/bash
+
+../parse_cfg/scripts/collect_code.py

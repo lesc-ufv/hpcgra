@@ -12,6 +12,7 @@ ARCH=(
 )
 
 BENCH=(
+../json/sum_vector.json
 #../json/toys/chebyshev.json
 #../json/toys/fir64.json  #No solution found! deu uns segmentation fault tbm!
 #../json/toys/kmeans_4_4.json

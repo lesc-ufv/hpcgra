@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <string>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ typedef struct pe_t {
     bool acc;
     vector<int> neighbors;
     vector<int> elastic_queue;
-    bool isa[SIZE_TYPE];
+    bool *isa;
     vector<int> inputs, outputs, basics;
 } pe_t;
 
@@ -33,6 +34,8 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
     }
     ifs.close();
 
+    int count = map_type.size();
+
     try {
         int size_pe = data["pe"].size();
         int size_neighbors = 0;
@@ -40,17 +43,36 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
         int size_isa = 0;
 
         for (int i = 0; i < size_pe; ++i) {
+            size_isa = data["pe"][i]["isa"].size();
+            for (int j = 0; j < size_isa; ++j) {
+                string type_name = data["pe"][i]["isa"][j].asString();
+                if (map_type.count(type_name) == 0) {
+                    map_type[type_name] = count++;
+                }
+            }
+        }
+
+        SIZE_TYPE = map_type.size();
+
+        for (int i = 0; i < size_pe; ++i) {
             pe_t aux_pe;
+            aux_pe.isa = new bool[SIZE_TYPE];
             aux_pe.id = data["pe"][i]["id"].asInt();
             
-            // old read
-            //aux_pe.type = map_type[data["pe"][i]["type"].asString()];
+            aux_pe.type = -1;
 
             for (int j = 0; j < SIZE_TYPE; ++j)
                 aux_pe.isa[j] = false;
             
-            aux_pe.isa[0] = data["pe"][i]["num_istream"].asInt(); // input
-            aux_pe.isa[1] = data["pe"][i]["num_ostream"].asInt(); // output
+            aux_pe.isa[0] = (data["pe"][i]["num_istream"].asInt() >= 1); // input
+            aux_pe.isa[1] = (data["pe"][i]["num_ostream"].asInt() >= 1); // output
+
+            if (aux_pe.isa[0] && aux_pe.isa[1])
+                aux_pe.type = 2;
+            else if (aux_pe.isa[0])
+                aux_pe.type = 0;
+            else if (aux_pe.isa[1])
+                aux_pe.type = 1;
 
             /*aux_pe.isa[aux_pe.type] = true;
             if (aux_pe.type == 2) {

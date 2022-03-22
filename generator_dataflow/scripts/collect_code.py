@@ -9,16 +9,14 @@ def collect_code(f):
         if l:
             if l and "__cgra__" in l:
                 copy = True
+            if copy and "{" in l:
+                count += 1
             if copy and count >= 1:
                 s += l + "\n"
                 if "}" in l:
                     count -= 1
                     if count == 0:
                         copy = False
-                continue
-            if copy and "{" in l:
-                s += l + "\n"
-                count += 1
     return s
 
 if __name__ == '__main__':

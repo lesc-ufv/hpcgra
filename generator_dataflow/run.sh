@@ -2,7 +2,8 @@ set -e
 
 # Benchmarks
 BENCH=(
-	sum_simple
+	#sum_simple
+    sum_loop
 )
 
 LLVM_INSTALL_DIR="/home/canesche/git/llvm-10/build" # </path/to/llvm/>, if you use binary installation, you can leave empty this string 
@@ -25,11 +26,12 @@ cd ..
 
 for ((i = 0; i < ${#BENCH[@]}; i++)); do
 
-    ../bin/generate_dataflow bench/sum_simple.cpp  
+    EXAMPLE=bench/${BENCH[i]}
+
+    ../bin/generate_dataflow $EXAMPLE.cpp  
 
     echo "Executing the pass for bench: ${BENCH[i]}"
 
-    EXAMPLE=bench/${BENCH[i]}
     $CLANG -Wno-everything -fno-discard-value-names -Xclang -disable-O0-optnone -S -emit-llvm $EXAMPLE"_to_cgra.cpp" -o $EXAMPLE".ll"
     $LLVM_OPT -S -instnamer -mem2reg $EXAMPLE".ll" -o $EXAMPLE"_opt.ll"
     

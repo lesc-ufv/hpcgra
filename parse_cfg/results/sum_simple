@@ -1,5 +1,0 @@
-digraph G {
-a -> add
-b -> add
-add -> output
-}

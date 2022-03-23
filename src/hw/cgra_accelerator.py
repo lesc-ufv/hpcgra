@@ -1,13 +1,19 @@
 from veriloggen import *
 
+
+p = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if not p in sys.path:
+    sys.path.insert(0, p)
+
 from src.hw.components import Components
+from src.hw.cgra import Cgra
 
 
 class CgraAccelerator:
     def __init__(self, cgra):
         self.cgra = cgra
-        self.num_in = len(self.cgra.input_ids)
-        self.num_out = len(self.cgra.output_ids)
+        self.num_in =  sum([t[1] for t in self.cgra.input_ids])
+        self.num_out = sum([t[1] for t in self.cgra.output_ids])
 
     def get_num_in(self):
         return self.num_in
@@ -30,7 +36,7 @@ class CgraAccelerator:
         control_exec = comp.create_control_exec(self.cgra.id, self.num_in, self.num_out)
         control_data_flow = comp.create_control_data_flow(self.num_in + 1, self.num_out, 4, 4)
 
-        m = Module('cgra_acc')
+        m = Module('m_cgra_acc')
         clk = m.Input('clk')
         rst = m.Input('rst')
         start = m.Input('start')
@@ -135,18 +141,23 @@ class CgraAccelerator:
         con = [('clk', clk), ('conf_bus', conf_out_bus)]
 
         j = 0
-        for i in self.cgra.input_ids:
-            con.append(('in_stream%d' % i,
-                        Cat(en_pop[j] & read_fifo_mask[j],
-                            fifo_in_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
-            j += 1
+        in_sorted = sorted(self.cgra.input_ids,key=lambda t: t[0])
+        out_sorted = sorted(self.cgra.output_ids,key=lambda t: t[0])
+        
+        for i in in_sorted:
+            for k in range(i[1]):
+                con.append(('in_stream%d_%d' % (i[0],k),
+                            Cat(en_pop[j] & read_fifo_mask[j],
+                                fifo_in_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
+                j += 1
 
         j = 0
-        for i in self.cgra.output_ids:
-            con.append(('out_stream%d' % i,
-                        Cat(en_push[j], fifo_out_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
-            j += 1
+        for i in out_sorted:
+            for k in range(i[1]):
+                con.append(('out_stream%d_%d'% (i[0],k),
+                            Cat(en_push[j], fifo_out_data[self.cgra.data_width * j:self.cgra.data_width * (j + 1)])))
+                j += 1
 
-        m.Instance(self.cgra.get(), 'cgra', params, con)
+        m.Instance(self.cgra, 'cgra', params, con)
 
         return m

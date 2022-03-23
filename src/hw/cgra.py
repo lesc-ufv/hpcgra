@@ -1,7 +1,13 @@
+
 import json
+from veriloggen import *
 from math import ceil
 
-from veriloggen import *
+p = os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))))
+if not p in sys.path:
+    sys.path.insert(0, p)
+
 
 from src.hw.cgra_alu_operations import CgraAluOperations
 from src.hw.cgra_conf_tag import ConfTag
@@ -9,80 +15,76 @@ from src.hw.components import Components
 from src.hw.utils import bits, initialize_regs, create_conf_path
 
 
-class Cgra:
-    def __init__(self, json_arch=None):
+class Cgra(Module):
+    def __init__(self, json_arch: dict = None, json_file: str = None) -> None:
+        super().__init__('m_cgra')
+        if json_file:
+            with open(json_file, "r") as read_file:
+                self.arch = json.load(read_file)
+                read_file.close()
+            self.__create()
+        elif json_arch:
+            self.arch = json_arch
+            self.__create()
+
+    def __create(self):
         self.id = 0
-        self.cache = {}
         self.components = Components()
-        self.alu_ops = CgraAluOperations.get_operations()
-        self.arch = {}
+        self.alu_ops = CgraAluOperations(self.arch)
         self.array_pe = {}
         self.array_pe_arch = {}
         self.conf_raw_bits = 0
-        self.data_width = 0
-        self.pe_id_width = 0
-        self.conf_bus_width = 0
-        self.axi_bus_data_width = 0
+        self.data_width = self.arch['data_width']
+        self.pe_id_width = bits(len(self.arch['pe'])) + 1
+        self.conf_bus_width = self.arch['conf_bus_width']
+        self.axi_bus_data_width = self.arch['axi_bus_data_width']
         self.input_ids = []
         self.output_ids = []
-        self.__module = None
-        if json_arch:
-            self.load_from_file(json_arch)
 
-    def load_from_file(self, json_file):
-        with open(json_file, "r") as read_file:
-            self.arch = json.load(read_file)
-            read_file.close()
-        self.get()
-
-    def load_from_string(self, json_string):
-        self.arch = json_string
-        self.get()
-
-    def to_verilog(self, filename):
-        if not self.__module:
-            self.get()
-
-        self.__module.to_verilog(filename)
-
-    def get(self):
-        if not self.__module:
-            self.data_width = self.arch['data_width']
-            self.pe_id_width = bits(len(self.arch['pe'])) + 1
-            self.conf_bus_width = self.arch['conf_bus_width']
-            self.axi_bus_data_width = self.arch['axi_bus_data_width']
-            self.input_ids.clear()
-            self.output_ids.clear()
-            for pe in self.arch['pe']:
-                self.array_pe[pe['id']] = self.__create_pe(pe)
-                self.array_pe_arch[pe['id']] = pe
-                if pe['type'] == 'input' or pe['type'] == 'inout':
-                    self.input_ids.append(pe['id'])
-                if pe['type'] == 'output' or pe['type'] == 'inout':
-                    self.output_ids.append(pe['id'])
-
-            self.__module = self.__create_cgra()
-        return self.__module
-
-    def __create_cgra(self):
         wires = {}
-        array_pe_stream = {}
-        m = Module('cgra')
-        clk = m.Input('clk')
-        conf_bus = m.Input('conf_bus', self.conf_bus_width + 1)
+        array_pe_istream = {}
+        array_pe_ostream = {}
+        pe_cache = {}
         for pe in self.arch['pe']:
-            if pe['type'] == 'input' or pe['type'] == 'inout':
-                array_pe_stream[pe['id']] = m.Input('in_stream%s' % pe['id'], self.data_width + 1)
+            m_pe = Pe(
+                pe, self.alu_ops, self.data_width, self.conf_bus_width, self.pe_id_width)
+
+            if not pe_cache.get(m_pe.name):
+                pe_cache[m_pe.name] = m_pe
+            else:
+                m_pe = pe_cache[m_pe.name]
+
+            self.conf_raw_bits = max(self.conf_raw_bits, m_pe.getConfRawBits())
+            self.array_pe[pe['id']] = m_pe
+            self.array_pe_arch[pe['id']] = pe
+            if pe['num_istream'] > 0:
+                self.input_ids.append((pe['id'], pe['num_istream']))
+            if pe['num_ostream'] > 0:
+                self.output_ids.append((pe['id'], pe['num_ostream']))
+
+        clk = self.Input('clk')
+        conf_bus = self.Input('conf_bus', self.conf_bus_width + 1)
         for pe in self.arch['pe']:
-            if pe['type'] == 'output' or pe['type'] == 'inout':
-                array_pe_stream[pe['id']] = m.Output('out_stream%s' % pe['id'], self.data_width + 1)
+            a = []
+            for i in range(pe['num_istream']):
+                a.append(self.Input('in_stream%s_%s' %
+                         (pe['id'], i), self.data_width + 1))
+            array_pe_istream[pe['id']] = a
+        for pe in self.arch['pe']:
+            a = []
+            for o in range(pe['num_ostream']):
+                a.append(self.Output('out_stream%s_%s' %
+                         (pe['id'], o), self.data_width + 1))
+            array_pe_ostream[pe['id']] = a
         for pe in self.arch['pe']:
             for w in pe['neighbors']:
                 n = 'pe%d_to_pe%d' % (pe['id'], w)
-                wires[n] = m.Wire(n, self.data_width + 1)
+                wires[n] = self.Wire(n, self.data_width + 1)
 
-        wires['conf_bus_reg_in'] = m.Wire('conf_bus_reg_in', self.conf_bus_width + 1, len(self.array_pe))
-        wires['conf_bus_reg_out'] = m.Wire('conf_bus_reg_out', self.conf_bus_width + 1, len(self.array_pe))
+        wires['conf_bus_reg_in'] = self.Wire(
+            'conf_bus_reg_in', self.conf_bus_width + 1, len(self.array_pe))
+        wires['conf_bus_reg_out'] = self.Wire(
+            'conf_bus_reg_out', self.conf_bus_width + 1, len(self.array_pe))
         reg_pipe_conf_bus = self.components.create_register_pipeline()
 
         for pe in self.array_pe:
@@ -90,7 +92,8 @@ class Cgra:
             w = wires['conf_bus_reg_in'][pe]
             con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', w),
                    ('out', wires['conf_bus_reg_out'][pe])]
-            m.Instance(reg_pipe_conf_bus, 'reg_pipe_conf_%d' % pe, param, con)
+            self.Instance(reg_pipe_conf_bus, 'reg_pipe_conf_%d' %
+                          pe, param, con)
 
         for pe in self.array_pe:
             outputs = []
@@ -102,10 +105,15 @@ class Cgra:
             params = [('id', pe + 1), ('conf_raw_bits', self.conf_raw_bits)]
 
             con = [('clk', clk), ('conf_bus', wires['conf_bus_reg_out'][pe])]
-            if self.array_pe_arch[pe]['type'] == 'input' or self.array_pe_arch[pe]['type'] == 'inout':
-                con.append(('stream_in', array_pe_stream[pe]))
-            if self.array_pe_arch[pe]['type'] == 'output' or self.array_pe_arch[pe]['type'] == 'inout':
-                con.append(('stream_out', array_pe_stream[pe]))
+
+            for st in array_pe_istream[pe]:
+                v = st.name.split('_')[-1]
+                con.append(('stream_in%s' % (v), st))
+
+            for st in array_pe_ostream[pe]:
+                v = st.name.split('_')[-1]
+                con.append(('stream_out%s' % (v), st))
+
             for p in ports:
                 if self.array_pe[pe].is_input(p):
                     inputs.append(ports[p])
@@ -124,139 +132,210 @@ class Cgra:
                     if n in wires.keys():
                         con.append((p.name, wires[n]))
 
-            m.Instance(self.array_pe[pe], "pe_%d" % pe, params, con)
+            self.Instance(self.array_pe[pe], "pe_%d" % pe, params, con)
 
         wires['conf_bus_reg_in'][0].assign(conf_bus)
         p = create_conf_path(self.arch)
         for i, j in p:
             wires['conf_bus_reg_in'][j].assign(wires['conf_bus_reg_out'][i])
 
-        return m
 
-    def __create_pe(self, pe_arch):
-        has_acc = pe_arch['acc']
-        isa = pe_arch['isa']
-        isa.sort()
-        num_opcodes = len(isa)
-        alu_num_inputs = self.get_max_operands(isa)
+class Alu(Module):
+    def __init__(self, operators: list) -> None:
+        operators = sorted(operators, key=lambda op: op.name)
+        name = 'alu_%s' % ("_".join([o.name for o in operators]))
+        super().__init__(name)
+        num_opcodes = len(operators)
+        self.opcode_width = bits(num_opcodes)
+        width = self.Parameter('width', 8)
+        self.num_inputs = 0
+        self.num_outputs = 0
+        for op in operators:
+            self.num_inputs = max(op.get_num_in_operand(), self.num_inputs)
+            self.num_outputs = max(op.get_num_out_operand(), self.num_outputs)
+
+        clk = self.Input('clk')
+        rst = self.Input('rst')
+        opcode = self.Input('opcode', self.opcode_width)
+        inputs = [self.Input('in%d' % i, Add(width, 1))
+                  for i in range(self.num_inputs)]
+        outputs = [self.OutputReg('out%d' % i, Add(width, 1))
+                   for i in range(self.num_outputs)]
+
+        inputs_reg = [self.Reg('in_reg%d' % i, Add(width, 1))
+                      for i in range(self.num_inputs)]
+        outputs_wire = [self.Wire('out_wire%d' % i, Add(
+            width, 1), num_opcodes) for i in range(self.num_outputs)]
+
+        seq = Seq(self, 'in_regs', clk=clk)
+
+        for r, i in zip(inputs_reg, inputs):
+            seq.add(r(i))
+
+        for w, o in zip(outputs_wire, outputs):
+            seq.add(o(w[opcode]))
+
+        j = 0
+
+        for op in operators:
+            con = []
+            if 'clk' in op.get_ports():
+                con.append(('clk', clk))
+            if 'rst' in op.get_ports():
+                con.append(('rst', rst))
+            for i in range(op.get_num_in_operand()):
+                con.append(('in%d' % i, inputs_reg[i][0:width]))
+                con.append(('in%d_valid' % i, inputs_reg[i][width]))
+            for i in range(op.get_num_out_operand()):
+                con.append(
+                    ('out%d' % i, outputs_wire[i][j][EmbeddedCode('width-1:0')]))
+                con.append(('out%d_valid' % i, outputs_wire[i][j][width]))
+
+            j += 1
+
+            self.Instance(op, op.name, [('width', width)], con)
+
+        seq.implement()
+        initialize_regs(self)
+
+    def getNumInputs(self):
+        return self.num_inputs
+
+    def getNumOutputs(self):
+        return self.num_outputs
+
+    def getOpcodeWidth(self):
+        return self.opcode_width
+
+
+class Pe(Module):
+    def __init__(self, pe_arch: dict, operators: CgraAluOperations, data_width: Int, conf_bus_width: Int, pe_id_width: Int) -> None:
+        self.operators = operators
+        self.alu = Alu(self.operators.getOperators(pe_arch['isa']))
+        self.data_width = data_width
+        self.conf_bus_width = conf_bus_width
+        self.pe_id_width = pe_id_width
+        self.components = Components()
+
         elastic_queue = pe_arch['elastic_queue']
-        neighbors = pe_arch['neighbors']
-        neighbors.sort()
+        neighbors = sorted(pe_arch['neighbors'])
         routes = pe_arch['routes']
-
-        s = ''
-        for i in isa:
-            s += i + '_'
-        s = s[:-1]
-        acc = 'acc_' if has_acc else ''
-
+        num_istream = pe_arch['num_istream']
+        num_ostream = pe_arch['num_ostream']
         elastic_queue_str = ''.join(['%d_' % i for i in elastic_queue])
+        name = 'pe_i%d_o%d_n%d_r%d_e%s%s' % (num_istream, num_ostream,
+                                             len(neighbors), routes, elastic_queue_str, self.alu.name)
 
-        name = 'pe_%s_%d_%d_%s%s%s' % (pe_arch['type'], len(neighbors), routes, elastic_queue_str, acc, s)
-        if name in self.cache.keys():
-            return self.cache[name]
+        super().__init__(name)
 
-        m = Module(name)
-        # Module parameters:
-        id = m.Parameter('id', 0)
-        conf_raw_bits = m.Parameter('conf_raw_bits', 0)
-        # Module ports:
-        clk = m.Input('clk')
-        conf_bus = m.Input('conf_bus', self.conf_bus_width + 1)
+        id = self.Parameter('id', 0)
+        conf_raw_bits = self.Parameter('conf_raw_bits', 0)
 
-        inputs = [m.Input('in%d' % i, self.data_width + 1) for i in range(len(neighbors))]
-        inputs_reg = [m.Wire('in_reg%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+        clk = self.Input('clk')
+        conf_bus = self.Input('conf_bus', self.conf_bus_width + 1)
 
-        outputs = [m.Output('out%d' % i, self.data_width + 1) for i in range(len(neighbors))]
-        router_out = [m.Wire('router_out%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+        inputs = [self.Input('in%d' % i, self.data_width + 1)
+                  for i in range(len(neighbors))]
+        inputs_reg = [self.Wire('in_reg%d' % i, self.data_width + 1)
+                      for i in range(len(neighbors))]
+
+        outputs = [self.Output('out%d' % i, self.data_width + 1)
+                   for i in range(len(neighbors))]
+        router_out = [self.Wire('router_out%d' % i, self.data_width + 1)
+                      for i in range(len(neighbors))]
 
         mux_alu_inputs = []
-        load_pe = None
-        stream_in_reg = None
-        if pe_arch['type'] == 'input' or pe_arch['type'] == 'inout':
-            load_pe = m.Input('stream_in', self.data_width + 1)
-            stream_in_reg = m.Wire('stream_in_reg', self.data_width + 1)
-            mux_alu_inputs.append(stream_in_reg)
+        load_pe = []
+        stream_in_reg = []
+        for i in range(num_istream):
+            load_pe.append(self.Input('stream_in%d' % i, self.data_width + 1))
+            stream_in_reg.append(
+                self.Wire('stream_in_reg%d' % i, self.data_width + 1))
+            mux_alu_inputs.append(stream_in_reg[i])
 
-        if pe_arch['type'] == 'output' or pe_arch['type'] == 'inout':
-            store_pe = m.Output('stream_out', self.data_width + 1)
-            store_pe_route = m.Wire('stream_out_route', self.data_width + 1)
+        for i in range(num_ostream):
+            store_pe = self.Output('stream_out%d' % i, self.data_width + 1)
+            store_pe_route = self.Wire(
+                'stream_out_route%d' % i, self.data_width + 1)
             outputs.append(store_pe)
             router_out.append(store_pe_route)
 
-        reset = m.Wire('reset')
+        reset = self.Wire('reset')
 
-        acc_wire = None
-        acc_rst = None
-        conf_acc = None
-        # TODO: precisa balancear o acc!
-        if has_acc:
-            acc_wire = m.Wire('acc_wire', self.data_width + 1)
-            acc_rst = m.Wire('acc_rst')
-            conf_acc = m.Wire('conf_acc', self.data_width)
-            mux_alu_inputs.append(acc_wire)
-
-        pe_const = m.Wire('pe_const', Mul(alu_num_inputs, self.data_width + 1))
+        pe_const = self.Wire('pe_const', Mul(
+            self.alu.getNumInputs(), self.data_width + 1))
 
         mux_alu_inputs.append(pe_const)
 
         for i in inputs_reg:
             mux_alu_inputs.append(i)
 
-        inputs_regs_router = [m.Wire('in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors))]
+        inputs_regs_router = [self.Wire(
+            'in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors))]
 
         mux_alu_bits = bits(len(mux_alu_inputs))
-        alu_in = [m.Wire('mux_alu_out%d' % i, self.data_width + 1) for i in range(alu_num_inputs)]
-        alu_out = m.Wire('alu_out', self.data_width + 1)
-        sel_alu_opcode = m.Reg('sel_alu_opcode', bits(num_opcodes))
-        sel_mux_alu = [m.Reg('sel_mux_alu%d' % i, mux_alu_bits) for i in range(alu_num_inputs)]
+        alu_in = [self.Wire('mux_alu_out%d' % i, self.data_width + 1)
+                  for i in range(self.alu.getNumInputs())]
+        alu_out = [self.Wire('alu_out%d' % i, self.data_width + 1)
+                   for i in range(self.alu.getNumOutputs())]
+        sel_alu_opcode = self.Reg('sel_alu_opcode', self.alu.getOpcodeWidth())
+        sel_mux_alu = [self.Reg('sel_mux_alu%d' % i, mux_alu_bits)
+                       for i in range(self.alu.getNumInputs())]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
 
-        router = self.components.create_router(routes, len(neighbors) + 1, len(outputs))
+        router = self.components.create_router(
+            routes, len(neighbors) + 1, len(outputs))
         route_ports = router.get_ports()
         route_sel_in = None
         route_sel_out = None
         if 'sel_in' in route_ports.keys():
-            route_sel_in = m.Reg('route_sel_in', route_ports['sel_in'].width)
+            route_sel_in = self.Reg(
+                'route_sel_in', route_ports['sel_in'].width)
 
         if 'sel_out' in route_ports.keys():
-            route_sel_out = m.Reg('route_sel_out', route_ports['sel_out'].width)
+            route_sel_out = self.Reg(
+                'route_sel_out', route_ports['sel_out'].width)
 
         m_reg = self.components.create_register_pipeline()
-        if pe_arch['type'] == 'input' or pe_arch['type'] == 'inout':
+        for i in range(num_istream):
             param = [('num_register', 1), ('width', self.data_width + 1)]
-            con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', load_pe), ('out', stream_in_reg)]
-            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-            m.Instance(m_reg, 'm_stream_in_reg', param, con)
+            con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(
+                1, 1, 2)), ('in', load_pe[i]), ('out', stream_in_reg[i])]
+            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+            self.Instance(m_reg, 'm_stream_in_reg%d' % i, param, con)
 
         m_reg = self.components.create_register_pipeline()
         for i, j in zip(inputs, inputs_reg):
             param = [('num_register', 1), ('width', self.data_width + 1)]
-            con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i), ('out', j)]
-            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-            m.Instance(m_reg, i.name + '_reg', param, con)
+            con = [('clk', clk), ('rst', Int(0, 1, 2)),
+                   ('en', Int(1, 1, 2)), ('in', i), ('out', j)]
+            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+            self.Instance(m_reg, i.name + '_reg', param, con)
 
         mux_alu = self.components.create_multiplexer(len(mux_alu_inputs))
         sel_elastic_pipeline = []
         balance = 2
-        for i in range(alu_num_inputs):
+        for i in range(self.alu.getNumInputs()):
             con = [('sel', sel_mux_alu[i])]
             for j in range(len(mux_alu_inputs)):
                 if mux_alu_inputs[j].name == 'acc_wire':
                     con.append(('in%d' % j, mux_alu_inputs[j]))
                 elif mux_alu_inputs[j].name == 'pe_const':
-                    const_ = mux_alu_inputs[j][Mul(i, self.data_width + 1):Mul((i + 1), self.data_width + 1)]
+                    const_ = mux_alu_inputs[j][Mul(
+                        i, self.data_width + 1):Mul((i + 1), self.data_width + 1)]
                     con.append(('in%d' % j, const_))
                 else:
                     con.append(('in%d' % j, mux_alu_inputs[j]))
             con.append(('out', alu_in[i]))
             params = [('width', self.data_width + 1)]
-            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-            m.Instance(mux_alu, 'mux_alu_in%d' % i, params, con)
-            elastic_pipeline_to_alu = m.Wire('elastic_pipeline_to_alu%d' % i, self.data_width + 1)
+            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+            self.Instance(mux_alu, 'mux_alu_in%d' % i, params, con)
+            elastic_pipeline_to_alu = self.Wire(
+                'elastic_pipeline_to_alu%d' % i, self.data_width + 1)
             con = [('in', alu_in[i]), ('out', elastic_pipeline_to_alu)]
             if elastic_queue[i] > 0:
-                w = m.Reg('sel_elastic_pipeline%d' % i, bits(elastic_queue[i] + 1))
+                w = self.Reg('sel_elastic_pipeline%d' %
+                             i, bits(elastic_queue[i] + 1))
                 sel_elastic_pipeline.append(w)
                 con.append(('clk', clk))
                 con.append(('en', Int(1, 1, 2)))
@@ -264,40 +343,28 @@ class Cgra:
 
             params = [('width', self.data_width + 1)]
             eq = self.components.create_elastic_pipeline(elastic_queue[i])
-            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-            m.Instance(eq, 'elastic_pipeline%d' % i, params, con)
+            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+            self.Instance(eq, 'elastic_pipeline%d' % i, params, con)
             alu_in[i] = elastic_pipeline_to_alu
 
         con = [('clk', clk), ('opcode', sel_alu_opcode)]
-        con += [('in%d' % i, alu_in[i]) for i in range(alu_num_inputs)]
-        con.append(('out', alu_out))
+        con += [('in%d' % i, alu_in[i])
+                for i in range(self.alu.getNumInputs())]
+        con += [('out%d' % i, alu_out[i])
+                for i in range(self.alu.getNumOutputs())]
         params = [('width', self.data_width)]
-        m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-        m.Instance(self.__create_alu(isa, alu_num_inputs), 'alu', params, con)
-
-        if has_acc:
-            reg_acc = self.components.create_register_pipeline()
-            con1 = [('clk', clk), ('rst', acc_rst), ('en', alu_out[self.data_width]),
-                    ('in', alu_out[0:self.data_width]), ('out', acc_wire)]
-            param1 = [('num_register', 1), ('width', self.data_width)]
-            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-            m.Instance(reg_acc, 'acc_reg', param1, con1)
-
-            acc_reset = self.components.create_acc_reset()
-            p = [('width', self.data_width)]
-            c = [('clk', clk), ('rst', reset), ('start', alu_out[self.data_width]), ('limit', conf_acc),
-                 ('out', acc_rst)]
-            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-            m.Instance(acc_reset, 'acc_reset_inst', p, c)
+        self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+        self.Instance(self.alu, 'alu', params, con)
 
         if routes > 0:
             reg_pipe_in = self.components.create_register_pipeline()
             for i, j in zip(inputs_reg, inputs_regs_router):
                 con1 = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i),
                         ('out', j)]
-                param1 = [('num_register', balance), ('width', self.data_width + 1)]
-                m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-                m.Instance(reg_pipe_in, i.name + '_router', param1, con1)
+                param1 = [('num_register', balance),
+                          ('width', self.data_width + 1)]
+                self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+                self.Instance(reg_pipe_in, i.name + '_router', param1, con1)
 
         con = []
         conf_array_router = []
@@ -322,8 +389,8 @@ class Cgra:
             con.append(('out%d' % c, o))
             c += 1
 
-        m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-        m.Instance(router, 'router', [('width', self.data_width + 1)], con)
+        self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+        self.Instance(router, 'router', [('width', self.data_width + 1)], con)
 
         conf_array_alu += sel_elastic_pipeline
         conf_alu_width = 0
@@ -334,40 +401,37 @@ class Cgra:
         for w in conf_array_router:
             conf_router_width += w.width
 
-        conf_tag_bits = ConfTag(alu_num_inputs).bits
+        conf_tag_bits = ConfTag(self.alu.getNumInputs()).bits
         self.conf_raw_bits = max(conf_alu_width + self.pe_id_width + conf_tag_bits,
                                  conf_router_width + self.pe_id_width + conf_tag_bits,
-                                 self.data_width + self.pe_id_width + conf_tag_bits,
-                                 self.conf_raw_bits)
+                                 self.data_width + self.pe_id_width + conf_tag_bits)
 
-        self.conf_raw_bits = ceil(self.conf_raw_bits / self.conf_bus_width) * self.conf_bus_width
+        self.conf_raw_bits = ceil(
+            self.conf_raw_bits / self.conf_bus_width) * self.conf_bus_width
 
-        conf_alu = m.Wire('conf_alu', conf_alu_width)
+        conf_alu = self.Wire('conf_alu', conf_alu_width)
         conf_router = ''
         params = [('pe_id', id), ('conf_raw_bits', conf_raw_bits)]
         con = [('clk', clk), ('conf_bus', conf_bus), ('reset', reset), ('conf_alu', conf_alu),
                ('conf_const', pe_const)]
 
         if conf_router_width > 0:
-            conf_router = m.Wire('conf_router', conf_router_width)
+            conf_router = self.Wire('conf_router', conf_router_width)
             con.append(('conf_router', conf_router))
 
-        if has_acc:
-            con.append(('conf_acc', conf_acc))
+        cf = ConfReader(conf_router_width > 0, self.pe_id_width, conf_alu_width, self.alu,
+                        conf_router_width, self.conf_bus_width, self.data_width)
 
-        cf = self.__create_pe_conf_reader(has_acc, conf_router_width > 0, self.pe_id_width, conf_alu_width,
-                                          alu_num_inputs,
-                                          conf_router_width)
-
-        m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-        m.Instance(cf, 'pe_conf_reader', params, con)
+        self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+        self.Instance(cf, 'pe_conf_reader', params, con)
 
         for o, ro in zip(outputs, router_out):
             out_reg = self.components.create_register_pipeline()
             param = [('num_register', 1), ('width', self.data_width + 1)]
-            con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', ro), ('out', o)]
-            m.EmbeddedCode('(* keep_hierarchy = "yes" *)')
-            m.Instance(out_reg, o.name + '_reg', param, con)
+            con = [('clk', clk), ('rst', Int(0, 1, 2)),
+                   ('en', Int(1, 1, 2)), ('in', ro), ('out', o)]
+            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+            self.Instance(out_reg, o.name + '_reg', param, con)
 
         stm = []
         last = 0
@@ -381,153 +445,73 @@ class Cgra:
                 stm.append(p(conf_router[last:last + p.width]))
                 last += p.width
 
-        m.Always(Posedge(clk))(
+        self.Always(Posedge(clk))(
             stm
         )
 
-        initialize_regs(m)
-        self.cache[name] = m
+        initialize_regs(self)
 
-        return m
+    def getConfRawBits(self):
+        return self.conf_raw_bits
 
-    def get_max_operands(self, isa):
-        r = 0
-        for i in isa:
-            r = max(self.alu_ops[i].get_num_operand(), r)
-        return r
 
-    def __create_alu(self, isa, num_inputs):
-        s = ''
-        for i in isa:
-            s += i + '_'
-        s = s[:-1]
-        name = 'alu_%d_%s' % (num_inputs, s)
-        if name in self.cache.keys():
-            return self.cache[name]
+class ConfReader(Module):
+    def __init__(self, has_router: bool, pe_id_width: Int, conf_alu_width: Int, alu: Alu,
+                 conf_router_width: Int, conf_bus_width: Int, data_width: Int) -> None:
+        tag_bits = ConfTag(alu.getNumInputs()).bits
+        name = 'pe_conf_reader_alu_in_%d_alu_w_%d_router_w_%d' % (
+            alu.getNumInputs(), conf_alu_width, conf_router_width)
 
-        m = Module(name)
-        num_opcodes = len(isa)
-        opcode_width = bits(num_opcodes)
+        super().__init__(name)
+        pe_id = self.Parameter('pe_id', 0)
+        conf_raw_bits = self.Parameter('conf_raw_bits', 0)
 
-        width = m.Parameter('width', 8)
-        clk = m.Input('clk')
-
-        opcode = m.Input('opcode', opcode_width)
-        inputs = [m.Input('in%d' % i, Add(width, 1)) for i in range(num_inputs)]
-        out = m.OutputReg('out', Add(width, 1))
-
-        inputs_reg = [m.Reg('in%d_reg' % i, width) for i in range(num_inputs)]
-        op_results = m.Wire('op_results', width, num_opcodes)
-        valid_result = m.Wire('valid_result', num_opcodes)
-        seq = Seq(m, 'seq_reg', clk)
-        and_valid = {}
-        v = [i[width] for i in inputs]
-
-        for i in isa:
-            t = self.alu_ops[i].get_type()
-            a = and_valid.keys()
-            if t == 'unary':
-                if 'and_valid_1' not in a:
-                    r = m.Reg('and_valid_1')
-                    seq.add(r(v[0]))
-                    and_valid[r.name] = r
-            if t == 'binary':
-                if 'and_valid_2' not in a:
-                    r = m.Reg('and_valid_2')
-                    seq.add(r(And(v[0], v[1])))
-                    and_valid[r.name] = r
-            if t == 'ternary':
-                if 'and_valid_3' not in a:
-                    r = m.Reg('and_valid_3')
-                    seq.add(r(And(And(v[0], v[1]), v[2])))
-                    and_valid[r.name] = r
-
-        for i in range(num_inputs):
-            seq.add(inputs_reg[i](inputs[i][0:width]))
-
-        opc = 0
-        for i in isa:
-            op = self.alu_ops[i].get
-            t = self.alu_ops[i].get_type()
-            if t == 'unary':
-                op(m, op_results[opc].assign, inputs_reg[0])
-                valid_result[opc].assign(and_valid['and_valid_1'])
-            if t == 'binary':
-                op(m, op_results[opc].assign, inputs_reg[0], inputs_reg[1])
-                valid_result[opc].assign(and_valid['and_valid_2'])
-            if t == 'ternary':
-                op(m, op_results[opc].assign, inputs_reg[0], inputs_reg[1], inputs_reg[2])
-                valid_result[opc].assign(and_valid['and_valid_3'])
-            opc += 1
-
-        seq.add(out(Cat(valid_result[opcode], op_results[opcode])))
-
-        seq.implement()
-
-        initialize_regs(m)
-        self.cache[name] = m
-        return m
-
-    def __create_pe_conf_reader(self, has_acc, has_router, pe_id_width, conf_alu_width, alu_num_inputs,
-                                conf_router_width=0):
-        tag_bits = ConfTag(alu_num_inputs).bits
-        acc = '_acc' if has_acc else ''
-        name = 'pe_conf_reader%s_alu_in_%d_alu_w_%d_router_w_%d' % (
-            acc, alu_num_inputs, conf_alu_width, conf_router_width)
-
-        if name in self.cache.keys():
-            return self.cache[name]
-
-        m = Module(name)
-        pe_id = m.Parameter('pe_id', 0)
-        conf_raw_bits = m.Parameter('conf_raw_bits', 0)
-
-        clk = m.Input('clk')
-        conf_bus = m.Input('conf_bus', self.conf_bus_width + 1)
-        reset = m.OutputReg('reset')
-        conf_alu = m.OutputReg('conf_alu', conf_alu_width)
-        conf_const = m.OutputReg('conf_const', (self.data_width + 1) * alu_num_inputs)
+        clk = self.Input('clk')
+        conf_bus = self.Input('conf_bus', conf_bus_width + 1)
+        reset = self.OutputReg('reset')
+        conf_alu = self.OutputReg('conf_alu', conf_alu_width)
+        conf_const = self.OutputReg(
+            'conf_const', (data_width + 1) * alu.getNumInputs())
         conf_router = None
-        conf_acc = None
         conf_width = pe_id_width + tag_bits
-        if has_acc:
-            conf_acc = m.OutputReg('conf_acc', self.data_width)
 
         if has_router:
-            conf_router = m.OutputReg('conf_router', conf_router_width)
-            conf_width += max(conf_alu_width, self.data_width, conf_router_width)
+            conf_router = self.OutputReg('conf_router', conf_router_width)
+            conf_width += max(conf_alu_width, data_width, conf_router_width)
         else:
-            conf_width += max(conf_alu_width, self.data_width)
+            conf_width += max(conf_alu_width, data_width)
 
-        conf_bus_r = m.Reg('conf_bus_r', self.conf_bus_width + 1)
-        conf_valid0 = m.Reg('conf_valid0')
-        conf_valid1 = m.Reg('conf_valid1')
-        conf_valid2 = m.Reg('conf_valid2')
-        conf_valid = m.Reg('conf_valid')
-        conf_reg0 = m.Reg('conf_reg0', conf_width)
-        conf_reg1 = m.Reg('conf_reg1', conf_width)
-        conf_reg2 = m.Reg('conf_reg2', conf_width)
-        conf_reg = m.Reg('conf_reg', conf_width)
-        conf_raw_reg = m.Reg('conf_raw_reg', conf_raw_bits)
-        count = m.Reg('count', Div(conf_raw_bits, self.conf_bus_width))
-        m.Always(Posedge(clk))(
+        conf_bus_r = self.Reg('conf_bus_r', conf_bus_width + 1)
+        conf_valid0 = self.Reg('conf_valid0')
+        conf_valid1 = self.Reg('conf_valid1')
+        conf_valid2 = self.Reg('conf_valid2')
+        conf_valid = self.Reg('conf_valid')
+        conf_reg0 = self.Reg('conf_reg0', conf_width)
+        conf_reg1 = self.Reg('conf_reg1', conf_width)
+        conf_reg2 = self.Reg('conf_reg2', conf_width)
+        conf_reg = self.Reg('conf_reg', conf_width)
+        conf_raw_reg = self.Reg('conf_raw_reg', conf_raw_bits)
+        count = self.Reg('count', Div(conf_raw_bits, conf_bus_width))
+        self.Always(Posedge(clk))(
             conf_bus_r(conf_bus)
         )
-        m.Always(Posedge(clk))(
+        self.Always(Posedge(clk))(
             conf_valid0(Int(0, 1, 2)),
             conf_reg0(Int(0, conf_width, 2)),
-            conf_raw_reg(Mux(conf_bus_r[0], Cat(conf_bus_r[1:], conf_raw_reg[self.conf_bus_width:]),
+            conf_raw_reg(Mux(conf_bus_r[0], Cat(conf_bus_r[1:], conf_raw_reg[conf_bus_width:]),
                              Repeat(Int(0, 1, 2), conf_raw_bits))),
-            count(Mux(conf_bus_r[0], Cat(Int(1, 1, 2), count[1:]), Repeat(Int(0, 1, 2), count.width))),
+            count(Mux(conf_bus_r[0], Cat(Int(1, 1, 2), count[1:]), Repeat(
+                Int(0, 1, 2), count.width))),
 
             If(count[0])(
                 conf_reg0(conf_raw_reg[0:conf_reg0.width]),
                 conf_valid0(Int(1, 1, 2)),
-                count(Cat(conf_bus_r[0], Repeat(Int(0, 1, 2), count.width - 1)))
+                count(Cat(conf_bus_r[0], Repeat(
+                    Int(0, 1, 2), count.width - 1)))
             )
         )
 
-        m.Always(Posedge(clk))(
+        self.Always(Posedge(clk))(
             conf_reg1(conf_reg0),
             conf_reg2(conf_reg1),
             conf_reg(conf_reg2),
@@ -538,36 +522,30 @@ class Cgra:
 
         case = Case(conf_reg[pe_id_width:pe_id_width + tag_bits])()
 
-        reset_case = When(Int(0, tag_bits, 2))(reset(Int(1, 1, 2)), conf_alu(0), conf_const(0))
+        reset_case = When(Int(0, tag_bits, 2))(
+            reset(Int(1, 1, 2)), conf_alu(0), conf_const(0))
         case.add(reset_case)
 
         alu_case = When(Int(1, tag_bits, 2))(
             conf_alu(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + conf_alu_width]))
         case.add(alu_case)
 
-        for i in range(alu_num_inputs):
+        for i in range(alu.getNumInputs()):
             const_case = When(Int(2 + i, tag_bits, 2))(
-                conf_const[Mul(i, self.data_width + 1):Mul((i + 1), self.data_width + 1)](
+                conf_const[Mul(i, data_width + 1):Mul((i + 1), data_width + 1)](
                     Cat(Int(1, 1, 2),
-                        conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width])))
+                        conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + data_width])))
             case.add(const_case)
 
         if has_router:
-            router_case = When(Int(alu_num_inputs + 2, tag_bits, 2))(
+            router_case = When(Int(alu.getNumInputs() + 2, tag_bits, 2))(
                 conf_router(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + conf_router_width]))
             reset_case.add(conf_router(0))
             case.add(router_case)
-        if has_acc:
-            acc_case = When(Int(alu_num_inputs + 3, tag_bits, 2))(
-                conf_acc(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + self.data_width]))
-            reset_case.add(conf_acc(0))
-            case.add(acc_case)
 
-        m.Always(Posedge(clk))(
+        self.Always(Posedge(clk))(
             reset(Int(0, 1, 2)),
             If(AndList(conf_valid, pe_id == conf_reg[0:pe_id_width]))(case)
         )
 
-        initialize_regs(m)
-        self.cache[name] = m
-        return m
+        initialize_regs(self)

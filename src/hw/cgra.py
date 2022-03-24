@@ -376,10 +376,12 @@ class Pe(Module):
             con.append(('sel_out', route_sel_out))
             conf_array_router.append(route_sel_out)
 
-        con.append(('in0', alu_out))
+        c = 0
+        for p in alu_out:
+            con.append(('in%d'%c, p))
+            c += 1
 
         if routes > 0:
-            c = 1
             for i in inputs_regs_router:
                 con.append(('in%d' % c, i))
                 c += 1

@@ -44,10 +44,10 @@ for ((i = 0; i < ${#BENCH[@]}; i++)); do
 	bench_name=$(basename -s .json ${BENCH[i]})
 	echo "+ "${bench_name}
 	for ((j = 0; j < ${#ARCH[@]}; j++)); do
-	arch_name=$(basename -s .json ${ARCH[j]})
-	echo " - "${arch_name}
-	NAME=${bench_name}"_"${arch_name}
-	$EXEC $NAME ${BENCH[i]} ${ARCH[j]} 1000
+		arch_name=$(basename -s .json ${ARCH[j]})
+		echo " - "${arch_name}
+		NAME=${bench_name}"_"${arch_name}
+		$EXEC $NAME ${BENCH[i]} ${ARCH[j]} 1000
 	done
 	#python3 ../get_problem.py $NAME.asm
 done

@@ -32,7 +32,6 @@
 #include <evaluate.h>
 #include <visualization.h>
 #include <generate_asm.h>
-#include <statistics.h>
 
 using namespace std;
 using namespace std::chrono;

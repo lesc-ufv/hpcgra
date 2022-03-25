@@ -155,10 +155,10 @@ class CgraAssembler:
                         has_const = True
                     port += 1
 
-            ops = CgraAluOperations.get_operations()
-            if ops[op].get_num_operand() != len(alu_src):
+            ops = CgraAluOperations().get_all_operators()
+            if ops[op].get_num_in_operand() != len(alu_src):
                 return False, "Error in the number of operands, expected %d found %d." % (
-                    ops[op].get_num_operand(), len(alu_src))
+                    ops[op].get_num_in_operand(), len(alu_src))
 
         except Exception as e:
             return False, str(e)

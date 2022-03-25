@@ -9,7 +9,7 @@ class Bitstream:
     def __init__(self, cgra_json, assembly, pr_dot_path):
         self.mask_input = 0
         self.mask_output = 0
-        self.cgra = Cgra(cgra_json)
+        self.cgra = Cgra(json_file=cgra_json)
         self.assembler = CgraAssembler(self.cgra, assembly, pr_dot=pr_dot_path)
 
         cgra_bitstream = self.assembler.compile()
@@ -18,14 +18,14 @@ class Bitstream:
 
         cgra_bitstream = cgra_bitstream.split('\n')
 
-        sorted(self.cgra.input_ids)
+        self.cgra.input_ids = sorted(self.cgra.input_ids, key=lambda p:p[0])
         for i in range(len(self.cgra.input_ids)):
-            if self.cgra.input_ids[i] in self.assembler.used_inputs:
+            if self.cgra.input_ids[i][0] in self.assembler.used_inputs:
                 self.mask_input |= 1 << i
 
-        sorted(self.cgra.output_ids)
+        self.cgra.output_ids = sorted(self.cgra.output_ids, key=lambda p:p[0])
         for i in range(len(self.cgra.output_ids)):
-            if self.cgra.output_ids[i] in self.assembler.used_outputs:
+            if self.cgra.output_ids[i][0] in self.assembler.used_outputs:
                 self.mask_output |= 1 << i
 
         cgra_bitstream_hex = []

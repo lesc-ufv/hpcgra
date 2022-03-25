@@ -14,7 +14,7 @@ class CgraConfiguration:
             return False, 'CGRA does not contain the PE %d.' % id
 
         isa = self.cgra.array_pe_arch[id]['isa']
-        alu_num_inputs = self.cgra.get_max_operands(isa)
+        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         conf_tag = ConfTag(alu_num_inputs)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(int(bin(id + 1)[2:], 2), '0%db' % self.cgra.pe_id_width)
@@ -26,15 +26,14 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
-        pe_type = self.cgra.array_pe_arch[id]['type']
         elastic_queue = self.cgra.array_pe_arch[id]['elastic_queue']
-        has_acc = self.cgra.array_pe_arch[id]['acc']
-        pe_is_input = pe_type == 'input' or pe_type == 'inout'
+        has_acc = False#self.cgra.array_pe_arch[id]['acc']
+        pe_is_input = self.cgra.array_pe_arch[id]['num_istream'] > 0
         isa = self.cgra.array_pe_arch[id]['isa']
         neighbors = self.cgra.array_pe_arch[id]['neighbors']
         isa.sort()
         neighbors.sort()
-        alu_num_inputs = self.cgra.get_max_operands(isa)
+        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         conf_tag = ConfTag(alu_num_inputs)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
@@ -112,7 +111,7 @@ class CgraConfiguration:
             return False, 'CGRA does not contain the PE %d.' % id
 
         isa = self.cgra.array_pe_arch[id]['isa']
-        alu_num_inputs = self.cgra.get_max_operands(isa)
+        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         conf_tag = ConfTag(alu_num_inputs)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
@@ -127,14 +126,13 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
-        pe_type = self.cgra.array_pe_arch[id]['type']
         routes = self.cgra.array_pe_arch[id]['routes']
-        pe_is_output = pe_type == 'output' or pe_type == 'inout'
+        pe_is_output = self.cgra.array_pe_arch[id]['num_ostream'] > 0
         isa = self.cgra.array_pe_arch[id]['isa']
         neighbors = self.cgra.array_pe_arch[id]['neighbors']
         isa.sort()
         neighbors.sort()
-        alu_num_inputs = self.cgra.get_max_operands(isa)
+        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         conf_tag = ConfTag(alu_num_inputs)
         conf_bits = self.cgra.conf_raw_bits
         route_tb = {}
@@ -251,7 +249,7 @@ class CgraConfiguration:
             return False, 'CGRA does not contain the PE %d.' % id
 
         isa = self.cgra.array_pe_arch[id]['isa']
-        alu_num_inputs = self.cgra.get_max_operands(isa)
+        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         conf_tag = ConfTag(alu_num_inputs)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)

@@ -250,15 +250,15 @@ class AluOperationMux(AluOperationTernary):
 
 
 class CgraAluOperations:
-    def __init__(self, json_arch:Path = None) -> None:
-        if json_arch:
-            with open(json_arch,"r") as file:
+    def __init__(self, json_arch:dict=None,json_arch_file:str = None) -> None:
+        if json_arch_file:
+            with open(json_arch_file,"r") as file:
                 jarch = json.load(file)
                 self.init(jarch)
-
-    def __init__(self, json_arch:dict = None) -> None:
-        if json_arch:
+        elif json_arch:
             self.init(json_arch)
+        else:
+            self.init(None)
 
     def init(self, jarch):
         self.operations = {
@@ -286,11 +286,11 @@ class CgraAluOperations:
             'max': AluOperationMax(),
             'min': AluOperationMin()
         }
-
-        if "operations" in jarch.keys():
-            j_all_ops = jarch["operations"]
-            types = self.parse(j_all_ops)
-            self.operations.update(types)
+        if jarch:
+            if "operations" in jarch.keys():
+                j_all_ops = jarch["operations"]
+                types = self.parse(j_all_ops)
+                self.operations.update(types)
 
     def parse(self,j_all_operations: dict):
         types = CgraAluOperations.get_operations()
@@ -367,8 +367,8 @@ class CgraAluOperations:
 
         return types
 
-    def getAllOperators(self):
+    def get_all_operators(self):
         return self.operations
     
-    def getOperators(self, names:list):
+    def get_operators(self, names:list):
         return [self.operations[n] for n in names]

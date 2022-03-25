@@ -211,7 +211,7 @@ class Alu(Module):
 class Pe(Module):
     def __init__(self, pe_arch: dict, operators: CgraAluOperations, data_width: Int, conf_bus_width: Int, pe_id_width: Int) -> None:
         self.operators = operators
-        self.alu = Alu(self.operators.getOperators(pe_arch['isa']))
+        self.alu = Alu(self.operators.get_operators(pe_arch['isa']))
         self.data_width = data_width
         self.conf_bus_width = conf_bus_width
         self.pe_id_width = pe_id_width

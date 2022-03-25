@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 ../generator_dataflow/scripts/collect_code.py $@

@@ -1,0 +1,7 @@
+digraph G {
+sum.0 -> add
+tmp4 -> add
+i.0 -> inc
+ -> inc
+sum.0 -> output
+}

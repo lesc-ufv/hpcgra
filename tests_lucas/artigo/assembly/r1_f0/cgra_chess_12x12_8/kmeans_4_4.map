@@ -1,0 +1,13 @@
+{
+	"input":
+	{
+		"input": 16,
+		"input": 17,
+		"input": 18,
+		"input": 19
+	},
+	"output":
+	{
+		"output": 20
+	}
+}

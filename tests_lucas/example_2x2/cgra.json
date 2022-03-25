@@ -25,7 +25,7 @@
     {
       "id": 1,
       "num_istream": 0,
-      "num_ostream": 0,
+      "num_ostream": 1,
       "neighbors": [
         0,
         3
@@ -44,7 +44,7 @@
     },
     {
       "id": 2,
-      "num_istream": 0,
+      "num_istream": 1,
       "num_ostream": 0,
       "neighbors": [
         0,

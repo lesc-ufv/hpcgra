@@ -67,30 +67,32 @@ def create_neighbors(shape, i, j, arch_type):
                 neighbors.append(get_id(i + 1, j - 1, C))
             if i < L - 1:
                 neighbors.append(get_id(i + 1, j, C))
-
+                
     return neighbors
 
 
-def create_cgra_json(arch_net, shape, isa, routes, fifos, acc, data_width, conf_bus_width,axi_bus_data_width, inputs, outputs):
+def create_cgra_json(arch_net, shape, isa, routes, fifos,
+                        data_width, conf_bus_width,
+                         axi_bus_data_width, inputs, outputs):
     json_arch = {'data_width': data_width, 'conf_bus_width': conf_bus_width, 'axi_bus_data_width': axi_bus_data_width,
                  'pe': []}
 
     for i in range(shape[0]):
         for j in range(shape[1]):
             id = get_id(i, j, shape[1])
-            if id in inputs and id in outputs:
-                pe_type = 'inout'
-            elif id in inputs:
-                pe_type = 'input'
-            elif id in outputs:
-                pe_type = 'output'
-            else:
-                pe_type = 'basic'
+            num_istream = 0
+            num_ostream = 0
+            for ip in inputs:
+                if id == ip:
+                    num_istream += 1
+            for op in outputs:
+                if id == op:
+                    num_ostream += 1
 
             neighbors = create_neighbors(shape, i, j, arch_net)
             routes_min = min(len(neighbors) + 1, routes)
-            pe = {'id': id, 'type': pe_type, 'neighbors': neighbors, 'routes': routes_min, 'elastic_queue': fifos,
-                  'acc': acc, 'isa': isa}
+            pe = {'id': id, 'num_istream': num_istream, 'num_ostream':num_ostream,'neighbors': neighbors, 'routes': routes_min, 'elastic_queue': fifos,
+                   'isa': isa}
             json_arch['pe'].append(pe)
 
     return json_arch

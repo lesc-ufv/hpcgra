@@ -1,0 +1,24 @@
+{
+	"input":
+	{
+		"input": 0,
+		"input": 2,
+		"input": 4,
+		"input": 6,
+		"input": 8,
+		"input": 10,
+		"input": 12,
+		"input": 14
+	},
+	"output":
+	{
+		"output": 1,
+		"output": 3,
+		"output": 5,
+		"output": 7,
+		"output": 9,
+		"output": 11,
+		"output": 13,
+		"output": 15
+	}
+}

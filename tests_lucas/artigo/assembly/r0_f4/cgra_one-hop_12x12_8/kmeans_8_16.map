@@ -1,0 +1,17 @@
+{
+	"input":
+	{
+		"input": 128,
+		"input": 129,
+		"input": 130,
+		"input": 131,
+		"input": 132,
+		"input": 133,
+		"input": 134,
+		"input": 135
+	},
+	"output":
+	{
+		"output": 136
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"input":
+	{
+		"input": 64,
+		"input": 65,
+		"input": 66,
+		"input": 67,
+		"input": 68,
+		"input": 69,
+		"input": 70,
+		"input": 71
+	},
+	"output":
+	{
+		"output": 72
+	}
+}

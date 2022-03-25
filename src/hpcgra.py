@@ -25,7 +25,6 @@ def create_args():
     parser.add_argument('--routes', default=0, type=int,
                         help='Number of inputs and to be routed to outputs,\
                          0 only the output of the ALU is sent to outputs.')
-    parser.add_argument('--acc', help='This flag adding an accumulator to all PE.', action="store_true")
     parser.add_argument('--data_width', help='CGRA data width bits.', type=int, default=8)
     parser.add_argument('--conf_bus_width', help='CGRA configuration bus data width.', type=int, default=8)
     parser.add_argument('--axi_bus_width', help='CGRA axi interface bus data width.', type=int, default=512)
@@ -40,19 +39,19 @@ def create_args():
 
 def main():
     args = create_args()
-    cgra = Cgra()
     if args.json or args.arch:
         if args.json:
-            cgra.load_from_file(args.json)
+            cgra = Cgra(json_file=args.json)
         else:
             if args.shape:
                 v = args.shape.split('x')
                 n, m = int(v[0]), int(v[1])
                 if args.isa:
-                    json_str = create_cgra_json(args.arch, (n, m), args.isa, args.routes, args.fifos, args.acc,
+                    json_str = create_cgra_json(args.arch, (n, m), args.isa, args.routes, args.fifos,
                                            args.data_width,
                                            args.conf_bus_width, args.axi_bus_width, args.inputs, args.outputs)
-                    cgra.load_from_string(json_str)
+                   
+                    cgra = Cgra(json_arch=json_str)
                     if args.emit:
                         with open(args.emit, 'w') as f:
                             f.write(json.dumps(json_str, indent=4))
@@ -65,7 +64,7 @@ def main():
                 raise Exception('Missing shape parameter.')
 
         if args.verilog:
-            cgra.get().to_verilog(args.verilog)
+            cgra.to_verilog(args.verilog)
             print('Verilog code generates with success, file save in %s' % args.verilog)
 
     else:

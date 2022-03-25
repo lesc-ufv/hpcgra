@@ -1,10 +1,12 @@
 {
     "data_width": 16,
     "conf_bus_width": 8,
+    "axi_bus_data_width": 512,
     "pe": [
         {
             "id": 0,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 1,
                 2,
@@ -17,23 +19,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 1,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 0,
                 2,
@@ -47,23 +49,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 2,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 0,
                 1,
@@ -78,23 +80,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 3,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 1,
                 2,
@@ -109,23 +111,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 4,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 2,
                 3,
@@ -140,23 +142,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 5,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 3,
                 4,
@@ -171,23 +173,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 6,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 4,
                 5,
@@ -202,23 +204,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 7,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 5,
                 6,
@@ -233,23 +235,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 8,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 6,
                 7,
@@ -264,23 +266,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 9,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 7,
                 8,
@@ -295,23 +297,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 10,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 8,
                 9,
@@ -326,23 +328,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 11,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 9,
                 10,
@@ -357,23 +359,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 12,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 10,
                 11,
@@ -388,23 +390,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 13,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 11,
                 12,
@@ -419,23 +421,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 14,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 12,
                 13,
@@ -449,23 +451,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 15,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 13,
                 14,
@@ -478,23 +480,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 16,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 0,
                 17,
@@ -508,23 +510,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 17,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 1,
                 16,
@@ -539,23 +541,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 18,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 2,
                 16,
@@ -571,23 +573,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 19,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 3,
                 17,
@@ -603,23 +605,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 20,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 4,
                 18,
@@ -635,23 +637,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 21,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 5,
                 19,
@@ -667,23 +669,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 22,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 6,
                 20,
@@ -699,23 +701,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 23,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 7,
                 21,
@@ -731,23 +733,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 24,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 8,
                 22,
@@ -763,23 +765,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 25,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 9,
                 23,
@@ -795,23 +797,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 26,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 10,
                 24,
@@ -827,23 +829,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 27,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 11,
                 25,
@@ -859,23 +861,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 28,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 12,
                 26,
@@ -891,23 +893,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 29,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 13,
                 27,
@@ -923,23 +925,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 30,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 14,
                 28,
@@ -954,23 +956,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 31,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 15,
                 29,
@@ -984,23 +986,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 32,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 0,
                 16,
@@ -1015,23 +1017,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 33,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 1,
                 17,
@@ -1047,23 +1049,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 34,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 2,
                 18,
@@ -1080,23 +1082,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 35,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 3,
                 19,
@@ -1113,23 +1115,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 36,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 4,
                 20,
@@ -1146,23 +1148,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 37,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 5,
                 21,
@@ -1179,23 +1181,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 38,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 6,
                 22,
@@ -1212,23 +1214,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 39,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 7,
                 23,
@@ -1245,23 +1247,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 40,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 8,
                 24,
@@ -1278,23 +1280,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 41,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 9,
                 25,
@@ -1311,23 +1313,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 42,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 10,
                 26,
@@ -1344,23 +1346,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 43,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 11,
                 27,
@@ -1377,23 +1379,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 44,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 12,
                 28,
@@ -1410,23 +1412,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 45,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 13,
                 29,
@@ -1443,23 +1445,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 46,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 14,
                 30,
@@ -1475,23 +1477,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 47,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 15,
                 31,
@@ -1506,23 +1508,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 48,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 16,
                 32,
@@ -1537,23 +1539,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 49,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 17,
                 33,
@@ -1569,23 +1571,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 50,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 18,
                 34,
@@ -1602,23 +1604,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 51,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 19,
                 35,
@@ -1635,23 +1637,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 52,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 20,
                 36,
@@ -1668,23 +1670,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 53,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 21,
                 37,
@@ -1701,23 +1703,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 54,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 22,
                 38,
@@ -1734,23 +1736,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 55,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 23,
                 39,
@@ -1767,23 +1769,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 56,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 24,
                 40,
@@ -1800,23 +1802,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 57,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 25,
                 41,
@@ -1833,23 +1835,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 58,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 26,
                 42,
@@ -1866,23 +1868,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 59,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 27,
                 43,
@@ -1899,23 +1901,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 60,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 28,
                 44,
@@ -1932,23 +1934,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 61,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 29,
                 45,
@@ -1965,23 +1967,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 62,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 30,
                 46,
@@ -1997,23 +1999,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 63,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 31,
                 47,
@@ -2028,23 +2030,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 64,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 32,
                 48,
@@ -2059,23 +2061,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 65,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 33,
                 49,
@@ -2091,23 +2093,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 66,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 34,
                 50,
@@ -2124,23 +2126,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 67,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 35,
                 51,
@@ -2157,23 +2159,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 68,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 36,
                 52,
@@ -2190,23 +2192,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 69,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 37,
                 53,
@@ -2223,23 +2225,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 70,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 38,
                 54,
@@ -2256,23 +2258,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 71,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 39,
                 55,
@@ -2289,23 +2291,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 72,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 40,
                 56,
@@ -2322,23 +2324,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 73,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 41,
                 57,
@@ -2355,23 +2357,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 74,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 42,
                 58,
@@ -2388,23 +2390,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 75,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 43,
                 59,
@@ -2421,23 +2423,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 76,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 44,
                 60,
@@ -2454,23 +2456,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 77,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 45,
                 61,
@@ -2487,23 +2489,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 78,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 46,
                 62,
@@ -2519,23 +2521,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 79,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 47,
                 63,
@@ -2550,23 +2552,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 80,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 48,
                 64,
@@ -2581,23 +2583,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 81,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 49,
                 65,
@@ -2613,23 +2615,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 82,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 50,
                 66,
@@ -2646,23 +2648,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 83,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 51,
                 67,
@@ -2679,23 +2681,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 84,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 52,
                 68,
@@ -2712,23 +2714,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 85,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 53,
                 69,
@@ -2745,23 +2747,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 86,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 54,
                 70,
@@ -2778,23 +2780,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 87,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 55,
                 71,
@@ -2811,23 +2813,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 88,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 56,
                 72,
@@ -2844,23 +2846,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 89,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 57,
                 73,
@@ -2877,23 +2879,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 90,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 58,
                 74,
@@ -2910,23 +2912,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 91,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 59,
                 75,
@@ -2943,23 +2945,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 92,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 60,
                 76,
@@ -2976,23 +2978,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 93,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 61,
                 77,
@@ -3009,23 +3011,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 94,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 62,
                 78,
@@ -3041,23 +3043,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 95,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 63,
                 79,
@@ -3072,23 +3074,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 96,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 64,
                 80,
@@ -3103,23 +3105,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 97,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 65,
                 81,
@@ -3135,23 +3137,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 98,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 66,
                 82,
@@ -3168,23 +3170,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 99,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 67,
                 83,
@@ -3201,23 +3203,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 100,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 68,
                 84,
@@ -3234,23 +3236,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 101,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 69,
                 85,
@@ -3267,23 +3269,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 102,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 70,
                 86,
@@ -3300,23 +3302,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 103,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 71,
                 87,
@@ -3333,23 +3335,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 104,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 72,
                 88,
@@ -3366,23 +3368,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 105,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 73,
                 89,
@@ -3399,23 +3401,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 106,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 74,
                 90,
@@ -3432,23 +3434,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 107,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 75,
                 91,
@@ -3465,23 +3467,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 108,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 76,
                 92,
@@ -3498,23 +3500,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 109,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 77,
                 93,
@@ -3531,23 +3533,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 110,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 78,
                 94,
@@ -3563,23 +3565,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 111,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 79,
                 95,
@@ -3594,23 +3596,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 112,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 80,
                 96,
@@ -3625,23 +3627,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 113,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 81,
                 97,
@@ -3657,23 +3659,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 114,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 82,
                 98,
@@ -3690,23 +3692,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 115,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 83,
                 99,
@@ -3723,23 +3725,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 116,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 84,
                 100,
@@ -3756,23 +3758,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 117,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 85,
                 101,
@@ -3789,23 +3791,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 118,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 86,
                 102,
@@ -3822,23 +3824,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 119,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 87,
                 103,
@@ -3855,23 +3857,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 120,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 88,
                 104,
@@ -3888,23 +3890,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 121,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 89,
                 105,
@@ -3921,23 +3923,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 122,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 90,
                 106,
@@ -3954,23 +3956,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 123,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 91,
                 107,
@@ -3987,23 +3989,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 124,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 92,
                 108,
@@ -4020,23 +4022,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 125,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 93,
                 109,
@@ -4053,23 +4055,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 126,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 94,
                 110,
@@ -4085,23 +4087,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 127,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 95,
                 111,
@@ -4116,23 +4118,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 128,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 96,
                 112,
@@ -4147,23 +4149,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 129,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 97,
                 113,
@@ -4179,23 +4181,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 130,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 98,
                 114,
@@ -4212,23 +4214,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 131,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 99,
                 115,
@@ -4245,23 +4247,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 132,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 100,
                 116,
@@ -4278,23 +4280,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 133,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 101,
                 117,
@@ -4311,23 +4313,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 134,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 102,
                 118,
@@ -4344,23 +4346,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 135,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 103,
                 119,
@@ -4377,23 +4379,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 136,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 104,
                 120,
@@ -4410,23 +4412,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 137,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 105,
                 121,
@@ -4443,23 +4445,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 138,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 106,
                 122,
@@ -4476,23 +4478,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 139,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 107,
                 123,
@@ -4509,23 +4511,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 140,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 108,
                 124,
@@ -4542,23 +4544,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 141,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 109,
                 125,
@@ -4575,23 +4577,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 142,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 110,
                 126,
@@ -4607,23 +4609,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 143,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 111,
                 127,
@@ -4638,23 +4640,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 144,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 112,
                 128,
@@ -4669,23 +4671,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 145,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 113,
                 129,
@@ -4701,23 +4703,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 146,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 114,
                 130,
@@ -4734,23 +4736,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 147,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 115,
                 131,
@@ -4767,23 +4769,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 148,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 116,
                 132,
@@ -4800,23 +4802,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 149,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 117,
                 133,
@@ -4833,23 +4835,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 150,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 118,
                 134,
@@ -4866,23 +4868,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 151,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 119,
                 135,
@@ -4899,23 +4901,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 152,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 120,
                 136,
@@ -4932,23 +4934,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 153,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 121,
                 137,
@@ -4965,23 +4967,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 154,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 122,
                 138,
@@ -4998,23 +5000,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 155,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 123,
                 139,
@@ -5031,23 +5033,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 156,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 124,
                 140,
@@ -5064,23 +5066,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 157,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 125,
                 141,
@@ -5097,23 +5099,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 158,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 126,
                 142,
@@ -5129,23 +5131,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 159,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 127,
                 143,
@@ -5160,23 +5162,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 160,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 128,
                 144,
@@ -5191,23 +5193,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 161,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 129,
                 145,
@@ -5223,23 +5225,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 162,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 130,
                 146,
@@ -5256,23 +5258,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 163,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 131,
                 147,
@@ -5289,23 +5291,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 164,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 132,
                 148,
@@ -5322,23 +5324,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 165,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 133,
                 149,
@@ -5355,23 +5357,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 166,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 134,
                 150,
@@ -5388,23 +5390,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 167,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 135,
                 151,
@@ -5421,23 +5423,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 168,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 136,
                 152,
@@ -5454,23 +5456,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 169,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 137,
                 153,
@@ -5487,23 +5489,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 170,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 138,
                 154,
@@ -5520,23 +5522,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 171,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 139,
                 155,
@@ -5553,23 +5555,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 172,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 140,
                 156,
@@ -5586,23 +5588,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 173,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 141,
                 157,
@@ -5619,23 +5621,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 174,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 142,
                 158,
@@ -5651,23 +5653,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 175,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 143,
                 159,
@@ -5682,23 +5684,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 176,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 144,
                 160,
@@ -5713,23 +5715,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 177,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 145,
                 161,
@@ -5745,23 +5747,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 178,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 146,
                 162,
@@ -5778,23 +5780,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 179,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 147,
                 163,
@@ -5811,23 +5813,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 180,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 148,
                 164,
@@ -5844,23 +5846,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 181,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 149,
                 165,
@@ -5877,23 +5879,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 182,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 150,
                 166,
@@ -5910,23 +5912,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 183,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 151,
                 167,
@@ -5943,23 +5945,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 184,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 152,
                 168,
@@ -5976,23 +5978,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 185,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 153,
                 169,
@@ -6009,23 +6011,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 186,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 154,
                 170,
@@ -6042,23 +6044,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 187,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 155,
                 171,
@@ -6075,23 +6077,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 188,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 156,
                 172,
@@ -6108,23 +6110,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 189,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 157,
                 173,
@@ -6141,23 +6143,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 190,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 158,
                 174,
@@ -6173,23 +6175,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 191,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 159,
                 175,
@@ -6204,23 +6206,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 192,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 160,
                 176,
@@ -6235,23 +6237,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 193,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 161,
                 177,
@@ -6267,23 +6269,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 194,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 162,
                 178,
@@ -6300,23 +6302,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 195,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 163,
                 179,
@@ -6333,23 +6335,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 196,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 164,
                 180,
@@ -6366,23 +6368,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 197,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 165,
                 181,
@@ -6399,23 +6401,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 198,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 166,
                 182,
@@ -6432,23 +6434,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 199,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 167,
                 183,
@@ -6465,23 +6467,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 200,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 168,
                 184,
@@ -6498,23 +6500,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 201,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 169,
                 185,
@@ -6531,23 +6533,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 202,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 170,
                 186,
@@ -6564,23 +6566,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 203,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 171,
                 187,
@@ -6597,23 +6599,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 204,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 172,
                 188,
@@ -6630,23 +6632,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 205,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 173,
                 189,
@@ -6663,23 +6665,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 206,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 174,
                 190,
@@ -6695,23 +6697,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 207,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 175,
                 191,
@@ -6726,23 +6728,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 208,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 176,
                 192,
@@ -6757,23 +6759,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 209,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 177,
                 193,
@@ -6789,23 +6791,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 210,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 178,
                 194,
@@ -6822,23 +6824,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 211,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 179,
                 195,
@@ -6855,23 +6857,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 212,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 180,
                 196,
@@ -6888,23 +6890,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 213,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 181,
                 197,
@@ -6921,23 +6923,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 214,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 182,
                 198,
@@ -6954,23 +6956,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 215,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 183,
                 199,
@@ -6987,23 +6989,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 216,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 184,
                 200,
@@ -7020,23 +7022,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 217,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 185,
                 201,
@@ -7053,23 +7055,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 218,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 186,
                 202,
@@ -7086,23 +7088,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 219,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 187,
                 203,
@@ -7119,23 +7121,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 220,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 188,
                 204,
@@ -7152,23 +7154,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 221,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 189,
                 205,
@@ -7185,23 +7187,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 222,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 190,
                 206,
@@ -7217,23 +7219,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 223,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 191,
                 207,
@@ -7248,23 +7250,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 224,
-            "type": "input",
+            "num_istream": 1,
+            "num_ostream": 0,
             "neighbors": [
                 192,
                 208,
@@ -7278,23 +7280,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 225,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 193,
                 209,
@@ -7309,23 +7311,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 226,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 194,
                 210,
@@ -7341,23 +7343,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 227,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 195,
                 211,
@@ -7373,23 +7375,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 228,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 196,
                 212,
@@ -7405,23 +7407,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 229,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 197,
                 213,
@@ -7437,23 +7439,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 230,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 198,
                 214,
@@ -7469,23 +7471,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 231,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 199,
                 215,
@@ -7501,23 +7503,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 232,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 200,
                 216,
@@ -7533,23 +7535,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 233,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 201,
                 217,
@@ -7565,23 +7567,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 234,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 202,
                 218,
@@ -7597,23 +7599,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 235,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 203,
                 219,
@@ -7629,23 +7631,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 236,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 204,
                 220,
@@ -7661,23 +7663,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 237,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 205,
                 221,
@@ -7693,23 +7695,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 238,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 206,
                 222,
@@ -7724,23 +7726,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 239,
-            "type": "output",
+            "num_istream": 0,
+            "num_ostream": 1,
             "neighbors": [
                 207,
                 223,
@@ -7754,23 +7756,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 240,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 208,
                 224,
@@ -7783,23 +7785,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 241,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 209,
                 225,
@@ -7813,23 +7815,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 242,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 210,
                 226,
@@ -7844,23 +7846,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 243,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 211,
                 227,
@@ -7875,23 +7877,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 244,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 212,
                 228,
@@ -7906,23 +7908,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 245,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 213,
                 229,
@@ -7937,23 +7939,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 246,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 214,
                 230,
@@ -7968,23 +7970,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 247,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 215,
                 231,
@@ -7999,23 +8001,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 248,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 216,
                 232,
@@ -8030,23 +8032,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 249,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 217,
                 233,
@@ -8061,23 +8063,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 250,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 218,
                 234,
@@ -8092,23 +8094,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 251,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 219,
                 235,
@@ -8123,23 +8125,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 252,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 220,
                 236,
@@ -8154,23 +8156,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 253,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 221,
                 237,
@@ -8185,23 +8187,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 254,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 222,
                 238,
@@ -8215,23 +8217,23 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         },
         {
             "id": 255,
-            "type": "basic",
+            "num_istream": 0,
+            "num_ostream": 0,
             "neighbors": [
                 223,
                 239,
@@ -8244,18 +8246,17 @@
                 4,
                 0
             ],
-            "acc": false,
             "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
                 "or",
+                "and",
                 "seq",
+                "abs",
                 "sgt",
                 "slt",
-                "sub"
+                "mux",
+                "sub",
+                "mul",
+                "add"
             ]
         }
     ]

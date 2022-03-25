@@ -176,6 +176,47 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
     writer->write(df, &myfile);
 }
 
+void DataFlow::toJsonOperator(const std::string &fileNamePath) {
+    Json::Value json;
+    json["opcode"] = this->name;
+    
+    for(auto item : this->op_array) {
+        int id = item.first;
+        Operator *op = item.second;
+        
+        if(typeid(*op) == typeid(InputStream)) {
+            // do nothing
+            json["inputs"].append(op->getOpCode() + std::to_string(op->getId()));
+        } else if(typeid(*op) == typeid(OutputStream)) {
+            Operator *from = op->getSrc(0);
+            std::string name = from->getOpCode() + std::to_string(from->getId());
+            if(from->getType() != OP_IN) name += ".out" + std::to_string(from->getDstPort(op));
+            json["outputs"].append(name);
+        } else {
+            Json::Value df;
+            df["type"] = op->getOpCode();
+            df["label"] = op->getOpCode() + std::to_string(op->getId());
+            Operator *x;
+            for(int i=0; x = op->getSrc(i); ++i) {
+                std::string name = x->getOpCode() + std::to_string(x->getId());
+                if(x->getType() != OP_IN) name += ".out" + std::to_string(x->getDstPort(op));
+                df["inputs"].append(name);
+            }
+            for(int i=0; op->getDst()[i]; ++i) {
+                df["outputs"].append("out" + std::to_string(i));
+            }
+
+            json["dataflow"].append(df);
+        }
+    }
+    
+
+    std::ofstream fout(fileNamePath);
+    Json::StreamWriterBuilder builder;
+    const std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+    writer->write(json, &fout);
+}
+
 void DataFlow::connect(Operator *src,  int srcPort, Operator *dst, int dstPort) {
 
     DataFlow::addOperator(src);

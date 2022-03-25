@@ -46,6 +46,8 @@ public:
 
     void toJSON(const std::string &fileNamePath);
 
+    void toJsonOperator(const std::string &fileNamePath);
+
     void connect(Operator *src, int srcPort, Operator *dst, int dstPort);
 
     void updateOpLevel();

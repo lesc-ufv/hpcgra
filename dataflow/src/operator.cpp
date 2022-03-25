@@ -111,6 +111,10 @@ std::map<int,Operator*> &Operator::getDst() {
     return m_outputs;
 }
 
+std::map<int, Operator*> &Operator::getAllSrc() {
+    return m_inputs;
+}
+
 void Operator::setConst(int port, unsigned short value) {
     m_constants[port] = value;
 }

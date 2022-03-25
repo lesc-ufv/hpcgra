@@ -61,6 +61,8 @@ public:
     
     std::map<int, Operator*> &getDst();
 
+    std::map<int, Operator*> &getAllSrc();
+
     void setConst(int  port, unsigned short value);
 
     unsigned short getConst(int port);

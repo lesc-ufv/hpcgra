@@ -1,0 +1,130 @@
+Principais mudanças:
+
+Assembly:
+        * Agora a entrada/saída de dados são vetores
+            Exemplo:
+                add $0 $istream[0] 0
+                route $1 $0 $ostream[0]
+        * Agora a alu também deve ser um vetor:
+            Exemplo:
+                route $2 $alu[0] $3
+
+
+Dataflow:
+    * Arestas agora vão possuir porta de entrada e porta de saída
+        Exemplo:
+            {
+               "source": 0
+               "target": 1
+               "source-port": 0
+               "target-port": 0
+            }
+    * Vértices de entrada e saída agora vão possuir quantidade de entradas e saídas 
+        Exemplo:
+            {
+               "id":0,
+               "label": "input",
+               "opcode": "input",
+               "size": 1
+            },
+            {
+               "id":1,
+               "label": "output",
+               "opcode": "output",
+               "size": 1
+            }
+            
+Arquitura:
+        * Foi retirado o atributo "acc" do PE. => ok
+        * O formato do PE agora possui numero de entradas e numero de saídas
+            Exemplo:
+                {
+                    "id": 0,
+                    "num_istream": 1,
+                    "num_ostream": 0,
+                    "neighbors": [1,2],
+                    "routes": 1,
+                    "elastic_queue": [4,4],
+                    "isa": [ "add","mul","sub"]
+                }
+
+Dataflow Exemplo:
+
+//add_sub_vector
+//Descrição: Entra dois streams de dados e sai dois stream de dados um contendo a soma e outra a subtração.
+
+{
+   "nodes":[
+            {
+               "id":0,
+               "label": "input",
+               "opcode": "input",
+               "size": 2
+            },
+            {
+               "id":1,
+               "label": "addsub",
+               "opcode": "addsub",
+            },
+            {
+               "id":2,
+               "label": "output",
+               "opcode": "output",
+               "size": 2
+            }        
+   ],
+   "edges":[
+            {
+               "source": 0
+               "target": 1
+               "source-port": 0
+               "target-port": 0
+            },
+            {
+               "source": 0
+               "target": 1
+               "source-port": 1
+               "target-port": 1
+            },
+            {
+               "source": 1
+               "target": 2
+               "source-port": 0
+               "target-port": 0
+            },
+            {
+               "source": 1
+               "target": 2
+               "source-port": 1
+               "target-port": 1
+            }    
+   ]
+}
+
+
+Assembly Exemplo:
+
+        addsub $0 $istream[0] $istream[1]
+        route $0 $alu[0] $1
+        route $0 $alu[1] $2
+        add $1 $0 0
+        add $2 $0 0
+        route $1 $alu[0] $ostream[0]
+        route $2 $alu[0] $ostream[0]
+        
+        
+        
+        
+        
+        
+        
+
+
+
+
+
+
+
+
+                
+        

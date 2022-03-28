@@ -35,7 +35,6 @@
           4,
           4
         ],
-        "acc": false,
         "isa": [
           "add",
           "mul",
@@ -55,7 +54,6 @@
           4,
           4
         ],
-        "acc": false,
         "isa": [
           "add",
           "mul",
@@ -75,7 +73,6 @@
           4,
           4
         ],
-        "acc": false,
         "isa": [
           "add",
           "mul",

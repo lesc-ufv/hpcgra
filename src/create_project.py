@@ -25,12 +25,14 @@ def create_args():
     parser = argparse.ArgumentParser('create_project -h')
     parser.add_argument('-j', '--json', help='CGRA architecture description JSON file', type=str)
     parser.add_argument('-n', '--name', help='Project name', type=str, default='a.prj')
+    parser.add_argument('-c', '--clock', help='Synthesis clock in MHz', type=int, default=250)
     parser.add_argument('-o', '--output', help='Project location', type=str, default='.')
+    
 
     return parser.parse_args()
 
 
-def create_project(hpcgra_root, arch_json, name, output_path):
+def create_project(hpcgra_root, arch_json, name, clock, output_path):
     cgra = Cgra(json_file=arch_json)
     cgraacc = CgraAccelerator(cgra)
     acc_axi = AccAXIInterface(cgraacc)
@@ -46,15 +48,18 @@ def create_project(hpcgra_root, arch_json, name, output_path):
     m.to_verilog(hw_path + 'src/%s.v' % (name))
 
     num_axis_str = 'NUM_M_AXIS=%d' % cgraacc.get_num_in()
-    conn_str = acc_axi.get_connectivity_config(name)
+    
+    vitis_config =  acc_axi.get_clock_config(clock,name)
+    vitis_config += '\n'
+    vitis_config += acc_axi.get_connectivity_config(name)
 
     write_file(hw_path + 'simulate/num_m_axis.mk', num_axis_str)
     write_file(hw_path + 'synthesis/num_m_axis.mk', num_axis_str)
     write_file(sw_path + 'host/prj_name', name)
     write_file(hw_path + 'simulate/prj_name', name)
     write_file(hw_path + 'synthesis/prj_name', name)
-    write_file(hw_path + 'simulate/vitis_config.txt', conn_str)
-    write_file(hw_path + 'synthesis/vitis_config.txt', conn_str)
+    write_file(hw_path + 'simulate/vitis_config.txt', vitis_config)
+    write_file(hw_path + 'synthesis/vitis_config.txt', vitis_config)
 
 
 def main():
@@ -70,7 +75,7 @@ def main():
 
         args.json = running_path + '/' + args.json
 
-        create_project(hpcgra_root, args.json, args.name, args.output)
+        create_project(hpcgra_root, args.json, args.name, args.clock, args.output)
 
         print('Project successfully created in %s/%s' % (args.output, args.name))
     else:

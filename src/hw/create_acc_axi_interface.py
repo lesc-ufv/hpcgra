@@ -19,6 +19,11 @@ class AccAXIInterface:
             sp += 'sp=%s_1.out%d:DDR[%d]\n' % (name, axi, ddr[axi])
 
         return sp
+    
+    def get_clock_config(self,clock,name):
+        clk = '[hls]\n'
+        clk += 'clock=%d:%s_1\n'%(clock*1000000,name)
+        return clk
 
     def create_app_top(self):
         num_m_axis = self.acc.get_num_in()

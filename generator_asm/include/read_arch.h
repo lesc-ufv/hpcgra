@@ -92,7 +92,8 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
                 aux_pe.elastic_queue.push_back(data["pe"][i]["elastic_queue"][j].asInt());
             }
 
-            aux_pe.acc = data["pe"][i]["acc"].asBool();
+            // remove from new version
+            //aux_pe.acc = data["pe"][i]["acc"].asBool();
 
             size_isa = data["pe"][i]["isa"].size();
             for (int j = 0; j < size_isa; ++j) {

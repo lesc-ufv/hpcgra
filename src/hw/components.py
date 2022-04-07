@@ -32,7 +32,7 @@ class Components:
         data_in = m.Input('in', data_width)
         data_out = m.Output('out', data_width)
 
-        m.EmbeddedCode('(* keep = "true" *)')
+         
         regs = m.Reg('regs', data_width, num_stages)
         i = m.Integer('i')
         m.EmbeddedCode('')
@@ -223,9 +223,8 @@ class Components:
 
         return m
 
-    def create_elastic_pipeline(self, max_latency):
-        PE_LATENCY = 4
-        name = 'elastic_pipeline_%d' % max_latency
+    def create_elastic_pipeline(self, pe_latency, max_latency):
+        name = 'elastic_pipeline_%d_%d' % (pe_latency,max_latency)
         if name in self.cache.keys():
             return self.cache[name]
 
@@ -238,20 +237,20 @@ class Components:
             latency = m.Input('latency', max_latency_bits)
             din = m.Input('in', width)
             dout = m.Output('out', width)
-            m.EmbeddedCode('(* keep = "true" *)')
-            shift_reg = m.Reg('shift_reg', width, PE_LATENCY * max_latency)
+             
+            shift_reg = m.Reg('shift_reg', width, pe_latency * max_latency)
             i = m.Integer('i')
             m.Always(Posedge(clk))(
                 If(en)(
                     shift_reg[0](din),
-                    For(i(1), i < PE_LATENCY * max_latency, i.inc())(
+                    For(i(1), i < pe_latency * max_latency, i.inc())(
                         shift_reg[i](shift_reg[i - 1])
                     )
                 )
             )
             mux = self.create_multiplexer(max_latency + 1)
             con = [('sel', latency), ('in0', din)]
-            con += [('in%d' % j, shift_reg[(j * PE_LATENCY) - 1]) for j in range(1, max_latency + 1)]
+            con += [('in%d' % j, shift_reg[(j * pe_latency) - 1]) for j in range(1, max_latency + 1)]
             con.append(('out', dout))
             params = [('width', width)]
             m.Instance(mux, 'mux' % i, params, con)
@@ -313,23 +312,14 @@ class Components:
             return self.cache[name]
         m = Module(name)
         width = m.Parameter('width', 16)
-
+        
+        routes = routes + 1 if routes > 0 else routes 
+        
         if routes == 0:
             in0 = m.Input('in0', width)
             outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
             for o in outputs:
                 o.assign(in0)
-
-        elif routes == 1:
-            mux = self.create_multiplexer(num_in)
-            p = mux.get_ports()
-            sel_in = m.Input('sel_in', p['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
-            mux_out = m.Wire('mux_out', width)
-            m.Instance(mux, mux.name, [('width', width)], [('sel', sel_in)] + inputs + [('out', mux_out)])
-            for o in outputs:
-                o[1].assign(mux_out)
 
         elif routes >= num_out:
             switch_in = self.create_switch_box(num_in, num_out)
@@ -1138,7 +1128,7 @@ class Components:
             name = 'out_%d' % i
             outputs.append(m.Output(name, DATA_WIDTH))
 
-        m.EmbeddedCode('(* keep = "true" *)')
+         
         regs = m.Reg('r', DATA_WIDTH, r)
 
         m.Always(Posedge(clk))(
@@ -1162,7 +1152,7 @@ class Components:
         inn = [m.Input('in_%d' % i) for i in range(num_input)]
         out = m.Output('out')
         s = self.calc_and_tree_size_helper(num_input, radix)
-        m.EmbeddedCode('(* keep = "true" *)')
+         
         reg = m.Reg('r', s)
         stack1 = []
         stack2 = []

@@ -26,15 +26,16 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
+        routes = self.cgra.array_pe_arch[id]['routes']
         elastic_queue = self.cgra.array_pe_arch[id]['elastic_queue']
-        has_acc = False#self.cgra.array_pe_arch[id]['acc']
-        pe_is_input = self.cgra.array_pe_arch[id]['num_istream'] > 0
+        pe_num_istream = self.cgra.array_pe_arch[id]['num_istream']
         isa = self.cgra.array_pe_arch[id]['isa']
         neighbors = self.cgra.array_pe_arch[id]['neighbors']
         isa.sort()
         neighbors.sort()
         alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
-        conf_tag = ConfTag(alu_num_inputs)
+        alu_num_const = self.cgra.array_pe[id].alu.getNumConst()
+        conf_tag = ConfTag(routes > 0,alu_num_const)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
 
@@ -56,35 +57,30 @@ class CgraConfiguration:
         op_width = bits(len(isa))
         opcode_bits = format(opcode, '0%db' % op_width)
 
-        if pe_is_input and has_acc:
-            offset_mux_alu = 3
-        elif pe_is_input or has_acc:
-            offset_mux_alu = 2
-        else:
-            offset_mux_alu = 1
+        offset_mux_alu = 1
+        if pe_num_istream > 0:
+            offset_mux_alu += pe_num_istream
+
 
         sel_alu_bits = bits(len(neighbors) + offset_mux_alu)
         sel_alu = [format(0, '0%db' % sel_alu_bits) for _ in range(alu_num_inputs)]
 
         for i in range(alu_num_inputs):
             if i < len(alu_src):
-                alu = alu_src[i]
-                if alu == 'istream':
-                    if not pe_is_input:
-                        return False, 'PE %s does not have input stream.' % id
-                    sel_alu[i] = format(0, '0%db' % sel_alu_bits)
-                elif alu == 'acc':
-                    if not has_acc:
-                        return False, 'PE %s does not accumulator.' % id
-                    sel_alu[i] = format(1, '0%db' % sel_alu_bits)
-                elif alu == 'const':
+                src = alu_src[i]
+                if 'istream' in str(src):
+                    istream_id = int(src[8:-1])
+                    if istream_id >= pe_num_istream:
+                        return False, 'PE %s does not have inputs streams.' % id
+                    sel_alu[i] = format(istream_id, '0%db' % sel_alu_bits)
+                elif src == 'const':
                     sel_alu[i] = format(offset_mux_alu - 1, '0%db' % sel_alu_bits)
                 else:
                     try:
-                        pe_src = neighbors.index(alu) + offset_mux_alu
+                        pe_src = neighbors.index(src) + offset_mux_alu
                         sel_alu[i] = format(pe_src, '0%db' % sel_alu_bits)
                     except:
-                        return False, 'The PE %s does not have PE %s in neighbors.' % (id, alu)
+                        return False, 'The PE %s does not have PE %s in neighbors.' % (id, src)
 
         sel_alu.reverse()
         sel_alu = ''.join(sel_alu)
@@ -106,35 +102,23 @@ class CgraConfiguration:
                           '0%db' % conf_bits)
         return True, [raw_conf]
 
-    def create_const_conf(self, id, op_idx, const):
-        if id not in self.cgra.array_pe_arch.keys():
-            return False, 'CGRA does not contain the PE %d.' % id
-
-        isa = self.cgra.array_pe_arch[id]['isa']
-        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
-        conf_tag = ConfTag(alu_num_inputs)
-        conf_bits = self.cgra.conf_raw_bits
-        id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
-        if const < 0:
-            const = Complement2(const)
-        const = format(const, '0%db' % self.cgra.data_width)
-        raw_conf = format(int(const + conf_tag.const[op_idx] + id_bits, 2), '0%db' % conf_bits)
-        return True, [raw_conf]
-
     def create_router_conf(self, id, routing):
 
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
         routes = self.cgra.array_pe_arch[id]['routes']
-        pe_is_output = self.cgra.array_pe_arch[id]['num_ostream'] > 0
+        num_ostream = self.cgra.array_pe_arch[id]['num_ostream']
         isa = self.cgra.array_pe_arch[id]['isa']
         neighbors = self.cgra.array_pe_arch[id]['neighbors']
+        alu = self.cgra.array_pe[id].alu
         isa.sort()
         neighbors.sort()
-        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
-        conf_tag = ConfTag(alu_num_inputs)
+        num_consts = alu.getNumInputs() + alu.getNumConst()
+        alu_num_out = alu.getNumOutputs()
+        conf_tag = ConfTag(routes > 0,num_consts)
         conf_bits = self.cgra.conf_raw_bits
+
         route_tb = {}
         lines_error = {}
         for line, r in routing:
@@ -156,18 +140,21 @@ class CgraConfiguration:
             map_route = {}
             for i, vo in route_tb.items():
                 for o in vo:
-                    if i != 'alu' and i not in neighbors:
+                    if not 'alu' in str(i) and i not in neighbors:
                         lines = lines_error.get(i)
                         return False, list(lines), 'PE %s not in neighbors of PE %s.' % (i, id)
                     if o not in neighbors:
                         lines = lines_error.get(o)
-                        if o == 'ostream' and not pe_is_output:
-                            return False, list(lines), 'PE %s cannot perform output data.' % (id)
-                        elif o != 'ostream':
+                        if 'ostream' in o:
+                            if int(o[8:-1]) >= num_ostream:
+                                return False, list(lines), 'PE %s cannot perform output data.' % (id)
+                        else:
                             return False, list(lines), 'PE %s not in neighbors of PE %s.' % (o, id)
+                    
                     if i == o:
                         lines = lines_error.get(i).intersection(lines_error.get(o))
                         return False, list(lines), 'It is not possible to route %s to %s' % (i, o)
+
                     if o in map_route.keys():
                         lines = lines_error.get(o)
                         return False, list(lines), 'There is more than one routing to the same destination (PE %d).' % (
@@ -183,52 +170,53 @@ class CgraConfiguration:
         route_sel_out = ''
         if routes > 0:
             if routes == 1:
-                route_sel_in_bits = bits(len(neighbors) + 1)  # plus one because alu output
+                route_sel_in_bits = bits(len(neighbors) + alu_num_out)
                 for i, _ in route_tb.items():
                     if i == 'alu':
                         route_sel_in = format(0, '0%db' % route_sel_in_bits)
                     else:
-                        iidx = neighbors.index(i) + 1  # the first port is always alu
+                        iidx = neighbors.index(i) + alu_num_out # the first port is always alu
                         route_sel_in = format(iidx, '0%db' % route_sel_in_bits)
             else:
                 if len(route_tb) > routes:
                     return False, 'PE %s can perform only %d routing.' % (id, routes)
                 else:
                     if routes >= len(neighbors):
-                        route_sel_in_bits = bits(len(neighbors) + 1)  # plus one because alu output
+                        route_sel_in_bits = bits(len(neighbors) + alu_num_out)
                         route_sel_in_v = [format(0, '0%db' % route_sel_in_bits) for _ in range(len(neighbors) + 1)]
                         for i, vo in route_tb.items():
                             for o in vo:
-                                if o == 'ostream':
-                                    oidx = len(neighbors)
+                                if 'ostream' in str(o):
+                                    offset = int(o[8:-1])
+                                    oidx = len(neighbors) + offset
                                 else:
                                     oidx = neighbors.index(o)
 
-                                if i == 'alu':
-                                    route_sel_in_v[oidx] = format(0, '0%db' % route_sel_in_bits)
+                                if 'alu' in str(i):
+                                    alu_out_id = int(i[4:-1])
+                                    route_sel_in_v[oidx] = format(alu_out_id, '0%db' % route_sel_in_bits)
                                 else:
-                                    iidx = neighbors.index(i) + 1  # the first port is always alu
+                                    iidx = neighbors.index(i) + alu_num_out  # the first port is always alu
                                     route_sel_in_v[oidx] = format(iidx, '0%db' % route_sel_in_bits)
                         route_sel_in_v.reverse()
                         route_sel_in = "".join(route_sel_in_v)
                     else:
-                        num_out = len(neighbors)
-                        if pe_is_output:
-                            num_out += 1
-                        route_sel_in_bits = bits(len(neighbors) + 1)  # plus one because alu output
+                        num_out = len(neighbors) + num_ostream
+                        route_sel_in_bits = bits(len(neighbors) + alu_num_out)  # plus one because alu output
                         route_sel_out_bits = bits(routes)
                         route_sel_in_v = []
                         route_sel_out_v = [format(0, '0%db' % route_sel_out_bits) for _ in range(num_out)]
                         for i, vo in route_tb.items():
-                            if i == 'alu':
-                                iidx = 0
+                            if 'alu' in i:
+                                iidx = int(i[4:-1])
                             else:
-                                iidx = neighbors.index(i) + 1
+                                iidx = neighbors.index(i) + alu_num_out
 
                             route_sel_in_v.append(format(iidx, '0%db' % route_sel_in_bits))
                             for o in vo:
-                                if o == 'ostream':
-                                    oidx = len(neighbors)
+                                if 'ostream' in o:
+                                    offset = int(o[8:-1])
+                                    oidx = len(neighbors)+offset
                                 else:
                                     oidx = neighbors.index(o)
 
@@ -244,16 +232,17 @@ class CgraConfiguration:
         raw_conf = format(int(route_sel_out + route_sel_in + conf_tag.router + id_bits, 2), '0%db' % conf_bits)
         return True, None, [raw_conf]
 
-    def create_acc_reset_conf(self, id, val):
+    def create_const_conf(self, id, op_idx, const):
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
-        isa = self.cgra.array_pe_arch[id]['isa']
-        alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
-        conf_tag = ConfTag(alu_num_inputs)
+        num_consts = self.cgra.array_pe[id].alu.getNumInputs() + self.cgra.array_pe[id].alu.getNumConst()
+        routes = self.cgra.array_pe_arch[id]['routes']
+        conf_tag = ConfTag(routes > 0,num_consts)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
-        val = format(val, '0%db' % self.cgra.data_width)
-        raw_conf = format(int(val + conf_tag.acc_reset + id_bits, 2), '0%db' % conf_bits)
-
+        if const < 0:
+            const = Complement2(const)
+        const = format(const, '0%db' % self.cgra.data_width)
+        raw_conf = format(int(const + conf_tag.const[op_idx] + id_bits, 2), '0%db' % conf_bits)
         return True, [raw_conf]

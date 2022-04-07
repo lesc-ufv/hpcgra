@@ -1,5 +1,12 @@
 import math
 import re
+import os
+import sys
+
+p = os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))))
+if not p in sys.path:
+    sys.path.insert(0, p)
 
 from src.hw.cgra_alu_operations import CgraAluOperations
 from src.hw.cgra_configuration import CgraConfiguration
@@ -113,16 +120,11 @@ class CgraAssembler:
 
     def decode_set_inst(self, line, inst):
         try:
-            val = max(int(inst[3]), 1)
-            if inst[2] == '$ostream_ignore':
-                val *= 3  # 3 é o pipeline atual da alu dos PEs.
-                self.ostream_ignore.append((line, int(inst[1][1:]), val))
-            elif inst[2] == '$ostream_loop':
-                self.ostream_ignore_loop.append((line, int(inst[1][1:]), val))
-            elif inst[2] == '$accumulator':
-                self.accumulator.append((line, int(inst[1][1:]), val))
-            else:
-                return False, 'Invalid argument.'
+            pe_id = int(inst[1][1:])
+            const_name = inst[2]
+            const_val = int(inst[3])
+            const_id =  self.cgra.array_pe[pe_id].getConstId(const_name)
+            self.const.append((line, pe_id, const_id, const_val))
         except Exception as e:
             return False, str(e)
 
@@ -136,26 +138,25 @@ class CgraAssembler:
             delays = []
             port = 0
             tok = inst[2:]
-            is_istream = False
+            is_istream = []
             has_const = False
-            for j in range(len(tok)):
-                i = tok[j]
-                if '#' in i:
-                    delays.append((port, int(i[1:])))
+            for arg in tok:
+                if arg[0] == '#':
+                    delays.append((port, int(arg[1:])))
                 else:
-                    if 'alu' in i or 'istream' in i or 'acc' in i:
-                        alu_src.append(i[1:])
-                        if 'istream' in i:
-                            is_istream = True
-                    elif '$' in i:
-                        alu_src.append(int(i[1:]))
-                    else:
+                    if arg[0] != '$':
                         alu_src.append('const')
-                        self.const.append((line, pe, len(alu_src) - 1, int(i)))
+                        self.const.append((line, pe, port, int(arg)))
                         has_const = True
+                    elif arg[1:-3] == 'istream':
+                        alu_src.append(arg[1:])
+                        is_istream.append(int(arg[9:-1]))
+                    else:
+                        alu_src.append(int(arg[1:]))
+
                     port += 1
 
-            ops = CgraAluOperations().get_all_operators()
+            ops = self.cgra.alu_ops.get_all_operators()
             if ops[op].get_num_in_operand() != len(alu_src):
                 return False, "Error in the number of operands, expected %d found %d." % (
                     ops[op].get_num_in_operand(), len(alu_src))
@@ -163,8 +164,8 @@ class CgraAssembler:
         except Exception as e:
             return False, str(e)
 
-        if is_istream:
-            self.used_inputs.append(pe)
+        if len(is_istream) > 0:
+            self.used_inputs.append((pe,is_istream))
 
         delays_str = ''
         delays_v = [0 for _ in range(3)]
@@ -173,9 +174,9 @@ class CgraAssembler:
         for d in delays_v:
             delays_str += "%d " % d
 
-        if "istream" in alu_src:
-            self.dot_op[pe] = "pe%d [label=\"in\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=greenyellow];\n" % (
-            pe, delays_str, pe, "@")
+        if len(is_istream) > 0:
+            self.dot_op[pe] = "pe%d [label=\"in%s\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=greenyellow];\n" % (
+            pe,is_istream, delays_str, pe, "@")
         else:
             op_label = op + 'i' if has_const else op
             self.dot_op[pe] = "pe%d [label=\"%s\\n%s\\n%d\",tooltip=\"%s\" ,fontsize=9, fillcolor=%s];\n" % (
@@ -189,28 +190,31 @@ class CgraAssembler:
         return True, [pe, op, alu_src, delays]
 
     def decode_route_inst(self, inst):
+        is_ostream=[]
         try:
             pe = int(inst[1][1:])
-            if 'alu' in inst[2][1:]:
-                src = 'alu'
+            if inst[2][1:-3] == 'alu':
+                src = inst[2][1:]
             else:
                 src = int(inst[2][1:])
-            if 'ostream' in inst[3][1:]:
-                dst = 'ostream'
+
+            if inst[3][1:-3] == 'ostream':
+                dst = inst[3][1:]
+                is_ostream.append(int(dst[8:-1]))
             else:
                 dst = int(inst[3][1:])
         except Exception as e:
             return None, str(e)
 
-        if dst == 'ostream':
-            self.used_outputs.append(pe)
-            self.dot_op[pe] = "pe%d [label=\"out\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightpink];\n" % (
-            pe, pe, "@")
+        if len(is_ostream) > 0:
+            self.used_outputs.append((pe,is_ostream))
+            self.dot_op[pe] = "pe%d [label=\"out%s\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightpink];\n" % (
+            pe,is_ostream, pe, "@")
         else:
             if not self.dot_op.get(pe):
                 self.dot_op[pe] = "pe%d [label=\"router\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightyellow];\n" % (
                 pe, pe, "@")
-            if src == 'alu':
+            if inst[2][1:-3] == 'alu':
                 self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=red];\n" % (pe, dst)
             else:
                 self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=blue];\n" % (
@@ -240,28 +244,9 @@ class CgraAssembler:
                     self.last_error = 'line %d: %s' % (line, v)
                     break
 
-                if 'acc' in conf[2]:
-                    r, v = self.cc.create_reset_conf(conf[0])
-                    if r:
-                        for c in v:
-                            machine_code += c + '\n'
-                    else:
-                        self.last_error = 'line %d: %s' % (line, v)
-                        break
-
         if self.last_error == '':
             for line, i, op_idx, const in self.const:
                 r, v = self.cc.create_const_conf(i, op_idx, const)
-                if r:
-                    for c in v:
-                        machine_code += c + '\n'
-                else:
-                    self.last_error = 'line %d: %s' % (line, v)
-                    break
-
-        if self.last_error == '':
-            for line, i, acc in self.accumulator:
-                r, v = self.cc.create_acc_reset_conf(i, acc)
                 if r:
                     for c in v:
                         machine_code += c + '\n'
@@ -297,3 +282,5 @@ class CgraAssembler:
             print('Build succeeded, output file save in %s' % self.output_file)
 
         return machine_code[:-1]
+
+from cgra import Cgra

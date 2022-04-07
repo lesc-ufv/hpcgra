@@ -2,114 +2,101 @@
   "data_width": 16,
   "conf_bus_width": 8,
   "axi_bus_data_width":64,
+  "operations": [
+     {
+            "opcode": "myadd",
+            "inputs": ["in0", "in1", "in2"],
+            "outputs": ["reg1.out1"],
+            "dataflow":[
+                {
+                    "type": "add",
+                    "label": "add1",
+                    "inputs": ["in0", "in1"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type": "add",
+                    "label": "add2",
+                    "inputs": ["in2", "add1.out1"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type": "reg",
+                    "label": "reg1",
+                    "inputs": ["add2.out1"],
+                    "outputs":["out1"]
+                }
+
+            ]
+        },
+        {
+            "opcode": "myaddconst",
+            "inputs": ["in0", "in1"],
+            "outputs": ["reg2.out1"],
+            "dataflow":[
+                {
+                    "type": "myadd",
+                    "label": "add3",
+                    "inputs": ["in0", "in1","myconst.out1"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type": "const",
+                    "label": "myconst",
+                    "inputs": [],
+                    "outputs":["out1"]
+                },
+                {
+                    "type": "reg",
+                    "label": "reg1",
+                    "inputs": ["add3.out1"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type": "reg",
+                    "label": "reg2",
+                    "inputs": ["reg1.out1"],
+                    "outputs":["out1"]
+                }
+            ]            
+        }
+  ],
   "pe": [
     {
       "id": 0,
-      "type": "input",
-      "neighbors": [
-        1,
-        2
-      ],
+      "num_istream": 1,
+      "num_ostream": 0,
+      "neighbors": [ 1, 2],
       "routes": 4,
-      "elastic_queue": [
-        4,
-        4,
-        0
-      ],
-      "acc": false,
-      "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
-                "or",
-                "seq",
-                "sgt",
-                "slt",
-                "sub"
-      ]
+      "elastic_queue": [ 4, 4, 0],
+      "isa": [ "sub", "myaddconst"]
     },
     {
       "id": 1,
-      "type": "output",
-      "neighbors": [
-        0,
-        3
-      ],
+      "num_istream": 0,
+      "num_ostream": 1,
+      "neighbors": [ 0, 3 ],
       "routes": 4,
-      "elastic_queue": [
-        4,
-        4,
-        0
-      ],
-      "acc": false,
-      "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
-                "or",
-                "seq",
-                "sgt",
-                "slt",
-                "sub"
-      ]
+      "elastic_queue": [ 4, 4, 0],
+      "isa": ["sub", "add"]
     },
     {
       "id": 2,
-      "type": "input",
-      "neighbors": [
-        0,
-        3
-      ],
+      "num_istream": 1,
+      "num_ostream": 0,
+      "neighbors": [ 0, 3],
       "routes": 4,
-      "elastic_queue": [
-        4,
-        4,
-        0
-      ],
-      "acc": false,
-      "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
-                "or",
-                "seq",
-                "sgt",
-                "slt",
-                "sub"
-      ]
+      "elastic_queue": [ 4, 4, 0],
+      "isa": ["sub", "add"]
     },
     {
       "id": 3,
-      "type": "output",
-      "neighbors": [
-        1,
-        2
-      ],
+      "num_istream": 0,
+      "num_ostream":1,
+      "neighbors": [1, 2],
       "routes": 4,
-      "elastic_queue": [
-        4,
-        4,
-        0
-      ],
-      "acc": false,
-      "isa": [
-                "abs",
-                "add",
-                "and",
-                "mul",
-                "mux",
-                "or",
-                "seq",
-                "sgt",
-                "slt",
-                "sub"
-      ]
+      "elastic_queue": [4, 4, 0],
+      "isa": ["sub", "add"]
     }
   ]
 }

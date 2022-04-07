@@ -1,0 +1,78 @@
+{
+    "data_width": 16,
+    "axi_bus_data_width": 64,
+    "conf_bus_width": 8,
+    "operations": [
+     {
+            "opcode": "my_muladd",
+            "inputs": ["in1", "in2","in3"],
+            "outputs": ["myreg1.out1"],
+            "dataflow":[
+                {
+                    "type": "my_mult",
+                    "label": "mymul",
+                    "inputs": ["in1","in2"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type": "my_add",
+                    "label": "myadd",
+                    "inputs": ["in3", "mymul.out1"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type": "reg",
+                    "label": "myreg1",
+                    "inputs": ["myadd.out1"],
+                    "outputs":["out1"]
+                }
+
+            ]
+        },
+        {
+            "opcode": "my_add",
+            "inputs": ["in1", "in2"],
+            "outputs": ["myreg2.out1"],
+            "dataflow": [
+                {
+                    "type": "add",
+                    "label": "sum",
+                    "inputs": ["in1", "myconst.out1"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type":"reg",
+                    "label": "myreg2",
+                    "inputs":["sum.out1"],
+                    "outputs":["out1"]
+                },
+                {
+                    "type":"const",
+                    "label": "myconst",
+                    "inputs":[],
+                    "outputs":["out1"]
+                }
+              ]
+        },
+                {
+            "opcode": "my_mult",
+            "inputs": ["in1", "in2"],
+            "outputs": ["myreg3.out1"],
+            "dataflow": [
+                {
+                    "type":"reg",
+                    "label": "myreg3",
+                    "inputs":["mymul.out1"],
+                    "outputs":["out1"]                
+                },
+                {
+                    "type":"mul",
+                    "label": "mymul",
+                    "inputs":["in1","in2"],
+                    "outputs":["out1"] 
+                }
+             ]
+        }
+    ],
+    "pe": []
+}

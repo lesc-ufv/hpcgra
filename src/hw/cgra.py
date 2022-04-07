@@ -1,4 +1,3 @@
-
 import json
 from veriloggen import *
 from math import ceil
@@ -143,59 +142,116 @@ class Cgra(Module):
 class Alu(Module):
     def __init__(self, operators: list) -> None:
         operators = sorted(operators, key=lambda op: op.name)
-        name = 'alu_%s' % ("_".join([o.name for o in operators]))
+        name = 'alu%s' % ("".join([o.name for o in operators]))
         super().__init__(name)
         num_opcodes = len(operators)
         self.opcode_width = bits(num_opcodes)
         width = self.Parameter('width', 8)
         self.num_inputs = 0
         self.num_outputs = 0
+        self.num_const = 0
+        
+        max_op_latency = 1
         for op in operators:
             self.num_inputs = max(op.get_num_in_operand(), self.num_inputs)
             self.num_outputs = max(op.get_num_out_operand(), self.num_outputs)
+            self.num_const = max(op.get_num_const(), self.num_const)
+            max_op_latency = max(op.getLatency(),max_op_latency)
+        
+        regpipe = Components().create_register_pipeline()
 
         clk = self.Input('clk')
         rst = self.Input('rst')
         opcode = self.Input('opcode', self.opcode_width)
         inputs = [self.Input('in%d' % i, Add(width, 1))
                   for i in range(self.num_inputs)]
-        outputs = [self.OutputReg('out%d' % i, Add(width, 1))
+        outputs = [self.Output('out%d' % i, Add(width, 1))
                    for i in range(self.num_outputs)]
+        
+        in_consts = [self.Input('const%d' % i, Add(width, 1))
+                  for i in range(self.num_const)]
 
         inputs_reg = [self.Reg('in_reg%d' % i, Add(width, 1))
                       for i in range(self.num_inputs)]
-        outputs_wire = [self.Wire('out_wire%d' % i, Add(
+
+        out_ops = [self.Wire('out_ops%d' % i, Add(
+            width, 1), num_opcodes) for i in range(self.num_outputs)]
+        
+        out_ops_reg = [self.Wire('out_ops_reg%d' % i, Add(
             width, 1), num_opcodes) for i in range(self.num_outputs)]
 
+        in_consts_vals = []
+        in_consts_reg = []
+        for i in range(self.num_const):
+            r = self.Reg('const%d_reg' % i, Add(width, 1))
+            in_consts_reg.append(r)
+            in_consts_vals.append(r[0:width])
+            in_consts_vals.append(r[width])
+     
         seq = Seq(self, 'in_regs', clk=clk)
 
         for r, i in zip(inputs_reg, inputs):
             seq.add(r(i))
 
-        for w, o in zip(outputs_wire, outputs):
-            seq.add(o(w[opcode]))
+        for c, r in zip(in_consts, in_consts_reg):
+            seq.add(r(c))
 
         j = 0
-
+        const_names = []
         for op in operators:
             con = []
             if 'clk' in op.get_ports():
                 con.append(('clk', clk))
             if 'rst' in op.get_ports():
                 con.append(('rst', rst))
+
             for i in range(op.get_num_in_operand()):
-                con.append(('in%d' % i, inputs_reg[i][0:width]))
-                con.append(('in%d_valid' % i, inputs_reg[i][width]))
+                n = op.get_input_by_pos(i)
+                con.append((n, inputs_reg[i][0:width]))
+                con.append(('%s_valid' % n, inputs_reg[i][width]))
+
             for i in range(op.get_num_out_operand()):
-                con.append(
-                    ('out%d' % i, outputs_wire[i][j][EmbeddedCode('width-1:0')]))
-                con.append(('out%d_valid' % i, outputs_wire[i][j][width]))
+                n = op.get_output_by_pos(i)
+                con.append((n, out_ops[i][j][EmbeddedCode('width-1:0')]))
+                con.append(('%s_valid' % n, out_ops[i][j][width]))
+            
+            const_ports = [op.get_const_ports()[p] for p in op.get_const_ports()]
+            const_ports = sorted(const_ports,key=lambda p:p.name)
+            const_names += [ "%s.%s"%(op.name,"".join(n.split('.')[:-1])) for n,_ in op.get_const_ports().items()]
+
+            const_ports_v = []
+            for i in const_ports:
+                const_ports_v.append(i.name)
+                const_ports_v.append('%s_valid'%i.name)
+
+            for c,r in zip(const_ports_v,in_consts_vals):
+                con.append((c,r))
+                
+            self.Instance(op, op.name, [('width', width)], con)
+            l = max_op_latency-op.getLatency()
+            param = [('num_register', l), ('width', width)]
+            for i in range(op.get_num_out_operand()):
+                if l > 0:            
+                    con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in',out_ops[i][j]),
+                        ('out', out_ops_reg[i][j])]
+                    self.Instance(regpipe,'%s_outreg'%op.name,param, con)
+                else:
+                    out_ops_reg[i][j].assign(out_ops[i][j])
 
             j += 1
 
-            self.Instance(op, op.name, [('width', width)], con)
-
         seq.implement()
+
+        for w, o in zip(out_ops_reg, outputs):
+            o.assign(w[opcode])
+
+        self.latency = 1 + max_op_latency
+
+        self.const_ids = {}
+        const_names = sorted(const_names)
+        for i in range(len(const_names)):
+            self.const_ids[const_names[i]] = i
+
         initialize_regs(self)
 
     def getNumInputs(self):
@@ -207,6 +263,15 @@ class Alu(Module):
     def getOpcodeWidth(self):
         return self.opcode_width
 
+    def getNumConst(self):
+        return self.num_const
+    
+    def getLatency(self):
+        return self.latency
+    
+    def getConstIds(self):
+        return self.const_ids 
+
 
 class Pe(Module):
     def __init__(self, pe_arch: dict, operators: CgraAluOperations, data_width: Int, conf_bus_width: Int, pe_id_width: Int) -> None:
@@ -216,14 +281,17 @@ class Pe(Module):
         self.conf_bus_width = conf_bus_width
         self.pe_id_width = pe_id_width
         self.components = Components()
+        self.const_ids = self.alu.getConstIds()
+        for cn in self.const_ids:
+            self.const_ids[cn] += self.alu.getNumInputs()
 
         elastic_queue = pe_arch['elastic_queue']
         neighbors = sorted(pe_arch['neighbors'])
         routes = pe_arch['routes']
         num_istream = pe_arch['num_istream']
         num_ostream = pe_arch['num_ostream']
-        elastic_queue_str = ''.join(['%d_' % i for i in elastic_queue])
-        name = 'pe_i%d_o%d_n%d_r%d_e%s%s' % (num_istream, num_ostream,
+        elastic_queue_str = ''.join(['%d' % i for i in elastic_queue])
+        name = 'pei%do%dn%dr%de%s%s' % (num_istream, num_ostream,
                                              len(neighbors), routes, elastic_queue_str, self.alu.name)
 
         super().__init__(name)
@@ -263,7 +331,7 @@ class Pe(Module):
         reset = self.Wire('reset')
 
         pe_const = self.Wire('pe_const', Mul(
-            self.alu.getNumInputs(), self.data_width + 1))
+            self.alu.getNumInputs()+self.alu.getNumConst(), self.data_width + 1))
 
         mux_alu_inputs.append(pe_const)
 
@@ -282,7 +350,7 @@ class Pe(Module):
         sel_mux_alu = [self.Reg('sel_mux_alu%d' % i, mux_alu_bits)
                        for i in range(self.alu.getNumInputs())]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
-
+        
         router = self.components.create_router(
             routes, len(neighbors) + 1, len(outputs))
         route_ports = router.get_ports()
@@ -301,7 +369,7 @@ class Pe(Module):
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(
                 1, 1, 2)), ('in', load_pe[i]), ('out', stream_in_reg[i])]
-            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+            
             self.Instance(m_reg, 'm_stream_in_reg%d' % i, param, con)
 
         m_reg = self.components.create_register_pipeline()
@@ -309,18 +377,16 @@ class Pe(Module):
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)),
                    ('en', Int(1, 1, 2)), ('in', i), ('out', j)]
-            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+             
             self.Instance(m_reg, i.name + '_reg', param, con)
 
         mux_alu = self.components.create_multiplexer(len(mux_alu_inputs))
         sel_elastic_pipeline = []
-        balance = 2
+        balance = self.alu.getLatency()
         for i in range(self.alu.getNumInputs()):
             con = [('sel', sel_mux_alu[i])]
             for j in range(len(mux_alu_inputs)):
-                if mux_alu_inputs[j].name == 'acc_wire':
-                    con.append(('in%d' % j, mux_alu_inputs[j]))
-                elif mux_alu_inputs[j].name == 'pe_const':
+                if mux_alu_inputs[j].name == 'pe_const':
                     const_ = mux_alu_inputs[j][Mul(
                         i, self.data_width + 1):Mul((i + 1), self.data_width + 1)]
                     con.append(('in%d' % j, const_))
@@ -328,7 +394,7 @@ class Pe(Module):
                     con.append(('in%d' % j, mux_alu_inputs[j]))
             con.append(('out', alu_in[i]))
             params = [('width', self.data_width + 1)]
-            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+             
             self.Instance(mux_alu, 'mux_alu_in%d' % i, params, con)
             elastic_pipeline_to_alu = self.Wire(
                 'elastic_pipeline_to_alu%d' % i, self.data_width + 1)
@@ -342,18 +408,30 @@ class Pe(Module):
                 con.append(('latency', w))
 
             params = [('width', self.data_width + 1)]
-            eq = self.components.create_elastic_pipeline(elastic_queue[i])
-            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+            eq = self.components.create_elastic_pipeline(self.alu.getLatency()+2,elastic_queue[i])
+             
             self.Instance(eq, 'elastic_pipeline%d' % i, params, con)
             alu_in[i] = elastic_pipeline_to_alu
+
+        alu_const = []
+        for c in range(self.alu.getNumConst()):
+            offset=c+self.alu.getNumInputs()
+            w = pe_const[Mul(
+                        offset, self.data_width + 1):Mul((offset + 1), self.data_width + 1)]
+            alu_const.append(('const%d'%c,w))
+
 
         con = [('clk', clk), ('opcode', sel_alu_opcode)]
         con += [('in%d' % i, alu_in[i])
                 for i in range(self.alu.getNumInputs())]
+        
         con += [('out%d' % i, alu_out[i])
                 for i in range(self.alu.getNumOutputs())]
+        
+        con += alu_const
+
         params = [('width', self.data_width)]
-        self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+         
         self.Instance(self.alu, 'alu', params, con)
 
         if routes > 0:
@@ -363,7 +441,7 @@ class Pe(Module):
                         ('out', j)]
                 param1 = [('num_register', balance),
                           ('width', self.data_width + 1)]
-                self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+                 
                 self.Instance(reg_pipe_in, i.name + '_router', param1, con1)
 
         con = []
@@ -391,7 +469,7 @@ class Pe(Module):
             con.append(('out%d' % c, o))
             c += 1
 
-        self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+         
         self.Instance(router, 'router', [('width', self.data_width + 1)], con)
 
         conf_array_alu += sel_elastic_pipeline
@@ -403,7 +481,7 @@ class Pe(Module):
         for w in conf_array_router:
             conf_router_width += w.width
 
-        conf_tag_bits = ConfTag(self.alu.getNumInputs()).bits
+        conf_tag_bits = ConfTag(routes > 0,self.alu.getNumInputs()+self.alu.getNumConst()).bits
         self.conf_raw_bits = max(conf_alu_width + self.pe_id_width + conf_tag_bits,
                                  conf_router_width + self.pe_id_width + conf_tag_bits,
                                  self.data_width + self.pe_id_width + conf_tag_bits)
@@ -424,7 +502,7 @@ class Pe(Module):
         cf = ConfReader(conf_router_width > 0, self.pe_id_width, conf_alu_width, self.alu,
                         conf_router_width, self.conf_bus_width, self.data_width)
 
-        self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+         
         self.Instance(cf, 'pe_conf_reader', params, con)
 
         for o, ro in zip(outputs, router_out):
@@ -432,7 +510,7 @@ class Pe(Module):
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)),
                    ('en', Int(1, 1, 2)), ('in', ro), ('out', o)]
-            self.EmbeddedCode('(* keep_hierarchy = "yes" *)')
+             
             self.Instance(out_reg, o.name + '_reg', param, con)
 
         stm = []
@@ -455,14 +533,19 @@ class Pe(Module):
 
     def getConfRawBits(self):
         return self.conf_raw_bits
+    
+    def getConstId(self,const_name):
+        return self.const_ids[const_name]
 
 
 class ConfReader(Module):
     def __init__(self, has_router: bool, pe_id_width: Int, conf_alu_width: Int, alu: Alu,
                  conf_router_width: Int, conf_bus_width: Int, data_width: Int) -> None:
-        tag_bits = ConfTag(alu.getNumInputs()).bits
+
+        alu_confs_size = alu.getNumInputs()+alu.getNumConst()
+        tag_bits = ConfTag(has_router,alu_confs_size).bits
         name = 'pe_conf_reader_alu_in_%d_alu_w_%d_router_w_%d' % (
-            alu.getNumInputs(), conf_alu_width, conf_router_width)
+            alu_confs_size, conf_alu_width, conf_router_width)
 
         super().__init__(name)
         pe_id = self.Parameter('pe_id', 0)
@@ -473,7 +556,7 @@ class ConfReader(Module):
         reset = self.OutputReg('reset')
         conf_alu = self.OutputReg('conf_alu', conf_alu_width)
         conf_const = self.OutputReg(
-            'conf_const', (data_width + 1) * alu.getNumInputs())
+            'conf_const', (data_width + 1) * alu_confs_size)
         conf_router = None
         conf_width = pe_id_width + tag_bits
 
@@ -532,7 +615,7 @@ class ConfReader(Module):
             conf_alu(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + conf_alu_width]))
         case.add(alu_case)
 
-        for i in range(alu.getNumInputs()):
+        for i in range(alu_confs_size):
             const_case = When(Int(2 + i, tag_bits, 2))(
                 conf_const[Mul(i, data_width + 1):Mul((i + 1), data_width + 1)](
                     Cat(Int(1, 1, 2),
@@ -540,7 +623,7 @@ class ConfReader(Module):
             case.add(const_case)
 
         if has_router:
-            router_case = When(Int(alu.getNumInputs() + 2, tag_bits, 2))(
+            router_case = When(Int(alu_confs_size + 2, tag_bits, 2))(
                 conf_router(conf_reg[pe_id_width + tag_bits:pe_id_width + tag_bits + conf_router_width]))
             reset_case.add(conf_router(0))
             case.add(router_case)

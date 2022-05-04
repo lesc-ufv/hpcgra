@@ -8,7 +8,6 @@ p = os.path.dirname(os.path.dirname(
 if not p in sys.path:
     sys.path.insert(0, p)
 
-from src.hw.cgra_alu_operations import CgraAluOperations
 from src.hw.cgra_configuration import CgraConfiguration
 from src.hw.utils import get_id, get_dot_color_by_op
 
@@ -24,8 +23,8 @@ class CgraAssembler:
         self.const = []
         self.accumulator = []
         self.last_error = ''
-        self.used_inputs = []
-        self.used_outputs = []
+        self.used_inputs = {}
+        self.used_outputs = {}
         self.ostream_ignore = []
         self.ostream_ignore_loop = []
         self.dot = ""
@@ -165,7 +164,10 @@ class CgraAssembler:
             return False, str(e)
 
         if len(is_istream) > 0:
-            self.used_inputs.append((pe,is_istream))
+            if self.used_inputs.get(pe) is None:
+                self.used_inputs[pe] = is_istream
+            else:
+                self.used_inputs[pe] += is_istream
 
         delays_str = ''
         delays_v = [0 for _ in range(3)]
@@ -207,7 +209,11 @@ class CgraAssembler:
             return None, str(e)
 
         if len(is_ostream) > 0:
-            self.used_outputs.append((pe,is_ostream))
+            if self.used_outputs.get(pe) is None:
+                self.used_outputs[pe] = is_ostream
+            else:
+                self.used_outputs[pe] += is_ostream
+
             self.dot_op[pe] = "pe%d [label=\"out%s\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightpink];\n" % (
             pe,is_ostream, pe, "@")
         else:
@@ -282,5 +288,4 @@ class CgraAssembler:
             print('Build succeeded, output file save in %s' % self.output_file)
 
         return machine_code[:-1]
-
-from cgra import Cgra
+    

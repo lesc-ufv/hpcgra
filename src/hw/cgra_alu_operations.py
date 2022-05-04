@@ -3,6 +3,8 @@ from traceback import print_tb
 
 from veriloggen import *
 
+from src.hw.utils import initialize_regs
+
 
 class AluOperation(Module):
     def __init__(self, modulename: str, typename: str) -> None:
@@ -23,18 +25,27 @@ class AluOperation(Module):
         self.const_ports_valids = {}
 
     def add_input(self, name: str, pos: int):
+        
+        name = name.replace('.','__')
+
         self.inputs[name] = self.Input(name, self.width)
         self.in_valids[name+'_valid'] = self.Input(name+'_valid')
         self.inputs_pos[pos] = name
         self.num_in_operand += 1
 
     def add_output(self, name: str, pos: int):
+
+        name = name.replace('.','__')
+
         self.outputs[name] = self.Output(name, self.width)
         self.out_valids[name+'_valid'] = self.Output(name+'_valid')
         self.outputs_pos[pos] = name
         self.num_out_operand += 1
 
     def add_const_port(self, name: str):
+
+        name = name.replace('.','__')
+
         namev = name+'_valid'
         self.const_ports[name] = self.Input(name, self.width)
         self.const_ports_valids[namev] = self.Input(namev)
@@ -395,6 +406,8 @@ class AluOperationReg(AluOperation):
         self.outputs['out0'].assign(value)
         self.out_valids['out0_valid'].assign(valid)
 
+        initialize_regs(self)
+
     def getLatency(self):
         return 1
 
@@ -417,6 +430,8 @@ class AluOperationConst(AluOperation):
         )
         self.outputs['out0'].assign(value)
         self.out_valids['out0_valid'].assign(valid)
+
+        initialize_regs(self)
 
     def getLatency(self):
         return 0
@@ -514,8 +529,8 @@ class CgraAluOperations:
             else:
                 for i in node['inputs']:
                     if wires.get(i) is None:
-                        wires[i] = opnew.Wire(i, opnew.width)
-                        wires['%s_valid' % i] = opnew.Wire('%s_valid' % i)
+                        wires[i] = opnew.Wire(i.replace('.','__'), opnew.width)
+                        wires['%s_valid' % i] = opnew.Wire('%s_valid' % i.replace('.','__'))
                     con_inputs.append(wires[i])
                     con_inputs.append(wires['%s_valid' % i])
 
@@ -523,8 +538,8 @@ class CgraAluOperations:
                 n = '%s.%s' % (node['label'], o)
                 nv = '%s.%s_valid' % (node['label'], o)
                 if wires.get(n) is None:
-                    wires[n] = opnew.Wire(n, opnew.width)
-                    wires[nv] = opnew.Wire(nv)
+                    wires[n] = opnew.Wire(n.replace('.','__'), opnew.width)
+                    wires[nv] = opnew.Wire(nv.replace('.','__'))
                 con_outputs.append(wires[n])
                 con_outputs.append(wires[nv])
 
@@ -566,15 +581,16 @@ class CgraAluOperations:
                     parent = i.split('.')[0]
                     m_adj[parent]['neighbors'].append(node['label'])
 
-        lat = 0
+        max_lat = 0
         for node in dataflow:
-            lat = max(self.t(m_adj, node['label'], 0),lat)
+            curr_lat = self.calc_latency_helper(m_adj, node['label'], self.operations[node['type']].getLatency())
+            max_lat = max(max_lat,curr_lat)
 
-        return lat
+        return max_lat
 
-    def t(self, graph, root, depth):
+    def calc_latency_helper(self, graph, root, depth):
         for n in graph[root]['neighbors']:
-            return max(self.t(graph, n, depth + self.operations[graph[n]['type']].getLatency()), depth)
+            return max(self.calc_latency_helper(graph, n, depth + self.operations[graph[n]['type']].getLatency()), depth)
 
-        return self.operations[graph[root]['type']].getLatency()
+        return depth
 

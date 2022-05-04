@@ -39,14 +39,21 @@ class Cgra(Module):
         self.axi_bus_data_width = self.arch['axi_bus_data_width']
         self.input_ids = []
         self.output_ids = []
+        self.all_isa = set() 
 
         wires = {}
         array_pe_istream = {}
         array_pe_ostream = {}
         pe_cache = {}
         for pe in self.arch['pe']:
+            for isa in pe['isa']:
+                self.all_isa.add(isa)
+        
+        op_max_latency = max(self.alu_ops.get_operators(list(self.all_isa)),key=lambda op:op.getLatency())
+        op_max_latency = op_max_latency.getLatency()
+        for pe in self.arch['pe']:
             m_pe = Pe(
-                pe, self.alu_ops, self.data_width, self.conf_bus_width, self.pe_id_width)
+                pe, self.alu_ops, self.data_width, self.conf_bus_width, self.pe_id_width,op_max_latency)
 
             if not pe_cache.get(m_pe.name):
                 pe_cache[m_pe.name] = m_pe
@@ -137,10 +144,10 @@ class Cgra(Module):
         p = create_conf_path(self.arch)
         for i, j in p:
             wires['conf_bus_reg_in'][j].assign(wires['conf_bus_reg_out'][i])
-
+        
 
 class Alu(Module):
-    def __init__(self, operators: list) -> None:
+    def __init__(self, operators: list, max_op_latency : Int) -> None:
         operators = sorted(operators, key=lambda op: op.name)
         name = 'alu%s' % ("".join([o.name for o in operators]))
         super().__init__(name)
@@ -151,12 +158,12 @@ class Alu(Module):
         self.num_outputs = 0
         self.num_const = 0
         
-        max_op_latency = 1
+        max_op_latency = max(max_op_latency,1)
+
         for op in operators:
             self.num_inputs = max(op.get_num_in_operand(), self.num_inputs)
             self.num_outputs = max(op.get_num_out_operand(), self.num_outputs)
             self.num_const = max(op.get_num_const(), self.num_const)
-            max_op_latency = max(op.getLatency(),max_op_latency)
         
         regpipe = Components().create_register_pipeline()
 
@@ -217,7 +224,7 @@ class Alu(Module):
             
             const_ports = [op.get_const_ports()[p] for p in op.get_const_ports()]
             const_ports = sorted(const_ports,key=lambda p:p.name)
-            const_names += [ "%s.%s"%(op.name,"".join(n.split('.')[:-1])) for n,_ in op.get_const_ports().items()]
+            const_names += [ "%s.%s"%(op.name,"".join(n.split('__')[:-1])) for n,_ in op.get_const_ports().items()]
 
             const_ports_v = []
             for i in const_ports:
@@ -229,7 +236,7 @@ class Alu(Module):
                 
             self.Instance(op, op.name, [('width', width)], con)
             l = max_op_latency-op.getLatency()
-            param = [('num_register', l), ('width', width)]
+            param = [('num_register', l), ('width', width+1)]
             for i in range(op.get_num_out_operand()):
                 if l > 0:            
                     con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in',out_ops[i][j]),
@@ -274,9 +281,9 @@ class Alu(Module):
 
 
 class Pe(Module):
-    def __init__(self, pe_arch: dict, operators: CgraAluOperations, data_width: Int, conf_bus_width: Int, pe_id_width: Int) -> None:
+    def __init__(self, pe_arch: dict, operators: CgraAluOperations, data_width: Int, conf_bus_width: Int, pe_id_width: Int, op_max_latency:Int) -> None:
         self.operators = operators
-        self.alu = Alu(self.operators.get_operators(pe_arch['isa']))
+        self.alu = Alu(self.operators.get_operators(pe_arch['isa']),op_max_latency)
         self.data_width = data_width
         self.conf_bus_width = conf_bus_width
         self.pe_id_width = pe_id_width
@@ -421,7 +428,7 @@ class Pe(Module):
             alu_const.append(('const%d'%c,w))
 
 
-        con = [('clk', clk), ('opcode', sel_alu_opcode)]
+        con = [('clk', clk),('rst',reset), ('opcode', sel_alu_opcode)]
         con += [('in%d' % i, alu_in[i])
                 for i in range(self.alu.getNumInputs())]
         

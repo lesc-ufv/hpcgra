@@ -1,0 +1,23 @@
+digraph layout{
+rankdir=TB;
+splines=ortho;
+node [style=filled shape=square fixedsize=true width=0.6];
+pe0 [label="in[0]\n0 0 0 \n0",tooltip="myaddconst $0 $istream[0] 0\nroute $0 $alu[0] $1\n",fontsize=9,  fillcolor=greenyellow];
+pe1 [label="add\n1 0 0 \n1",tooltip="add $1 #1 $0 $3\nroute $1 $alu[0] $3\n" ,fontsize=9, fillcolor=lightblue ];
+pe2 [label="in[0]\n0 0 0 \n2",tooltip="add $2 $istream[0] 0\nroute $2 $alu[0] $3\n",fontsize=9,  fillcolor=greenyellow];
+pe3 [label="out[0]\n3",tooltip="add $3 $1 0\nroute $3 $2 $1\nroute $3 $alu[0] $ostream[0]\n",fontsize=9, fillcolor=lightpink];
+edge [constraint=false];
+pe0 -> pe1 [color=red];
+pe0 -> pe2[style="penwidth(0.1)", color=grey89];
+pe1 -> pe0[style="penwidth(0.1)", color=grey89];
+pe1 -> pe3 [color=red];
+pe2 -> pe0[style="penwidth(0.1)", color=grey89];
+pe2 -> pe3 [color=red];
+pe3 -> pe1 [color=blue];
+pe3 -> pe2[style="penwidth(0.1)", color=grey89];
+edge [constraint=true, style=invis];
+pe0 -> pe2;
+pe1 -> pe3;
+rank = same {pe0 ->pe1 };
+rank = same {pe2 ->pe3 };
+}

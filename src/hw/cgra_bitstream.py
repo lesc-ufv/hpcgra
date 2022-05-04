@@ -19,14 +19,19 @@ class Bitstream:
         cgra_bitstream = cgra_bitstream.split('\n')
 
         self.cgra.input_ids = sorted(self.cgra.input_ids, key=lambda p:p[0])
-        for i in range(len(self.cgra.input_ids)):
-            if self.cgra.input_ids[i][0] in self.assembler.used_inputs:
-                self.mask_input |= 1 << i
 
-        self.cgra.output_ids = sorted(self.cgra.output_ids, key=lambda p:p[0])
-        for i in range(len(self.cgra.output_ids)):
-            if self.cgra.output_ids[i][0] in self.assembler.used_outputs:
-                self.mask_output |= 1 << i
+        pe_in_ids = [idx[0] for idx in self.cgra.input_ids]
+        pe_out_ids = [idx[0] for idx in self.cgra.output_ids]
+
+        for pe_id, istream_id in self.assembler.used_inputs.items():
+            istream_id_global = pe_in_ids.index(pe_id)
+            for i in istream_id:
+                self.mask_input |= 1 << (istream_id_global+i)
+
+        for pe_id, ostream_id in self.assembler.used_outputs.items():
+            ostream_id_global = pe_out_ids.index(pe_id)
+            for o in ostream_id:
+                self.mask_output |= 1 << (ostream_id_global+o)
 
         cgra_bitstream_hex = []
         for cb in cgra_bitstream:

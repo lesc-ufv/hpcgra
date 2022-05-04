@@ -35,7 +35,7 @@ class CgraConfiguration:
         neighbors.sort()
         alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         alu_num_const = self.cgra.array_pe[id].alu.getNumConst()
-        conf_tag = ConfTag(routes > 0,alu_num_const)
+        conf_tag = ConfTag(routes > 0,alu_num_inputs+alu_num_const)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
 
@@ -57,10 +57,7 @@ class CgraConfiguration:
         op_width = bits(len(isa))
         opcode_bits = format(opcode, '0%db' % op_width)
 
-        offset_mux_alu = 1
-        if pe_num_istream > 0:
-            offset_mux_alu += pe_num_istream
-
+        offset_mux_alu = 1 + pe_num_istream
 
         sel_alu_bits = bits(len(neighbors) + offset_mux_alu)
         sel_alu = [format(0, '0%db' % sel_alu_bits) for _ in range(alu_num_inputs)]

@@ -29,7 +29,7 @@
 
             ]
         },
-        {
+    {
             "opcode": "myaddconst",
             "inputs": ["in0", "in1"],
             "outputs": ["reg2.out1"],

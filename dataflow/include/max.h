@@ -9,7 +9,7 @@
 
 class Max : public Operator {
 public:
-    explicit Max(int id) : Operator(id, "max", OP_BASIC, "max") {}
+    explicit Max(int id) : Operator(id, "max", OP_BASIC, "max",1) {}
 
     static Operator *create(Params params) {
         return new Max(params.id);
@@ -17,12 +17,12 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            if (Operator::getSrc(0)->getVal() > Operator::getSrc(0)->getVal()) {
-                auto v = Operator::getSrc(0)->getVal();
-                Operator::setVal(v);
+            if (Operator::getSrc(0)->getVal(0) > Operator::getSrc(0)->getVal(0)) {
+                auto v = Operator::getSrc(0)->getVal(0);
+                Operator::setVal(v,0);
             } else {
-                auto v = Operator::getSrc(0)->getVal();
-                Operator::setVal(v);
+                auto v = Operator::getSrc(0)->getVal(0);
+                Operator::setVal(v,0);
             }
         }
     }
@@ -30,7 +30,7 @@ public:
 
 class Maxi : public Operator {
 public:
-    Maxi(int id, unsigned short constant) : Operator(id, "max", OP_IMMEDIATE, "maxi") {
+    Maxi(int id, unsigned short constant) : Operator(id, "max", OP_IMMEDIATE, "maxi",1) {
         setConst(1,constant);
     }
 
@@ -40,12 +40,12 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            if (Operator::getSrc(0)->getVal() > Operator::getConst(1)) {
-                auto v = Operator::getSrc(0)->getVal();
-                Operator::setVal(v);
+            if (Operator::getSrc(0)->getVal(0) > Operator::getConst(1)) {
+                auto v = Operator::getSrc(0)->getVal(0);
+                Operator::setVal(v,0);
             } else {
                 auto v = Operator::getConst(1);
-                Operator::setVal(v);
+                Operator::setVal(v,0);
             }
         }
     }

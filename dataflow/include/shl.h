@@ -7,7 +7,7 @@
 
 class Shl : public Operator {
 public:
-    explicit Shl(int id) : Operator(id, "shl", OP_BASIC, "shl") {}
+    explicit Shl(int id) : Operator(id, "shl", OP_BASIC, "shl",1) {}
 
     static Operator *create(Params params) {
         return new Shl(params.id);
@@ -15,15 +15,15 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() << Operator::getSrc(1)->getVal();
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) << Operator::getSrc(1)->getVal(0);
+            Operator::setVal(v,0);
         }
     }
 };
 
 class Shli : public Operator {
 public:
-    explicit Shli(int id,int constant) : Operator(id, "shl", OP_IMMEDIATE, "shli") {
+    explicit Shli(int id,int constant) : Operator(id, "shl", OP_IMMEDIATE, "shli",1) {
         setConst(1, constant);
     }
 
@@ -33,8 +33,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() << Operator::getConst(1);
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) << Operator::getConst(1);
+            Operator::setVal(v,0);
         }
     }
 };

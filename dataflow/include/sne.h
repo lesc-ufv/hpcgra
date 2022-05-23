@@ -7,7 +7,7 @@
 
 class Sne : public Operator {
 public:
-    explicit Sne(int id) : Operator(id,"sne", OP_BASIC, "sne") {}
+    explicit Sne(int id) : Operator(id,"sne", OP_BASIC, "sne",1) {}
 
     static Operator *create(Params params) {
         return new Sne(params.id);
@@ -15,8 +15,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() != Operator::getSrc(1)->getVal() ? 1 : 0;
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) != Operator::getSrc(1)->getVal(0) ? 1 : 0;
+            Operator::setVal(v,0);
         }
     }
 
@@ -24,7 +24,7 @@ public:
 
 class Snei : public Operator {
 public:
-    explicit Snei(int id,int constant) : Operator(id, "sne", OP_IMMEDIATE, "snei") {
+    explicit Snei(int id,int constant) : Operator(id, "sne", OP_IMMEDIATE, "snei",1) {
         setConst(1, constant);
     }
 
@@ -34,8 +34,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() != Operator::getConst(1) ? 1 : 0;
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) != Operator::getConst(1) ? 1 : 0;
+            Operator::setVal(v,0);
         }
     }
 };

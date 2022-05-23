@@ -53,9 +53,16 @@ void DataFlow::compute() {
                 auto op = item.second;
                 if (op->getLevel() == i) {
                     op->compute();
-                    if (op->getType() == OP_IN && op->getIsEnd()) {
-                        allIsEnd++;
+                    int end=0;
+                    for(int k=0;k < op->getSize();k++){
+                        if (op->getType() == OP_IN && op->getIsEnd(k)) {
+                           end = 1;
+                        }else{
+                           end = 0;
+                           break;
+                        }
                     }
+                     allIsEnd+=end;
                 }
             }
             if (allIsEnd == DataFlow::getNumOpIn()) {
@@ -135,6 +142,7 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
         node["id"] =  std::to_string(op->getId());
         node["opcode"] = op->getOpCode();
         node["label"] = op->getLabel();
+        node["size"] = op->getSize();
         if(op->getType() == OP_IMMEDIATE){
             auto v = op->getConst();
             for(auto c : v){
@@ -150,13 +158,15 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
     }
     for (auto item:DataFlow::op_array) {
         auto op = item.second;
-        for (auto neighbor:op->getDst()) {           
+        for (auto neighbor:op->getDst()) {
+            auto nei = neighbor.second;
             edge["source"] = std::to_string(op->getId());
-            edge["target"] = std::to_string(neighbor.second->getId());
-            edge["port"] = std::to_string(neighbor.first);
+            edge["target"] = std::to_string(nei->getId());
+            edge["source-port"] = std::to_string(op->getDstPort(nei));
+            edge["target-port"] = std::to_string(nei->getSrcPort(op));
             df["edges"].append(edge);
             edge.clear();
-        }
+        } 
     }
 
     std::ofstream myfile;
@@ -166,13 +176,13 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
     writer->write(df, &myfile);
 }
 
-void DataFlow::connect(Operator *src, Operator *dst, int dstPort) {
+void DataFlow::connect(Operator *src,  int srcPort, Operator *dst, int dstPort) {
 
     DataFlow::addOperator(src);
     DataFlow::addOperator(dst);
     DataFlow::graph[src->getId()].push_back(dst->getId());
-    src->addDst(dst,dstPort);
-    dst->setSrc(src,dstPort);
+    src->addDst(dst,srcPort);
+    dst->addSrc(src,dstPort);
     DataFlow::updateOpLevel();
 }
 

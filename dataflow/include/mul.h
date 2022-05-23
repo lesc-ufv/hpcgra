@@ -7,7 +7,7 @@
 
 class Mul : public Operator {
 public:
-    explicit Mul(int id) : Operator(id, "mul", OP_BASIC, "mul") {}
+    explicit Mul(int id) : Operator(id, "mul", OP_BASIC, "mul",1) {}
 
     static Operator *create(Params params) {
         return new Mul(params.id);
@@ -15,15 +15,15 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() * Operator::getSrc(1)->getVal();
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) * Operator::getSrc(1)->getVal(0);
+            Operator::setVal(v,0);
         }
     }
 };
 
 class Muli : public Operator {
 public:
-    Muli(int id, unsigned short  constant) : Operator(id, "mul", OP_IMMEDIATE, "muli") {
+    Muli(int id, unsigned short  constant) : Operator(id, "mul", OP_IMMEDIATE, "muli",1) {
         setConst(1,constant);
     }
 
@@ -33,8 +33,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() * Operator::getConst(1);
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) * Operator::getConst(1);
+            Operator::setVal(v,0);
         }
     }
 };

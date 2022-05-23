@@ -2,22 +2,27 @@
 
 #include <utility>
 
-Operator::Operator(int id, std::string op_code, int type, std::string label){
+Operator::Operator(int id, std::string op_code, int type, std::string label, int size){
 
     m_id = id;
     m_data_flow_id = -1;
     m_op_code = std::move(op_code);
     m_level = -1;
     m_type = type;
-    m_val = 0;
-    m_is_end = false;
     m_label = std::move(label);
+    m_size = size;
+    for(int i=0;i < size;i++){
+        m_val.emplace_back(0);
+        m_is_end.emplace_back(false);
+    }
 }
 
 Operator::~Operator() {
     m_constants.clear();
-    m_src.clear();
-    m_dst.clear();
+    m_inputs.clear();
+    m_outputs.clear();
+    m_val.clear();
+    m_is_end.clear();
 }
 
 int Operator::getId() const {
@@ -26,6 +31,14 @@ int Operator::getId() const {
 
 void Operator::setId(int id) {
     m_id = id;
+}
+
+int Operator::getSize() const {
+    return m_size;
+}
+
+void Operator::setSize(int size) {
+    m_size = size;
 }
 
 std::string Operator::getOpCode() const {
@@ -44,39 +57,65 @@ void Operator::setType(int type) {
     m_type = type;
 }
 
-void Operator::setVal(int val) {
-    m_val = val;
+void Operator::setVal(int val, int idx) {
+    m_val[idx] = val;
 }
 
-short Operator::getVal() const {
-    return m_val;
+short Operator::getVal(int idx) const {
+    return m_val[idx];
 }
 
-void Operator::setSrc(Operator *src, int port) {
-    assert(port < 3);
-    m_src[port] = src;
+void Operator::addSrc(Operator *src, int port) {
+    m_inputs[port] = src;
 }
 
 Operator * Operator::getSrc(int port){
-   assert(port < 3);
-   return m_src[port];
+    for (auto it = m_inputs.begin(); it != m_inputs.end(); ++it){
+        if (it->first == port){
+            return it->second;
+        }
+    }
+    assert((1) && "Source operator not found!");
+    return nullptr;
 }
 
-void Operator::addDst(Operator * op_dst, int port){
-    m_dst.emplace_back(port,op_dst);
+int Operator::getSrcPort(Operator * op){
+    int port = -1;
+    for (auto it = m_inputs.begin(); it != m_inputs.end(); ++it){
+        if (it->second->getId() == op->getId()){
+            port = it->first;
+            break;
+        }
+    }
+    assert((port >= 0) && "Source port not found!");
+    return port;
 }
 
-std::vector<std::pair<int,Operator*>> &Operator::getDst() {
-    return Operator::m_dst;
+int Operator::getDstPort(Operator * op){
+    int port = -1;
+    for (auto it = m_outputs.begin(); it != m_outputs.end(); ++it){
+        if (it->second->getId() == op->getId()){
+            port = it->first;
+            break;
+        }
+    }
+    assert((port >= 0) && "Source port not found!");
+    return port;
+}
+
+void Operator::addDst(Operator * op_dst, int dstPort){
+    m_outputs[dstPort] = op_dst;
+}
+
+std::map<int,Operator*> &Operator::getDst() {
+    return m_outputs;
 }
 
 void Operator::setConst(int port, unsigned short value) {
-    assert(port < 3);
     m_constants[port] = value;
 }
 
 unsigned short Operator::getConst(int port){
-    assert(port < 3);
     return m_constants[port];
 }
 
@@ -104,11 +143,11 @@ const std::string &Operator::getLabel() const {
     return m_label;
 }
 
-int Operator::getIsEnd() const {
-    return m_is_end;
+int Operator::getIsEnd(int idx) const {
+    return m_is_end[idx];
 }
 
-void Operator::setIsEnd(bool isEnd) {
-    m_is_end = isEnd;
+void Operator::setIsEnd(bool isEnd,int idx) {
+    m_is_end[idx] = isEnd;
 }
 

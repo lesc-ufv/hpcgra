@@ -26,8 +26,8 @@ void test(int taps){
     }
     auto in = reinterpret_cast<InputStream *>(df->getOp(0));
     auto out = reinterpret_cast<OutputStream *>(df->getOp(1));
-    in->setData(data_in,1024);
-    out->setData(data_out,1024);
+    in->setData(data_in,0,1024);
+    out->setData(data_out,0,1024);
     df->compute();
     df->toJSON("../fir"+to_string(taps)+".json");
     df->toDOT("../fir"+to_string(taps)+".dot");
@@ -50,11 +50,11 @@ DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps) {
 
     in_cp.reserve(copies);
     for (int j = 0; j < copies; ++j) {
-        in_cp.push_back(new InputStream(idx++,nullptr,0));
+        in_cp.push_back(new InputStream(idx++,nullptr,1,0));
     }
     out_cp.reserve(copies);
     for (int j = 0; j < copies; ++j) {
-        out_cp.push_back(new OutputStream(idx++,nullptr,0));
+        out_cp.push_back(new OutputStream(idx++,nullptr,1,0));
     }
     for (int j = 0; j < copies; ++j) {
         Operator *op, *op1, *op2;
@@ -68,16 +68,16 @@ DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps) {
                 op = new Add(idx++);
             }
             add.push_back(op);
-            df->connect(in_cp[j], m, 0);
-            df->connect(m, op, 0);
+            df->connect(in_cp[j],0, m, 0);
+            df->connect(m,0, op, 0);
         }
         for (int i = 0; i < taps - 1; ++i) {
             op1 = add[i];
             op2 = add[i + 1];
-            df->connect(op1, op2, 1);
+            df->connect(op1,0, op2, 1);
         }
         op1 = add[taps - 1];
-        df->connect(op1, out_cp[j], 0);
+        df->connect(op1,0, out_cp[j], 0);
     }
 
 

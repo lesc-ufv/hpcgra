@@ -2,414 +2,406 @@
 	"edges" : 
 	[
 		{
-			"port" : "0",
 			"source" : "0",
-			"target" : "36"
+			"source-port" : "0",
+			"target" : "36",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "1",
-			"target" : "45"
+			"source-port" : "0",
+			"target" : "15",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "1",
-			"target" : "22"
-		},
-		{
-			"port" : "0",
-			"source" : "1",
-			"target" : "27"
-		},
-		{
-			"port" : "0",
-			"source" : "1",
-			"target" : "15"
-		},
-		{
-			"port" : "1",
 			"source" : "2",
-			"target" : "15"
+			"source-port" : "0",
+			"target" : "33",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "2",
-			"target" : "55"
-		},
-		{
-			"port" : "0",
-			"source" : "2",
-			"target" : "28"
-		},
-		{
-			"port" : "0",
-			"source" : "2",
-			"target" : "29"
-		},
-		{
-			"port" : "0",
-			"source" : "2",
-			"target" : "30"
-		},
-		{
-			"port" : "0",
-			"source" : "2",
-			"target" : "31"
-		},
-		{
-			"port" : "0",
-			"source" : "2",
-			"target" : "33"
-		},
-		{
-			"port" : "0",
 			"source" : "4",
-			"target" : "16"
+			"source-port" : "0",
+			"target" : "16",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "5",
-			"target" : "17"
+			"source-port" : "0",
+			"target" : "17",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "6",
-			"target" : "14"
+			"source-port" : "0",
+			"target" : "14",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "7",
-			"target" : "49"
+			"source-port" : "0",
+			"target" : "49",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "8",
-			"target" : "20"
+			"source-port" : "0",
+			"target" : "20",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "9",
-			"target" : "21"
+			"source-port" : "0",
+			"target" : "21",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "10",
-			"target" : "19"
+			"source-port" : "0",
+			"target" : "19",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "11",
-			"target" : "18"
+			"source-port" : "0",
+			"target" : "18",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "12",
-			"target" : "60"
+			"source-port" : "0",
+			"target" : "60",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "13",
-			"target" : "25"
+			"source-port" : "0",
+			"target" : "25",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "14",
-			"target" : "5"
+			"source-port" : "0",
+			"target" : "5",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "15",
-			"target" : "10"
+			"source-port" : "0",
+			"target" : "10",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "16",
-			"target" : "3"
+			"source-port" : "0",
+			"target" : "3",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "17",
-			"target" : "9"
+			"source-port" : "0",
+			"target" : "9",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "18",
-			"target" : "8"
+			"source-port" : "0",
+			"target" : "8",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "19",
-			"target" : "6"
+			"source-port" : "0",
+			"target" : "6",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "20",
-			"target" : "17"
+			"source-port" : "0",
+			"target" : "17",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "21",
-			"target" : "4"
+			"source-port" : "0",
+			"target" : "4",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "22",
-			"target" : "26"
+			"source-port" : "0",
+			"target" : "26",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "23",
-			"target" : "18"
+			"source-port" : "0",
+			"target" : "18",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "24",
-			"target" : "19"
+			"source-port" : "0",
+			"target" : "19",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "25",
-			"target" : "57"
+			"source-port" : "0",
+			"target" : "57",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "26",
-			"target" : "11"
+			"source-port" : "0",
+			"target" : "11",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "27",
-			"target" : "32"
+			"source-port" : "0",
+			"target" : "32",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "28",
-			"target" : "54"
+			"source-port" : "0",
+			"target" : "54",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "29",
-			"target" : "24"
+			"source-port" : "0",
+			"target" : "24",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "30",
-			"target" : "35"
+			"source-port" : "0",
+			"target" : "35",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "31",
-			"target" : "34"
+			"source-port" : "0",
+			"target" : "34",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "32",
-			"target" : "7"
+			"source-port" : "0",
+			"target" : "7",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "33",
-			"target" : "12"
+			"source-port" : "0",
+			"target" : "12",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "34",
-			"target" : "58"
+			"source-port" : "0",
+			"target" : "58",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "35",
-			"target" : "13"
+			"source-port" : "0",
+			"target" : "13",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "36",
-			"target" : "37"
+			"source-port" : "0",
+			"target" : "37",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "37",
-			"target" : "38"
+			"source-port" : "0",
+			"target" : "38",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "38",
-			"target" : "39"
+			"source-port" : "0",
+			"target" : "39",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "39",
-			"target" : "40"
+			"source-port" : "0",
+			"target" : "40",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "40",
-			"target" : "5"
+			"source-port" : "0",
+			"target" : "41",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "40",
-			"target" : "41"
-		},
-		{
-			"port" : "0",
 			"source" : "41",
-			"target" : "42"
+			"source-port" : "0",
+			"target" : "42",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "42",
-			"target" : "9"
+			"source-port" : "0",
+			"target" : "43",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "42",
-			"target" : "43"
-		},
-		{
-			"port" : "0",
 			"source" : "43",
-			"target" : "44"
+			"source-port" : "0",
+			"target" : "44",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "44",
-			"target" : "4"
+			"source-port" : "0",
+			"target" : "4",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "45",
-			"target" : "46"
+			"source-port" : "0",
+			"target" : "10",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "45",
-			"target" : "10"
-		},
-		{
-			"port" : "0",
 			"source" : "46",
-			"target" : "47"
+			"source-port" : "0",
+			"target" : "47",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "47",
-			"target" : "48"
+			"source-port" : "0",
+			"target" : "6",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "47",
-			"target" : "6"
-		},
-		{
-			"port" : "0",
 			"source" : "48",
-			"target" : "8"
+			"source-port" : "0",
+			"target" : "8",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "49",
-			"target" : "50"
+			"source-port" : "0",
+			"target" : "50",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "50",
-			"target" : "51"
+			"source-port" : "0",
+			"target" : "51",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "51",
-			"target" : "52"
+			"source-port" : "0",
+			"target" : "52",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "52",
-			"target" : "53"
+			"source-port" : "0",
+			"target" : "53",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "53",
-			"target" : "21"
+			"source-port" : "0",
+			"target" : "21",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "54",
-			"target" : "23"
+			"source-port" : "0",
+			"target" : "23",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "55",
-			"target" : "56"
+			"source-port" : "0",
+			"target" : "12",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "55",
-			"target" : "12"
-		},
-		{
-			"port" : "1",
 			"source" : "56",
-			"target" : "7"
+			"source-port" : "0",
+			"target" : "13",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
-			"source" : "56",
-			"target" : "13"
-		},
-		{
-			"port" : "1",
 			"source" : "57",
-			"target" : "20"
+			"source-port" : "0",
+			"target" : "20",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "58",
-			"target" : "59"
+			"source-port" : "0",
+			"target" : "59",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "59",
-			"target" : "14"
+			"source-port" : "0",
+			"target" : "14",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "60",
-			"target" : "61"
+			"source-port" : "0",
+			"target" : "61",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "61",
-			"target" : "62"
+			"source-port" : "0",
+			"target" : "62",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "62",
-			"target" : "63"
+			"source-port" : "0",
+			"target" : "63",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "63",
-			"target" : "64"
+			"source-port" : "0",
+			"target" : "64",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "64",
-			"target" : "65"
+			"source-port" : "0",
+			"target" : "65",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "65",
-			"target" : "66"
+			"source-port" : "0",
+			"target" : "66",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "66",
-			"target" : "67"
+			"source-port" : "0",
+			"target" : "67",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "67",
-			"target" : "16"
+			"source-port" : "0",
+			"target" : "16",
+			"target-port" : "1"
 		}
 	],
 	"nodes" : 
@@ -417,57 +409,68 @@
 		{
 			"id" : "0",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "1",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "2",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "3",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "4",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "5",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "6",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "7",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "8",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "9",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "10",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -479,57 +482,68 @@
 			],
 			"id" : "11",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "12",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "13",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "14",
 			"label" : "sub",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"id" : "15",
 			"label" : "sub",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"id" : "16",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"id" : "17",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"id" : "18",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"id" : "19",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"id" : "20",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"id" : "21",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -541,7 +555,8 @@
 			],
 			"id" : "22",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -553,7 +568,8 @@
 			],
 			"id" : "23",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -565,7 +581,8 @@
 			],
 			"id" : "24",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -577,7 +594,8 @@
 			],
 			"id" : "25",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -589,7 +607,8 @@
 			],
 			"id" : "26",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -601,7 +620,8 @@
 			],
 			"id" : "27",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -613,7 +633,8 @@
 			],
 			"id" : "28",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -625,7 +646,8 @@
 			],
 			"id" : "29",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -637,7 +659,8 @@
 			],
 			"id" : "30",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -649,7 +672,8 @@
 			],
 			"id" : "31",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -661,7 +685,8 @@
 			],
 			"id" : "32",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -673,7 +698,8 @@
 			],
 			"id" : "33",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -685,7 +711,8 @@
 			],
 			"id" : "34",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -697,7 +724,8 @@
 			],
 			"id" : "35",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -709,7 +737,8 @@
 			],
 			"id" : "36",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -721,7 +750,8 @@
 			],
 			"id" : "37",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -733,7 +763,8 @@
 			],
 			"id" : "38",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -745,7 +776,8 @@
 			],
 			"id" : "39",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -757,7 +789,8 @@
 			],
 			"id" : "40",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -769,7 +802,8 @@
 			],
 			"id" : "41",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -781,7 +815,8 @@
 			],
 			"id" : "42",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -793,7 +828,8 @@
 			],
 			"id" : "43",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -805,7 +841,8 @@
 			],
 			"id" : "44",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -817,7 +854,8 @@
 			],
 			"id" : "45",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -829,7 +867,8 @@
 			],
 			"id" : "46",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -841,7 +880,8 @@
 			],
 			"id" : "47",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -853,7 +893,8 @@
 			],
 			"id" : "48",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -865,7 +906,8 @@
 			],
 			"id" : "49",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -877,7 +919,8 @@
 			],
 			"id" : "50",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -889,7 +932,8 @@
 			],
 			"id" : "51",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -901,7 +945,8 @@
 			],
 			"id" : "52",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -913,7 +958,8 @@
 			],
 			"id" : "53",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -925,7 +971,8 @@
 			],
 			"id" : "54",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -937,7 +984,8 @@
 			],
 			"id" : "55",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -949,7 +997,8 @@
 			],
 			"id" : "56",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -961,7 +1010,8 @@
 			],
 			"id" : "57",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -973,7 +1023,8 @@
 			],
 			"id" : "58",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -985,7 +1036,8 @@
 			],
 			"id" : "59",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -997,7 +1049,8 @@
 			],
 			"id" : "60",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -1009,7 +1062,8 @@
 			],
 			"id" : "61",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -1021,7 +1075,8 @@
 			],
 			"id" : "62",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -1033,7 +1088,8 @@
 			],
 			"id" : "63",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -1045,7 +1101,8 @@
 			],
 			"id" : "64",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -1057,7 +1114,8 @@
 			],
 			"id" : "65",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -1069,7 +1127,8 @@
 			],
 			"id" : "66",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -1081,7 +1140,8 @@
 			],
 			"id" : "67",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		}
 	]
 }

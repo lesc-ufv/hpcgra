@@ -8,54 +8,71 @@
 class OutputStream : public Operator {
 private:
     int index;
-    unsigned short *data;
-    int size;
+    std::vector<unsigned short *>data;
+    int qtd;
+    int num_data;
 public:
-    explicit OutputStream(int id,unsigned short *data, int size) : Operator(id, "output", OP_OUT, "output"),
+    explicit OutputStream(int id,unsigned short **data, int qtd, int size) : Operator(id, "output", OP_OUT, "output",qtd),
                                                          index(0),
-                                                         data(data),
-                                                         size(size) {}
+                                                         qtd(qtd),
+                                                         num_data(size) {
+                                                             for(int i=0;i < qtd;i++){
+                                                                 if(data){
+                                                                     OutputStream::data.emplace_back((unsigned short *)data[i]);
+                                                                 }else{
+                                                                     OutputStream::data.emplace_back(nullptr);
+                                                                 }
+
+                                                            }
+                                                        }
 
     static Operator *create(Params params) {
-        return new OutputStream(params.id, params.data, params.size);
+        return new OutputStream(params.id, params.data,params.qtd, params.size);
     }
 
-    void setData(unsigned short *data, int size) {
-        OutputStream::data = data;
-        OutputStream::size = size;
+    void setData(unsigned short *data, int idx, int size) {
+        OutputStream::data[idx] = data;
+        OutputStream::num_data = size;
     }
 
-    ~OutputStream(){
-        delete [] OutputStream::data;
-    }
+    ~OutputStream(){}
 
-    unsigned short * getData(){
-        return OutputStream::data;
+    unsigned short * getData(int idx){
+        return OutputStream::data[idx];
     }
     
-    int getSize() const{
-        return OutputStream::size;
+    int getNumData() const{
+        return OutputStream::num_data;
+    }
+
+    int getQtd(){
+        return  OutputStream::qtd;
     }
 
     void reset() {
         OutputStream::index = 0;
-        Operator::setIsEnd(false);
+       for(int i=0;i < OutputStream::qtd;i++){
+            Operator::setIsEnd(false,i);
+        }
     }
 
     void compute() override {
-        if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal();
-            Operator::setVal(v);
-        }
-        if (data) {
-            if (OutputStream::index < OutputStream::size) {
-                OutputStream::data[OutputStream::index++] = Operator::getVal();
-            } else {
-                Operator::setIsEnd(true);
+        for(int i=0;i < OutputStream::qtd;i++){
+            if (Operator::getSrc(i)) {
+                auto v = Operator::getSrc(i)->getVal(i);
+                Operator::setVal(v,i);
             }
-        } else {
-            Operator::setIsEnd(true);
+            if (data[i]) {
+                if (OutputStream::index < OutputStream::num_data) {
+                    OutputStream::data[i][OutputStream::index] = Operator::getVal(i);
+                } else {
+                    Operator::setIsEnd(true,i);
+                }
+            } else {
+                Operator::setIsEnd(true,i);
+            }
         }
+        OutputStream::index++;
     }
 };
 

@@ -16,11 +16,11 @@ DataFlow *createDataFlow(int id, int copies) {
     Operator *inA[copies];
     Operator *out[copies];
     for (int i = 0; i < copies; ++i) {
-        inA[i] = new InputStream(idx++,nullptr,0);
-        out[i] = new OutputStream(idx++,nullptr,0);
+        inA[i] = new InputStream(idx++,nullptr,1,0);
+        out[i] = new OutputStream(idx++,nullptr,1,0);
     }
     for (int i = 0; i < copies; ++i) {
-        df->connect(inA[i], out[i], 1);
+        df->connect(inA[i],0, out[i], 1);
     }
 
     return df;

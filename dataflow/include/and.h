@@ -8,7 +8,7 @@
 
 class And : public Operator {
 public:
-    explicit And(int id) : Operator(id, "and", OP_BASIC, "and") {}
+    explicit And(int id) : Operator(id, "and", OP_BASIC, "and",1) {}
 
     static Operator *create(Params params) {
         return new And(params.id);
@@ -16,15 +16,15 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() & Operator::getSrc(0)->getVal();
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) & Operator::getSrc(0)->getVal(0);
+            Operator::setVal(v,0);
         }
     }
 };
 
 class Andi : public Operator {
 public:
-    Andi(int id, unsigned short constant) : Operator(id, "and", OP_IMMEDIATE, "andi") {
+    Andi(int id, unsigned short constant) : Operator(id, "and", OP_IMMEDIATE, "andi",1) {
         setConst(1,constant);
     }
 
@@ -34,8 +34,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() & Operator::getConst(1);
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) & Operator::getConst(1);
+            Operator::setVal(v,0);
         }
     }
 };

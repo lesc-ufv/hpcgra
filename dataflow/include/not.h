@@ -7,7 +7,7 @@
 
 class Not : public Operator {
 public:
-    explicit Not(int id) : Operator(id, "not", OP_BASIC, "not") {}
+    explicit Not(int id) : Operator(id, "not", OP_BASIC, "not",1) {}
 
     static Operator *create(Params params) {
         return new Not(params.id);
@@ -15,8 +15,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = ~Operator::getSrc(0)->getVal();
-            Operator::setVal(v);
+            auto v = ~Operator::getSrc(0)->getVal(0);
+            Operator::setVal(v,0);
         }
     }
 };

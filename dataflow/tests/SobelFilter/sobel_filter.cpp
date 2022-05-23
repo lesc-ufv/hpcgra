@@ -16,15 +16,13 @@ int main(int argc, char *argv[]) {
         data_out[k] = 0;
     }
     
-    for (int i = 0,j=0; i < 9; ++i) {
-        if (i != 4){
-            auto in = reinterpret_cast<InputStream *>(df->getOp(i));
-            in->setData(data_in[j++],1024);
-        }
+    for (int i = 0; i < 8; ++i) {
+        auto in = reinterpret_cast<InputStream *>(df->getOp(i));
+        in->setData(data_in[i],0,1024);
     }
     
     auto out = reinterpret_cast<OutputStream *>(df->getOp(8));
-    out->setData(data_out,1024);
+    out->setData(data_out,0,1024);
     
     df->compute();
     
@@ -55,9 +53,9 @@ DataFlow *createDataFlow(int id, int copies) {
 
     for (int i = 0; i < 9; ++i) {
         if (i != 4)
-            inputs[i] = new InputStream(idx++,nullptr,0);
+            inputs[i] = new InputStream(idx++,nullptr,1,0);
     }
-    output[0] = new OutputStream(idx++,nullptr,0);
+    output[0] = new OutputStream(idx++,nullptr,1,0);
 
 //     for (int i = 0; i < 9; ++i) {
 //         if (i == 4) {
@@ -65,7 +63,7 @@ DataFlow *createDataFlow(int id, int copies) {
 //             inputs[i] = r;
 //         } else {
 //             auto r = new Addi(idx++,0);
-//             df->connect(inputs[i], r, 0);
+//             df->connect(inputs[i],0, r, 0);
 //             inputs[i] = r;
 //         }
 //     }
@@ -76,7 +74,7 @@ DataFlow *createDataFlow(int id, int copies) {
         for (int j = 0; j < 9; ++j) {
             if(l[9 - j - 1] != 0){
                 auto mul = new Muli(idx++, l[9 - j - 1]);
-                df->connect(inputs[j], mul, 0);
+                df->connect(inputs[j],0, mul, 0);
                 aux0.push_back(mul);
             }
         }
@@ -84,14 +82,14 @@ DataFlow *createDataFlow(int id, int copies) {
             int r = 0;
             if (aux0.size() % 2 != 0) {
                 auto reg = new Addi(idx++,0);
-                df->connect(aux0[aux0.size() - 1], reg, 0);
+                df->connect(aux0[aux0.size() - 1],0, reg, 0);
                 aux1.push_back(reg);
                 r = 1;
             }
             for (int k = 0; k < aux0.size() - r; k += 2) {
                 auto add = new Add(idx++);
-                df->connect(aux0[k], add, 0);
-                df->connect(aux0[k + 1], add, 1);
+                df->connect(aux0[k],0, add, 0);
+                df->connect(aux0[k + 1],0, add, 1);
                 aux1.push_back(add);
             }
             aux0.clear();
@@ -106,14 +104,13 @@ DataFlow *createDataFlow(int id, int copies) {
     auto Mul2 = new Mul(idx++);
     auto add = new Add(idx++);
 
-    df->connect(adds[0], Mul1, 0);
-    df->connect(adds[0], Mul1, 1);
-    df->connect(adds[1], Mul2, 0);
-    df->connect(adds[1], Mul2, 1);
-    df->connect(Mul1, add, 0);
-    df->connect(Mul2, add, 1);
-    df->connect(add, output[0], 0);
+    df->connect(adds[0],0, Mul1, 0);
+    df->connect(adds[0],0, Mul1, 1);
+    df->connect(adds[1],0, Mul2, 0);
+    df->connect(adds[1],0, Mul2, 1);
+    df->connect(Mul1,0, add, 0);
+    df->connect(Mul2,0, add, 1);
+    df->connect(add,0, output[0], 0);
 
-    
     return df;
 }

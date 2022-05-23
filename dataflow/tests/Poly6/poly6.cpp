@@ -19,20 +19,20 @@ int main(int argc, char *argv[]) {
     auto in2 = reinterpret_cast<InputStream *>(df->getOp(2));
     auto out = reinterpret_cast<OutputStream *>(df->getOp(3));
     
-    in0->setData(data_in0,1024);
-    in1->setData(data_in1,1024);
-    in2->setData(data_in2,1024);
-    out->setData(data_out,1024);
+    in0->setData(data_in0,0,1024);
+    in1->setData(data_in1,0,1024);
+    in2->setData(data_in2,0,1024);
+    out->setData(data_out,0,1024);
     
     df->compute();
     
     df->toJSON("../poly6.json");
     df->toDOT("../poly6.dot");
     
-    for(int i=0;i < 1024;i++){
-     std::cout << data_out[i] << " ";
-    } 
-    std::cout << std::endl;
+//     for(int i=0;i < 1024;i++){
+//      std::cout << data_out[i] << " ";
+//     } 
+//     std::cout << std::endl;
     
     delete df;
     return 0;
@@ -48,10 +48,10 @@ DataFlow *createDataFlow(int id, int copies) {
     std::vector<Operator *> o0_n48;
 
     for (int i = 0; i < copies; ++i) {
-        i0_n1.push_back(new InputStream(idx++,nullptr,0)); // 0
-        i1_n2.push_back(new InputStream(idx++,nullptr,0)); // 1
-        i2_n3.push_back(new InputStream(idx++,nullptr,0)); // 2
-        o0_n48.push_back(new OutputStream(idx++,nullptr,0));// 3
+        i0_n1.push_back(new InputStream(idx++,nullptr,1,0)); // 0
+        i1_n2.push_back(new InputStream(idx++,nullptr,1,0)); // 1
+        i2_n3.push_back(new InputStream(idx++,nullptr,1,0)); // 2
+        o0_n48.push_back(new OutputStream(idx++,nullptr,1,0));// 3
     }
     for (int i = 0; i < copies; ++i) {
         auto mul_n4 = new Mul(idx++); // 4
@@ -152,131 +152,131 @@ DataFlow *createDataFlow(int id, int copies) {
         auto reg54 = new Addi(idx++,0); // 98
         auto reg55 = new Addi(idx++,0); // 99
 
-        df->connect(reg11, mul_n36, 0);
-        df->connect(mul_n36, add_n27, 0);
-        df->connect(add_n27, reg38, 0);
-        df->connect(reg38, reg39, 0);
-        df->connect(reg39, reg40, 0);
-        df->connect(reg40, reg41, 0);
-        df->connect(reg41, reg42, 0);
-        df->connect(reg42, sub_n21, 0);
-        df->connect(sub_n21, o0_n48[i],0);
-        df->connect(i1_n2[i], reg7, 0);
-        df->connect(reg7, reg8, 0);
-        df->connect(reg8, reg9, 0);
-        df->connect(reg9, reg10, 0);
-        df->connect(reg10, reg11, 0);
-        df->connect(reg11, reg16, 0);
-        df->connect(reg16, mul_n5, 0);
-        df->connect(mul_n5, sub_n10, 0);
-        df->connect(sub_n10, reg43, 0);
-        df->connect(reg43, reg44, 0);
-        df->connect(reg44, sub_n8, 0);
-        df->connect(sub_n8, mul_n7, 0);
-        df->connect(mul_n7, sub_n21, 1);
-        df->connect(reg10, mul_n35, 0);
-        df->connect(mul_n35, sub_n28, 0);
-        df->connect(sub_n28, mul_n5, 1);
-        df->connect(reg9, mul_n16, 0);
-        df->connect(mul_n16, add_n25, 0);
-        df->connect(add_n25, mul_n36, 1);
-        df->connect(i1_n2[i], add_lmm_216_n14, 0);
-        df->connect(add_lmm_216_n14, mul_lmm_8_n43, 0);
-        df->connect(mul_lmm_8_n43, mul_n12, 0);
-        df->connect(mul_n12, mul_n16, 1);
-        df->connect(reg16, reg17, 0);
-        df->connect(reg17, mul_n33, 0);
-        df->connect(mul_n33, add_n42, 0);
-        df->connect(add_n42, mul_n4, 0);
-        df->connect(mul_n4, sub_n8, 1);
-        df->connect(i1_n2[i], mul_lmm_6_n17, 0);
-        df->connect(mul_lmm_6_n17, add_n30, 0);
-        df->connect(add_n30, sub_lmm_432_n22, 0);
-        df->connect(sub_lmm_432_n22, mul_n39, 0);
-        df->connect(reg9, mul_n39, 1);
-        df->connect(mul_n39, mul_n35, 1);
-        df->connect(reg11, mul_n15, 0);
-        df->connect(mul_n15, sub_n44, 0);
-        df->connect(sub_n44, mul_n33, 1);
-        df->connect(reg7, mul_n29, 0);
-        df->connect(mul_n29, reg20, 0);
-        df->connect(reg20, reg21, 0);
-        df->connect(reg21, add_n47, 0);
-        df->connect(reg14, mul_n12, 1);
-        df->connect(i2_n3[i], mul_lmm_124416_n34, 0);
-        df->connect(mul_lmm_124416_n34, reg24, 0);
-        df->connect(reg24, reg25, 0);
-        df->connect(reg25, reg26, 0);
-        df->connect(reg26, add_n25, 1);
-        df->connect(i2_n3[i], mul_lmm_4_n9, 0);
-        df->connect(mul_lmm_4_n9, add_n30, 1);
-        df->connect(i2_n3[i], mul_lmm_2985984_n26, 0);
-        df->connect(mul_lmm_2985984_n26, reg27, 0);
-        df->connect(reg27, reg28, 0);
-        df->connect(reg28, reg29, 0);
-        df->connect(reg29, reg30, 0);
-        df->connect(reg30, reg31, 0);
-        df->connect(reg31, add_n27, 1);
-        df->connect(reg14, mul_n11, 0);
-        df->connect(mul_n11, reg22, 0);
-        df->connect(reg22, reg23, 0);
-        df->connect(reg23, sub_n28, 1);
-        df->connect(i2_n3[i], mul_lmm_414_n18, 0);
-        df->connect(mul_lmm_414_n18, sub_lmm_20736_n41, 0);
-        df->connect(sub_lmm_20736_n41, mul_n11, 1);
-        df->connect(i2_n3[i], sub_lmm_32_n40, 0);
-        df->connect(sub_lmm_32_n40, mul_n29, 1);
-        df->connect(reg14, mul_n45, 0);
-        df->connect(mul_n45, reg3, 0);
-        df->connect(reg3, reg4, 0);
-        df->connect(reg4, reg5, 0);
-        df->connect(reg5, reg6, 0);
-        df->connect(reg6, sub_n10, 1);
-        df->connect(i2_n3[i], mul_lmm_3456_n24, 0);
-        df->connect(mul_lmm_3456_n24, sub_lmm_1492992_n20, 0);
-        df->connect(sub_lmm_1492992_n20, mul_n45, 1);
-        df->connect(i2_n3[i], sub_lmm_72_n46, 0);
-        df->connect(sub_lmm_72_n46, reg18, 0);
-        df->connect(reg18, reg19, 0);
-        df->connect(reg19, mul_n37, 0);
-        df->connect(mul_n37, add_n47, 1);
-        df->connect(add_n47, mul_n15, 1);
-        df->connect(i2_n3[i], reg13, 0);
-        df->connect(reg13, reg14, 0);
-        df->connect(reg14, reg15, 0);
-        df->connect(reg15, mul_n13, 0);
-        df->connect(reg15, mul_n37, 1);
-        df->connect(reg15, mul_n38, 0);
-        df->connect(mul_n13, reg36, 0);
-        df->connect(reg36, reg37, 0);
-        df->connect(reg37, sub_n44, 1);
-        df->connect(i2_n3[i], mul_lmm_87_n19, 0);
-        df->connect(mul_lmm_87_n19, add_lmm_2592_n32, 0);
-        df->connect(add_lmm_2592_n32, reg12, 0);
-        df->connect(reg12, mul_n13, 1);
-        df->connect(mul_n38, reg32, 0);
-        df->connect(reg32, reg33, 0);
-        df->connect(reg33, reg34, 0);
-        df->connect(reg34, reg35, 0);
-        df->connect(reg35, add_n42, 1);
-        df->connect(reg13, mul_n6, 0);
-        df->connect(mul_n6, sub_lmm_186624_n23, 0);
-        df->connect(sub_lmm_186624_n23, mul_n38, 1);
-        df->connect(i2_n3[i], sub_lmm_864_n31, 0);
-        df->connect(sub_lmm_864_n31, mul_n6, 1);
-        df->connect(reg53, mul_n4, 1);
-        df->connect(i0_n1[i], reg45, 0);
-        df->connect(reg45, reg46, 0);
-        df->connect(reg46, reg47, 0);
-        df->connect(reg47, reg48, 0);
-        df->connect(reg48, reg49, 0);
-        df->connect(reg49, reg50, 0);
-        df->connect(reg50, reg51, 0);
-        df->connect(reg51, reg52, 0);
-        df->connect(reg52, reg53, 0);
-        df->connect(reg53, reg54, 0);
-        df->connect(reg54, reg55, 0);
-        df->connect(reg55, mul_n7, 1);
+        df->connect(reg11,0, mul_n36, 0);
+        df->connect(mul_n36,0, add_n27, 0);
+        df->connect(add_n27,0, reg38, 0);
+        df->connect(reg38,0, reg39, 0);
+        df->connect(reg39,0, reg40, 0);
+        df->connect(reg40,0, reg41, 0);
+        df->connect(reg41,0, reg42, 0);
+        df->connect(reg42,0, sub_n21, 0);
+        df->connect(sub_n21,0, o0_n48[i],0);
+        df->connect(i1_n2[i],0, reg7, 0);
+        df->connect(reg7,0, reg8, 0);
+        df->connect(reg8,0, reg9, 0);
+        df->connect(reg9,0, reg10, 0);
+        df->connect(reg10,0, reg11, 0);
+        df->connect(reg11,0, reg16, 0);
+        df->connect(reg16,0, mul_n5, 0);
+        df->connect(mul_n5,0, sub_n10, 0);
+        df->connect(sub_n10,0, reg43, 0);
+        df->connect(reg43,0, reg44, 0);
+        df->connect(reg44,0, sub_n8, 0);
+        df->connect(sub_n8,0, mul_n7, 0);
+        df->connect(mul_n7,0, sub_n21, 1);
+        df->connect(reg10,0, mul_n35, 0);
+        df->connect(mul_n35,0, sub_n28, 0);
+        df->connect(sub_n28,0, mul_n5, 1);
+        df->connect(reg9,0, mul_n16, 0);
+        df->connect(mul_n16,0, add_n25, 0);
+        df->connect(add_n25,0, mul_n36, 1);
+        df->connect(i1_n2[i],0, add_lmm_216_n14, 0);
+        df->connect(add_lmm_216_n14,0, mul_lmm_8_n43, 0);
+        df->connect(mul_lmm_8_n43,0, mul_n12, 0);
+        df->connect(mul_n12,0, mul_n16, 1);
+        df->connect(reg16,0, reg17, 0);
+        df->connect(reg17,0, mul_n33, 0);
+        df->connect(mul_n33,0, add_n42, 0);
+        df->connect(add_n42,0, mul_n4, 0);
+        df->connect(mul_n4,0, sub_n8, 1);
+        df->connect(i1_n2[i],0, mul_lmm_6_n17, 0);
+        df->connect(mul_lmm_6_n17,0, add_n30, 0);
+        df->connect(add_n30,0, sub_lmm_432_n22, 0);
+        df->connect(sub_lmm_432_n22,0, mul_n39, 0);
+        df->connect(reg9,0, mul_n39, 1);
+        df->connect(mul_n39,0, mul_n35, 1);
+        df->connect(reg11,0, mul_n15, 0);
+        df->connect(mul_n15,0, sub_n44, 0);
+        df->connect(sub_n44,0, mul_n33, 1);
+        df->connect(reg7,0, mul_n29, 0);
+        df->connect(mul_n29,0, reg20, 0);
+        df->connect(reg20,0, reg21, 0);
+        df->connect(reg21,0, add_n47, 0);
+        df->connect(reg14,0, mul_n12, 1);
+        df->connect(i2_n3[i],0, mul_lmm_124416_n34, 0);
+        df->connect(mul_lmm_124416_n34,0, reg24, 0);
+        df->connect(reg24,0, reg25, 0);
+        df->connect(reg25,0, reg26, 0);
+        df->connect(reg26,0, add_n25, 1);
+        df->connect(i2_n3[i],0, mul_lmm_4_n9, 0);
+        df->connect(mul_lmm_4_n9,0, add_n30, 1);
+        df->connect(i2_n3[i],0, mul_lmm_2985984_n26, 0);
+        df->connect(mul_lmm_2985984_n26,0, reg27, 0);
+        df->connect(reg27,0, reg28, 0);
+        df->connect(reg28,0, reg29, 0);
+        df->connect(reg29,0, reg30, 0);
+        df->connect(reg30,0, reg31, 0);
+        df->connect(reg31,0, add_n27, 1);
+        df->connect(reg14,0, mul_n11, 0);
+        df->connect(mul_n11,0, reg22, 0);
+        df->connect(reg22,0, reg23, 0);
+        df->connect(reg23,0, sub_n28, 1);
+        df->connect(i2_n3[i],0, mul_lmm_414_n18, 0);
+        df->connect(mul_lmm_414_n18,0, sub_lmm_20736_n41, 0);
+        df->connect(sub_lmm_20736_n41,0, mul_n11, 1);
+        df->connect(i2_n3[i],0, sub_lmm_32_n40, 0);
+        df->connect(sub_lmm_32_n40,0, mul_n29, 1);
+        df->connect(reg14,0, mul_n45, 0);
+        df->connect(mul_n45,0, reg3, 0);
+        df->connect(reg3,0, reg4, 0);
+        df->connect(reg4,0, reg5, 0);
+        df->connect(reg5,0, reg6, 0);
+        df->connect(reg6,0, sub_n10, 1);
+        df->connect(i2_n3[i],0, mul_lmm_3456_n24, 0);
+        df->connect(mul_lmm_3456_n24,0, sub_lmm_1492992_n20, 0);
+        df->connect(sub_lmm_1492992_n20,0, mul_n45, 1);
+        df->connect(i2_n3[i],0, sub_lmm_72_n46, 0);
+        df->connect(sub_lmm_72_n46,0, reg18, 0);
+        df->connect(reg18,0, reg19, 0);
+        df->connect(reg19,0, mul_n37, 0);
+        df->connect(mul_n37,0, add_n47, 1);
+        df->connect(add_n47,0, mul_n15, 1);
+        df->connect(i2_n3[i],0, reg13, 0);
+        df->connect(reg13,0, reg14, 0);
+        df->connect(reg14,0, reg15, 0);
+        df->connect(reg15,0, mul_n13, 0);
+        df->connect(reg15,0, mul_n37, 1);
+        df->connect(reg15,0, mul_n38, 0);
+        df->connect(mul_n13,0, reg36, 0);
+        df->connect(reg36,0, reg37, 0);
+        df->connect(reg37,0, sub_n44, 1);
+        df->connect(i2_n3[i],0, mul_lmm_87_n19, 0);
+        df->connect(mul_lmm_87_n19,0, add_lmm_2592_n32, 0);
+        df->connect(add_lmm_2592_n32,0, reg12, 0);
+        df->connect(reg12,0, mul_n13, 1);
+        df->connect(mul_n38,0, reg32, 0);
+        df->connect(reg32,0, reg33, 0);
+        df->connect(reg33,0, reg34, 0);
+        df->connect(reg34,0, reg35, 0);
+        df->connect(reg35,0, add_n42, 1);
+        df->connect(reg13,0, mul_n6, 0);
+        df->connect(mul_n6,0, sub_lmm_186624_n23, 0);
+        df->connect(sub_lmm_186624_n23,0, mul_n38, 1);
+        df->connect(i2_n3[i],0, sub_lmm_864_n31, 0);
+        df->connect(sub_lmm_864_n31,0, mul_n6, 1);
+        df->connect(reg53,0, mul_n4, 1);
+        df->connect(i0_n1[i],0, reg45, 0);
+        df->connect(reg45,0, reg46, 0);
+        df->connect(reg46,0, reg47, 0);
+        df->connect(reg47,0, reg48, 0);
+        df->connect(reg48,0, reg49, 0);
+        df->connect(reg49,0, reg50, 0);
+        df->connect(reg50,0, reg51, 0);
+        df->connect(reg51,0, reg52, 0);
+        df->connect(reg52,0, reg53, 0);
+        df->connect(reg53,0, reg54, 0);
+        df->connect(reg54,0, reg55, 0);
+        df->connect(reg55,0, mul_n7, 1);
     }
 
     return df;

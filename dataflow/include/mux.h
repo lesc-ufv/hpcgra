@@ -7,7 +7,7 @@
 
 class Mux : public Operator {
 public:
-    explicit Mux(int id) : Operator(id, "mux", OP_BASIC, "mux") {}
+    explicit Mux(int id) : Operator(id, "mux", OP_BASIC, "mux",1) {}
 
     static Operator *create(Params params) {
         return new Mux(params.id);
@@ -15,16 +15,16 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1) && Operator::getSrc(2)) {
-            auto v = Operator::getSrc(0)->getVal() ? Operator::getSrc(1)->getVal()
-                                                       : Operator::getSrc(2)->getVal();
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) ? Operator::getSrc(1)->getVal(0)
+                                                       : Operator::getSrc(2)->getVal(0);
+            Operator::setVal(v,1);
         }
     }
 };
 
 class Muxi : public Operator {
 public:
-    Muxi(int id, int constant) : Operator(id, "mux", OP_IMMEDIATE, "muxi") {
+    Muxi(int id, int constant) : Operator(id, "mux", OP_IMMEDIATE, "muxi",1) {
         setConst(2,constant);
     }
 
@@ -34,15 +34,15 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() ? Operator::getSrc(1)->getVal() : Operator::getConst(2);
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) ? Operator::getSrc(1)->getVal(0) : Operator::getConst(2);
+            Operator::setVal(v,1);
         }
     }
 };
 
 class Muxii : public Operator {
 public:
-    Muxii(int id, unsigned short constant1, unsigned short constant2) : Operator(id, "mux", OP_IMMEDIATE, "muxii") {
+    Muxii(int id, unsigned short constant1, unsigned short constant2) : Operator(id, "mux", OP_IMMEDIATE, "muxii",1) {
         setConst(1,constant1);
         setConst(2,constant2);
     }
@@ -53,8 +53,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() ? Operator::getConst(1) : Operator::getConst(2);
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) ? Operator::getConst(1) : Operator::getConst(2);
+            Operator::setVal(v,1);
         }
     }
 };

@@ -7,7 +7,7 @@
 
 class Sub : public Operator {
 public:
-    explicit Sub(int id) : Operator(id, "sub", OP_BASIC, "sub") {}
+    explicit Sub(int id) : Operator(id, "sub", OP_BASIC, "sub",1) {}
 
     static Operator *create(Params params) {
         return new Sub(params.id);
@@ -15,15 +15,15 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() - Operator::getSrc(1)->getVal();
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) - Operator::getSrc(1)->getVal(0);
+            Operator::setVal(v,0);
         }
     }
 };
 
 class Subi : public Operator {
 public:
-    Subi(int id, int constant) : Operator(id, "sub", OP_IMMEDIATE, "subi") {
+    Subi(int id, int constant) : Operator(id, "sub", OP_IMMEDIATE, "subi",1) {
         setConst(1,constant);
     }
 
@@ -33,8 +33,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() - Operator::getConst(1);
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) - Operator::getConst(1);
+            Operator::setVal(v,0);
         }
     }
 };

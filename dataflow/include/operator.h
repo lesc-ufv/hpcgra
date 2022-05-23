@@ -6,7 +6,7 @@
 #include <utility>
 #include <assert.h>
 #include <cstdlib>
-#include<map>
+#include <map>
 
 class Operator {
 
@@ -15,22 +15,27 @@ private:
     int m_data_flow_id;
     int m_level;
     int m_type;
-    unsigned short m_val;
-    bool m_is_end;
+    int m_size;
+    std::vector<unsigned short> m_val;
+    std::vector<bool> m_is_end;
     std::string m_op_code;
     std::string m_label;
     std::map<int,unsigned short> m_constants;
-    std::map<int, Operator*> m_src;
-    std::vector<std::pair<int, Operator*>> m_dst;
+    std::map<int, Operator*> m_inputs;
+    std::map<int, Operator*> m_outputs;
     
 public:
-    Operator(int id, std::string op_code, int type, std::string label);
+    Operator(int id, std::string op_code, int type, std::string label, int size);
 
     ~Operator();
 
     int getId() const;
 
     void setId(int id);
+    
+    int getSize() const;
+
+    void setSize(int size);
 
     std::string getOpCode() const;
 
@@ -40,17 +45,21 @@ public:
 
     void setType(int type);
 
-    short getVal() const;
+    short getVal(int idx) const;
 
-    void setVal(int val);
+    void setVal(int val, int idx);
     
-    void setSrc(Operator *src, int port);
+    void addSrc(Operator *src, int port);
     
     Operator *getSrc(int port);
     
+    int getSrcPort(Operator * op);
+     
     void addDst(Operator * op_dst, int port);
+
+    int getDstPort(Operator * op);
     
-    std::vector<std::pair<int, Operator*>> &getDst();
+    std::map<int, Operator*> &getDst();
 
     void setConst(int  port, unsigned short value);
 
@@ -70,9 +79,9 @@ public:
 
     virtual void compute() = 0;
 
-    int getIsEnd() const;
+    int getIsEnd(int idx) const;
 
-    void setIsEnd(bool isEnd);
+    void setIsEnd(bool isEnd,int idx);
 };
 
 #endif //OPERATOR_H

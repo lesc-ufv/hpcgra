@@ -2,214 +2,214 @@
 	"edges" : 
 	[
 		{
-			"port" : "0",
 			"source" : "0",
-			"target" : "18"
+			"source-port" : "0",
+			"target" : "3",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "0",
-			"target" : "19"
-		},
-		{
-			"port" : "0",
-			"source" : "0",
-			"target" : "20"
-		},
-		{
-			"port" : "0",
-			"source" : "0",
-			"target" : "13"
-		},
-		{
-			"port" : "0",
-			"source" : "0",
-			"target" : "3"
-		},
-		{
-			"port" : "0",
 			"source" : "1",
-			"target" : "21"
+			"source-port" : "0",
+			"target" : "7",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "1",
-			"target" : "7"
-		},
-		{
-			"port" : "0",
 			"source" : "3",
-			"target" : "4"
+			"source-port" : "0",
+			"target" : "4",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "4",
-			"target" : "5"
+			"source-port" : "0",
+			"target" : "26",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "4",
-			"target" : "26"
-		},
-		{
-			"port" : "0",
 			"source" : "5",
-			"target" : "6"
+			"source-port" : "0",
+			"target" : "6",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "6",
-			"target" : "30"
+			"source-port" : "0",
+			"target" : "30",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "7",
-			"target" : "8"
+			"source-port" : "0",
+			"target" : "8",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "8",
-			"target" : "9"
+			"source-port" : "0",
+			"target" : "9",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "9",
-			"target" : "10"
+			"source-port" : "0",
+			"target" : "29",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
-			"source" : "9",
-			"target" : "29"
-		},
-		{
-			"port" : "0",
 			"source" : "10",
-			"target" : "11"
+			"source-port" : "0",
+			"target" : "11",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "11",
-			"target" : "12"
+			"source-port" : "0",
+			"target" : "12",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "12",
-			"target" : "33"
+			"source-port" : "0",
+			"target" : "33",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "13",
-			"target" : "14"
+			"source-port" : "0",
+			"target" : "14",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "14",
-			"target" : "25"
+			"source-port" : "0",
+			"target" : "25",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "15",
-			"target" : "31"
+			"source-port" : "0",
+			"target" : "31",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "16",
-			"target" : "17"
+			"source-port" : "0",
+			"target" : "17",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "17",
-			"target" : "34"
+			"source-port" : "0",
+			"target" : "34",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "18",
-			"target" : "23"
+			"source-port" : "0",
+			"target" : "23",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "19",
-			"target" : "22"
+			"source-port" : "0",
+			"target" : "22",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "20",
-			"target" : "24"
+			"source-port" : "0",
+			"target" : "24",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "21",
-			"target" : "24"
+			"source-port" : "0",
+			"target" : "24",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "22",
-			"target" : "25"
+			"source-port" : "0",
+			"target" : "25",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "23",
-			"target" : "26"
+			"source-port" : "0",
+			"target" : "26",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "24",
-			"target" : "27"
+			"source-port" : "0",
+			"target" : "27",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "25",
-			"target" : "28"
+			"source-port" : "0",
+			"target" : "28",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "26",
-			"target" : "15"
+			"source-port" : "0",
+			"target" : "15",
+			"target-port" : "0"
 		},
 		{
-			"port" : "1",
 			"source" : "27",
-			"target" : "29"
+			"source-port" : "0",
+			"target" : "29",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "28",
-			"target" : "30"
+			"source-port" : "0",
+			"target" : "30",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "29",
-			"target" : "31"
+			"source-port" : "0",
+			"target" : "31",
+			"target-port" : "1"
 		},
 		{
-			"port" : "0",
 			"source" : "30",
-			"target" : "16"
+			"source-port" : "0",
+			"target" : "16",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "31",
-			"target" : "32"
+			"source-port" : "0",
+			"target" : "32",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "32",
-			"target" : "33"
+			"source-port" : "0",
+			"target" : "33",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "33",
-			"target" : "34"
+			"source-port" : "0",
+			"target" : "34",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "34",
-			"target" : "35"
+			"source-port" : "0",
+			"target" : "35",
+			"target-port" : "0"
 		},
 		{
-			"port" : "0",
 			"source" : "35",
-			"target" : "2"
+			"source-port" : "0",
+			"target" : "2",
+			"target-port" : "0"
 		}
 	],
 	"nodes" : 
@@ -217,17 +217,20 @@
 		{
 			"id" : "0",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "1",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "2",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -239,7 +242,8 @@
 			],
 			"id" : "3",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -251,7 +255,8 @@
 			],
 			"id" : "4",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -263,7 +268,8 @@
 			],
 			"id" : "5",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -275,7 +281,8 @@
 			],
 			"id" : "6",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -287,7 +294,8 @@
 			],
 			"id" : "7",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -299,7 +307,8 @@
 			],
 			"id" : "8",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -311,7 +320,8 @@
 			],
 			"id" : "9",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -323,7 +333,8 @@
 			],
 			"id" : "10",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -335,7 +346,8 @@
 			],
 			"id" : "11",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -347,7 +359,8 @@
 			],
 			"id" : "12",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -359,7 +372,8 @@
 			],
 			"id" : "13",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -371,7 +385,8 @@
 			],
 			"id" : "14",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -383,7 +398,8 @@
 			],
 			"id" : "15",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -395,7 +411,8 @@
 			],
 			"id" : "16",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -407,7 +424,8 @@
 			],
 			"id" : "17",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -419,7 +437,8 @@
 			],
 			"id" : "18",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -431,7 +450,8 @@
 			],
 			"id" : "19",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -443,7 +463,8 @@
 			],
 			"id" : "20",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -455,7 +476,8 @@
 			],
 			"id" : "21",
 			"label" : "muli",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -467,7 +489,8 @@
 			],
 			"id" : "22",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -479,22 +502,26 @@
 			],
 			"id" : "23",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"id" : "24",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"id" : "25",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "26",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -506,7 +533,8 @@
 			],
 			"id" : "27",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -518,22 +546,26 @@
 			],
 			"id" : "28",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		},
 		{
 			"id" : "29",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "30",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "31",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -545,17 +577,20 @@
 			],
 			"id" : "32",
 			"label" : "addi",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"id" : "33",
 			"label" : "mul",
-			"opcode" : "mul"
+			"opcode" : "mul",
+			"size" : 1
 		},
 		{
 			"id" : "34",
 			"label" : "add",
-			"opcode" : "add"
+			"opcode" : "add",
+			"size" : 1
 		},
 		{
 			"const" : 
@@ -567,7 +602,8 @@
 			],
 			"id" : "35",
 			"label" : "subi",
-			"opcode" : "sub"
+			"opcode" : "sub",
+			"size" : 1
 		}
 	]
 }

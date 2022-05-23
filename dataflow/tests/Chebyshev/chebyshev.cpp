@@ -14,18 +14,18 @@ int main(int argc, char *argv[]) {
     auto in = reinterpret_cast<InputStream *>(df->getOp(0));
     auto out = reinterpret_cast<OutputStream *>(df->getOp(1));
     
-    in->setData(data_in,1024);
-    out->setData(data_out,1024);
+    in->setData(data_in,0,10);
+    out->setData(data_out,0,10);
     
     df->compute();
 
     df->toJSON("../chebyshev.json");
     df->toDOT("../chebyshev.dot");
     
-   for(int i=0;i < 1024;i++){
-     std::cout << data_out[i] << " ";
-   }
-   std::cout << std::endl;
+//    for(int i=0;i < 1024;i++){
+//      std::cout << data_out[i] << " ";
+//    }
+//    std::cout << std::endl;
     
     delete df;
 
@@ -38,8 +38,8 @@ DataFlow *createDataFlow(int id, int copies) {
     std::vector<Operator *> in;
     std::vector<Operator *> out;
     for (int i = 0; i < copies; ++i) {
-        in.push_back(new InputStream(idx++, nullptr,0));
-        out.push_back(new OutputStream(idx++, nullptr,0));
+        in.push_back(new InputStream(idx++, nullptr,1,0));
+        out.push_back(new OutputStream(idx++, nullptr,1,0));
     }
 
     for (int i = 0; i < copies; ++i) {
@@ -58,25 +58,25 @@ DataFlow *createDataFlow(int id, int copies) {
         auto add1 = new Addi(idx++, 5);
         auto mult5 = new Mul(idx++);
 
-        df->connect(in[i], mult1, 0);
-        df->connect(in[i], reg1, 0);
-        df->connect(reg1, reg2, 0);
-        df->connect(reg2, reg5, 0);
-        df->connect(reg5, reg3, 0);
-        df->connect(reg3, reg6, 0);
-        df->connect(reg6, reg4, 0);
-        df->connect(reg1, mult2, 0);
-        df->connect(mult1, mult2, 1);
-        df->connect(mult2, sub1, 0);
-        df->connect(reg2, reg7, 0);
-        df->connect(reg7, mult3,0);
-        df->connect(sub1, mult3, 1);
-        df->connect(reg3, mult4, 0);
-        df->connect(mult3, mult4, 1);
-        df->connect(mult4, add1, 0);
-        df->connect(reg4, mult5, 0);
-        df->connect(add1, mult5, 1);
-        df->connect(mult5, out[i], 0);
+        df->connect(in[i],0, mult1, 0);
+        df->connect(in[i],0, reg1, 0);
+        df->connect(reg1,0, reg2, 0);
+        df->connect(reg2,0, reg5, 0);
+        df->connect(reg5,0, reg3, 0);
+        df->connect(reg3,0, reg6, 0);
+        df->connect(reg6,0, reg4, 0);
+        df->connect(reg1,0, mult2, 0);
+        df->connect(mult1,0, mult2, 1);
+        df->connect(mult2,0, sub1, 0);
+        df->connect(reg2,0, reg7, 0);
+        df->connect(reg7,0, mult3,0);
+        df->connect(sub1,0, mult3, 1);
+        df->connect(reg3,0, mult4, 0);
+        df->connect(mult3,0, mult4, 1);
+        df->connect(mult4,0, add1, 0);
+        df->connect(reg4,0, mult5, 0);
+        df->connect(add1,0, mult5, 1);
+        df->connect(mult5,0, out[i], 0);
     }
 
     return df;

@@ -7,7 +7,7 @@
 
 class Seq : public Operator {
 public:
-    explicit Seq(int id) : Operator(id, "seq", OP_BASIC, "seq") {}
+    explicit Seq(int id) : Operator(id, "seq", OP_BASIC, "seq",1) {}
 
     static Operator *create(Params params) {
         return new Seq(params.id);
@@ -15,15 +15,15 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() == Operator::getSrc(1)->getVal() ? 1 : 0;
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) == Operator::getSrc(1)->getVal(0) ? 1 : 0;
+            Operator::setVal(v,1);
         }
     }
 };
 
 class Seqi : public Operator {
 public:
-    Seqi(int id, int constant) : Operator(id,"seq", OP_IMMEDIATE, "seqi") {
+    Seqi(int id, int constant) : Operator(id,"seq", OP_IMMEDIATE, "seqi",1) {
         setConst(1,constant);
     }
 
@@ -33,8 +33,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() == Operator::getConst(1) ? 1 : 0;
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) == Operator::getConst(1) ? 1 : 0;
+            Operator::setVal(v,1);
         }
     }
 };

@@ -2,44 +2,52 @@
 	"edges" : 
 	[
 		{
-			"port" : "1",
 			"source" : "0",
-			"target" : "1"
+			"source-port" : "0",
+			"target" : "1",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "2",
-			"target" : "3"
+			"source-port" : "0",
+			"target" : "3",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "4",
-			"target" : "5"
+			"source-port" : "0",
+			"target" : "5",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "6",
-			"target" : "7"
+			"source-port" : "0",
+			"target" : "7",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "8",
-			"target" : "9"
+			"source-port" : "0",
+			"target" : "9",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "10",
-			"target" : "11"
+			"source-port" : "0",
+			"target" : "11",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "12",
-			"target" : "13"
+			"source-port" : "0",
+			"target" : "13",
+			"target-port" : "1"
 		},
 		{
-			"port" : "1",
 			"source" : "14",
-			"target" : "15"
+			"source-port" : "0",
+			"target" : "15",
+			"target-port" : "1"
 		}
 	],
 	"nodes" : 
@@ -47,82 +55,98 @@
 		{
 			"id" : "0",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "1",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "2",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "3",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "4",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "5",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "6",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "7",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "8",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "9",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "10",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "11",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "12",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "13",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		},
 		{
 			"id" : "14",
 			"label" : "input",
-			"opcode" : "input"
+			"opcode" : "input",
+			"size" : 1
 		},
 		{
 			"id" : "15",
 			"label" : "output",
-			"opcode" : "output"
+			"opcode" : "output",
+			"size" : 1
 		}
 	]
 }

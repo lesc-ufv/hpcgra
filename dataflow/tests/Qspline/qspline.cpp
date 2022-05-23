@@ -29,23 +29,23 @@ int main(int argc, char *argv[]) {
     auto in5 = reinterpret_cast<InputStream *>(df->getOp(5));
     auto out = reinterpret_cast<OutputStream *>(df->getOp(6));
     
-    in0->setData(data_in0,1024);
-    in1->setData(data_in1,1024);
-    in2->setData(data_in2,1024);
-    in3->setData(data_in3,1024);
-    in4->setData(data_in4,1024);
-    in5->setData(data_in5,1024);
-    out->setData(data_out,1024);
+    in0->setData(data_in0,0,1024);
+    in1->setData(data_in1,0,1024);
+    in2->setData(data_in2,0,1024);
+    in3->setData(data_in3,0,1024);
+    in4->setData(data_in4,0,1024);
+    in5->setData(data_in5,0,1024);
+    out->setData(data_out,0,1024);
     
     df->compute();
     
     df->toJSON("../qspline.json");
     df->toDOT("../qspline.dot");
     
-    for(int i=0;i < 1024;i++){
-     std::cout << data_out[i] << " ";
-    } 
-    std::cout << std::endl;
+//     for(int i=0;i < 1024;i++){
+//      std::cout << data_out[i] << " ";
+//     } 
+//     std::cout << std::endl;
     
     delete df;
     return 0;
@@ -62,13 +62,13 @@ DataFlow *createDataFlow(int id, int copies) {
     std::vector<Operator *> in5;
     std::vector<Operator *> out;
     for (int i = 0; i < copies; ++i) {
-        in0.push_back(new InputStream(idx++,nullptr,0));//0
-        in1.push_back(new InputStream(idx++,nullptr,0));//1
-        in2.push_back(new InputStream(idx++,nullptr,0));//2
-        in3.push_back(new InputStream(idx++,nullptr,0));//3
-        in4.push_back(new InputStream(idx++,nullptr,0));//4
-        in5.push_back(new InputStream(idx++,nullptr,0));//5
-        out.push_back(new OutputStream(idx++,nullptr,0));//6
+        in0.push_back(new InputStream(idx++,nullptr,1,0));//0
+        in1.push_back(new InputStream(idx++,nullptr,1,0));//1
+        in2.push_back(new InputStream(idx++,nullptr,1,0));//2
+        in3.push_back(new InputStream(idx++,nullptr,1,0));//3
+        in4.push_back(new InputStream(idx++,nullptr,1,0));//4
+        in5.push_back(new InputStream(idx++,nullptr,1,0));//5
+        out.push_back(new OutputStream(idx++,nullptr,1,0));//6
     }
     for (int j = 0; j < copies; ++j) {
         auto mul7 = new Mul(idx++);
@@ -98,55 +98,55 @@ DataFlow *createDataFlow(int id, int copies) {
         auto reg31 = new Addi(idx++,0);
         auto add32 = new Add(idx++);
         //level 0
-        df->connect(in0[j],mul7,0);
-        df->connect(in1[j],mul7,1);
-        df->connect(in1[j],mul8,0);
-        df->connect(in1[j],mul8,1);
-        df->connect(in1[j],reg9,0);
-        df->connect(in2[j],mul10,0);
-        df->connect(in3[j],mul11,0);
-        df->connect(in3[j],mul11,1);
-        df->connect(in3[j],mul12,0);
-        df->connect(in3[j],reg13,0);
-        df->connect(in4[j],mul12,1);
-        df->connect(in5[j],mul14,0);
+        df->connect(in0[j],0,mul7,0);
+        df->connect(in1[j],0,mul7,1);
+        df->connect(in1[j],0,mul8,0);
+        df->connect(in1[j],0,mul8,1);
+        df->connect(in1[j],0,reg9,0);
+        df->connect(in2[j],0,mul10,0);
+        df->connect(in3[j],0,mul11,0);
+        df->connect(in3[j],0,mul11,1);
+        df->connect(in3[j],0,mul12,0);
+        df->connect(in3[j],0,reg13,0);
+        df->connect(in4[j],0,mul12,1);
+        df->connect(in5[j],0,mul14,0);
         //level 1
-        df->connect(mul7,mul15,0);
-        df->connect(mul8,mul15,1);
-        df->connect(mul8,reg17,0);
-        df->connect(reg9,reg16,0);
-        df->connect(reg9,mul20,0);
-        df->connect(mul10,mul18,0);
-        df->connect(mul11,mul18,1);
-        df->connect(mul11,mul19,0);
-        df->connect(mul11,mul21,0);
-        df->connect(mul12,mul19,1);
-        df->connect(reg13,mul21,1);
-        df->connect(mul14,mul20,1);
+        df->connect(mul7,0,mul15,0);
+        df->connect(mul8,0,mul15,1);
+        df->connect(mul8,0,reg17,0);
+        df->connect(reg9,0,reg16,0);
+        df->connect(reg9,0,mul20,0);
+        df->connect(mul10,0,mul18,0);
+        df->connect(mul11,0,mul18,1);
+        df->connect(mul11,0,mul19,0);
+        df->connect(mul11,0,mul21,0);
+        df->connect(mul12,0,mul19,1);
+        df->connect(reg13,0,mul21,1);
+        df->connect(mul14,0,mul20,1);
         //level 2
-        df->connect(mul15,mul22,0);
-        df->connect(reg16,mul22,1);
-        df->connect(reg17,reg23,0);
-        df->connect(reg17,mul24,0);        
-        df->connect(mul18,mul24,1);
-        df->connect(mul19,reg25,0);
-        df->connect(mul20,mul26,0);
-        df->connect(mul21,mul26,1);
+        df->connect(mul15,0,mul22,0);
+        df->connect(reg16,0,mul22,1);
+        df->connect(reg17,0,reg23,0);
+        df->connect(reg17,0,mul24,0);        
+        df->connect(mul18,0,mul24,1);
+        df->connect(mul19,0,reg25,0);
+        df->connect(mul20,0,mul26,0);
+        df->connect(mul21,0,mul26,1);
         //level 3
-        df->connect(mul22,add27,0);
-        df->connect(reg23,add27,1);
-        df->connect(mul24,add28,0);
-        df->connect(reg25,add28,1);
-        df->connect(mul26,reg29,0);
+        df->connect(mul22,0,add27,0);
+        df->connect(reg23,0,add27,1);
+        df->connect(mul24,0,add28,0);
+        df->connect(reg25,0,add28,1);
+        df->connect(mul26,0,reg29,0);
         //level 4
-        df->connect(add27,add30,0);
-        df->connect(add28,add30,1);
-        df->connect(reg29,reg31,0);
+        df->connect(add27,0,add30,0);
+        df->connect(add28,0,add30,1);
+        df->connect(reg29,0,reg31,0);
         //level 5
-        df->connect(add30,add32,0);
-        df->connect(reg31,add32,1);
+        df->connect(add30,0,add32,0);
+        df->connect(reg31,0,add32,1);
         //level 6
-        df->connect(add32,out[j],0);
+        df->connect(add32,0,out[j],0);
     }
     return df;
 }

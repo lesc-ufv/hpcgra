@@ -42,12 +42,12 @@ DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, in
             }
             for (int i = 0; i < num_dim[n]; ++i) {
                 if(inputs.size() < num_dim[n])
-                    inputs.push_back(new InputStream(idx++,nullptr,0));
+                    inputs.push_back(new InputStream(idx++,nullptr,1,0));
             }
             outId = idx++;
             for (int j = 0; j < num_clusters[n]; ++j) {
                 for (int i = 0; i < num_dim[n]; ++i) {
-                    df->connect(inputs[i], subs[j][i], 0);
+                    df->connect(inputs[i],0, subs[j][i], 0);
                 }
                 for (auto s:subs[j]) {
                     abs[j].push_back(s);
@@ -61,14 +61,14 @@ DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, in
                     int start = 0;
                     if (aux.size() % 2 != 0) {
                         auto passA = new Addi(idx++,0);
-                        df->connect(aux[0], passA,0);
+                        df->connect(aux[0],0, passA,0);
                         aux_reduz.push_back(passA);
                         start = 1;
                     }
                     for (int l = start; l < aux.size(); l += 2) {
                         auto add = new Add(idx++);
-                        df->connect(aux[l], add, 0);
-                        df->connect(aux[l + 1], add, 1);
+                        df->connect(aux[l],0, add, 0);
+                        df->connect(aux[l + 1],0, add, 1);
                         aux_reduz.push_back(add);
                     }
                     aux.clear();
@@ -97,21 +97,21 @@ DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, in
                     if (reg > 0) {
                         auto slt = new Slt(idx++);
                         auto mux = new Mux(idx++);
-                        df->connect(aux[l], slt, 0);
-                        df->connect(aux[l + 1], slt, 1);
-                        df->connect(slt, mux, 0);
+                        df->connect(aux[l],0, slt, 0);
+                        df->connect(aux[l + 1],0, slt, 1);
+                        df->connect(slt,0, mux, 0);
                         aux_reduz.push_back(slt);
-                        df->connect(mux_reduz.front(), mux, 1);
+                        df->connect(mux_reduz.front(),0, mux, 1);
                         mux_reduz.pop();
-                        df->connect(mux_reduz.front(), mux,2);
+                        df->connect(mux_reduz.front(),0, mux,2);
                         mux_reduz.pop();
                         mux_reduz.push(mux);
                     } else {
                         auto slt = new Slt(idx++);
                         auto mux = new Muxii(idx++,l,l+1);
-                        df->connect(aux[l], slt, 0);
-                        df->connect(aux[l + 1], slt, 1);
-                        df->connect(slt, mux, 0);
+                        df->connect(aux[l],0, slt, 0);
+                        df->connect(aux[l + 1],0, slt, 1);
+                        df->connect(slt,0, mux, 0);
                         aux_reduz.push_back(slt);
                         mux_reduz.push(mux);
                     }
@@ -128,28 +128,28 @@ DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, in
                 auto rr = addEnd;
                 for (int i = 0; i < reg; ++i) {
                     auto r = new Addi(idx++,0);
-                    df->connect(rr, r, 0);
+                    df->connect(rr,0, r, 0);
                     rr = r;
                 }
                 auto sltEnd = new Slt(idx++);
                 auto muxEnd = new Muxi(idx++,num_clusters[n] - 1);
 
-                df->connect(aux[0], sltEnd,0);
-                df->connect(rr, sltEnd, 1);
-                df->connect(sltEnd, muxEnd, 0);
-                df->connect(mux_reduz.front(), muxEnd, 1);
-                auto out = new OutputStream(outId,nullptr,0);
-                df->connect(muxEnd, out, 0);
+                df->connect(aux[0],0, sltEnd,0);
+                df->connect(rr,0, sltEnd, 1);
+                df->connect(sltEnd,0, muxEnd, 0);
+                df->connect(mux_reduz.front(),0, muxEnd, 1);
+                auto out = new OutputStream(outId,nullptr,1,0);
+                df->connect(muxEnd,0, out, 0);
             } else {
-                auto out = new OutputStream(outId,nullptr,0);
-                df->connect(mux_reduz.front(), out, 0);
+                auto out = new OutputStream(outId,nullptr,1,0);
+                df->connect(mux_reduz.front(),0, out, 0);
             }
         } else {
-            auto in = new InputStream(idx++,nullptr,0);
-            auto out = new OutputStream(idx++,nullptr,0);
+            auto in = new InputStream(idx++,nullptr,1,0);
+            auto out = new OutputStream(idx++,nullptr,1,0);
             auto muli = new Muli(idx, 0);
-            df->connect(in, muli, 0);
-            df->connect(muli, out, 0);
+            df->connect(in,0, muli, 0);
+            df->connect(muli,0, out, 0);
         }
     }
     return df;

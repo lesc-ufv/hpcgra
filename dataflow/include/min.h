@@ -7,7 +7,7 @@
 
 class Min : public Operator {
 public:
-    explicit Min(int id) : Operator(id, "min", OP_BASIC, "min") {}
+    explicit Min(int id) : Operator(id, "min", OP_BASIC, "min",1) {}
 
     static Operator *create(Params params) {
         return new Min(params.id);
@@ -15,12 +15,12 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            if (Operator::getSrc(0)->getVal() < Operator::getSrc(1)->getVal()) {
-                auto v = Operator::getSrc(0)->getVal();
-                Operator::setVal(v);
+            if (Operator::getSrc(0)->getVal(0) < Operator::getSrc(1)->getVal(0)) {
+                auto v = Operator::getSrc(0)->getVal(0);
+                Operator::setVal(v,0);
             } else {
-                auto v = Operator::getSrc(0)->getVal();
-                Operator::setVal(v);
+                auto v = Operator::getSrc(0)->getVal(0);
+                Operator::setVal(v,0);
             }
         }
     }
@@ -28,7 +28,7 @@ public:
 
 class Mini : public Operator {
 public:
-    Mini(int id, unsigned short constant) : Operator(id, "min", OP_IMMEDIATE, "mini") {
+    Mini(int id, unsigned short constant) : Operator(id, "min", OP_IMMEDIATE, "mini",1) {
         setConst(1,constant);
     }
 
@@ -38,12 +38,12 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            if (Operator::getSrc(0)->getVal() < Operator::getConst(1)) {
-                auto v = Operator::getSrc(0)->getVal();
-                Operator::setVal(v);
+            if (Operator::getSrc(0)->getVal(0) < Operator::getConst(1)) {
+                auto v = Operator::getSrc(0)->getVal(0);
+                Operator::setVal(v,0);
             } else {
                 auto v = Operator::getConst(1);
-                Operator::setVal(v);
+                Operator::setVal(v,0);
             }
         }
     }

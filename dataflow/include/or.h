@@ -7,7 +7,7 @@
 
 class Or : public Operator {
 public:
-    explicit Or(int id) : Operator(id, "or", OP_BASIC, "or") {}
+    explicit Or(int id) : Operator(id, "or", OP_BASIC, "or",1) {}
 
     static Operator *create(Params params) {
         return new Or(params.id);
@@ -15,15 +15,15 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0) && Operator::getSrc(1)) {
-            auto v = Operator::getSrc(0)->getVal() | Operator::getSrc(1)->getVal();
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) | Operator::getSrc(1)->getVal(0);
+            Operator::setVal(v,0);
         }
     }
 };
 
 class Ori : public Operator {
 public:
-    explicit Ori(int id,unsigned short constant) : Operator(id, "or", OP_IMMEDIATE, "ori") {
+    explicit Ori(int id,unsigned short constant) : Operator(id, "or", OP_IMMEDIATE, "ori",1) {
         setConst(1,constant);
     }
 
@@ -33,8 +33,8 @@ public:
 
     void compute() override {
         if (Operator::getSrc(0)) {
-            auto v = Operator::getSrc(0)->getVal() | Operator::getConst(1);
-            Operator::setVal(v);
+            auto v = Operator::getSrc(0)->getVal(0) | Operator::getConst(1);
+            Operator::setVal(v,1);
         }
     }
 };

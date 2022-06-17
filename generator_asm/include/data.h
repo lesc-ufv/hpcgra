@@ -58,7 +58,8 @@ bool fill_data(const int TOTAL_GRID_SIZE,
                std::vector<pe_t> &pe,
                Graph g,
                int *results,
-               int **table) {
+               int **table, 
+               std::map<std::string, int> &map_type) {
     
     std::vector<int> pe_in, pe_out, pe_basic, inputs, outputs, basic;
 
@@ -80,7 +81,7 @@ bool fill_data(const int TOTAL_GRID_SIZE,
     // Verify about arch and graph
     if (!verify(SIZE_NODES, TOTAL_GRID_SIZE, SIZE_GRAPH_IN,
                 SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT,
-                pe , g)) return false;
+                pe, map_type, g)) return false;
     
     inputs = g.get_inputs();
     outputs = g.get_outputs();

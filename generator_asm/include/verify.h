@@ -11,6 +11,7 @@ bool verify(const int SIZE_NODES,
             const int SIZE_PE_IN,
             const int SIZE_PE_OUT,
             std::vector<pe_t> pe,
+            std::map<std::string, int> &map_type,
             Graph g) {
 
     if (SIZE_NODES > TOTAL_GRID_SIZE) {
@@ -30,6 +31,8 @@ bool verify(const int SIZE_NODES,
 
     std::map<int, int> alu;
     int type_alu;
+    const unsigned int SIZE_TYPE = map_type.size();
+
     for (int i = 0; i < pe.size(); ++i) {
         for (int j = 0; j < SIZE_TYPE; ++j) {
             if (!pe[i].isa[j]) continue;

@@ -18,7 +18,10 @@ struct pe_t {
     std::vector<int> inputs, outputs, basics;
 };
 
-bool read_arch(std::string &arch_file, std::vector<pe_t> &pe) {
+bool read_arch(std::string &arch_file, 
+               std::vector<pe_t> &pe, 
+               std::map<std::string, int> &map_type
+            ) {
 
     Json::Value data;
     std::ifstream ifs;
@@ -50,7 +53,7 @@ bool read_arch(std::string &arch_file, std::vector<pe_t> &pe) {
             }
         }
 
-        SIZE_TYPE = map_type.size();
+        const unsigned int SIZE_TYPE = map_type.size();
 
         for (int i = 0; i < size_pe; ++i) {
             pe_t aux_pe;

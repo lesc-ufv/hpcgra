@@ -8,7 +8,6 @@
 #include <string>
 #include <chrono>
 #include <map>
-#include <type.h>
 #include <Graph.h>
 #include <cstdlib>
 #include <iostream>

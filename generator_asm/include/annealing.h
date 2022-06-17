@@ -3,7 +3,7 @@
 
 #include <vector>
 
-void annealing(const int N,
+inline void annealing(const int N,
                const int SIZE_NODES,
                const int SIZE_EDGES,
                const int SIZE_GRID,

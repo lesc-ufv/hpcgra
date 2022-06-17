@@ -24,14 +24,15 @@ int main(int argc, char **argv) {
     path_asm = name;
 
     std::vector<pe_t> pe;
+    std::map<std::string, int> map_type = {{"input", 0}, {"output", 1}, {"inout", 2}};
 
     // read arch
-    if (!read_arch(path_arch, pe)) {
+    if (!read_arch(path_arch, pe, map_type)) {
         printf("Architecture format wrong!\n\n");
         return 1;
     }
 
-    Graph g(path_dot);
+    Graph g(path_dot, map_type);
 
     if (!g.get_ok()) { // verify if graph format it's ok
         printf("bad format of graph json\n\n");
@@ -78,7 +79,8 @@ int main(int argc, char **argv) {
     // fill the data
     if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES, 
               VGRID, grid, edges_cost, buffers, pos, v, v_i, h_edgeA, 
-              h_edgeB, randomvec, A, g.get_edges(), pe, g, results, table)) return 1;
+              h_edgeB, randomvec, A, g.get_edges(), pe, g, results, table,
+              map_type)) return 1;
     stop = std::chrono::high_resolution_clock::now();
     duration = (stop - start);
     time_data = duration.count();

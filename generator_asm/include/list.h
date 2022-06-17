@@ -2,14 +2,16 @@
 #define __LIST_H
 
 #include <Graph.h>
+#include <queue>
+#include <vector>
 
-void dfs(Graph g, vector<int> &aux_edges, int *visited, int dad) {
+void dfs(Graph g, std::vector<int> &aux_edges, int *visited, int dad) {
 
     visited[dad] = 1;
     int child;
-    vector<int> children = g.get_predecessors(dad);
+    std::vector<int> children = g.get_predecessors(dad);
 
-    random_shuffle(children.begin(), children.end());
+    std::random_shuffle(children.begin(), children.end());
 
     for (int i = 0; i < children.size(); ++i) {
         child = children[i];
@@ -20,16 +22,16 @@ void dfs(Graph g, vector<int> &aux_edges, int *visited, int dad) {
     }
 }
 
-void dfs_position_order(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
+void dfs_position_order(Graph g, std::vector<std::pair<std::pair<int, int>, int>> &EDGES,
                         const int NODE_SIZE, const int times) {
 
-    vector<int> aux_edges, outputs;
+    std::vector<int> aux_edges, outputs;
     int *visited = new int[NODE_SIZE];
 
     for (int t = 0; t < times; ++t) {
         aux_edges.clear();
         outputs = g.get_outputs();
-        random_shuffle(outputs.begin(), outputs.end());
+        std::random_shuffle(outputs.begin(), outputs.end());
         memset(visited, 0, sizeof(int) * NODE_SIZE);
 
         for (int i = 0; i < outputs.size(); ++i)
@@ -37,16 +39,16 @@ void dfs_position_order(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
 
         for (int i = 0; i < aux_edges.size(); i += 2) {
             //printf("%d -> %d\n", aux_edges[i], aux_edges[i+1]);
-            EDGES.push_back(make_pair(make_pair(aux_edges[i], aux_edges[i + 1]), 0));
+            EDGES.push_back(std::make_pair(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0));
         }
     }
 }
 
-void bfs_position_order(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
+void bfs_position_order(Graph g, std::vector<std::pair<std::pair<int, int>, int>> &EDGES,
                         const int NODE_SIZE, const int times) {
 
-    queue<int> q;
-    vector<int> aux_edges, children, outputs;
+    std::queue<int> q;
+    std::vector<int> aux_edges, children, outputs;
     int *visited = new int[NODE_SIZE];
     int dad, child;
 
@@ -54,7 +56,7 @@ void bfs_position_order(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
         aux_edges.clear();
         outputs = g.get_outputs();
         memset(visited, 0, sizeof(int) * NODE_SIZE);
-        random_shuffle(outputs.begin(), outputs.end());
+        std::random_shuffle(outputs.begin(), outputs.end());
 
         for (int i = 0; i < outputs.size(); ++i)
             q.push(outputs[i]);
@@ -67,7 +69,7 @@ void bfs_position_order(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
 
             children = g.get_predecessors(dad);
 
-            random_shuffle(children.begin(), children.end());
+            std::random_shuffle(children.begin(), children.end());
 
             for (int i = 0; i < children.size(); ++i) {
                 child = children[i];
@@ -80,16 +82,16 @@ void bfs_position_order(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
             }
         }
         for (int i = 0; i < aux_edges.size(); i += 2) {
-            EDGES.push_back(make_pair(make_pair(aux_edges[i], aux_edges[i + 1]), 0));
+            EDGES.push_back(std::make_pair(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0));
         }
     }
 }
 
-void bfs_critical_path(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
+void bfs_critical_path(Graph g, std::vector<std::pair<std::pair<int, int>, int>> &EDGES,
                        const int NODE_SIZE, const int times, int *critical_path) {
 
-    queue<int> q;
-    vector<int> aux_edges, children, outputs;
+    std::queue<int> q;
+    std::vector<int> aux_edges, children, outputs;
     int *visited = new int[NODE_SIZE];
     int dad, child;
 
@@ -97,7 +99,7 @@ void bfs_critical_path(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
         aux_edges.clear();
         outputs = g.get_outputs();
         memset(visited, 0, sizeof(int) * NODE_SIZE);
-        random_shuffle(outputs.begin(), outputs.end());
+        std::random_shuffle(outputs.begin(), outputs.end());
 
         for (int i = 0; i < outputs.size(); ++i)
             q.push(outputs[i]);
@@ -110,7 +112,7 @@ void bfs_critical_path(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
 
             children = g.get_predecessors(dad);
 
-            random_shuffle(children.begin(), children.end());
+            std::random_shuffle(children.begin(), children.end());
 
             for (int i = 0; i < children.size(); ++i) {
                 child = children[i];
@@ -123,7 +125,7 @@ void bfs_critical_path(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
             }
         }
         for (int i = 0; i < aux_edges.size(); i += 2) {
-            EDGES.push_back(make_pair(make_pair(aux_edges[i], aux_edges[i + 1]), 0));
+            EDGES.push_back(std::make_pair(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0));
         }
     }
 }
@@ -131,17 +133,17 @@ void bfs_critical_path(Graph g, vector<pair<pair<int, int>, int>> &EDGES,
 void create_list_borders(Graph g, const int NODE_SIZE, const int GRID_SIZE,
                          int *list_borders) {
 
-    queue <pair<int, int>> q;
-    vector<int> son, inputs;
+    std::queue<std::pair<int, int>> q;
+    std::vector<int> son, inputs;
     int dad, child, new_cost, cost, distance;
 #if __ARCH == 0
-    distance = max(GRID_SIZE / 2, 1);
+    distance = std::max(GRID_SIZE / 2, 1);
 #elif __ARCH == 1
-    distance = max(GRID_SIZE/2-1,1);
+    distance = std::max(GRID_SIZE / 2 - 1,1);
 #endif
 
 #if __THRESHOlD_IO > 0
-    distance = min(distance, __THRESHOlD_IO);
+    distance = std::min(distance, __THRESHOlD_IO);
 #endif
 
 
@@ -149,7 +151,7 @@ void create_list_borders(Graph g, const int NODE_SIZE, const int GRID_SIZE,
 
     inputs = g.get_inputs();
     for (int i = 0; i < inputs.size(); ++i)
-        q.push(make_pair(inputs[i], 0));
+        q.push(std::make_pair(inputs[i], 0));
 
     while (!q.empty()) {
         dad = q.front().first;
@@ -165,13 +167,13 @@ void create_list_borders(Graph g, const int NODE_SIZE, const int GRID_SIZE,
         for (int i = 0, n = son.size(); i < n; ++i) {
             child = son[i];
             if (dad == child) continue;
-            q.push(make_pair(child, cost + 1));
+            q.push(std::make_pair(child, cost + 1));
         }
     }
 
     inputs = g.get_outputs();
     for (int i = 0; i < inputs.size(); ++i)
-        q.push(make_pair(inputs[i], 0));
+        q.push(std::make_pair(inputs[i], 0));
 
     while (!q.empty()) {
         dad = q.front().first;
@@ -187,7 +189,7 @@ void create_list_borders(Graph g, const int NODE_SIZE, const int GRID_SIZE,
         for (int i = 0, n = son.size(); i < n; ++i) {
             child = son[i];
             if (dad == child) continue;
-            q.push(make_pair(child, cost + 1));
+            q.push(std::make_pair(child, cost + 1));
         }
     }
 }

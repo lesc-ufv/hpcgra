@@ -3,25 +3,28 @@
 
 #include <Graph.h>
 #include <get_critical_path.h>
+#include <map>
+#include <queue>
+#include <vector>
 
 void dfsBuffer(
     Graph g, 
     int *level, 
     int *levelOrig, 
-    map<pair<int, int>, int> &buffers,
-    map<pair<int, int>, int> &edges
+    std::map<std::pair<int, int>, int> &buffers,
+    std::map<std::pair<int, int>, int> &edges
 ) {
 
-    std::queue<pair<int, int>> q;
+    std::queue<std::pair<int, int>> q;
     int node, nodeLvl, edgeCost, nodeLvlOrig, min = INT_MAX;
-    vector<int> outputs;
-    pair<int, int> key, keyInv;
-    vector<int> parents;
+    std::vector<int> outputs;
+    std::pair<int, int> key, keyInv;
+    std::vector<int> parents;
 
     outputs = g.get_outputs();
 
     for (int i = 0; i < outputs.size(); ++i)
-        q.push(make_pair(outputs[i], level[outputs[i]]));
+        q.push(std::make_pair(outputs[i], level[outputs[i]]));
 
     while (!q.empty()) {
         node = q.front().first;
@@ -31,8 +34,8 @@ void dfsBuffer(
 
         //Get the level in which each parent is, and the differences
         parents = g.get_predecessors(node);
-        vector<int> parentLvl(parents.size()), parentLvlOrig(parents.size());
-        vector<int> diffLvl(parents.size());
+        std::vector<int> parentLvl(parents.size()), parentLvlOrig(parents.size());
+        std::vector<int> diffLvl(parents.size());
 
         for (int i = 0, n = parents.size(); i < n; i++) {
             if (node == parents[i]) continue;
@@ -47,25 +50,26 @@ void dfsBuffer(
 
             diffLvl[i] = (nodeLvl - nodeLvlOrig) - (parentLvl[i] - parentLvlOrig[i]) - edgeCost + 1;
 
-            if (diffLvl[i] < 0) diffLvl[i] = 0;
+            if (diffLvl[i] < 0) 
+                diffLvl[i] = 0;
             //set buffer size
-            pair<int, int> aux_edge = make_pair(parents[i], node);
+            std::pair<int, int> aux_edge = std::make_pair(parents[i], node);
             if (diffLvl[i] > buffers[aux_edge]) buffers[aux_edge] = diffLvl[i];
-            q.push(make_pair(parents[i], level[parents[i]]));
+            q.push(std::make_pair(parents[i], level[parents[i]]));
         }
     }
 }
 
 void update_values(
     Graph g, 
-    map<int, int> &max_value,
+    std::map<int, int> &max_value,
     int *levelOrig,
     int *level, 
     int node,
     int value
 ) {
 
-    queue<int> q;
+    std::queue<int> q;
     q.push(node);
     
     bool visited[g.get_nodes().size()];
@@ -94,13 +98,13 @@ void getBuffer(
     Graph g,
     int *level,
     int *levelOrig,
-    map<pair<int, int>, int> &buffers,
-    map<int, vector<int>> map_level
+    std::map<std::pair<int, int>, int> &buffers,
+    std::map<int, std::vector<int>> map_level
 ) {
 
     int key;
-    vector<int> value;
-    map<int, int> max_value;
+    std::vector<int> value;
+    std::map<int, int> max_value;
 
     for(auto it : map_level) {
         key = it.first;
@@ -115,7 +119,7 @@ void getBuffer(
     }
 
     int v;
-    queue<int> q;
+    std::queue<int> q;
 
     for (auto in : g.get_inputs()) {
         q.push(in);
@@ -140,7 +144,7 @@ void getBuffer(
             
             q.push(son);
 
-            buffers[make_pair(dad,son)] = v;
+            buffers[std::make_pair(dad,son)] = v;
             if (v > 0 && g.get_sucessors(son).size() > 0) {
                 level[son] = max_value[levelOrig[son]];
                 update_values(g, max_value, levelOrig, level, son, v);
@@ -149,11 +153,11 @@ void getBuffer(
     }
 }
 
-void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>, int> &edges) {
-    std::queue<pair<int, int>> q;
-    vector<int> son, inputs;
+void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, std::map<std::pair<int, int>, int> &edges) {
+    std::queue<std::pair<int, int>> q;
+    std::vector<int> son, inputs;
     int dad, child, new_cost, cost;
-    pair<int, int> key, keyInv;
+    std::pair<int, int> key, keyInv;
 
     inputs = g.get_inputs();
 
@@ -161,7 +165,7 @@ void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>
         critical_path[i] = -1;
 
     for (int i = 0; i < inputs.size(); ++i)
-        q.push(make_pair(inputs[i], 0));
+        q.push(std::make_pair(inputs[i], 0));
 
 
     while (!q.empty()) {
@@ -181,7 +185,7 @@ void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, map<pair<int, int>
             keyInv.first = child;
             if (edges.count(key) > 0) new_cost = cost + edges[key];
             else if (edges.count(keyInv) > 0) new_cost = cost + edges[keyInv];
-            q.push(make_pair(child, new_cost));
+            q.push(std::make_pair(child, new_cost));
         }
     }
 }
@@ -191,14 +195,14 @@ void optimizeBuffer(
     const int SIZE_NODES,
     int *pos,
     Graph g, 
-    map<pair<int, int>, int> &buffers,
-    vector<pe_t> &arch
+    std::map<std::pair<int, int>, int> &buffers,
+    std::vector<pe_t> &arch
 ) {
 
     std::queue<int> q;
     int node, buffer_arch, pe, diff, p;
-    vector<int> outputs, parents, port, ancestors;
-    pair<int, int> key;
+    std::vector<int> outputs, parents, port, ancestors;
+    std::pair<int, int> key;
 
     outputs = g.get_outputs();
 
@@ -215,7 +219,7 @@ void optimizeBuffer(
         for (int i = 0, n = parents.size(); i < n; ++i) {
             if (parents[i] == node) continue;
 
-            key = make_pair(parents[i], node);
+            key = std::make_pair(parents[i], node);
             port = g.get_port(key);
 
             p = (port.size() == 1) ? 0 : port[i];
@@ -232,7 +236,7 @@ void optimizeBuffer(
                     buffers[key] = buffer_arch;
 
                     for (int j = 0; j < ancestors.size(); ++j) {
-                        buffers[make_pair(ancestors[j], parents[i])] += diff;
+                        buffers[std::make_pair(ancestors[j], parents[i])] += diff;
                     }
                 }
             }
@@ -251,23 +255,23 @@ bool verify_buffer(
     int *h_edgeB,
     int *pos,
     Graph g,
-    vector<pe_t> &arch, 
-    map<pair<int, int>, int> &buffers
+    std::vector<pe_t> &arch, 
+    std::map<std::pair<int, int>, int> &buffers
 ) {
 
     int a, b, pe, buffer_arch, p;
-    pair<int, int> key;
-    vector<int> port;
+    std::pair<int, int> key;
+    std::vector<int> port;
     
     for (int i = 0; i < SIZE_EDGES; i++) {
         a = h_edgeA[i];
         b = h_edgeB[i];
-        port = g.get_port(make_pair(a,b));
+        port = g.get_port(std::make_pair(a,b));
         pe = pos[k * SIZE_NODES + b];
 
         for (int j = 0, n = port.size(); j < n; ++j) {
             buffer_arch = arch[pe].elastic_queue[port[j]];
-            key = make_pair(a, b);
+            key = std::make_pair(a, b);
             
             if (buffers[key] > buffer_arch)
                 return false;
@@ -283,14 +287,14 @@ void buffer(Graph g,
             int *h_edgeA, 
             int *h_edgeB, 
             int *results, 
-            map<pair<int, int>, int> *edges_cost,
-            map<pair<int, int>, int> *buffers, 
-            vector<pe_t> &arch, 
+            std::map<std::pair<int, int>, int> *edges_cost,
+            std::map<std::pair<int, int>, int> *buffers, 
+            std::vector<pe_t> &arch, 
             int *pos) {
 
     int *levelOrig = new int[SIZE_NODES];
     int **level = new int *[NGRIDS];
-    map<int, vector<int>> map_level;
+    std::map<int, std::vector<int>> map_level;
 
     for (int i = 0; i < NGRIDS; ++i) {
         level[i] = new int[SIZE_NODES];
@@ -308,16 +312,16 @@ void buffer(Graph g,
     }
 
     bool *visited = new bool[SIZE_NODES];
-    vector<int> outputs = g.get_outputs();
-    vector<int> inputs = g.get_inputs();
+    std::vector<int> outputs = g.get_outputs();
+    std::vector<int> inputs = g.get_inputs();
 
-    pair<int, int> aux;
+    std::pair<int, int> aux;
     for (int k = 0; k < NGRIDS; k++) {
         if (results[k] == MAXVALUE) continue;
 
         //Initializing map with buffer size 0 for each edge
         for (int i = 0; i < SIZE_EDGES; i++) {
-            aux = make_pair(h_edgeA[i], h_edgeB[i]);
+            aux = std::make_pair(h_edgeA[i], h_edgeB[i]);
             buffers[k][aux] = 0;
         }
 

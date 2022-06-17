@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
-    string path_dot = "", name = "", path_arch = "", path_asm = "";
+    std::string path_dot = "", name = "", path_arch = "", path_asm = "";
     int NGRIDS = 1000;
 
     if (argc > 3) {
@@ -19,11 +19,11 @@ int main(int argc, char **argv) {
     }
     if (argc > 4) NGRIDS = atoi(argv[4]);
 
-    auto start_total = high_resolution_clock::now();
+    auto start_total = std::chrono::high_resolution_clock::now();
 
     path_asm = name;
 
-    vector<pe_t> pe;
+    std::vector<pe_t> pe;
 
     // read arch
     if (!read_arch(path_arch, pe)) {
@@ -61,25 +61,25 @@ int main(int argc, char **argv) {
     int **table = new int *[TOTAL_GRID_SIZE];
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i) table[i] = new int[TOTAL_GRID_SIZE];
 
-    vector<int> A;
-    map<pair<int, int>, int> *edges_cost = new map<pair<int, int>, int>[NGRIDS];
+    std::vector<int> A;
+    std::map<std::pair<int, int>, int> *edges_cost = new std::map<std::pair<int, int>, int>[NGRIDS];
 
     double time_data, time_total, time_place, time_route, time_buffer, time_table;
 
-    auto start = high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
     // create the table that measure the distance grid to grid
     create_table_floyd_warshall(TOTAL_GRID_SIZE, table, pe);
     // end table
-    auto stop = high_resolution_clock::now();
+    auto stop = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli>  duration = (stop - start);
     time_table = duration.count();
 
-    start = high_resolution_clock::now();
+    start = std::chrono::high_resolution_clock::now();
     // fill the data
     if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES, 
               VGRID, grid, edges_cost, buffers, pos, v, v_i, h_edgeA, 
               h_edgeB, randomvec, A, g.get_edges(), pe, g, results, table)) return 1;
-    stop = high_resolution_clock::now();
+    stop = std::chrono::high_resolution_clock::now();
     duration = (stop - start);
     time_data = duration.count();
 
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results,
                     h_edgeA, h_edgeB, table);
 
-    start = high_resolution_clock::now();
+    start = std::chrono::high_resolution_clock::now();
 #pragma omp parallel for
     for (int i = 0; i < NGRIDS; ++i) {
         if (results[i] == MAXVALUE) continue; // Found perfect solution!
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE,
                   grid, pos, v_i, v, A, randomvec, results, table, pe, g);
     }
-    stop = high_resolution_clock::now();
+    stop = std::chrono::high_resolution_clock::now();
 
     duration = (stop - start);
     time_place = duration.count();
@@ -109,14 +109,14 @@ int main(int argc, char **argv) {
     get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB,
                   pos, table, edges_cost, results);
 
-    map<pair<int, int>, vector<int>> *route = new map<pair<int, int>, vector<int>>[NGRIDS];
+    std::map<std::pair<int, int>, std::vector<int>> *route = new std::map<std::pair<int, int>, std::vector<int>>[NGRIDS];
 
-    start = high_resolution_clock::now();
+    start = std::chrono::high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
             edges_cost, results, pos, h_edgeA, h_edgeB, route, pe, table);
     // end routing
-    stop = high_resolution_clock::now();
+    stop = std::chrono::high_resolution_clock::now();
 
     duration = (stop - start);
     time_route = duration.count();
@@ -126,14 +126,14 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    map<pair<int, int>, int> *buffers_EDGE = new map<pair<int, int>, int>[NGRIDS];
+    std::map<std::pair<int, int>, int> *buffers_EDGE = new std::map<std::pair<int, int>, int>[NGRIDS];
 
-    start = high_resolution_clock::now();
+    start = std::chrono::high_resolution_clock::now();
     // generate buffer
     buffer(g, NGRIDS, SIZE_NODES, SIZE_EDGES, h_edgeA,
            h_edgeB, results, edges_cost, buffers_EDGE, pe, pos);
     // end buffer
-    stop = high_resolution_clock::now();
+    stop = std::chrono::high_resolution_clock::now();
 
     duration = (stop - start);
     time_buffer = duration.count();
@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
     generate_asm(g, best_index, SIZE_NODES, TOTAL_GRID_SIZE, pos,
                  buffers_EDGE, path_asm, route, edges_cost);
 
-    auto stop_total = high_resolution_clock::now();
+    auto stop_total = std::chrono::high_resolution_clock::now();
 
     duration = (stop_total - start_total);
     time_total = duration.count();

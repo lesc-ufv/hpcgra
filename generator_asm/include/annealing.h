@@ -1,6 +1,8 @@
 #ifndef __ANNEALING__H
 #define __ANNEALING__H
 
+#include <vector>
+
 void annealing(const int N,
                const int SIZE_NODES,
                const int SIZE_EDGES,
@@ -10,11 +12,11 @@ void annealing(const int N,
                int *pos,
                int *v_i,
                int *v,
-               vector<int> A,
+               std::vector<int> A,
                double *randomvec,
                int *results,
                int **table,
-               vector<pe_t> &pe,
+               std::vector<pe_t> &pe,
                Graph g) {
 
     int localGrid[TOTAL_GRID_SIZE];

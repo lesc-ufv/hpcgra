@@ -1,7 +1,9 @@
 #ifndef __LIST_ADJACENCY_H
 #define __LIST_ADJACENCY_H
 
-vector <pair<int, int>> ADJACENCY_FIRST = {{0,  1},
+#include <vector>
+
+std::vector<std::pair<int, int>> ADJACENCY_FIRST = {{0,  1},
                                            {1,  0},
                                            {0,  -1},
                                            {-1, 0}};

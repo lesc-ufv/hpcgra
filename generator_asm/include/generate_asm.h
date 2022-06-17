@@ -8,10 +8,10 @@ void generate_asm(Graph g,
                   const int SIZE_NODES,
                   const int SIZE_PE,
                   int *pos,
-                  map<pair<int, int>, int> *buffers_EDGE,
-                  string path,
-                  map<pair<int, int>, vector<int>> *route,
-                  map<pair<int, int>, int> *edges_cost
+                  std::map<std::pair<int, int>, int> *buffers_EDGE,
+                  std::string path,
+                  std::map<std::pair<int, int>, std::vector<int>> *route,
+                  std::map<std::pair<int, int>, int> *edges_cost
 ) {
 
     if (best_index == -1) return;
@@ -29,16 +29,16 @@ void generate_asm(Graph g,
         printf("\n");
     }*/
 
-    ofstream myfile;
+    std::ofstream myfile;
     myfile.open(path + ".asm");
 
     int dad, new_cost, cost, pe_gf, pe, buff, port, oper_size;
-    vector<int> rota;
-    std::queue<pair<int, int>> q;
-    pair<int, int> key;
-    vector<int> inputs = g.get_inputs();
-    vector<int> outputs = g.get_outputs();
-    vector<int> son, grandfather;
+    std::vector<int> rota;
+    std::queue<std::pair<int, int>> q;
+    std::pair<int, int> key;
+    std::vector<int> inputs = g.get_inputs();
+    std::vector<int> outputs = g.get_outputs();
+    std::vector<int> son, grandfather;
     int routed[SIZE_PE][SIZE_PE];
 
     for (int i = 0; i < SIZE_PE; ++i)
@@ -49,7 +49,7 @@ void generate_asm(Graph g,
     for (int i = 0; i < SIZE_NODES; ++i) visited[i] = false;
 
     for (int i = 0; i < inputs.size(); ++i)
-        q.push(make_pair(inputs[i], 0));
+        q.push(std::make_pair(inputs[i], 0));
 
     while (!q.empty()) {
         dad = q.front().first;
@@ -68,7 +68,7 @@ void generate_asm(Graph g,
             pe = pos[best_index * SIZE_NODES + dad];
 
             for (int i = 0; i < grandfather.size(); ++i) {
-                pair<int, int> key = make_pair(grandfather[i], dad);
+                std::pair<int, int> key = std::make_pair(grandfather[i], dad);
                 rota = route[best_index][key];
                 pe_gf = rota[rota.size() - 2];
                 myfile << "route $" << pe << " $" << pe_gf << " $ostream\n";
@@ -79,7 +79,7 @@ void generate_asm(Graph g,
         } else {
             grandfather = g.get_predecessors(dad);
             oper_size = grandfather.size() + g.get_const(dad).size();
-            string operators[oper_size];
+            std::string operators[oper_size];
 
             pe = pos[best_index * SIZE_NODES + dad];
             myfile << g.get_opcode(dad).c_str() << " $" << pe << " ";
@@ -88,7 +88,7 @@ void generate_asm(Graph g,
             //printf(" oper_size = %d n_avo %ld\n", oper_size, grandfather.size());
 
             for (int i = 0; i < grandfather.size(); ++i) {
-                key = make_pair(grandfather[i], dad);
+                key = std::make_pair(grandfather[i], dad);
                 buff = buffers_EDGE[best_index][key];
                 rota = route[best_index][key];
                 
@@ -102,16 +102,16 @@ void generate_asm(Graph g,
                     //printf("%d -> %d\n", grandfather[i], dad);
                     operators[port] = "";
                     if (buff > 0) {
-                        operators[port] += "#" + to_string(buff) + " ";
+                        operators[port] += "#" + std::to_string(buff) + " ";
                     }
                     //cout << "$" + to_string(pe_gf) + " port =" << port;
-                    operators[port] += "$" + to_string(pe_gf) + " ";
+                    operators[port] += "$" + std::to_string(pe_gf) + " ";
                 }
             }
                      
             for (auto c : g.get_const(dad)) {
                 //printf("c.first = %d c.sencond %d ", c.first, c.second);
-                operators[c.first] = to_string(c.second) + " ";
+                operators[c.first] = std::to_string(c.second) + " ";
             }
 
             for (int i = 0; i < oper_size; ++i) {
@@ -125,7 +125,7 @@ void generate_asm(Graph g,
         son = g.get_sucessors(dad);
         for (int i = 0; i < son.size(); ++i) {
             if (!visited[son[i]]) {
-                rota = route[best_index][make_pair(dad, son[i])];
+                rota = route[best_index][std::make_pair(dad, son[i])];
                 
                 // creating routing
                 for (int j = 0, n = rota.size(); j < n; j += 2) {
@@ -139,8 +139,8 @@ void generate_asm(Graph g,
                         myfile << "route $" << rota[j] << " $" << rota[j-2] << " $" << rota[j+1] << "\n";
                     }
                 }
-                new_cost = cost + edges_cost[best_index][make_pair(dad, son[i])];
-                q.push(make_pair(son[i], new_cost));
+                new_cost = cost + edges_cost[best_index][std::make_pair(dad, son[i])];
+                q.push(std::make_pair(son[i], new_cost));
             }
         }
     }

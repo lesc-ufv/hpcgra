@@ -45,13 +45,13 @@ bool greedy_solution(
     int *pos,
     int *grid,
     int **table,
-    vector<int> inputs,
+    std::vector<int> inputs,
     Graph g,
-    vector<pe_t> &pe
+    std::vector<pe_t> &pe
 ) {
 
-    queue<int> q;
-    vector<int> son;
+    std::queue<int> q;
+    std::vector<int> son;
     bool found;
     int a, b, pos_a, pos_a_x, pos_a_y, pos_b_x, pos_b_y, pos_b, pos_global_b, pos_local_b;
 
@@ -98,13 +98,12 @@ bool greedy_solution(
                     }
                 }
 
-                if (!found) return false;
-
+                if (!found) 
+                    return false;
                 q.push(b);
             }
         }
     }
-
     return true;
 }
 

@@ -2,12 +2,14 @@
 #define __CRITICAL_PATH_H
 
 #include <Graph.h>
+#include <queue>
+#include <vector>
 
 int get_critical_path(Graph g, const int NODE_SIZE, int *critical_path) {
-    std::queue<pair<int, int>> q;
-    vector<int> son, inputs;
+    std::queue<std::pair<int, int>> q;
+    std::vector<int> son, inputs;
     int dad, child, big_sum, new_cost, cost;
-    pair<int, int> key;
+    std::pair<int, int> key;
 
     inputs = g.get_inputs();
 
@@ -15,7 +17,7 @@ int get_critical_path(Graph g, const int NODE_SIZE, int *critical_path) {
         critical_path[i] = -1;
 
     for (int i = 0; i < inputs.size(); ++i)
-        q.push(make_pair(inputs[i], 0));
+        q.push(std::make_pair(inputs[i], 0));
 
     //memset(visited, 0, sizeof(int)*NODE_SIZE);
 
@@ -32,7 +34,7 @@ int get_critical_path(Graph g, const int NODE_SIZE, int *critical_path) {
             child = son[i];
             if (dad == child) continue;
             new_cost = cost + 1;
-            q.push(make_pair(child, new_cost));
+            q.push(std::make_pair(child, new_cost));
             if (new_cost > big_sum) big_sum = new_cost;
         }
     }

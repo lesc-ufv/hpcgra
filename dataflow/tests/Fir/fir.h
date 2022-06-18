@@ -9,7 +9,7 @@
 
 using namespace std;
 
-DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps);
+DataFlow *createDataFlow(int id, int copies, vector<unsigned short> &coef, int taps);
 
 void test(int taps);
 

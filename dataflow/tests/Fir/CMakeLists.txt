@@ -14,7 +14,7 @@ file(GLOB_RECURSE DF_CXX_SRCS ${CMAKE_SOURCE_DIR}/../../src/*.cpp)
 file(GLOB CPP_SRCS *.cpp)
 file(GLOB H_SRCS *.h)
 
-add_library(dataflow SHARED ${DF_CXX_SRCS} ${DF_H_SRCS})
+add_library(dataflow STATIC ${DF_CXX_SRCS} ${DF_H_SRCS})
 
 add_executable(fir ${CPP_SRCS} ${H_SRCS})
 

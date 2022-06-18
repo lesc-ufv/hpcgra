@@ -22,7 +22,7 @@ private:
     std::string m_label;
     std::map<int,unsigned short> m_constants;
     std::map<int, Operator*> m_inputs;
-    std::map<int, Operator*> m_outputs;
+    std::map<int, std::vector<Operator*>> m_outputs;
     
 public:
     Operator(int id, std::string op_code, int type, std::string label, int size);
@@ -59,7 +59,7 @@ public:
 
     int getDstPort(Operator * op);
     
-    std::map<int, Operator*> &getDst();
+    std::map<int, std::vector<Operator*>> &getDst();
 
     std::map<int, Operator*> &getAllSrc();
 

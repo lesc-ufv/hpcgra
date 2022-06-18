@@ -93,10 +93,12 @@ int Operator::getSrcPort(Operator * op){
 
 int Operator::getDstPort(Operator * op){
     int port = -1;
-    for (auto it = m_outputs.begin(); it != m_outputs.end(); ++it){
-        if (it->second->getId() == op->getId()){
-            port = it->first;
-            break;
+    for (auto it = m_outputs.begin(); it != m_outputs.end(); ++it) {
+        for(auto out : it->second) {
+            if (out->getId() == op->getId()){
+                port = it->first;
+                break;
+            }
         }
     }
     assert((port >= 0) && "Source port not found!");
@@ -104,10 +106,10 @@ int Operator::getDstPort(Operator * op){
 }
 
 void Operator::addDst(Operator * op_dst, int dstPort){
-    m_outputs[dstPort] = op_dst;
+    m_outputs[dstPort].push_back(op_dst);
 }
 
-std::map<int,Operator*> &Operator::getDst() {
+std::map<int, std::vector<Operator*>> &Operator::getDst() {
     return m_outputs;
 }
 

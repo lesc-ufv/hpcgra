@@ -123,8 +123,10 @@ void DataFlow::toDOT(const std::string &fileNamePath) {
                 myfile << " \"" << op.first << "." << c.second << "\" -> " << op.first << std::endl;
             }
         }
-        for (auto op_dst:op.second->getDst()) {
-            myfile << " " << op.first << " -> " << op_dst.second->getId() << std::endl;
+        for (auto op_dst_arr : op.second->getDst()) {
+            for(auto op_dst : op_dst_arr.second) {
+                myfile << " " << op.first << " -> " << op_dst->getId() << std::endl;
+            }
         }
     }
     myfile << "}" << std::endl;
@@ -158,14 +160,15 @@ void DataFlow::toJSON(const std::string &fileNamePath) {
     }
     for (auto item:DataFlow::op_array) {
         auto op = item.second;
-        for (auto neighbor:op->getDst()) {
-            auto nei = neighbor.second;
-            edge["source"] = std::to_string(op->getId());
-            edge["target"] = std::to_string(nei->getId());
-            edge["source-port"] = std::to_string(op->getDstPort(nei));
-            edge["target-port"] = std::to_string(nei->getSrcPort(op));
-            df["edges"].append(edge);
-            edge.clear();
+        for (auto neighbor_arr : op->getDst()) {
+            for(auto nei : neighbor_arr.second) {
+                edge["source"] = std::to_string(op->getId());
+                edge["target"] = std::to_string(nei->getId());
+                edge["source-port"] = std::to_string(op->getDstPort(nei));
+                edge["target-port"] = std::to_string(nei->getSrcPort(op));
+                df["edges"].append(edge);
+                edge.clear();
+            }
         } 
     }
 
@@ -202,7 +205,7 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath) {
                 if(x->getType() != OP_IN) name += ".out" + std::to_string(x->getDstPort(op));
                 df["inputs"].append(name);
             }
-            for(int i=0; op->getDst()[i]; ++i) {
+            for(int i=0; op->getDst()[i].size(); ++i) {
                 df["outputs"].append("out" + std::to_string(i));
             }
 

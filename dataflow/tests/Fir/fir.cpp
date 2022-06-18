@@ -3,16 +3,16 @@
 
 int main(int argc, char *argv[]) {
     
-    test(16);
-    test(32);
-    test(64);
+    test(1);
+    test(2);
+    test(4);
     
     return 0;
 }
 
 void test(int taps){
 
-    unsigned short coef[taps];
+    vector<unsigned short> coef(taps);
     for(int i =0; i < taps;i++){
         coef[i] = i+1;
     }
@@ -42,7 +42,7 @@ void test(int taps){
     
 }
 
-DataFlow *createDataFlow(int id, int copies, unsigned short *coef, int taps) {
+DataFlow *createDataFlow(int id, int copies, vector<unsigned short> &coef, int taps) {
     auto df = new DataFlow(id, "fir");
     int idx = 0;
     std::vector<Operator *> in_cp;

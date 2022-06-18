@@ -31,6 +31,7 @@ void test(int taps){
     df->compute();
     df->toJSON("../fir"+to_string(taps)+".json");
     df->toDOT("../fir"+to_string(taps)+".dot");
+    df->toJsonOperator("../fir"+to_string(taps)+"operator.json");
 
 //    for(int i=0;i < 1024;i++){
 //        std::cout << data_out[i] << " ";

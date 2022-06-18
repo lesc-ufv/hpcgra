@@ -205,6 +205,11 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath) {
                 if(x->getType() != OP_IN) name += ".out" + std::to_string(x->getDstPort(op));
                 df["inputs"].append(name);
             }
+            if(op->getType() == OP_IMMEDIATE) {
+                for(auto c : op->getConst()) {
+                    df["inputs"].append(c.second);
+                }
+            }
             for(int i=0; op->getDst()[i].size(); ++i) {
                 df["outputs"].append("out" + std::to_string(i));
             }

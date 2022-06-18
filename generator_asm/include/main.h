@@ -8,7 +8,6 @@
 #include <string>
 #include <chrono>
 #include <map>
-#include <type.h>
 #include <Graph.h>
 #include <cstdlib>
 #include <iostream>
@@ -33,8 +32,5 @@
 #include <visualization.h>
 #include <generate_asm.h>
 #include <statistics.h>
-
-using namespace std;
-using namespace std::chrono;
 
 #endif

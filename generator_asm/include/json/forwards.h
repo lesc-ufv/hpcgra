@@ -7,52 +7,36 @@
 #define JSON_FORWARDS_H_INCLUDED
 
 #if !defined(JSON_IS_AMALGAMATION)
-
 #include "config.h"
-
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
 namespace Json {
 
 // writer.h
-    class StreamWriter;
-
-    class StreamWriterBuilder;
-
-    class Writer;
-
-    class FastWriter;
-
-    class StyledWriter;
-
-    class StyledStreamWriter;
+class StreamWriter;
+class StreamWriterBuilder;
+class Writer;
+class FastWriter;
+class StyledWriter;
+class StyledStreamWriter;
 
 // reader.h
-    class Reader;
-
-    class CharReader;
-
-    class CharReaderBuilder;
+class Reader;
+class CharReader;
+class CharReaderBuilder;
 
 // json_features.h
-    class Features;
+class Features;
 
 // value.h
-    using ArrayIndex = unsigned int;
-
-    class StaticString;
-
-    class Path;
-
-    class PathArgument;
-
-    class Value;
-
-    class ValueIteratorBase;
-
-    class ValueIterator;
-
-    class ValueConstIterator;
+using ArrayIndex = unsigned int;
+class StaticString;
+class Path;
+class PathArgument;
+class Value;
+class ValueIteratorBase;
+class ValueIterator;
+class ValueConstIterator;
 
 } // namespace Json
 

@@ -7,20 +7,21 @@
 #include <map>
 #include <string>
 
-using namespace std;
-
-typedef struct pe_t {
+struct pe_t {
     int id;
     int type;
     int routes;
     bool acc;
-    vector<int> neighbors;
-    vector<int> elastic_queue;
+    std::vector<int> neighbors;
+    std::vector<int> elastic_queue;
     bool *isa;
-    vector<int> inputs, outputs, basics;
-} pe_t;
+    std::vector<int> inputs, outputs, basics;
+};
 
-bool read_arch(string &arch_file, vector<pe_t> &pe) {
+bool read_arch(std::string &arch_file, 
+               std::vector<pe_t> &pe, 
+               std::map<std::string, int> &map_type
+            ) {
 
     Json::Value data;
     std::ifstream ifs;
@@ -45,14 +46,14 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
         for (int i = 0; i < size_pe; ++i) {
             size_isa = data["pe"][i]["isa"].size();
             for (int j = 0; j < size_isa; ++j) {
-                string type_name = data["pe"][i]["isa"][j].asString();
+                std::string type_name = data["pe"][i]["isa"][j].asString();
                 if (map_type.count(type_name) == 0) {
                     map_type[type_name] = count++;
                 }
             }
         }
 
-        SIZE_TYPE = map_type.size();
+        const unsigned int SIZE_TYPE = map_type.size();
 
         for (int i = 0; i < size_pe; ++i) {
             pe_t aux_pe;
@@ -92,9 +93,6 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
                 aux_pe.elastic_queue.push_back(data["pe"][i]["elastic_queue"][j].asInt());
             }
 
-            // remove from new version
-            //aux_pe.acc = data["pe"][i]["acc"].asBool();
-
             size_isa = data["pe"][i]["isa"].size();
             for (int j = 0; j < size_isa; ++j) {
                 aux_pe.isa[map_type[data["pe"][i]["isa"][j].asString()]] = true;
@@ -102,8 +100,8 @@ bool read_arch(string &arch_file, vector<pe_t> &pe) {
 
             pe.push_back(aux_pe);
         }
-    } catch (exception& e) {
-        cout << "Standard exception: " << e.what() << endl;
+    } catch (std::exception& e) {
+        std::cout << "Standard exception: " << e.what() << "\n";
         return false;
     }
 

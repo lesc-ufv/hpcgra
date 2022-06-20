@@ -3,63 +3,124 @@
   "conf_bus_width": 8,
   "axi_bus_data_width":64,
   "operations": [
-     {
-            "opcode": "myadd",
-            "inputs": ["in0", "in1", "in2"],
-            "outputs": ["reg1.out1"],
-            "dataflow":[
-                {
-                    "type": "add",
-                    "label": "add1",
-                    "inputs": ["in0", "in1"],
-                    "outputs":["out1"]
-                },
-                {
-                    "type": "add",
-                    "label": "add2",
-                    "inputs": ["in2", "add1.out1"],
-                    "outputs":["out1"]
-                },
-                {
-                    "type": "reg",
-                    "label": "reg1",
-                    "inputs": ["add2.out1"],
-                    "outputs":["out1"]
-                }
-
-            ]
-        },
     {
-            "opcode": "myaddconst",
-            "inputs": ["in0", "in1"],
-            "outputs": ["reg2.out1"],
-            "dataflow":[
-                {
-                    "type": "myadd",
-                    "label": "add3",
-                    "inputs": ["in0", "in1","myconst.out1"],
-                    "outputs":["out1"]
-                },
-                {
-                    "type": "const",
-                    "label": "myconst",
-                    "inputs": [],
-                    "outputs":["out1"]
-                },
-                {
-                    "type": "reg",
-                    "label": "reg1",
-                    "inputs": ["add3.out1"],
-                    "outputs":["out1"]
-                },
-                {
-                    "type": "reg",
-                    "label": "reg2",
-                    "inputs": ["reg1.out1"],
-                    "outputs":["out1"]
-                }
-            ]            
-        }
+        "dataflow" :
+        [
+            {
+                "inputs" :
+                [
+                    "input0",
+                    4
+                ],
+                "label" : "mul2",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "mul"
+            },
+            {
+                "inputs" :
+                [
+                    "mul2.out0",
+                    0
+                ],
+                "label" : "add3",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "add"
+            },
+            {
+                "inputs" :
+                [
+                    "input0",
+                    3
+                ],
+                "label" : "mul4",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "mul"
+            },
+            {
+                "inputs" :
+                [
+                    "mul4.out0",
+                    "add3.out0"
+                ],
+                "label" : "add5",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "add"
+            },
+            {
+                "inputs" :
+                [
+                    "input0",
+                    2
+                ],
+                "label" : "mul6",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "mul"
+            },
+            {
+                "inputs" :
+                [
+                    "mul6.out0",
+                    "add5.out0"
+                ],
+                "label" : "add7",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "add"
+            },
+            {
+                "inputs" :
+                [
+                    "input0",
+                    1
+                ],
+                "label" : "mul8",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "mul"
+            },
+            {
+                "inputs" :
+                [
+                    "mul8.out0",
+                    "add7.out0"
+                ],
+                "label" : "add9",
+                "outputs" :
+                [
+                    "out0"
+                ],
+                "type" : "add"
+            }
+        ],
+        "inputs" :
+        [
+            "input0"
+        ],
+        "opcode" : "fir",
+        "outputs" :
+        [
+            "add9.out0"
+        ]
+    }
   ],
   "pe": [
     {
@@ -69,7 +130,7 @@
       "neighbors": [ 1, 2],
       "routes": 4,
       "elastic_queue": [ 4, 4, 0],
-      "isa": [ "sub", "myaddconst"]
+      "isa": ["add", "sub", "fir"]
     },
     {
       "id": 1,

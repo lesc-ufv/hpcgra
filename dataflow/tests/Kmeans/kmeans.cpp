@@ -2,14 +2,15 @@
 
 int main(int argc, char *argv[]) {
     
-    int num_kmeans=3;
-    int num_clusters[]={8,4,3};
-    int num_dim[]={2,4,4};
+    int num_kmeans=1;
+    int num_clusters[]={4};
+    int num_dim[]={4};
     int is_share_inputs= 0;
     
     
     auto df = createDataFlow(0,num_clusters,num_dim,num_kmeans,is_share_inputs);
     df->toJSON("../kmeans.json");
+    df->toJsonOperator("../kmeans.op.json");
     df->toDOT("../kmeans.dot");
     delete df;
     

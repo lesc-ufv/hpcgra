@@ -528,7 +528,10 @@ class CgraAluOperations:
 
             else:
                 for i in node['inputs']:
-                    if wires.get(i) is None:
+                    if type(i) == int:
+                        wires[i] = Int(i)
+                        wires['%s_valid' % i] = Int(1,1,2)
+                    elif wires.get(i) is None:
                         wires[i] = opnew.Wire(i.replace('.','__'), opnew.width)
                         wires['%s_valid' % i] = opnew.Wire('%s_valid' % i.replace('.','__'))
                     con_inputs.append(wires[i])
@@ -577,9 +580,10 @@ class CgraAluOperations:
 
         for node in dataflow:
             for i in node['inputs']:
-                if '.' in i:
-                    parent = i.split('.')[0]
-                    m_adj[parent]['neighbors'].append(node['label'])
+                if type(i) != int:
+                    if '.' in i:
+                        parent = i.split('.')[0]
+                        m_adj[parent]['neighbors'].append(node['label'])
 
         max_lat = 0
         for node in dataflow:

@@ -52,6 +52,8 @@ def create_project(hpcgra_root, arch_json, name, clock, output_path):
     vitis_config =  acc_axi.get_clock_config(clock,name)
     vitis_config += '\n'
     vitis_config += acc_axi.get_connectivity_config(name)
+    vitis_config += '\n[vivado]\n'
+    vitis_config += 'prop=run.impl_1.strategy=Performance_NetDelay_low\n'
 
     write_file(hw_path + 'simulate/num_m_axis.mk', num_axis_str)
     write_file(hw_path + 'synthesis/num_m_axis.mk', num_axis_str)

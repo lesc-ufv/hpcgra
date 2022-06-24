@@ -170,7 +170,7 @@ class CgraAssembler:
                 self.used_inputs[pe] += is_istream
 
         delays_str = ''
-        delays_v = [0 for _ in range(3)]
+        delays_v = [0 for _ in range(port)]
         for p, d in delays:
             delays_v[p] = d
         for d in delays_v:

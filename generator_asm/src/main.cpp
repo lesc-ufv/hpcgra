@@ -1,4 +1,5 @@
 #include <main.h>
+#include "annealing.h"
 
 int main(int argc, char **argv) {
 
@@ -14,7 +15,7 @@ int main(int argc, char **argv) {
         path_dot = argv[2];
         path_arch = argv[3];
     } else {
-        printf("ERROR: ./place <name> <path_to_dot.json> <path_to_arch.json> <number_trying>\n");
+        printf("ERROR: ./place <name> <path_to_dot.json> <path_to_arch.json> [number_trying]\n");
         return 1;
     }
     if (argc > 4) NGRIDS = atoi(argv[4]);
@@ -166,20 +167,20 @@ int main(int argc, char **argv) {
     print_pr_graph(g, pos, best_index, edges_cost, buffers_EDGE, path_asm, route);
 
     // clean memory
-    delete randomvec;
-    delete v;
-    delete v_i;
-    delete grid;
-    delete h_edgeA;
-    delete h_edgeB;
-    delete [] edges_cost;
-    delete buffers;
-    delete pos;
-    delete results;
+    delete[] randomvec;
+    delete[] v;
+    delete[] v_i;
+    delete[] grid;
+    delete[] h_edgeA;
+    delete[] h_edgeB;
+    delete[] edges_cost;
+    delete[] buffers;
+    delete[] pos;
+    delete[] results;
 
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i)
-        delete [] table[i];
-    delete [] table;
+        delete[] table[i];
+    delete[] table;
 
     return 0;
 }

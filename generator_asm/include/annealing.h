@@ -2,8 +2,10 @@
 #define __ANNEALING__H
 
 #include <vector>
+#include "graph.h"
+#include "read_arch.h"
 
-inline void annealing(const int N,
+void annealing(const int N,
                const int SIZE_NODES,
                const int SIZE_EDGES,
                const int SIZE_GRID,

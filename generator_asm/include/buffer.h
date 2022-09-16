@@ -6,6 +6,8 @@
 #include <map>
 #include <queue>
 #include <vector>
+#include "read_arch.h"
+#include <utility>
 
 void dfsBuffer(
     Graph g, 

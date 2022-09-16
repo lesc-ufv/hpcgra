@@ -1,6 +1,13 @@
 #ifndef __DATA__H
 #define __DATA__H
 
+#include <map>
+#include <utility>
+#include <vector>
+#include "read_arch.h"
+#include <string>
+#include "graph.h"
+
 void clean_data(const int NGRIDS, 
                 const int SIZE_EDGES,
                 const int SIZE_NODES, 

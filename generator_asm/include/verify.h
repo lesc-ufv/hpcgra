@@ -2,6 +2,9 @@
 #define __VERIFY__H
 
 #include <vector>
+#include <map>
+#include "read_arch.h"
+#include "graph.h"
 
 // verify if arch works
 bool verify(const int SIZE_NODES,

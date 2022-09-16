@@ -1,6 +1,10 @@
 #ifndef __LIST_H
 #define __LIST_H
 
+#include "graph.h"
+#include <vector>
+#include <utility>
+
 void dfs(Graph g, std::vector<int> &aux_edges, int *visited, int dad);
 
 void dfs_position_order(Graph g, std::vector<std::pair<std::pair<int, int>, int>> &EDGES,

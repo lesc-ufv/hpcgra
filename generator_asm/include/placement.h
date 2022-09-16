@@ -2,6 +2,10 @@
 #define __PLACEMENT__H
 
 #include <annealing.h>
+#include <vector>
+#include <map>
+#include <utility>
+#include "read_arch.h"
 
 void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, 
                                  int **table, 

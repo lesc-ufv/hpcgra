@@ -1,6 +1,10 @@
 #ifndef __EVALUATE_H
 #define __EVALUATE_H
 
+#include <map>
+#include <utility>
+
+
 int get_better_index(const int NGRIDS, 
                      const int SIZE_EDGES, 
                      int &best_worst_buffer,

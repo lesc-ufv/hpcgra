@@ -4,6 +4,8 @@
 #include <map>
 #include <utility>
 #include <vector>
+#include <tuple>
+#include "read_arch.h"
 
 typedef struct route_t {
     std::vector<int> *path;

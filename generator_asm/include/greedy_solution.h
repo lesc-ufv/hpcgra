@@ -1,6 +1,10 @@
 #ifndef __GREEDY_SOLUTION_H
 #define __GREEDY_SOLUTION_H
 
+#include "graph.h"
+#include <vector>
+#include "read_arch.h"
+
 bool greedy_solution(
     const int n,
     const int SIZE_NODE,

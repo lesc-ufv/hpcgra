@@ -1,6 +1,6 @@
 #include "../include/list.h"
 
-#include <Graph.h>
+#include <graph.h>
 #include <queue>
 #include <vector>
 

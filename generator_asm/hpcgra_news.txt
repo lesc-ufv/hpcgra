@@ -34,7 +34,7 @@ Dataflow:
                "size": 1
             }
             
-Arquitura:
+Arquitetura:
         * Foi retirado o atributo "acc" do PE. => ok
         * O formato do PE agora possui numero de entradas e numero de saídas
             Exemplo:

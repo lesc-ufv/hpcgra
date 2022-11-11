@@ -1,6 +1,7 @@
 #ifndef __ANNEALING__H
 #define __ANNEALING__H
 
+#include <cmath>
 #include <vector>
 #include "graph.h"
 #include "read_arch.h"

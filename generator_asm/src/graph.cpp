@@ -1,4 +1,4 @@
-#include <Graph.h>
+#include <graph.h>
 
 Graph::Graph() {
     this->ok = true;

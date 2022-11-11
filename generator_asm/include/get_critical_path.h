@@ -1,7 +1,7 @@
 #ifndef __CRITICAL_PATH_H
 #define __CRITICAL_PATH_H
 
-#include <Graph.h>
+#include <graph.h>
 #include <queue>
 #include <vector>
 

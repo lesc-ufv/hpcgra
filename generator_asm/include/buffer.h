@@ -1,7 +1,7 @@
 #ifndef __BUFFER_H
 #define __BUFFER_H
 
-#include <Graph.h>
+#include <graph.h>
 #include <get_critical_path.h>
 #include <map>
 #include <queue>

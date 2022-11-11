@@ -1,6 +1,7 @@
-#include "../include/greedy_solution.h"
-#include "../include/Graph.h"
-#include "../include/read_arch.h"
+
+#include <greedy_solution.h>
+#include <graph.h>
+#include <read_arch.h>
 
 #include <queue>
 

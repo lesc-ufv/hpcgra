@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv) {
 
-    auto timetime = 1624898814; //time(nullptr);
+    auto timetime = 1624898814L; //time(nullptr);
     srand(timetime);
 
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g

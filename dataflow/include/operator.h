@@ -8,7 +8,8 @@
 #include <cstdlib>
 #include <map>
 
-class Operator {
+class Operator
+{
 
 private:
     int m_id;
@@ -20,19 +21,21 @@ private:
     std::vector<bool> m_is_end;
     std::string m_op_code;
     std::string m_label;
-    std::map<int,unsigned short> m_constants;
-    std::map<int, Operator*> m_inputs;
-    std::map<int, std::vector<Operator*>> m_outputs;
-    
+    std::map<int, unsigned short> m_constants;
+    std::map<int, Operator *> m_inputs;
+    std::map<int, std::vector<Operator *>> m_outputs;
+
 public:
     Operator(int id, std::string op_code, int type, std::string label, int size);
 
     ~Operator();
 
+    void print();
+
     int getId() const;
 
     void setId(int id);
-    
+
     int getSize() const;
 
     void setSize(int size);
@@ -48,27 +51,29 @@ public:
     short getVal(int idx) const;
 
     void setVal(int val, int idx);
-    
+
     void addSrc(Operator *src, int port);
-    
+
     Operator *getSrc(int port);
-    
-    int getSrcPort(Operator * op);
-     
-    void addDst(Operator * op_dst, int port);
 
-    int getDstPort(Operator * op);
-    
-    std::map<int, std::vector<Operator*>> &getDst();
+    void addDst(Operator *dst, int port);
 
-    std::map<int, Operator*> &getAllSrc();
+    std::vector<Operator *> &getDst(int port);
 
-    void setConst(int  port, unsigned short value);
+    std::vector<int> getSrcPort(Operator *op);
+
+    std::vector<int> getDstPort(Operator *op);
+
+    std::map<int, std::vector<Operator *>> &getOutputs();
+
+    std::map<int, Operator *> &getInputs();
+
+    void setConst(int port, unsigned short value);
 
     unsigned short getConst(int port);
-    
+
     std::map<int, unsigned short> &getConst();
-    
+
     void setLevel(int level);
 
     int getLevel() const;
@@ -83,7 +88,7 @@ public:
 
     int getIsEnd(int idx) const;
 
-    void setIsEnd(bool isEnd,int idx);
+    void setIsEnd(bool isEnd, int idx);
 };
 
-#endif //OPERATOR_H
+#endif // OPERATOR_H

@@ -8,15 +8,15 @@ class AccAXIInterface:
         self.acc = accelerator
         self.cache = {}
 
-    def get_connectivity_config(self, name):
+    def get_connectivity_config(self, name, mem_type, size):
         num_m_axis = self.acc.get_num_in()
-        num_ddr = min(num_m_axis, 4)
+        num_ddr = min(num_m_axis, size)
         sp = '[connectivity]\n'
         ddr = [i % num_ddr for i in range(num_m_axis)]
         ddr.sort()
         for axi in range(num_m_axis):
-            sp += 'sp=%s_1.in%d:DDR[%d]\n' % (name, axi, ddr[axi])
-            sp += 'sp=%s_1.out%d:DDR[%d]\n' % (name, axi, ddr[axi])
+            sp += 'sp=%s_1.in%d:%s[%d]\n' % (name, axi, mem_type, ddr[axi])
+            sp += 'sp=%s_1.out%d:%s[%d]\n' % (name, axi, mem_type, ddr[axi])
 
         return sp
     

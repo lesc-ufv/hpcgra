@@ -32,9 +32,9 @@ public:
 
     int num_edges() const;
 
-    std::vector<std::tuple<int, int, int>> get_edges();
+    std::vector<std::tuple<int, int, int, int>> get_edges();
 
-    std::vector<std::tuple<int, int, int>> get_edges_inverse();
+    std::vector<std::tuple<int, int, int, int>> get_edges_inverse();
 
     std::vector<int> get_nodes();
 
@@ -43,7 +43,7 @@ public:
     std::string get_opcode(int u);
     int get_code(int u);
 
-    std::vector<int> get_port(std::pair<int,int> v);
+    std::vector<std::pair<int,int>> get_port(std::pair<int,int> v);
 
     int get_number_inputs() const;
 
@@ -70,14 +70,16 @@ private:
     std::vector<int> inputs;
     std::vector<int> outputs;
     std::vector<int> basic;
-    std::map<std::pair<int,int>, std::vector<int>> port; 
-    std::vector<std::tuple<int,int,int>> edges;
+    std::map<std::pair<int,int>, std::vector<std::pair<int,int>>> port; 
+    std::vector<std::tuple<int,int,int, int>> edges;
     std::map<int, std::vector<int>> node_in_degree;
     std::map<int, std::vector<int>> node_out_degree;
     std::map<int, std::string> name_label;
     std::map<int, std::string> opcode;
     std::map<int, int> code;
     std::map<int, std::vector<std::pair<int, int>>> constant;
+    std::map<int, int> size;
+    
     bool ok;
 };
 

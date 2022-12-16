@@ -11,11 +11,13 @@ struct pe_t {
     int id;
     int type;
     int routes;
-    bool acc;
+    //bool acc;
     std::vector<int> neighbors;
     std::vector<int> elastic_queue;
     bool *isa;
-    std::vector<int> inputs, outputs, basics;
+    std::vector<int> inputs;
+    std::vector<int> outputs;
+    std::vector<int> basics;
 };
 
 bool read_arch(std::string &arch_file, 

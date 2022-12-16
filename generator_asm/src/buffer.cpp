@@ -200,8 +200,10 @@ void optimizeBuffer(
 
     std::queue<int> q;
     int node, buffer_arch, pe, diff, p;
-    std::vector<int> outputs, parents, port, ancestors;
+    std::vector<int> outputs, parents, ancestors;
     std::pair<int, int> key;
+
+    std::vector<std::pair<int,int>> port;
 
     outputs = g.get_outputs();
 
@@ -221,7 +223,7 @@ void optimizeBuffer(
             key = std::make_pair(parents[i], node);
             port = g.get_port(key);
 
-            p = (port.size() == 1) ? 0 : port[i];
+            p = (port.size() == 1) ? 0 : std::get<1>(port[i]);
 
             buffer_arch = arch[pe].elastic_queue[p];
 
@@ -260,7 +262,7 @@ bool verify_buffer(
 
     int a, b, pe, buffer_arch, p;
     std::pair<int, int> key;
-    std::vector<int> port;
+    std::vector<std::pair<int, int>> port;
     
     for (int i = 0; i < SIZE_EDGES; i++) {
         a = h_edgeA[i];
@@ -269,7 +271,7 @@ bool verify_buffer(
         pe = pos[k * SIZE_NODES + b];
 
         for (int j = 0, n = port.size(); j < n; ++j) {
-            buffer_arch = arch[pe].elastic_queue[port[j]];
+            buffer_arch = arch[pe].elastic_queue[std::get<1>(port[j])];
             key = std::make_pair(a, b);
             
             if (buffers[key] > buffer_arch)

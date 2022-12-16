@@ -1,4 +1,4 @@
-#include <annealing.h>
+#include "../include/annealing.h"
 
 void annealing(const int N,
                const int SIZE_NODES,

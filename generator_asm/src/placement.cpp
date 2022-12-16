@@ -3,6 +3,8 @@
 #include "../include/read_arch.h"
 #include "../include/main.h"
 
+#include <map>
+
 void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, 
                                  int **table, 
                                  std::vector<pe_t> &arch
@@ -133,7 +135,7 @@ void get_edge_cost(const int NGRIDS,
             a = h_edgeA[j];
             b = h_edgeB[j];
             edges_cost[i][std::make_pair(a, b)] = table[pos[i * SIZE_NODES + a]][pos[i * SIZE_NODES + b]];
-            //printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], edges_cost[i][make_pair(a,b)]);
+            //printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], edges_cost[i][std::make_pair(a,b)]);
         }
         //printf("\n");
     }

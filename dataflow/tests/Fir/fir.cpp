@@ -3,8 +3,6 @@
 
 int main(int argc, char *argv[]) {
     
-    test(1);
-    test(2);
     test(4);
     
     return 0;
@@ -29,14 +27,9 @@ void test(int taps){
     in->setData(data_in,0,1024);
     out->setData(data_out,0,1024);
     df->compute();
-    df->toJSON("../fir"+to_string(taps)+".json");
-    df->toDOT("../fir"+to_string(taps)+".dot");
-    df->toJsonOperator("../fir"+to_string(taps)+"operator.json");
-
-//    for(int i=0;i < 1024;i++){
-//        std::cout << data_out[i] << " ";
-//    }
-//    std::cout << std::endl;
+    df->toJSON("../fir.json");
+    df->toDOT("../fir.dot");
+    df->toJsonOperator("../fir_operator.json");
 
     delete df;
     

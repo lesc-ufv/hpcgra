@@ -27,12 +27,14 @@ def create_args():
     parser.add_argument('-n', '--name', help='Project name', type=str, default='a.prj')
     parser.add_argument('-c', '--clock', help='Synthesis clock in MHz', type=int, default=250)
     parser.add_argument('-o', '--output', help='Project location', type=str, default='.')
+    parser.add_argument('-m', '--memory', help='Memory type=[HBM, DDR, HOST]', type=str, default='DDR')
+    parser.add_argument('-s', '--size', help='Memory num blocks', type=int, default=1)
     
 
     return parser.parse_args()
 
 
-def create_project(hpcgra_root, arch_json, name, clock, output_path):
+def create_project(hpcgra_root, arch_json, name, clock, output_path, mem_type, size):
     cgra = Cgra(json_file=arch_json)
     cgraacc = CgraAccelerator(cgra)
     acc_axi = AccAXIInterface(cgraacc)
@@ -41,8 +43,8 @@ def create_project(hpcgra_root, arch_json, name, clock, output_path):
     cmd = 'cp -r %s  %s/%s' % (template_path, output_path, name)
     commands_getoutput(cmd)
 
-    hw_path = '%s/%s/xilinx_aws_f1/hw/' % (output_path, name)
-    sw_path = '%s/%s/xilinx_aws_f1/sw/' % (output_path, name)
+    hw_path = '%s/%s/hw/' % (output_path, name)
+    sw_path = '%s/%s/sw/' % (output_path, name)
 
     m = acc_axi.create_kernel_top(name)
     m.to_verilog(hw_path + 'src/%s.v' % (name))
@@ -51,7 +53,7 @@ def create_project(hpcgra_root, arch_json, name, clock, output_path):
     
     vitis_config =  acc_axi.get_clock_config(clock,name)
     vitis_config += '\n'
-    vitis_config += acc_axi.get_connectivity_config(name)
+    vitis_config += acc_axi.get_connectivity_config(name, mem_type, size)
     vitis_config += '\n[vivado]\n'
     vitis_config += 'prop=run.impl_1.strategy=Performance_NetDelay_low\n'
 
@@ -77,7 +79,7 @@ def main():
 
         args.json = running_path + '/' + args.json
 
-        create_project(hpcgra_root, args.json, args.name, args.clock, args.output)
+        create_project(hpcgra_root, args.json, args.name, args.clock, args.output, args.memory, args.size)
 
         print('Project successfully created in %s/%s' % (args.output, args.name))
     else:

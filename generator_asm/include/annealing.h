@@ -1,10 +1,12 @@
 #ifndef __ANNEALING__H
 #define __ANNEALING__H
 
-#include <cmath>
 #include <vector>
+#include <cmath>
+
 #include "graph.h"
 #include "read_arch.h"
+
 
 void annealing(const int N,
                const int SIZE_NODES,

@@ -26,14 +26,9 @@ int main(int argc, char *argv[]) {
     
     df->compute();
     
-    df->toJSON("../sobel_filter.json");
+    df->toJSON("../sobelfilter.json");
     
-    df->toDOT("../sobel_filter.dot");
-    
-//  for (int k = 0; k < 1024; ++k) {
-//     cout << data_out[k] << " ";
-//  }
-//     cout << endl;
+    df->toDOT("../sobelfilter.dot");
     
     delete df;
     return 0;

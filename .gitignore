@@ -13,3 +13,6 @@
 **/*.bit
 **/*intel_harp2 
 **/*xilinx_aws_f1
+**/*.run
+**/*.ipcache
+**/*build_dir

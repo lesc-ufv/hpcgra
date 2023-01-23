@@ -24,11 +24,12 @@ int main(int argc, char *argv[]) {
     in2->setData(data_in2,0,1024);
     out->setData(data_out,0,1024);
     
-    df->compute();
+    //df->compute();
     
     
     df->toJSON("../poly5.json");
     df->toDOT("../poly5.dot");
+    df->toJsonOperator("../poly5.op.json");
     
 //     for(int i=0;i < 1024;i++){
 //      std::cout << data_out[i] << " ";

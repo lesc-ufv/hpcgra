@@ -1,10 +1,10 @@
 #include "loopback.h"
 
 int main(int argc, char *argv[]) {
-    int num_copies = 8;
+    int num_copies = 32;
     auto df = createDataFlow(0,num_copies);
     df->toJSON("../loopback.json");
-    df->toDOT("../loopback_.dot");
+    df->toDOT("../loopback.dot");
 
     delete df;
     return 0;

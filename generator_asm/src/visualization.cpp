@@ -25,6 +25,7 @@ void print_grid_dot(std::string path,
     char to_replace[100];
     char hex_color[100];
     auto dot_str = create_grid_dot_str(pes);
+
     const int SIZE_EDGES = g.get_edges().size();
     const int SIZE_NODES = g.get_nodes().size();
 
@@ -115,7 +116,7 @@ void print_grid_dot(std::string path,
 
 std::string create_grid_dot_str(std::vector<pe_t> &pes)
 {
-    char buf[200];
+    char buf[2048];
     std::string dot;
     auto GRID_SIZE = pes.size();
     auto grid_dim = (int)ceil(sqrt(GRID_SIZE));

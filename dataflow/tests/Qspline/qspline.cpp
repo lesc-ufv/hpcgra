@@ -37,10 +37,11 @@ int main(int argc, char *argv[]) {
     in5->setData(data_in5,0,1024);
     out->setData(data_out,0,1024);
     
-    df->compute();
+    //df->compute();
     
     df->toJSON("../qspline.json");
     df->toDOT("../qspline.dot");
+    df->toJsonOperator("../qspline.op.json");
     
 //     for(int i=0;i < 1024;i++){
 //      std::cout << data_out[i] << " ";

@@ -24,11 +24,13 @@ int main(int argc, char *argv[]) {
     auto out = reinterpret_cast<OutputStream *>(df->getOp(8));
     out->setData(data_out,0,1024);
     
-    df->compute();
+    //df->compute();
     
     df->toJSON("../sobelfilter.json");
     
     df->toDOT("../sobelfilter.dot");
+    
+    df->toJsonOperator("../sobelfilter.op.json");
     
     delete df;
     return 0;

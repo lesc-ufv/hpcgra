@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
 
-    auto df = createDataFlow(0, 8);
+    auto df = createDataFlow(0, 32);
     auto data_in = new unsigned short[1024];
     auto data_out = new unsigned short[1024];
 
@@ -16,12 +16,12 @@ int main(int argc, char *argv[]) {
     
     in->setData(data_in,0,10);
     out->setData(data_out,0,10);
-    
-    df->compute();
+    //df->compute();
 
     df->toJSON("../chebyshev.json");
     df->toDOT("../chebyshev.dot");
-    
+    df->toJsonOperator("../chebyshev.op.json");
+
 //    for(int i=0;i < 1024;i++){
 //      std::cout << data_out[i] << " ";
 //    }

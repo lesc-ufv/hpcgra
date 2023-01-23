@@ -3,21 +3,22 @@
 ARCH=(
 # ../arch/cgra_mesh_16x16_16.json
 # ../arch/cgra_one-hop_16x16_16.json
-../arch/cgra_chess_16x16_16.json
+#../arch/cgra_chess_16x16_16.json
+../arch/cgra_chess_32x32_32.json
 )
 
 BENCH=(
-../benchmarks/toys/chebyshev.json
-../benchmarks/toys/kmeans.json
+# ../benchmarks/toys/chebyshev.json
+# ../benchmarks/toys/kmeans.json
 ../benchmarks/toys/loopback.json 
-../benchmarks/toys/mibench.json
-../benchmarks/toys/paeth.json
-../benchmarks/toys/poly5.json
-../benchmarks/toys/poly6.json
-../benchmarks/toys/poly8.json
-../benchmarks/toys/qspline.json
-../benchmarks/toys/sgfilter.json
-../benchmarks/toys/sobelfilter.json
+# ../benchmarks/toys/mibench.json
+# ../benchmarks/toys/paeth.json
+# ../benchmarks/toys/poly5.json
+# ../benchmarks/toys/poly6.json
+# ../benchmarks/toys/poly8.json
+# ../benchmarks/toys/qspline.json
+# ../benchmarks/toys/sgfilter.json
+# ../benchmarks/toys/sobelfilter.json
 )
 
 rm -rf test

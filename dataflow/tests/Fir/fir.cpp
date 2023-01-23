@@ -26,10 +26,10 @@ void test(int taps){
     auto out = reinterpret_cast<OutputStream *>(df->getOp(1));
     in->setData(data_in,0,1024);
     out->setData(data_out,0,1024);
-    df->compute();
+    //df->compute();
     df->toJSON("../fir.json");
     df->toDOT("../fir.dot");
-    df->toJsonOperator("../fir_operator.json");
+    df->toJsonOperator("../fir.op.json");
 
     delete df;
     

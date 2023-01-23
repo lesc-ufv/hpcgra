@@ -21,11 +21,11 @@ int main(int argc, char *argv[]) {
     in1->setData(data_in1,0,1024);
     out->setData(data_out,0,1024);
     
-    df->compute();
+    //df->compute();
     
     df->toJSON("../sgfilter.json");
     df->toDOT("../sgfilter.dot");
-    
+    df->toJsonOperator("../sgfilter.op.json");
 //     for(int i=0;i < 1024;i++){
 //       std::cout << data_out[i] << " ";
 //     }

@@ -267,6 +267,9 @@ void routing(
         {
             a = h_edgeA[i];
             b = h_edgeB[i];
+
+            //printf("%d -> %d\n",a,b);
+
             key = std::make_pair(a, b);
 
             // solving first the wire cost 1

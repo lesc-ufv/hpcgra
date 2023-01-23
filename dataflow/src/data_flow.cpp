@@ -237,10 +237,12 @@ void DataFlow::toJSON(const std::string &fileNamePath)
     writer->write(df, &myfile);
 }
 
-//TODO: Need to be FIXED
+// TODO: Need to be FIXED
 void DataFlow::toJsonOperator(const std::string &fileNamePath)
 {
     Json::Value json;
+    std::map<std::tuple<int, int, int, int>, bool> map_port;
+
     json["opcode"] = this->name;
 
     for (auto item : this->op_array)
@@ -259,6 +261,25 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath)
             std::string name = from->getOpCode() + std::to_string(from->getId());
             // if (from->getType() != OP_IN)
             //     name += ".out" + std::to_string(from->getDstPort(op));
+            auto exitfor = false;
+            for (auto dp : from->getDstPort(op))
+            {
+                for (auto sp : op->getSrcPort(from))
+                {
+                    auto key = std::tuple<int, int, int, int>(op->getId(), from->getId(), sp, dp);
+
+                    if (map_port.find(key) == map_port.end())
+                    {
+                        name += ".out" + std::to_string(sp);
+                        map_port[key] = true;
+                        exitfor = true;
+                        break;
+                    }
+                }
+                if (exitfor)
+                    break;
+            }
+
             json["outputs"].append(name);
         }
         else
@@ -272,6 +293,24 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath)
                 std::string name = x->getOpCode() + std::to_string(x->getId());
                 // if (x->getType() != OP_IN)
                 //     name += ".out" + std::to_string(x->getDstPort(op));
+                auto exitfor = false;
+                for (auto dp : x->getDstPort(op))
+                {
+                    for (auto sp : op->getSrcPort(x))
+                    {
+                        auto key = std::tuple<int, int, int, int>(op->getId(), x->getId(), sp, dp);
+
+                        if (map_port.find(key) == map_port.end())
+                        {
+                            name += ".out" + std::to_string(sp);
+                            map_port[key] = true;
+                            exitfor = true;
+                            break;
+                        }
+                    }
+                    if (exitfor)
+                        break;
+                }
                 df["inputs"].append(name);
             }
             if (op->getType() == OP_IMMEDIATE)
@@ -285,11 +324,9 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath)
             {
                 df["outputs"].append("out" + std::to_string(i));
             }
-
             json["dataflow"].append(df);
         }
     }
-
     std::ofstream fout(fileNamePath);
     Json::StreamWriterBuilder builder;
     const std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());

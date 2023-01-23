@@ -3,8 +3,8 @@
 int main(int argc, char *argv[]) {
     
     int num_kmeans=1;
-    int num_clusters[]={4};
-    int num_dim[]={4};
+    int num_clusters[]={8};
+    int num_dim[]={32};
     int is_share_inputs= 0;
     
     

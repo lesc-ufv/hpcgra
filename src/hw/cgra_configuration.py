@@ -132,7 +132,7 @@ class CgraConfiguration:
                     route_tb[src].append(dst)
                 else:
                     route_tb[src] = [dst]
-
+        
         if len(route_tb) <= routes:
             map_route = {}
             for i, vo in route_tb.items():
@@ -142,7 +142,7 @@ class CgraConfiguration:
                         return False, list(lines), 'PE %s not in neighbors of PE %s.' % (i, id)
                     if o not in neighbors:
                         lines = lines_error.get(o)
-                        if 'ostream' in o:
+                        if 'ostream' in str(o):
                             if int(o[8:-1]) >= num_ostream:
                                 return False, list(lines), 'PE %s cannot perform output data.' % (id)
                         else:
@@ -204,14 +204,14 @@ class CgraConfiguration:
                         route_sel_in_v = []
                         route_sel_out_v = [format(0, '0%db' % route_sel_out_bits) for _ in range(num_out)]
                         for i, vo in route_tb.items():
-                            if 'alu' in i:
+                            if 'alu' in str(i):
                                 iidx = int(i[4:-1])
                             else:
                                 iidx = neighbors.index(i) + alu_num_out
 
                             route_sel_in_v.append(format(iidx, '0%db' % route_sel_in_bits))
                             for o in vo:
-                                if 'ostream' in o:
+                                if 'ostream' in str(o):
                                     offset = int(o[8:-1])
                                     oidx = len(neighbors)+offset
                                 else:

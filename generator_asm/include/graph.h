@@ -45,6 +45,10 @@ public:
 
     std::vector<std::pair<int,int>> get_port(std::pair<int,int> v);
 
+    std::vector<int> get_source_port(int u);
+
+    std::vector<int> get_target_port(int u);
+
     int get_number_inputs() const;
 
     std::vector<int> get_predecessors(int u);
@@ -79,6 +83,8 @@ private:
     std::map<int, int> code;
     std::map<int, std::vector<std::pair<int, int>>> constant;
     std::map<int, int> size;
+    std::map<int, std::vector<int>> source_port;
+    std::map<int, std::vector<int>> target_port;
     
     bool ok;
 };

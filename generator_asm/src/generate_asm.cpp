@@ -53,9 +53,12 @@ void generate_asm(Graph &g,
         for (int j = 0; j < SIZE_PE; ++j)
             routed[i][j] = false;
 
+    bool *visited_output = new bool[SIZE_NODES];
     bool *visited = new bool[SIZE_NODES];
-    for (int i = 0; i < SIZE_NODES; ++i)
+    for (int i = 0; i < SIZE_NODES; ++i) {
         visited[i] = false;
+        visited_output[i] = false;
+    }
 
     for (int i = 0; i < inputs.size(); ++i)
         q.push(std::make_pair(inputs[i], 0));
@@ -75,24 +78,26 @@ void generate_asm(Graph &g,
 
         if (g.get_code(dad) == 0 /*input*/)
         {
-            // printf("add $%d $istream 0\n", pos[best_index*SIZE_NODES+dad]);
-            myfile << "add $" << pos[best_index * SIZE_NODES + dad] << " $istream[0] 0\n";
+            for (auto input_port : g.get_source_port(dad)) 
+                myfile << "add $" << pos[best_index * SIZE_NODES + dad] << " $istream[" << input_port << "] 0\n";
         }
         else if (g.get_code(dad) == 1 /*output*/)
         {
 
             grandfather = g.get_predecessors(dad);
             pe = pos[best_index * SIZE_NODES + dad];
-
             for (int i = 0; i < grandfather.size(); ++i)
             {
-                vec_port = g.get_port(std::make_pair(grandfather[i], dad));
-                for (int j = 0; j < vec_port.size(); ++j)
-                {
-                    std::tuple<int, int, int, int> key = std::make_tuple(grandfather[i], dad, vec_port[j].first, vec_port[j].second);
-                    rota = route[best_index][key];
-                    pe_gf = rota[rota.size() - 2];
-                    myfile << "route $" << pe << " $" << pe_gf << " $ostream[0]\n";
+                if (!visited_output[grandfather[i]]) {
+                    visited_output[grandfather[i]] = true;
+                    vec_port = g.get_port(std::make_pair(grandfather[i], dad));
+                    for (int j = 0; j < vec_port.size(); ++j)
+                    {
+                        std::tuple<int, int, int, int> key = std::make_tuple(grandfather[i], dad, vec_port[j].first, vec_port[j].second);
+                        rota = route[best_index][key];
+                        pe_gf = rota[rota.size() - 2];
+                        myfile << "route $" << pe << " $" << pe_gf << " $ostream[" << vec_port[j].second << "]\n";
+                    }
                 }
             }
         }

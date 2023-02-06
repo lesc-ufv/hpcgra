@@ -67,6 +67,9 @@ Graph::Graph(const std::string filename,
 
         this->port[std::make_pair(u, v)].push_back(std::make_pair(s, t));
 
+        this->source_port[u].push_back(s);
+        this->target_port[v].push_back(t);
+
         // verify if edge is same
         this->edges.push_back(aux_e);
         this->node_out_degree[u].push_back(v);
@@ -95,6 +98,8 @@ Graph::Graph(const Graph &g)
     this->constant = g.constant;
     this->ok = g.ok;
     this->port = g.port;
+    this->source_port = g.source_port;
+    this->target_port = g.target_port;
 }
 
 Graph::~Graph()
@@ -240,4 +245,14 @@ void Graph::print_graph_number()
 std::vector<std::pair<int, int>> Graph::get_port(std::pair<int, int> u)
 {
     return this->port[u];
+}
+
+std::vector<int> Graph::get_source_port(int u) 
+{
+    return this->source_port[u];
+}
+
+std::vector<int> Graph::get_target_port(int u)
+{
+    return this->target_port[u];
 }

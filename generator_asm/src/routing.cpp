@@ -54,7 +54,7 @@ bool try_route_aStar(
 
     int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
-    printf("try: %d -> %d\n", pe_source, pe_target);
+    //printf("try: %d -> %d\n", pe_source, pe_target);
 
     visited[pe_source] = true;
 
@@ -69,7 +69,7 @@ bool try_route_aStar(
         visited[node] = true;
 
         // if (pe_source == 233 || pe_source == 237)
-        printf("\nnode choose: %d\n", node);
+        //printf("\nnode choose: %d\n", node);
 
         cost_b = 9999;
         index_b = -1;
@@ -82,7 +82,7 @@ bool try_route_aStar(
             key = std::make_tuple(node, son);
 
             // if (pe_source == 233 || pe_source == 237)
-            printf("pe %d -> pe %d map_pe = (%d,%d) a = %d min_rota %d\n", node, son, map_pe[node][son].first, map_pe[node][son].second, source, min_rota[node]);
+            //printf("pe %d -> pe %d map_pe = (%d,%d) a = %d min_rota %d\n", node, son, map_pe[node][son].first, map_pe[node][son].second, source, min_rota[node]);
             if (visited[son])
                 continue;
             if ((map_pe[node][son].first != source || map_pe[node][son].second != s_port) && map_pe[node][son].first != -1)
@@ -189,13 +189,13 @@ bool try_route_aStar(
             printf("\n");
         }*/
 
-        printf("Path final: ");
+        //printf("Path final: ");
         int pe_aux_a, pe_aux_b;
         for (int i = new_path.size() - 1; i > -1; --i)
         {
             pe_aux_a = new_path[i].first;
             pe_aux_b = new_path[i].second;
-            printf("%d %d, ", pe_aux_a, pe_aux_b);
+            //printf("%d %d, ", pe_aux_a, pe_aux_b);
             route[elem].push_back(pe_aux_a);
             route[elem].push_back(pe_aux_b);
             pe_route[pe_aux_a].push_back(std::make_pair(pe_aux_a, pe_aux_b));
@@ -275,7 +275,7 @@ void routing(
             s_port = std::get<2>(edge_list[i]);
             t_port = std::get<3>(edge_list[i]);
             
-            printf("%d:%d -> %d:%d \n", s, s_port, t, t_port);
+            //printf("%d:%d -> %d:%d \n", s, s_port, t, t_port);
 
             key = edge_list[i];
 
@@ -310,7 +310,7 @@ void routing(
     // resolve the cost greater than 1
     for (int j = 0; j < NGRIDS; ++j)
     {
-        printf("não resolvido!\n");
+        //printf("não resolvido!\n");
         if (results[j] == MAXVALUE)
             continue;
         // printf("\ntry: %d\n", j);
@@ -321,8 +321,8 @@ void routing(
             pe_source = pos[s + j * SIZE_NODES];
             pe_target = pos[t + j * SIZE_NODES];
 
-            printf("%d pe:%d -> %d pe:%d \n", s, pe_source, t, pe_target);
-            printf("%d [%d] -> %d [%d] cost: %d\n", s, pe_source, t, pe_target, edges_cost[j][edges_not_solved[j][i]]);
+            //printf("%d pe:%d -> %d pe:%d \n", s, pe_source, t, pe_target);
+            //printf("%d [%d] -> %d [%d] cost: %d\n", s, pe_source, t, pe_target, edges_cost[j][edges_not_solved[j][i]]);
             
             if (!try_route_aStar(TOTAL_GRID_SIZE, pe_source, pe_target, edges_not_solved[j][i], grid_route,
                                  route[j], results[j], edges_cost[j], table,

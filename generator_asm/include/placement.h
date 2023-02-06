@@ -25,9 +25,8 @@ void get_all_results(const int NGRIDS,
                      const int SIZE_NODES,
                      int *pos, 
                      int *results, 
-                     int *h_edgeA, 
-                     int *h_edgeB, 
-                     int **table
+                     int **table,
+                     Graph &g
                     );
 
 int get_result(const int N, 
@@ -42,11 +41,10 @@ int get_result(const int N,
 void get_edge_cost(const int NGRIDS,
                    const int SIZE_EDGES,
                    const int SIZE_NODES,
-                   int *h_edgeA,
-                   int *h_edgeB,
                    int *pos,
                    int **table,
-                   std::map<std::pair<int, int>, int> *edges_cost,
-                   int * results);
+                   std::map<std::tuple<int, int, int, int>, int> *edges_cost,
+                   int * results,
+                   Graph &g);
 
 #endif

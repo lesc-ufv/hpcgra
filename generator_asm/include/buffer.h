@@ -13,8 +13,8 @@ void dfsBuffer(
     Graph g, 
     int *level, 
     int *levelOrig, 
-    std::map<std::pair<int, int>, int> &buffers,
-    std::map<std::pair<int, int>, int> &edges
+    std::map<std::tuple<int, int, int, int>, int> &buffers,
+    std::map<std::tuple<int, int, int, int>, int> &edges
 );
 
 void update_values(
@@ -27,10 +27,10 @@ void update_values(
 );
 
 void getBuffer(
-    Graph g,
+    Graph &g,
     int *level,
     int *levelOrig,
-    std::map<std::pair<int, int>, int> &buffers,
+    std::map<std::tuple<int, int, int, int>, int> &buffers,
     std::map<int, std::vector<int>> map_level
 );
 
@@ -40,8 +40,8 @@ void optimizeBuffer(
     const int k,
     const int SIZE_NODES,
     int *pos,
-    Graph g, 
-    std::map<std::pair<int, int>, int> &buffers,
+    Graph &g, 
+    std::map<std::tuple<int, int, int, int>, int> &buffers,
     std::vector<pe_t> &arch
 );
 
@@ -49,23 +49,19 @@ bool verify_buffer(
     const int k,
     const int SIZE_EDGES,
     const int SIZE_NODES,
-    int *h_edgeA,
-    int *h_edgeB,
     int *pos,
-    Graph g,
+    Graph &g,
     std::vector<pe_t> &arch, 
-    std::map<std::pair<int, int>, int> &buffers
+    std::map<std::tuple<int, int, int, int>, int> &buffers
 );
 
-void buffer(Graph g, 
+void buffer(Graph &g, 
             const int NGRIDS, 
             const int SIZE_NODES, 
             const int SIZE_EDGES,
-            int *h_edgeA, 
-            int *h_edgeB, 
             int *results, 
-            std::map<std::pair<int, int>, int> *edges_cost,
-            std::map<std::pair<int, int>, int> *buffers, 
+            std::map<std::tuple<int, int, int, int>, int> *edges_cost,
+            std::map<std::tuple<int, int, int, int>, int> *buffers, 
             std::vector<pe_t> &arch, 
             int *pos);
 

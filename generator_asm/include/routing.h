@@ -6,6 +6,7 @@
 #include <vector>
 #include <tuple>
 #include "read_arch.h"
+#include "graph.h"
 
 typedef struct route_t {
     std::vector<int> *path;
@@ -18,6 +19,7 @@ void remove_element(int pe_a,
 
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 typedef std::pair<int, int> pd;
+typedef std::map<std::tuple<int, int, int, int>, std::vector<int>> map_tuple_vector_int;
 typedef std::map<std::pair<int, int>, std::vector<int>> map_pair_vector_int;
 typedef std::map<std::pair<int, int>, int> map_pair_int;
 
@@ -39,7 +41,7 @@ bool try_route_aStar(
         std::vector<int> *grid_route,
         map_pair_vector_int &route,
         int &results,
-        std::map<std::pair<int, int>, int> &edges_cost,
+        std::map<std::tuple<int, int, int, int>, int> *edges_cost,
         int **table,
         int *min_rota,
         std::vector<std::pair<int,int>> *pe_route,
@@ -51,14 +53,13 @@ void routing(
         const int SIZE_EDGES,
         const int SIZE_NODES,
         const int TOTAL_GRID_SIZE,
-        std::map<std::pair<int, int>, int> *edges_cost,
+        std::map<std::tuple<int, int, int, int>, int> *edges_cost,
         int *results,
         int *pos,
-        int *h_edgeA,
-        int *h_edgeB,
-        map_pair_vector_int *route,
+        map_tuple_vector_int *route,
         std::vector<pe_t> &pe,
-        int **table
+        int **table,
+        Graph &g
         );
 
 #endif

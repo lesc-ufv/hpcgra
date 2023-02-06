@@ -5,15 +5,15 @@
 
 /// TODO: Refactor code, because this code is bad format.
 
-void generate_asm(Graph g,
+void generate_asm(Graph &g,
                   const int best_index,
                   const int SIZE_NODES,
                   const int SIZE_PE,
                   int *pos,
-                  std::map<std::pair<int, int>, int> *buffers_EDGE,
+                  std::map<std::tuple<int, int, int, int>, int> *buffers_EDGE,
                   std::string path,
-                  std::map<std::pair<int, int>, std::vector<int>> *route,
-                  std::map<std::pair<int, int>, int> *edges_cost)
+                  std::map<std::tuple<int, int, int, int>, std::vector<int>> *route,
+                  std::map<std::tuple<int, int, int, int>, int> *edges_cost)
 {
 
     if (best_index == -1)
@@ -38,10 +38,12 @@ void generate_asm(Graph g,
     int dad, new_cost, cost, pe_gf, pe, buff, port, oper_size;
     std::vector<int> rota;
     std::queue<std::pair<int, int>> q;
-    std::pair<int, int> key;
+    std::tuple<int, int, int, int> key;
     std::vector<int> inputs = g.get_inputs();
     std::vector<int> outputs = g.get_outputs();
     std::vector<int> son, grandfather;
+
+    std::vector<std::pair<int, int>> vec_port;
 
     int **routed = new int *[SIZE_PE];
     for (int i = 0; i < SIZE_PE; ++i)
@@ -84,10 +86,14 @@ void generate_asm(Graph g,
 
             for (int i = 0; i < grandfather.size(); ++i)
             {
-                std::pair<int, int> key = std::make_pair(grandfather[i], dad);
-                rota = route[best_index][key];
-                pe_gf = rota[rota.size() - 2];
-                myfile << "route $" << pe << " $" << pe_gf << " $ostream[0]\n";
+                vec_port = g.get_port(std::make_pair(grandfather[i], dad));
+                for (int j = 0; j < vec_port.size(); ++j)
+                {
+                    std::tuple<int, int, int, int> key = std::make_tuple(grandfather[i], dad, vec_port[j].first, vec_port[j].second);
+                    rota = route[best_index][key];
+                    pe_gf = rota[rota.size() - 2];
+                    myfile << "route $" << pe << " $" << pe_gf << " $ostream[0]\n";
+                }
             }
         }
         else
@@ -100,23 +106,22 @@ void generate_asm(Graph g,
             myfile << g.get_opcode(dad).c_str() << " $" << pe << " ";
 
             // cout << g.get_opcode(dad).c_str() << " $" << pe;
-            //printf("%d oper_size = %d n_avo %ld\n", pe, oper_size, grandfather.size());
+            // printf("%d oper_size = %d n_avo %ld\n", pe, oper_size, grandfather.size());
 
             for (int i = 0; i < grandfather.size(); ++i)
             {
-                key = std::make_pair(grandfather[i], dad);
-                buff = buffers_EDGE[best_index][key];
-                rota = route[best_index][key];
-
-                pe_gf = rota[rota.size() - 2];
-
-                //printf(" %d -> %d\n", key.first, key.second);
-
-                for (int i = 0; i < g.get_port(key).size(); ++i)
+                vec_port = g.get_port(std::make_pair(grandfather[i], dad));
+                for (int j = 0; j < vec_port.size(); ++j)
                 {
-                    port = std::get<1>(g.get_port(key)[i]);
-                    //std::cout << port << " " << oper_size << std::endl;
-                    //printf("%d -> %d\n", grandfather[i], dad);
+                    key = std::make_tuple(grandfather[i], dad, vec_port[j].first, vec_port[j].second);
+                    buff = buffers_EDGE[best_index][key];
+                    rota = route[best_index][key];
+
+                    pe_gf = rota[rota.size() - 2];
+
+                    port = vec_port[j].second;
+                    // std::cout << port << " " << oper_size << std::endl;
+                    // printf("%d -> %d\n", grandfather[i], dad);
                     operators[port] = "";
                     if (buff > 0)
                     {
@@ -148,26 +153,28 @@ void generate_asm(Graph g,
         {
             if (!visited[son[i]])
             {
-                rota = route[best_index][std::make_pair(dad, son[i])];
+                vec_port = g.get_port(std::make_pair(dad, son[i]));
+                for (int k = 0; k < vec_port.size(); ++k) {
+                    rota = route[best_index][std::make_tuple(dad, son[i], vec_port[k].first, vec_port[k].second)];
 
-                // creating routing
-                for (int j = 0, n = rota.size(); j < n; j += 2)
-                {
-
-                    if (routed[rota[j]][rota[j + 1]])
-                        continue;
-                    routed[rota[j]][rota[j + 1]] = true;
-
-                    if (j == 0)
+                    // creating routing
+                    for (int j = 0, n = rota.size(); j < n; j += 2)
                     {
-                        myfile << "route $" << rota[j] << " $alu[0] $" << rota[j + 1] << "\n";
+                        if (routed[rota[j]][rota[j + 1]])
+                            continue;
+                        routed[rota[j]][rota[j + 1]] = true;
+
+                        if (j == 0)
+                        {
+                            myfile << "route $" << rota[j] << " $alu[0] $" << rota[j + 1] << "\n";
+                        }
+                        else if (j > 1)
+                        {
+                            myfile << "route $" << rota[j] << " $" << rota[j - 2] << " $" << rota[j + 1] << "\n";
+                        }
                     }
-                    else if (j > 1)
-                    {
-                        myfile << "route $" << rota[j] << " $" << rota[j - 2] << " $" << rota[j + 1] << "\n";
-                    }
+                    new_cost = cost + edges_cost[best_index][std::make_tuple(dad, son[i], vec_port[k].first, vec_port[k].second)];
                 }
-                new_cost = cost + edges_cost[best_index][std::make_pair(dad, son[i])];
                 q.push(std::make_pair(son[i], new_cost));
             }
         }

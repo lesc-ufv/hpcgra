@@ -13,15 +13,16 @@ void clean_data(const int NGRIDS,
                 const int SIZE_EDGES,
                 const int SIZE_NODES,
                 const int TOTAL_GRID_SIZE,
-                std::map<std::pair<int, int>, int> *edges_cost,
+                std::map<std::tuple<int, int, int, int>, int> *edges_cost,
                 int *buffers, int *pos,
                 int *grid,
                 int *v,
                 int *v_i,
-                int *h_edgeA,
-                int *h_edgeB,
-                int *results)
+                int *results,
+                Graph &graph)
 {
+
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     for (int i = 0; i < NGRIDS; ++i)
     {
@@ -39,7 +40,7 @@ void clean_data(const int NGRIDS,
     {
         for (int i = 0; i < SIZE_EDGES; ++i)
         {
-            edges_cost[k][std::make_pair(h_edgeA[i], h_edgeB[i])] = 0;
+            edges_cost[k][edge_list[i]] = 0;
             buffers[k * SIZE_EDGES + i] = 0;
         }
         for (int i = 0; i < SIZE_NODES; ++i)
@@ -59,24 +60,23 @@ bool fill_data(const int TOTAL_GRID_SIZE,
                const int SIZE_NODES,
                const int VGRID,
                int *grid,
-               std::map<std::pair<int, int>, int> *edges_cost,
+               std::map<std::tuple<int, int, int, int>, int> *edges_cost,
                int *buffers,
                int *pos,
                int *v,
                int *v_i,
-               int *h_edgeA,
-               int *h_edgeB,
                double *randomvec,
                std::vector<int> &A,
-               std::vector<std::tuple<int, int, int, int>> edge_list,
                std::vector<pe_t> &pe,
-               Graph g,
+               Graph &graph,
                int *results,
                int **table,
                std::map<std::string, int> &map_type)
 {
 
     std::vector<int> pe_in, pe_out, pe_basic, inputs, outputs, basic;
+
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int SIZE_GRID = ceil(sqrt(TOTAL_GRID_SIZE));
 
@@ -94,23 +94,22 @@ bool fill_data(const int TOTAL_GRID_SIZE,
 
     const int SIZE_PE_IN = pe_in.size();
     const int SIZE_PE_OUT = pe_out.size();
-    const int SIZE_GRAPH_IN = g.get_inputs().size();
-    const int SIZE_GRAPH_OUT = g.get_outputs().size();
+    const int SIZE_GRAPH_IN = graph.get_inputs().size();
+    const int SIZE_GRAPH_OUT = graph.get_outputs().size();
 
     // Verify about arch and graph
     if (!verify(SIZE_NODES, TOTAL_GRID_SIZE, SIZE_GRAPH_IN,
                 SIZE_GRAPH_OUT, SIZE_PE_IN, SIZE_PE_OUT,
-                pe, map_type, g))
+                pe, map_type, graph))
         return false;
 
-    inputs = g.get_inputs();
-    outputs = g.get_outputs();
-    basic = g.get_basic();
+    inputs = graph.get_inputs();
+    outputs = graph.get_outputs();
+    basic = graph.get_basic();
 
     // clean the data
     clean_data(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
-               edges_cost, buffers, pos, grid, v, v_i, h_edgeA,
-               h_edgeB, results);
+               edges_cost, buffers, pos, grid, v, v_i, results, graph);
 
     for (int i = 0; i < RANDOM_SIZE; ++i)
         randomvec[i] = (double)rand() / (double)(RAND_MAX);
@@ -121,8 +120,6 @@ bool fill_data(const int TOTAL_GRID_SIZE,
     {
         n1 = std::get<0>(edge_list[i]);
         n2 = std::get<1>(edge_list[i]);
-        h_edgeA[i] = n1;
-        h_edgeB[i] = n2;
         v[n1]++;
         if (n1 != n2)
             v[n2]++;
@@ -137,31 +134,22 @@ bool fill_data(const int TOTAL_GRID_SIZE,
     {
         for (int j = 0; j < SIZE_EDGES; ++j)
         {
-            if (h_edgeA[j] != h_edgeB[j])
+            n1 = std::get<0>(edge_list[j]);
+            n2 = std::get<1>(edge_list[j]);
+            if (n1 != n2)
             {
-                if (h_edgeA[j] == i)
-                    A.push_back(h_edgeB[j]);
-                if (h_edgeB[j] == i)
-                    A.push_back(h_edgeA[j]);
+                if (n1 == i)
+                    A.push_back(n2);
+                if (n2 == i)
+                    A.push_back(n1);
             }
             else
             {
-                if (h_edgeA[j] == i)
-                    A.push_back(h_edgeB[j]);
+                if (n1 == i)
+                    A.push_back(n2);
             }
         }
     }
-    /*
-    for (int i = 0; i < pe.size(); ++i) {
-        printf("PE %d, ALU: ", i);
-        for (int j = 0; j < pe[i].isa.size(); ++j) {
-            printf("%d ", pe[i].isa[j]);
-        }
-        printf("\n");
-    }
-    for (int i = 0; i < SIZE_NODES; ++i) {
-        printf("Node: %d type: %d\n", i, g.get_code(i));
-    }*/
 
     // fill the data
     std::vector<int> pe_aux;
@@ -188,14 +176,12 @@ bool fill_data(const int TOTAL_GRID_SIZE,
         }
 
         if (!greedy_solution(n, SIZE_NODES, SIZE_GRID, TOTAL_GRID_SIZE,
-                             pos, grid, table, inputs, g, pe))
+                             pos, grid, table, inputs, graph, pe))
         {
             results[n] = MAXVALUE;
             c++;
         }
     }
-
-    // printf("not solution %d\n", c);
 
     return true;
 }

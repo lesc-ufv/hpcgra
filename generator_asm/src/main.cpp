@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv)
 {
-    auto timetime = time(nullptr);
+    auto timetime = 42; //time(nullptr);
     srand(timetime);
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
     std::string path_dot = "", name = "", path_arch = "", path_asm = "";
@@ -57,8 +57,6 @@ int main(int argc, char **argv)
     print_inputs_outputs_json(graph, name);
 
     double *randomvec = new double[RANDOM_SIZE];
-    int *h_edgeA = new int[SIZE_EDGES];
-    int *h_edgeB = new int[SIZE_EDGES];
     int *v = new int[SIZE_NODES];
     int *v_i = new int[SIZE_NODES];
     int *grid = new int[TOTAL_GRID_SIZE * NGRIDS];
@@ -70,7 +68,7 @@ int main(int argc, char **argv)
         table[i] = new int[TOTAL_GRID_SIZE];
 
     std::vector<int> A;
-    std::map<std::pair<int, int>, int> *edges_cost = new std::map<std::pair<int, int>, int>[NGRIDS];
+    std::map<std::tuple<int, int, int, int>, int> *edges_cost = new std::map<std::tuple<int, int, int, int>, int>[NGRIDS];
 
     double time_data, time_total, time_place, time_route, time_buffer, time_table;
 
@@ -85,8 +83,7 @@ int main(int argc, char **argv)
     start = std::chrono::high_resolution_clock::now();
     // fill the data
     if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
-                   VGRID, grid, edges_cost, buffers, pos, v, v_i, h_edgeA,
-                   h_edgeB, randomvec, A, graph.get_edges(), pe, graph, results, table,
+                   VGRID, grid, edges_cost, buffers, pos, v, v_i, randomvec, A, pe, graph, results, table,
                    map_type))
         return 1;
     stop = std::chrono::high_resolution_clock::now();
@@ -100,8 +97,7 @@ int main(int argc, char **argv)
     }
 
     // get all results and put in results array
-    get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results,
-                    h_edgeA, h_edgeB, table);
+    get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, table, graph);
 
     start = std::chrono::high_resolution_clock::now();
 #pragma omp parallel for
@@ -119,15 +115,14 @@ int main(int argc, char **argv)
     time_place = duration.count();
 
     // get each value of edge, to routing
-    get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, h_edgeA, h_edgeB,
-                  pos, table, edges_cost, results);
+    get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, table, edges_cost, results, graph);
 
-    auto *route = new std::map<std::pair<int, int>, std::vector<int>>[NGRIDS];
+    auto *route = new std::map<std::tuple<int, int, int, int>, std::vector<int>>[NGRIDS];
 
     start = std::chrono::high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
-            edges_cost, results, pos, h_edgeA, h_edgeB, route, pe, table);
+            edges_cost, results, pos, route, pe, table, graph);
     // end routing
     stop = std::chrono::high_resolution_clock::now();
 
@@ -142,12 +137,11 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    std::map<std::pair<int, int>, int> *buffers_EDGE = new std::map<std::pair<int, int>, int>[NGRIDS];
+    std::map<std::tuple<int, int, int, int>, int> *buffers_EDGE = new std::map<std::tuple<int, int, int, int>, int>[NGRIDS];
 
     start = std::chrono::high_resolution_clock::now();
     // generate buffer
-    buffer(graph, NGRIDS, SIZE_NODES, SIZE_EDGES, h_edgeA,
-           h_edgeB, results, edges_cost, buffers_EDGE, pe, pos);
+    buffer(graph, NGRIDS, SIZE_NODES, SIZE_EDGES, results, edges_cost, buffers_EDGE, pe, pos);
     // end buffer
     stop = std::chrono::high_resolution_clock::now();
 
@@ -164,7 +158,7 @@ int main(int argc, char **argv)
 
     int worst_fifo;
     int best_index = get_better_index(NGRIDS, SIZE_EDGES, worst_fifo,
-                                      results, h_edgeA, h_edgeB, buffers_EDGE);
+                                      results, buffers_EDGE, graph);
 
     // generate assembly code
     generate_asm(graph, best_index, SIZE_NODES, TOTAL_GRID_SIZE, pos,
@@ -189,8 +183,6 @@ int main(int argc, char **argv)
     delete[] v;
     delete[] v_i;
     delete[] grid;
-    delete[] h_edgeA;
-    delete[] h_edgeB;
     delete[] edges_cost;
     delete[] buffers;
     delete[] pos;

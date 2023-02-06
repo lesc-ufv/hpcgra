@@ -6,22 +6,21 @@ int get_better_index(const int NGRIDS,
                      const int SIZE_EDGES, 
                      int &best_worst_buffer,
                      int *results, 
-                     int *h_edgeA, 
-                     int *h_edgeB, 
-                     std::map<std::pair<int, int>, int> *buffers_EDGE
+                     std::map<std::tuple<int, int, int, int>, int> *buffers_EDGE,
+                     Graph &graph
                      ) {
 
     best_worst_buffer = MAXVALUE;
     int best_index = -1, best_cost = MAXVALUE, worst_buffer = -1;
 
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
+
     // get the better results 
     for (int k = 0; k < NGRIDS; ++k) {
         if (results[k] >= MAXVALUE) continue;
         for (int i = 0; i < SIZE_EDGES; ++i) {
-            int a = h_edgeA[i];
-            int b = h_edgeB[i];
-            if (worst_buffer < buffers_EDGE[k][std::make_pair(a, b)])
-                worst_buffer = buffers_EDGE[k][std::make_pair(a, b)];
+            if (worst_buffer < buffers_EDGE[k][edge_list[i]])
+                worst_buffer = buffers_EDGE[k][edge_list[i]];
         }
         if (worst_buffer < best_worst_buffer) {
             best_worst_buffer = worst_buffer;

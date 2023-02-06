@@ -5,43 +5,47 @@
 #include "../include/read_arch.h"
 #include "../include/main.h"
 
-void remove_element(int pe_a,
-                    int pe_b,
+void remove_element(int pe_source,
+                    int pe_target,
                     std::vector<int> *grid_route)
 {
-    grid_route[pe_a].erase(remove(grid_route[pe_a].begin(),
-                                  grid_route[pe_a].end(), pe_b),
-                           grid_route[pe_a].end());
+    grid_route[pe_source].erase(remove(grid_route[pe_source].begin(),
+                                  grid_route[pe_source].end(), pe_target),
+                           grid_route[pe_source].end());
 }
 
 bool try_route_aStar(
     const int TOTAL_GRID_SIZE,
-    int pe_a,
-    int pe_b,
-    int a,
-    int b,
+    int pe_source,
+    int pe_target,
+    std::tuple<int, int, int, int> elem,
     std::vector<int> *grid_route,
-    map_pair_vector_int &route,
+    map_tuple_vector_int &route,
     int &results,
-    std::map<std::pair<int, int>, int> &edges_cost,
+    std::map<std::tuple<int, int, int, int>, int> &edges_cost,
     int **table,
     int *min_rota,
     std::vector<std::pair<int, int>> *pe_route,
-    std::map<int, std::map<int, int>> &map_pe)
+    std::map<int, std::map<int, std::pair<int,int>>> &map_pe)
 {
     int node, cost, cost_g, cost_h, before;
+
+    int source = std::get<0>(elem);
+    int target = std::get<1>(elem);
+    int s_port = std::get<2>(elem);
+    int t_port = std::get<3>(elem);
 
     // shortest distance between pes
     std::vector<std::tuple<int, int, int>> path;
     std::vector<int> n_son;
-    pd key;
+    std::tuple<int, int> key;
 
     std::priority_queue<std::tuple<int, int, int>, std::vector<std::tuple<int, int, int>>, spq> open;
-    open.push(std::make_tuple(-1, pe_a, table[pe_a][pe_b]));
-    // open.push(make_pair(make_pair(pe_a, pe_a), table[pe_a][pe_b]));
+    open.push(std::make_tuple(-1, pe_source, table[pe_source][pe_target]));
+    // open.push(make_pair(make_pair(pe_source, pe_source), table[pe_source][pe_target]));
 
     bool found = false, multicast;
-    std::map<pd, int> closed;
+    std::map<std::tuple<int,int>, int> closed;
 
     bool *visited = new bool[TOTAL_GRID_SIZE];
 
@@ -50,9 +54,9 @@ bool try_route_aStar(
 
     int cost_b, index_b, son, pe_origin, pe_destiny, pe_start;
 
-    // printf("try: %d -> %d\n", pe_a, pe_b);
+    printf("try: %d -> %d\n", pe_source, pe_target);
 
-    visited[pe_a] = true;
+    visited[pe_source] = true;
 
     // loop while the open is not empty
     while (!open.empty())
@@ -64,8 +68,8 @@ bool try_route_aStar(
 
         visited[node] = true;
 
-        // if (pe_a == 233 || pe_a == 237)
-        // printf("\nnode choose: %d\n", node);
+        // if (pe_source == 233 || pe_source == 237)
+        printf("\nnode choose: %d\n", node);
 
         cost_b = 9999;
         index_b = -1;
@@ -75,25 +79,26 @@ bool try_route_aStar(
         {
 
             son = n_son[j];
-            key = std::make_pair(node, son);
+            key = std::make_tuple(node, son);
 
-            // if (pe_a == 233 || pe_a == 237)
-            // printf("node %d son %d map_pe = %d a = %d min_rota %d\n", node, son, map_pe[node][son], a, min_rota[node]);
+            // if (pe_source == 233 || pe_source == 237)
+            printf("pe %d -> pe %d map_pe = (%d,%d) a = %d min_rota %d\n", node, son, map_pe[node][son].first, map_pe[node][son].second, source, min_rota[node]);
             if (visited[son])
                 continue;
-            if (map_pe[node][son] != a && map_pe[node][son] != -1)
+            if ((map_pe[node][son].first != source || map_pe[node][son].second != s_port) && map_pe[node][son].first != -1)
                 continue;
-            if (map_pe[node][son] != a && min_rota[node] < 1)
-                continue;
+            // pensar sobre!!!!!
+            //if ((map_pe[node][son].first != source || map_pe[node][son].second != s_port) && min_rota[node] < 1)
+            //    continue;
 
-            cost_h = table[son][pe_b];
+            cost_h = table[son][pe_target];
             // give preference to multicast (save wire and ports)
-            cost_g = (map_pe[node][son] == a) ? -1 : 0;
+            cost_g = (map_pe[node][son].first == source && map_pe[node][son].second == s_port) ? -1 : 0;
 
             cost = cost_h + cost_g;
             // printf("ch: %d, cg: %d, cost: %d \n", cost_h, cost_g, cost);
 
-            if (son == pe_b)
+            if (son == pe_target)
             {
                 index_b = j;
                 found = true;
@@ -128,10 +133,10 @@ bool try_route_aStar(
     if (found)
     {
         std::vector<std::pair<int, int>> new_path;
-        int nodo = pe_b;
+        int nodo = pe_target;
 
         /*
-        if (pe_a == 128 && pe_b == 72) {
+        if (pe_source == 128 && pe_target == 72) {
             printf("NEW-PATH: ");
             for (int i = path.size() - 1; i > -1; --i) {
                 printf("%d %d %d, ", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]));
@@ -141,11 +146,11 @@ bool try_route_aStar(
 
         for (int i = path.size() - 1; i > -1; --i)
         {
-            /*if (pe_a == 128 && pe_b == 72) {
+            /*if (pe_source == 128 && pe_target == 72) {
                 printf("%d -> %d -> %d nodo choose: %d\n", get<0>(path[i]), get<1>(path[i]), get<2>(path[i]), nodo);
             }*/
 
-            if (nodo == pe_a || std::get<0>(path[i]) == -1)
+            if (nodo == pe_source || std::get<0>(path[i]) == -1)
             {
                 /*if (find(new_path.begin(), new_path.end(),
                     make_pair(get<1>(path[i]), nodo)) == new_path.end())
@@ -161,7 +166,7 @@ bool try_route_aStar(
             {
                 new_path.push_back(std::make_pair(std::get<1>(path[i]), nodo));
                 new_path.push_back(std::make_pair(std::get<0>(path[i]), std::get<1>(path[i])));
-                /*if (pe_a == 84) {
+                /*if (pe_source == 84) {
                     printf("%d -> %d\n", get<1>(path[i]), get<2>(path[i]));
                     printf("%d -> %d\n", get<0>(path[i]), get<1>(path[i]));
                 }*/
@@ -172,11 +177,11 @@ bool try_route_aStar(
 
         // update values
         // printf("%d %d %d\n", results, new_path.size(), edges_cost[make_pair(a,b)]);
-        results += new_path.size() - edges_cost[std::make_pair(a, b)];
-        edges_cost[std::make_pair(a, b)] = new_path.size();
+        results += new_path.size() - edges_cost[elem];
+        edges_cost[elem] = new_path.size();
 
         /*
-        if (pe_a == 128 && pe_b == 72) {
+        if (pe_source == 128 && pe_target == 72) {
             printf("Path: ");
             for (int i = new_path.size() - 1; i > -1; --i) {
                 printf("%d %d ", new_path[i].first, new_path[i].second);
@@ -184,25 +189,24 @@ bool try_route_aStar(
             printf("\n");
         }*/
 
-        // printf("Path final: ");
+        printf("Path final: ");
         int pe_aux_a, pe_aux_b;
         for (int i = new_path.size() - 1; i > -1; --i)
         {
-            key = std::make_pair(a, b);
             pe_aux_a = new_path[i].first;
             pe_aux_b = new_path[i].second;
-            // printf("%d %d, ", pe_aux_a, pe_aux_b);
-            route[key].push_back(pe_aux_a);
-            route[key].push_back(pe_aux_b);
+            printf("%d %d, ", pe_aux_a, pe_aux_b);
+            route[elem].push_back(pe_aux_a);
+            route[elem].push_back(pe_aux_b);
             pe_route[pe_aux_a].push_back(std::make_pair(pe_aux_a, pe_aux_b));
             // se for multicast
-            if (map_pe[pe_aux_a][pe_aux_b] == -1)
+            if (map_pe[pe_aux_a][pe_aux_b].first == -1)
             {
                 min_rota[pe_aux_a]--;
-                map_pe[pe_aux_a][pe_aux_b] = a;
+                map_pe[pe_aux_a][pe_aux_b].first = source;
             }
         }
-        // printf("\n\n");
+        printf("\n\n");
         return true;
     }
 
@@ -216,20 +220,21 @@ void routing(
     const int SIZE_EDGES,
     const int SIZE_NODES,
     const int TOTAL_GRID_SIZE,
-    std::map<std::pair<int, int>, int> *edges_cost,
+    std::map<std::tuple<int, int, int, int>, int> *edges_cost,
     int *results,
     int *pos,
-    int *h_edgeA,
-    int *h_edgeB,
-    map_pair_vector_int *route,
+    map_tuple_vector_int *route,
     std::vector<pe_t> &pe,
-    int **table)
+    int **table,
+    Graph &graph)
 {
 
-    std::vector<std::pair<int, int>> *edge = new std::vector<std::pair<int, int>>[NGRIDS];
+    std::vector<std::tuple<int, int, int, int>> *edges_not_solved = new std::vector<std::tuple<int, int, int, int>>[NGRIDS];
     std::vector<int> *grid_route = new std::vector<int>[TOTAL_GRID_SIZE];
-    std::map<int, std::map<int, int>> *map_pe = new std::map<int, std::map<int, int>>[NGRIDS];
-    std::pair<int, int> key;
+    std::map<int, std::map<int, std::pair<int,int>>> *map_pe = new std::map<int, std::map<int, std::pair<int,int>>>[NGRIDS];
+    std::tuple<int, int, int, int> key;
+
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int **min_rota = new int *[NGRIDS];
     std::vector<std::pair<int, int>> **pe_route = new std::vector<std::pair<int, int>> *[NGRIDS];
@@ -252,12 +257,12 @@ void routing(
         {
             for (int i = 0; i < n; ++i)
             {
-                map_pe[k][j][pe[j].neighbors[i]] = -1;
+                map_pe[k][j][pe[j].neighbors[i]] = std::make_pair(-1,-1);
             }
         }
     }
 
-    int a, b, pe_a, pe_b, value_rota;
+    int s, t, pe_source, pe_target, value_rota, s_port, t_port;
     // resolve first to edges of cost 1
     for (int j = 0; j < NGRIDS; ++j)
     {
@@ -265,37 +270,39 @@ void routing(
             continue;
         for (int i = 0; i < SIZE_EDGES; ++i)
         {
-            a = h_edgeA[i];
-            b = h_edgeB[i];
+            s = std::get<0>(edge_list[i]);  //h_edgeA[i];
+            t = std::get<1>(edge_list[i]);
+            s_port = std::get<2>(edge_list[i]);
+            t_port = std::get<3>(edge_list[i]);
+            
+            printf("%d:%d -> %d:%d \n", s, s_port, t, t_port);
 
-            //printf("%d -> %d\n",a,b);
-
-            key = std::make_pair(a, b);
+            key = edge_list[i];
 
             // solving first the wire cost 1
             if (edges_cost[j][key] == 1)
             {
-                pe_a = pos[a + j * SIZE_NODES];
-                pe_b = pos[b + j * SIZE_NODES];
+                pe_source = pos[s + j * SIZE_NODES];
+                pe_target = pos[t + j * SIZE_NODES];
 
                 // verify if router's number is sufficiently
-                if (min_rota[j][pe_a] > 0)
+                if (min_rota[j][pe_source] > 0)
                 {
-                    min_rota[j][pe_a] -= 1;
-                    map_pe[j][pe_a][pe_b] = a;
-                    pe_route[j][pe_a].push_back(std::make_pair(pe_a, pe_b));
+                    min_rota[j][pe_source] -= 1;
+                    map_pe[j][pe_source][pe_target] = std::make_pair(s, s_port);
+                    pe_route[j][pe_source].push_back(std::make_pair(pe_source, pe_target));
 
-                    route[j][key].push_back(pe_a);
-                    route[j][key].push_back(pe_b);
+                    route[j][key].push_back(pe_source);
+                    route[j][key].push_back(pe_target);
                 }
                 else
                 { // multicast is resolved by try_route
-                    edge[j].push_back(key);
+                    edges_not_solved[j].push_back(key);
                 }
             }
             else
             {
-                edge[j].push_back(key);
+                edges_not_solved[j].push_back(key);
             }
         }
     }
@@ -303,30 +310,32 @@ void routing(
     // resolve the cost greater than 1
     for (int j = 0; j < NGRIDS; ++j)
     {
+        printf("não resolvido!\n");
         if (results[j] == MAXVALUE)
             continue;
         // printf("\ntry: %d\n", j);
-        for (int i = 0; i < edge[j].size(); ++i)
+        for (int i = 0; i < edges_not_solved[j].size(); ++i)
         {
-            a = edge[j][i].first;
-            b = edge[j][i].second;
-            pe_a = pos[a + j * SIZE_NODES];
-            pe_b = pos[b + j * SIZE_NODES];
-            //printf("%d [%d] -> %d [%d] cost: %d\n", a, pe_a, b, pe_b, edges_cost[j][std::make_pair(a, b)]);
-            if (!try_route_aStar(TOTAL_GRID_SIZE, pe_a, pe_b, a, b, grid_route,
+            s = std::get<0>(edges_not_solved[j][i]);
+            t = std::get<1>(edges_not_solved[j][i]);
+            pe_source = pos[s + j * SIZE_NODES];
+            pe_target = pos[t + j * SIZE_NODES];
+
+            printf("%d pe:%d -> %d pe:%d \n", s, pe_source, t, pe_target);
+            printf("%d [%d] -> %d [%d] cost: %d\n", s, pe_source, t, pe_target, edges_cost[j][edges_not_solved[j][i]]);
+            
+            if (!try_route_aStar(TOTAL_GRID_SIZE, pe_source, pe_target, edges_not_solved[j][i], grid_route,
                                  route[j], results[j], edges_cost[j], table,
                                  min_rota[j], pe_route[j], map_pe[j]))
             {
-                //printf("route not pass\n");
+                // printf("route not pass\n");
                 results[j] = MAXVALUE;
-                break; // it not possible
+                break; // it's not possible
             }
-            // else
-            // {
-            //     printf("new cost: %d\n", edges_cost[j][std::make_pair(a, b)]);
-            // }
+            
+            
         }
-        //printf("----------------------------------------------------------------------------");
+        // printf("----------------------------------------------------------------------------");
     }
     /*
     for (int i = 0; i < NGRIDS; ++i) {

@@ -80,18 +80,19 @@ void get_all_results(const int NGRIDS,
                      const int SIZE_NODES,
                      int *pos, 
                      int *results, 
-                     int *h_edgeA, 
-                     int *h_edgeB, 
-                     int **table
+                     int **table,
+                     Graph &graph
                     ) {
+
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int sum, pos_global_A, pos_global_B, edgeA, edgeB;
     for (int n = 0; n < NGRIDS; ++n) {
         if (results[n] == MAXVALUE) continue;
         sum = 0;
         for (int i = 0; i < SIZE_EDGE; ++i) {
-            edgeA = h_edgeA[i];
-            edgeB = h_edgeB[i];
+            edgeA = std::get<0>(edge_list[i]);
+            edgeB = std::get<1>(edge_list[i]);
             pos_global_A = pos[n * SIZE_NODES + edgeA];
             pos_global_B = pos[n * SIZE_NODES + edgeB];
             sum += table[pos_global_A][pos_global_B];
@@ -121,20 +122,21 @@ int get_result(const int N,
 void get_edge_cost(const int NGRIDS,
                    const int SIZE_EDGES,
                    const int SIZE_NODES,
-                   int *h_edgeA,
-                   int *h_edgeB,
                    int *pos,
                    int **table,
-                   std::map<std::pair<int, int>, int> *edges_cost,
-                   int * results) {
+                   std::map<std::tuple<int, int, int, int>, int> *edges_cost,
+                   int * results,
+                   Graph &graph) {
+    
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int a, b;
     for (int i = 0; i < NGRIDS; ++i) {
         if (results[i] == MAXVALUE) continue;
         for (int j = 0; j < SIZE_EDGES; ++j) {
-            a = h_edgeA[j];
-            b = h_edgeB[j];
-            edges_cost[i][std::make_pair(a, b)] = table[pos[i * SIZE_NODES + a]][pos[i * SIZE_NODES + b]];
+            a = std::get<0>(edge_list[j]);
+            b = std::get<1>(edge_list[j]);
+            edges_cost[i][edge_list[j]] = table[pos[i * SIZE_NODES + a]][pos[i * SIZE_NODES + b]];
             //printf("%2d [%d] -> %2d [%d] cost: %d\n", a, pos[i*SIZE_NODES+a], b, pos[i*SIZE_NODES+b], edges_cost[i][std::make_pair(a,b)]);
         }
         //printf("\n");

@@ -15,19 +15,21 @@ void print_grid(Graph &g, int *grid, int index, int GRID_SIZE)
 }
 
 void print_grid_dot(std::string path,
-                    Graph &g, std::vector<pe_t> &pes,
+                    Graph &graph, 
+                    std::vector<pe_t> &pes,
                     int *grid,
                     int index,
                     int GRID_SIZE,
                     int *pos,
-                    std::map<std::pair<int, int>, std::vector<int>> *route)
+                    std::map<std::tuple<int, int, int, int>, std::vector<int>> *route)
 {
     char to_replace[100];
     char hex_color[100];
     auto dot_str = create_grid_dot_str(pes);
 
-    const int SIZE_EDGES = g.get_edges().size();
-    const int SIZE_NODES = g.get_nodes().size();
+    const int SIZE_EDGES = graph.get_edges().size();
+    const int SIZE_NODES = graph.get_nodes().size();
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int a, b, pos_a, pos_b;
     bool flag_is_route = false;
@@ -45,14 +47,15 @@ void print_grid_dot(std::string path,
     {
         for (int i = 0; i < SIZE_EDGES; ++i)
         {
-            a = std::get<0>(g.get_edges()[i]);
-            b = std::get<1>(g.get_edges()[i]);
+            a = std::get<0>(edge_list[i]);
+            b = std::get<1>(edge_list[i]);
             pos_a = pos[index * SIZE_NODES + a];
             pos_b = pos[index * SIZE_NODES + b];
+
             flag_is_route = false;
-            for (int j = 1; j < route[index][std::make_pair(a, b)].size() - 1; j += 2)
+            for (int j = 1; j < route[index][edge_list[i]].size() - 1; j += 2)
             {
-                auto pos_b_int = route[index][std::make_pair(a, b)][j];
+                auto pos_b_int = route[index][edge_list[i]][j];
                 flag_is_route = pos_b_int != pos_b;
                 sprintf(to_replace, "$pe%d->pe%d$", pos_a, pos_b_int);
                 replace_first(dot_str, to_replace, flag_is_route ? "blue" : "red");
@@ -80,16 +83,16 @@ void print_grid_dot(std::string path,
         if (node_id >= 0)
         {
             sprintf(to_replace, "$pe%dLabel$", i);
-            replace_first(dot_str, to_replace, g.get_name_node(node_id));
+            replace_first(dot_str, to_replace, graph.get_name_node(node_id));
             sprintf(to_replace, "$pe%dFColor$", i);
-            if (op_colors.find(g.get_opcode(node_id)) == op_colors.end())
+            if (op_colors.find(graph.get_opcode(node_id)) == op_colors.end())
             {
                 sprintf(hex_color, "\"#%02x%02x%02x\"", RAND(), RAND(), RAND());
                 replace_first(dot_str, to_replace, hex_color);
             }
             else
             {
-                replace_first(dot_str, to_replace, op_colors.at(g.get_opcode(node_id)));
+                replace_first(dot_str, to_replace, op_colors.at(graph.get_opcode(node_id)));
             }
         }
         else
@@ -211,13 +214,13 @@ void print_inputs_outputs_json(Graph g, std::string path)
 }
 
 void print_pr_graph(
-    Graph g,
+    Graph &graph,
     int *pos,
     int best_index,
-    std::map<std::pair<int, int>, int> *edges_cost,
-    std::map<std::pair<int, int>, int> *buffers,
+    std::map<std::tuple<int, int, int, int>, int> *edges_cost,
+    std::map<std::tuple<int, int, int, int>, int> *buffers,
     std::string path,
-    std::map<std::pair<int, int>, std::vector<int>> *route)
+    std::map<std::tuple<int, int, int, int>, std::vector<int>> *route)
 {
 
     if (best_index == -1)
@@ -226,25 +229,28 @@ void print_pr_graph(
     std::ofstream myfile;
     myfile.open(path + "_pr_graph.dot");
 
-    const int SIZE_EDGES = g.get_edges().size();
-    const int SIZE_NODES = g.get_nodes().size();
+    const int SIZE_EDGES = graph.get_edges().size();
+    const int SIZE_NODES = graph.get_nodes().size();
+
+    std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int a, b, pos_a, pos_b;
     int c = 0;
     myfile << "digraph G {\n";
     for (int i = 0; i < SIZE_EDGES; ++i)
     {
-        a = std::get<0>(g.get_edges()[i]);
-        b = std::get<1>(g.get_edges()[i]);
+
+        a = std::get<0>(edge_list[i]);
+        b = std::get<1>(edge_list[i]);
         pos_a = pos[best_index * SIZE_NODES + a];
         pos_b = pos[best_index * SIZE_NODES + b];
         myfile << "PE" << pos_a << " -> ";
 
         // cout << pos_a << " " << pos_b << " COST: " << edges_cost[best_index][make_pair(a,b)] << endl;
 
-        for (int j = 1; j < route[best_index][std::make_pair(a, b)].size() - 1; j += 2)
+        for (int j = 1; j < route[best_index][edge_list[i]].size() - 1; j += 2)
         {
-            myfile << "r" << route[best_index][std::make_pair(a, b)][j] << "_" << c++ << " -> ";
+            myfile << "r" << route[best_index][edge_list[i]][j] << "_" << c++ << " -> ";
         }
 
         /*for (int j = 0; j < edges_cost[best_index][make_pair(a,b)]-1; ++j) {
@@ -258,7 +264,7 @@ void print_pr_graph(
         // cout << " SIZE = " << route[best_index][make_pair(a,b)].size() << endl;
 
         int bb = 0;
-        for (int j = 0; j < buffers[best_index][std::make_pair(a, b)]; ++j)
+        for (int j = 0; j < buffers[best_index][edge_list[i]]; ++j)
         {
             myfile << "b_" << pos_b << "_" << bb++ << " -> ";
         }

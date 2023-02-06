@@ -49,7 +49,7 @@ void print_grid_dot(std::string path,
                     int index,
                     int GRID_SIZE,
                     int *pos,
-                    std::map<std::pair<int, int>, std::vector<int>> *route);
+                    std::map<std::tuple<int, int, int, int>, std::vector<int>> *route);
 
 std::string create_grid_dot_str(std::vector<pe_t> &pes);
 
@@ -57,13 +57,13 @@ void print_inputs_outputs_json(Graph g,
                                std::string path);
 
 void print_pr_graph(
-    Graph g,
+    Graph &g,
     int *pos,
     int best_index,
-    std::map<std::pair<int, int>, int> *edges_cost,
-    std::map<std::pair<int, int>, int> *buffers,
+    std::map<std::tuple<int, int, int, int>, int> *edges_cost,
+    std::map<std::tuple<int, int, int, int>, int> *buffers,
     std::string path,
-    std::map<std::pair<int, int>, std::vector<int>> *route);
+    std::map<std::tuple<int, int, int, int>, std::vector<int>> *route);
 
 void replace_first(
     std::string &s,

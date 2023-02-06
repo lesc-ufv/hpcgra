@@ -3,15 +3,14 @@
 
 #include <map>
 #include <utility>
-
+#include "graph.h"
 
 int get_better_index(const int NGRIDS, 
                      const int SIZE_EDGES, 
                      int &best_worst_buffer,
                      int *results, 
-                     int *h_edgeA, 
-                     int *h_edgeB, 
-                     std::map<std::pair<int, int>, int> *buffers_EDGE
+                     std::map<std::tuple<int, int, int, int>, int> *buffers_EDGE,
+                     Graph &g
                      );
 
 void print_results(const double time_data,

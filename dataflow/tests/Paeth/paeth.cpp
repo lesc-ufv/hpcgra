@@ -1,7 +1,7 @@
 #include "paeth.h"
 
 int main(int argc, char *argv[]) {
-    auto df = createDataFlow(0,1);
+    auto df = createDataFlow(0,8);
     df->toJSON("../paeth.json");
     df->toDOT("../paeth.dot");
     df->toJsonOperator("../paeth.op.json");

@@ -20,7 +20,7 @@ DataFlow *createDataFlow(int id, int copies) {
         out[i] = new OutputStream(idx++,nullptr,1,0);
     }
     for (int i = 0; i < copies; ++i) {
-        df->connect(inA[i],0, out[i], 1);
+        df->connect(inA[i],0, out[i], 0);
     }
 
     return df;

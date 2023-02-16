@@ -206,7 +206,6 @@ bool try_route_aStar(
                 map_pe[pe_aux_a][pe_aux_b].first = source;
             }
         }
-        printf("\n\n");
         return true;
     }
 

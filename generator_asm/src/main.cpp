@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv)
 {
-    auto timetime = 42; //time(nullptr);
+    auto timetime = time(nullptr);
     srand(timetime);
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
     std::string path_dot = "", name = "", path_arch = "", path_asm = "";

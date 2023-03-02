@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ARCH=(
-../arch/cgra_chess_32x32_32.json
+../arch/cgra_4x4_zone.arch
+#../arch/cgra_chess_32x32_32.json
 #../arch/cgra_2x2.json
 #../arch/cgra_mesh_16x16_16.json
 #../arch/cgra_one-hop_16x16_16.json
@@ -10,8 +11,8 @@ ARCH=(
 )
 
 BENCH=(
-../benchmarks/toys/loopback_32.json
-#../benchmarks/toys/addsub.json
+#../benchmarks/toys/loopback_32.json
+../benchmarks/toys/addsub.json
 # ../benchmarks/toys/chebyshev.json
 #../benchmarks/toys/kmeans.json
 #../benchmarks/toys/loopback.json 

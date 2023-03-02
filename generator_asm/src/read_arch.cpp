@@ -1,4 +1,5 @@
 #include "../include/read_arch.h"
+#include <vector>
 
 bool read_arch(std::string &arch_file, 
                std::vector<pe_t> &pe, 
@@ -20,7 +21,29 @@ bool read_arch(std::string &arch_file,
     int count = map_type.size();
 
     try {
+        
         int size_pe = data["pe"].size();
+
+        std::map<int,std::vector<bool>> input_zone;
+        int c = 0;
+        for (auto in : data["input_zone"]) {
+            input_zone[c] = std::vector<bool>(size_pe,false);
+            for (auto v : in) {
+                input_zone[c][v.asInt()] = true;
+            }
+            ++c;
+        }
+
+        std::map<int,std::vector<bool>> output_zone;
+        c = 0;
+        for (auto out : data["output_zone"]) {
+            output_zone[c] = std::vector<bool>(size_pe,false);
+            for (auto v : out) {
+                output_zone[c][v.asInt()] = true;
+            }
+            ++c;
+        }
+        
         int size_neighbors = 0;
         int size_elastic_queue = 0;
         int size_isa = 0;
@@ -47,8 +70,19 @@ bool read_arch(std::string &arch_file,
             for (int j = 0; j < SIZE_TYPE; ++j)
                 aux_pe.isa[j] = false;
             
-            aux_pe.isa[0] = (data["pe"][i]["num_istream"].asInt() >= 1); // input
-            aux_pe.isa[1] = (data["pe"][i]["num_ostream"].asInt() >= 1); // output
+            for (auto in : input_zone) {
+                if (in.second[aux_pe.id]) {
+                    aux_pe.isa[0] = true;
+                    break;
+                }
+            }
+
+            for (auto out : output_zone) {
+                if (out.second[aux_pe.id]) {
+                    aux_pe.isa[1] = true;
+                    break;
+                }
+            }
 
             if (aux_pe.isa[0] && aux_pe.isa[1])
                 aux_pe.type = 2;
@@ -56,12 +90,6 @@ bool read_arch(std::string &arch_file,
                 aux_pe.type = 0;
             else if (aux_pe.isa[1])
                 aux_pe.type = 1;
-
-            /*aux_pe.isa[aux_pe.type] = true;
-            if (aux_pe.type == 2) {
-                aux_pe.isa[0] = true;
-                aux_pe.isa[1] = true;
-            }*/
 
             size_neighbors = data["pe"][i]["neighbors"].size();
             for (int j = 0; j < size_neighbors; ++j) {

@@ -4,6 +4,7 @@
 Here is a list of tools needed for proper synthesis and simulation:
 
 1. Xilinx Vitis 2020.1
+1. Xilinx Vitis 2022.1
 
 ## **Project Dependencies**
 Programs and libraries required for installation:

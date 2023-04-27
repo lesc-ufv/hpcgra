@@ -241,7 +241,7 @@ class Alu(Module):
                 if l > 0:            
                     con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in',out_ops[i][j]),
                         ('out', out_ops_reg[i][j])]
-                    self.Instance(regpipe,'%s_outreg'%op.name,param, con)
+                    self.Instance(regpipe,'%s_outreg%d'%(op.name,i),param, con)
                 else:
                     out_ops_reg[i][j].assign(out_ops[i][j])
 
@@ -358,8 +358,10 @@ class Pe(Module):
                        for i in range(self.alu.getNumInputs())]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
         
+        routes = self.alu.getNumOutputs() if routes == 0 else routes
         router = self.components.create_router(
-            routes, len(neighbors) + 1, len(outputs))
+            routes, len(neighbors) + self.alu.getNumOutputs(), len(outputs))
+        
         route_ports = router.get_ports()
         route_sel_in = None
         route_sel_out = None

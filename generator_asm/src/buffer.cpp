@@ -38,10 +38,10 @@ void dfsBuffer(
             if (node == parents[i])
                 continue;
 
-            std::vector<std::pair<int, int>> port = g.get_port(std::make_pair(node, parents[i]));
+            std::vector<std::pair<int, int>> port = g.get_port(std::make_pair(parents[i], node));
             for (int j = 0; j < port.size(); ++j)
             {
-                key = std::make_tuple(parents[i], node, port[j].second, port[j].first);
+                key = std::make_tuple(parents[i], node, port[j].first, port[j].second);
 
                 edgeCost = edges[key];
 
@@ -49,6 +49,8 @@ void dfsBuffer(
                 parentLvlOrig[i] = levelOrig[parents[i]];
 
                 diffLvl[i] = (nodeLvl - nodeLvlOrig) - (parentLvl[i] - parentLvlOrig[i]) - edgeCost + 1;
+
+                //printf("%d %d %d %d %d %d buffer %d\n", nodeLvl, nodeLvlOrig, parentLvl[i], parentLvlOrig[i], edgeCost, diffLvl[i], buffers[key]);
 
                 if (diffLvl[i] < 0)
                     diffLvl[i] = 0;
@@ -101,76 +103,6 @@ void update_values(
     delete[] visited;
 }
 
-void getBuffer(
-    Graph &g,
-    int *level,
-    int *levelOrig,
-    std::map<std::tuple<int, int, int, int>, int> &buffers,
-    std::map<int, std::vector<int>> map_level)
-{
-    int key;
-    std::vector<int> value;
-    std::map<int, int> max_value;
-
-    for (auto it : map_level)
-    {
-        key = it.first;
-        value = it.second;
-        max_value[key] = -1;
-
-        for (int i = 0, n = value.size(); i < n; ++i)
-        {
-            if (max_value[key] < level[value[i]])
-            {
-                max_value[key] = level[value[i]];
-            }
-        }
-    }
-
-    int v;
-    std::queue<int> q;
-
-    for (auto in : g.get_inputs())
-    {
-        q.push(in);
-    }
-
-    bool *visited = new bool[g.get_nodes().size()];
-    for (int i = 0; i < g.get_nodes().size(); ++i)
-        visited[i] = false;
-
-    int dad;
-    while (!q.empty())
-    {
-        dad = q.front();
-        q.pop();
-
-        if (visited[dad])
-            continue;
-        visited[dad] = true;
-
-        for (auto son : g.get_sucessors(dad))
-        {
-            v = max_value[levelOrig[son]] - level[son];
-
-            q.push(son);
-
-            std::vector<std::pair<int, int>> port = g.get_port(std::make_pair(dad, son));
-            for (int j = 0; j < port.size(); ++j)
-            {
-                buffers[std::make_tuple(dad, son, port[j].first, port[j].second)] = v;
-                if (v > 0 && g.get_sucessors(son).size() > 0)
-                {
-                    level[son] = max_value[levelOrig[son]];
-                    update_values(g, max_value, levelOrig, level, son, v);
-                }
-            }
-        }
-    }
-
-    delete[] visited;
-}
-
 void dfsLvl(
     Graph &g,
     const int NODE_SIZE,
@@ -188,9 +120,9 @@ void dfsLvl(
     for (int i = 0; i < NODE_SIZE; ++i)
         critical_path[i] = -1;
 
-    for (int i = 0; i < inputs.size(); ++i)
+    for (int i = 0; i < inputs.size(); ++i) 
         q.push(std::make_pair(inputs[i], 0));
-
+    
     while (!q.empty())
     {
         dad = q.front().first;
@@ -211,7 +143,7 @@ void dfsLvl(
             for (int j = 0; j < port.size(); ++j)
             {
                 key = std::make_tuple(dad, child, port[j].first, port[j].second);
-                keyInv = std::make_tuple(child, dad, port[j].second, port[j].second);
+                keyInv = std::make_tuple(child, dad, port[j].second, port[j].first);
 
                 if (edges.count(key) > 0)
                     new_cost = cost + edges[key];
@@ -260,7 +192,7 @@ void optimizeBuffer(
             port = g.get_port(std::make_pair(parents[i], node));
             for (int k = 0; k < port.size(); ++k)
             {
-                key = std::make_tuple(parents[i], node, port[k].second, port[k].first);
+                key = std::make_tuple(parents[i], node, port[k].first, port[k].second);
 
                 buffer_arch = arch[pe].elastic_queue[port[k].first];
 
@@ -316,7 +248,7 @@ bool verify_buffer(
         for (int j = 0, n = port.size(); j < n; ++j)
         {
             buffer_arch = arch[pe].elastic_queue[std::get<1>(port[j])];
-
+            //printf("j: %d, b: %d, ba: %d\n", j, buffers[edge_list[i]], buffer_arch);
             if (buffers[edge_list[i]] > buffer_arch)
                 return false;
         }
@@ -341,32 +273,18 @@ void buffer(Graph &graph,
 
     std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
-    for (int i = 0; i < NGRIDS; ++i)
-    {
-        level[i] = new int[SIZE_NODES];
-    }
-
-    // Gets level of each node given edges costs
-    for (int i = 0; i < NGRIDS; i++)
-    {
-        if (results[i] >= MAXVALUE)
-            continue;
-        get_critical_path(graph, SIZE_NODES, levelOrig);
-        dfsLvl(graph, SIZE_NODES, level[i], edges_cost[i]);
-    }
+    get_critical_path(graph, SIZE_NODES, levelOrig);
 
     for (int i = 0; i < SIZE_NODES; ++i)
     {
         map_level[levelOrig[i]].push_back(i);
     }
 
-    bool *visited = new bool[SIZE_NODES];
-    std::vector<int> outputs = graph.get_outputs();
-    std::vector<int> inputs = graph.get_inputs();
-
     std::pair<int, int> aux;
     for (int k = 0; k < NGRIDS; k++)
     {
+        level[k] = new int[SIZE_NODES];
+        
         if (results[k] == MAXVALUE)
             continue;
 
@@ -376,9 +294,11 @@ void buffer(Graph &graph,
             buffers[k][edge_list[i]] = 0;
         }
 
+        // Gets level of each node given edges costs
+        dfsLvl(graph, SIZE_NODES, level[k], edges_cost[k]);
+
         // Find number of buffers needed on each edge
         dfsBuffer(graph, level[k], levelOrig, buffers[k], edges_cost[k]);
-        getBuffer(graph, level[k], levelOrig, buffers[k], map_level);
 
         // optimize buffer
         optimizeBuffer(k, SIZE_NODES, pos, graph, buffers[k], arch);
@@ -393,11 +313,12 @@ void buffer(Graph &graph,
     /*
     printf("graph original\n");
     for (int i = 0; i < SIZE_NODES; ++i) {
-        printf("%d = %s level_origin %d\n", i, g.get_name_node(i).c_str(), levelOrig[i]);
+        printf("%d = %s level_origin %d\n", i, graph.get_name_node(i).c_str(), levelOrig[i]);
     }
 
     printf("graph with distance\n");
     for (int i = 0; i < SIZE_NODES; ++i) {
-        printf("%d = %s level %d\n", i, g.get_name_node(i).c_str(), level[0][i]);
-    }*/
+        printf("%d = %s level %d\n", i, graph.get_name_node(i).c_str(), level[0][i]);
+    }
+    */
 }

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ARCH=(
+../arch/cgra_chess_32x32_32.json
 #../arch/cgra_2x2.json
 #../arch/cgra_mesh_16x16_16.json
 #../arch/cgra_one-hop_16x16_16.json
@@ -9,6 +10,7 @@ ARCH=(
 )
 
 BENCH=(
+../benchmarks/toys/loopback_32.json
 #../benchmarks/toys/addsub.json
 # ../benchmarks/toys/chebyshev.json
 #../benchmarks/toys/kmeans.json
@@ -23,12 +25,12 @@ BENCH=(
 # ../benchmarks/toys/sobelfilter.json
 )
 
-rm -rf test
-mkdir test
+#rm -rf test
+#mkdir test
 cd test
 
-rm -rf build
-mkdir build 
+#rm -rf build
+#mkdir build 
 cd build
 cmake ../..
 make -j $(nproc)

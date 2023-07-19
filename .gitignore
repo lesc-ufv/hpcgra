@@ -16,3 +16,4 @@
 **/*.run
 **/*.ipcache
 **/*build_dir
+**/*tests_lucas

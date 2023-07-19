@@ -26,7 +26,6 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
-        routes = self.cgra.array_pe_arch[id]['routes']
         elastic_queue = self.cgra.array_pe_arch[id]['elastic_queue']
         pe_num_istream = self.cgra.array_pe_arch[id]['num_istream']
         isa = self.cgra.array_pe_arch[id]['isa']
@@ -35,6 +34,10 @@ class CgraConfiguration:
         neighbors.sort()
         alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         alu_num_const = self.cgra.array_pe[id].alu.getNumConst()
+
+        routes = self.cgra.array_pe_arch[id]['routes']
+        routes = self.cgra.array_pe[id].alu.getNumOutputs() if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
+        
         conf_tag = ConfTag(routes > 0,alu_num_inputs+alu_num_const)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
@@ -104,7 +107,6 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
-        routes = self.cgra.array_pe_arch[id]['routes']
         num_ostream = self.cgra.array_pe_arch[id]['num_ostream']
         isa = self.cgra.array_pe_arch[id]['isa']
         neighbors = self.cgra.array_pe_arch[id]['neighbors']
@@ -113,6 +115,10 @@ class CgraConfiguration:
         neighbors.sort()
         num_consts = alu.getNumInputs() + alu.getNumConst()
         alu_num_out = alu.getNumOutputs()
+
+        routes = self.cgra.array_pe_arch[id]['routes']
+        routes = alu_num_out if routes < alu_num_out else routes
+        
         conf_tag = ConfTag(routes > 0,num_consts)
         conf_bits = self.cgra.conf_raw_bits
 
@@ -132,7 +138,7 @@ class CgraConfiguration:
                     route_tb[src].append(dst)
                 else:
                     route_tb[src] = [dst]
-        
+
         if len(route_tb) <= routes:
             map_route = {}
             for i, vo in route_tb.items():
@@ -178,7 +184,7 @@ class CgraConfiguration:
                 if len(route_tb) > routes:
                     return False, 'PE %s can perform only %d routing.' % (id, routes)
                 else:
-                    if routes >= len(neighbors):
+                    if routes >= (len(neighbors)+num_ostream):
                         route_sel_in_bits = bits(len(neighbors) + alu_num_out)
                         route_sel_in_v = [format(0, '0%db' % route_sel_in_bits) for _ in range(len(neighbors) + 1)]
                         for i, vo in route_tb.items():
@@ -225,7 +231,7 @@ class CgraConfiguration:
                         route_sel_out_v.reverse()
                         route_sel_in = "".join(route_sel_in_v)
                         route_sel_out = "".join(route_sel_out_v)
-
+        
         raw_conf = format(int(route_sel_out + route_sel_in + conf_tag.router + id_bits, 2), '0%db' % conf_bits)
         return True, None, [raw_conf]
 
@@ -235,6 +241,7 @@ class CgraConfiguration:
 
         num_consts = self.cgra.array_pe[id].alu.getNumInputs() + self.cgra.array_pe[id].alu.getNumConst()
         routes = self.cgra.array_pe_arch[id]['routes']
+        routes = self.cgra.array_pe[id].alu.getNumOutputs() if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
         conf_tag = ConfTag(routes > 0,num_consts)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)

@@ -1,10 +1,12 @@
 #include "kmeans.h"
 
+void createDataFlow2();
+
 int main(int argc, char *argv[]) {
     
     int num_kmeans=1;
-    int num_clusters[]={16};
-    int num_dim[]={16};
+    int num_clusters[]={4};
+    int num_dim[]={4};
     int is_share_inputs= 0;
     
     
@@ -14,7 +16,50 @@ int main(int argc, char *argv[]) {
     df->toDOT("../kmeans.dot");
     delete df;
     
+    createDataFlow2();
+   
+    
     return 0;
+}
+
+void createDataFlow2(){
+  auto df = new DataFlow(0, "kmeans_filter");
+  int idx = 0; 
+  auto in0 = new InputStream(idx++,nullptr,1,0);
+  auto in1 = new InputStream(idx++,nullptr,1,0);
+  auto in2 = new InputStream(idx++,nullptr,1,0);
+  auto in3 = new InputStream(idx++,nullptr,1,0);
+  
+  auto pass0 = new Addi(idx++,0);
+  auto pass1 = new Addi(idx++,0);
+  auto pass3 = new Addi(idx++,0);
+  
+  auto slt = new Slt(idx++);
+  auto mux = new Mux(idx++);
+  
+  
+  auto out0 = new OutputStream(idx++,nullptr,1,0);
+  auto out1 = new OutputStream(idx++,nullptr,1,0);
+  
+  df->connect(in2,0,pass0,0);
+  df->connect(in3,0,pass1,0);
+  
+  df->connect(in0,0,slt,0);
+  df->connect(in1,0,slt,1);
+  df->connect(slt,0,mux,0);
+  df->connect(pass0,0,mux,1);
+  df->connect(pass1,0,mux,2);
+
+  df->connect(slt,0,pass3,0);
+  df->connect(pass3,0,out0,0);
+  df->connect(mux,0,out1,0);
+  
+  
+  df->toJSON("../kmeans_filter.json");
+  df->toJsonOperator("../kmeans_filter.op.json");
+  df->toDOT("../kmeans_filter.dot"); 
+  delete df;
+  
 }
 
 DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, int share_inputs) {

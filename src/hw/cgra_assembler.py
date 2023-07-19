@@ -1,3 +1,5 @@
+from src.hw.utils import get_id, get_dot_color_by_op
+from src.hw.cgra_configuration import CgraConfiguration
 import math
 import re
 import os
@@ -7,9 +9,6 @@ p = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))))
 if not p in sys.path:
     sys.path.insert(0, p)
-
-from src.hw.cgra_configuration import CgraConfiguration
-from src.hw.utils import get_id, get_dot_color_by_op
 
 
 class CgraAssembler:
@@ -41,25 +40,29 @@ class CgraAssembler:
             if self.dot_op.get(id):
                 self.dot += self.dot_op[id].replace("@", self.dot_tips[id])
             else:
-                self.dot += "pe%d[label=\"%d\", fontsize=8, fillcolor=white];\n" % (id, id)
+                self.dot += "pe%d[label=\"id:%d\", fontsize=6, fillcolor=white];\n" % (
+                    id, id)
 
         self.dot += "edge [constraint=false];\n"
         for id, pe in self.cgra.array_pe_arch.items():
             for n in pe['neighbors']:
-                default = "pe%d -> pe%d[style=\"penwidth(0.1)\", color=grey89];\n" % (id, n)
+                default = "pe%d -> pe%d[style=\"penwidth(0.1)\", color=grey89];\n" % (
+                    id, n)
                 self.dot += self.dot_edges.get("%d-%d" % (id, n), default)
 
         L = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
         C = int(math.ceil(math.sqrt(len(self.cgra.array_pe_arch))))
         self.dot += "edge [constraint=true, style=invis];\n"
         for i in range(L):
-            self.dot += "".join(["pe%d ->" % get_id(j, i, C) for j in range(C - 1)]) + " pe%d;\n" % get_id(C - 1, i, C)
+            self.dot += "".join(["pe%d ->" % get_id(j, i, C)
+                                for j in range(C - 1)]) + " pe%d;\n" % get_id(C - 1, i, C)
 
         for i in range(L):
             self.dot += "rank = same {" + "".join(
                 ["pe%d ->" % get_id(i, j, C) for j in range(C - 1)]) + "pe%d };\n" % get_id(
                 i, C - 1, C)
 
+        self.dot = self.dot.replace('*', '')
         self.dot += "}\n"
 
     def save_dot(self, filename):
@@ -114,7 +117,8 @@ class CgraAssembler:
             i += 1
 
         if len(self.used_outputs) == 0:
-            self.last_error = 'line %d: %s' % (i, "No output was used, at least one output needs to be used.")
+            self.last_error = 'line %d: %s' % (
+                i, "No output was used, at least one output needs to be used.")
             return
 
     def decode_set_inst(self, line, inst):
@@ -122,7 +126,7 @@ class CgraAssembler:
             pe_id = int(inst[1][1:])
             const_name = inst[2]
             const_val = int(inst[3])
-            const_id =  self.cgra.array_pe[pe_id].getConstId(const_name)
+            const_id = self.cgra.array_pe[pe_id].getConstId(const_name)
             self.const.append((line, pe_id, const_id, const_val))
         except Exception as e:
             return False, str(e)
@@ -138,7 +142,6 @@ class CgraAssembler:
             port = 0
             tok = inst[2:]
             is_istream = []
-            has_const = False
             for arg in tok:
                 if arg[0] == '#':
                     delays.append((port, int(arg[1:])))
@@ -146,7 +149,6 @@ class CgraAssembler:
                     if arg[0] != '$':
                         alu_src.append('const')
                         self.const.append((line, pe, port, int(arg)))
-                        has_const = True
                     elif arg[1:-3] == 'istream':
                         alu_src.append(arg[1:])
                         is_istream.append(int(arg[9:-1]))
@@ -169,20 +171,23 @@ class CgraAssembler:
             else:
                 self.used_inputs[pe] += is_istream
 
-        delays_str = ''
-        delays_v = [0 for _ in range(port)]
+        op_label = "%s\n" % op
+        flag = False
         for p, d in delays:
-            delays_v[p] = d
-        for d in delays_v:
-            delays_str += "%d " % d
+            op_label += "|%d:%d" % (p, d)
+            flag = True
+
+        if flag:
+            op_label += "|"
+        op_label += "\n"
 
         if len(is_istream) > 0:
-            self.dot_op[pe] = "pe%d [label=\"in%s\\n%s\\n%d\",tooltip=\"%s\",fontsize=9,  fillcolor=greenyellow];\n" % (
-            pe,is_istream, delays_str, pe, "@")
-        else:
-            op_label = op + 'i' if has_const else op
-            self.dot_op[pe] = "pe%d [label=\"%s\\n%s\\n%d\",tooltip=\"%s\" ,fontsize=9, fillcolor=%s];\n" % (
-                pe, op_label, delays_str, pe, "@", get_dot_color_by_op(op))
+            op_label += "in:%s\n" % (is_istream)
+
+        op_label += '*'
+
+        self.dot_op[pe] = "pe%d [label=\"id:%d\n%s\",tooltip=\"%s\" ,fontsize=6, fillcolor=%s];\n" % (
+            pe, pe, op_label, "@", get_dot_color_by_op(op))
 
         if self.dot_tips.get(pe):
             self.dot_tips[pe] += " ".join(inst) + "\\n"
@@ -192,7 +197,7 @@ class CgraAssembler:
         return True, [pe, op, alu_src, delays]
 
     def decode_route_inst(self, inst):
-        is_ostream=[]
+        is_ostream = []
         try:
             pe = int(inst[1][1:])
             if inst[2][1:-3] == 'alu':
@@ -208,23 +213,32 @@ class CgraAssembler:
         except Exception as e:
             return None, str(e)
 
+        op_label = ''
+        if not self.dot_op.get(pe):
+            op_label = 'router\n'
+        else:
+            op_label = '*'
+
         if len(is_ostream) > 0:
             if self.used_outputs.get(pe) is None:
                 self.used_outputs[pe] = is_ostream
             else:
                 self.used_outputs[pe] += is_ostream
 
-            self.dot_op[pe] = "pe%d [label=\"out%s\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightpink];\n" % (
-            pe,is_ostream, pe, "@")
+            op_label += "out:%s" % is_ostream
         else:
-            if not self.dot_op.get(pe):
-                self.dot_op[pe] = "pe%d [label=\"router\\n%d\",tooltip=\"%s\",fontsize=9, fillcolor=lightyellow];\n" % (
-                pe, pe, "@")
             if inst[2][1:-3] == 'alu':
-                self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=red];\n" % (pe, dst)
+                self.dot_edges["%d-%d" %
+                               (pe, dst)] = "pe%d -> pe%d [color=red];\n" % (pe, dst)
             else:
                 self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=blue];\n" % (
                     pe, dst)
+
+        if self.dot_op.get(pe):
+            self.dot_op[pe] = self.dot_op[pe].replace('*', op_label)
+        else:
+            self.dot_op[pe] = "pe%d [label=\"id:%d\n%s\",tooltip=\"%s\" ,fontsize=6, fillcolor=%s];\n" % (
+                pe, pe, op_label, "@", get_dot_color_by_op('router'))
 
         if self.dot_tips.get(pe):
             self.dot_tips[pe] += " ".join(inst) + "\\n"
@@ -242,7 +256,8 @@ class CgraAssembler:
         machine_code = ''
         if self.last_error == '':
             for line, conf in self.alu_inst.items():
-                r, v = self.cc.create_alu_conf(conf[0], conf[1], conf[2], conf[3])
+                r, v = self.cc.create_alu_conf(
+                    conf[0], conf[1], conf[2], conf[3])
                 if r:
                     for c in v:
                         machine_code += c + '\n'
@@ -288,4 +303,3 @@ class CgraAssembler:
             print('Build succeeded, output file save in %s' % self.output_file)
 
         return machine_code[:-1]
-    

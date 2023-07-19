@@ -357,8 +357,8 @@ class Pe(Module):
         sel_mux_alu = [self.Reg('sel_mux_alu%d' % i, mux_alu_bits)
                        for i in range(self.alu.getNumInputs())]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
-        
-        routes = self.alu.getNumOutputs() if routes == 0 else routes
+  
+        routes = self.alu.getNumOutputs() if routes < self.alu.getNumOutputs() else routes
         router = self.components.create_router(
             routes, len(neighbors) + self.alu.getNumOutputs(), len(outputs))
         

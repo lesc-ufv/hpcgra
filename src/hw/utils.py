@@ -38,8 +38,10 @@ def get_dot_color_by_op(op):
         'shr': 'lemonchiffon2',
         'max': 'lemonchiffon3',
         'min': 'lemonchiffon4',
+        'router': 'lemonchiffon4',
     }
-    return dic[op]
+    r =  dic.get(op)
+    return r if r else 'lightblue'
 
 
 

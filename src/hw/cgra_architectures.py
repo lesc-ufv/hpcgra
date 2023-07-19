@@ -76,22 +76,21 @@ def create_cgra_json(arch_net, shape, isa, routes, fifos,
                          axi_bus_data_width, inputs, outputs):
     json_arch = {'data_width': data_width, 'conf_bus_width': conf_bus_width, 'axi_bus_data_width': axi_bus_data_width,
                  'pe': []}
+    
+    json_arch['input_zone'] = {}
+    json_arch['output_zone'] = {}
+    for i in range(len(inputs)):
+        json_arch['input_zone'].update({'%d'%i:[inputs[i]]})
+
+    for i in range(len(outputs)):
+        json_arch['output_zone'].update({'%d'%i:[outputs[i]]})
 
     for i in range(shape[0]):
         for j in range(shape[1]):
             id = get_id(i, j, shape[1])
-            num_istream = 0
-            num_ostream = 0
-            for ip in inputs:
-                if id == ip:
-                    num_istream += 1
-            for op in outputs:
-                if id == op:
-                    num_ostream += 1
-
             neighbors = create_neighbors(shape, i, j, arch_net)
             routes_min = min(len(neighbors) + 1, routes)
-            pe = {'id': id, 'num_istream': num_istream, 'num_ostream':num_ostream,'neighbors': neighbors, 'routes': routes_min, 'elastic_queue': fifos,
+            pe = {'id': id,'neighbors': neighbors, 'routes': routes_min, 'elastic_queue': fifos,
                    'isa': isa}
             json_arch['pe'].append(pe)
 

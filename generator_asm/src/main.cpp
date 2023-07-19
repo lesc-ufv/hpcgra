@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv)
 {
-    auto timetime = 1676579628;//time(nullptr);
+    auto timetime = 1676579628; // time(nullptr);
     srand(timetime);
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
     std::string path_dot = "", name = "", path_arch = "", path_asm = "";
@@ -172,13 +172,13 @@ int main(int argc, char **argv)
     printf("\nSeed\t\t : %lu", timetime);
     // print the time and the best results
     print_results(time_data, time_table, time_place, time_route, time_buffer,
-                  time_total, best_index, worst_fifo, results);
+                  time_total, best_index, worst_fifo, results, ((double)SIZE_NODES / (double)TOTAL_GRID_SIZE) * 100.0);
 
     print_pr_graph(graph, pos, best_index, edges_cost, buffers_EDGE, path_asm, route);
 
     print_grid_dot(path_asm, graph, pe, grid, best_index, TOTAL_GRID_SIZE, pos, route);
 
-    // clean memory
+    //clean memory
     delete[] randomvec;
     delete[] v;
     delete[] v_i;

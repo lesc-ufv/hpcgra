@@ -41,14 +41,41 @@ class Cgra(Module):
         self.output_ids = []
         self.all_isa = set() 
 
+        self.input_zone=self.arch['input_zone']
+        self.output_zone=self.arch['output_zone']
+
         wires = {}
         array_pe_istream = {}
         array_pe_ostream = {}
         pe_cache = {}
+        
+        pes_v = []
         for pe in self.arch['pe']:
             for isa in pe['isa']:
                 self.all_isa.add(isa)
-        
+            
+            num_in = 0
+            for _, val in self.input_zone.items():
+                if pe['id'] in val:
+                    num_in+=1
+
+            num_out = 0
+            for _, val in self.output_zone.items():
+                if pe['id'] in val:
+                    num_out+=1
+
+            if num_in > 0:
+                self.input_ids.append((pe['id'], num_in))
+
+            if num_out > 0:
+                self.output_ids.append((pe['id'], num_out))
+            
+            pe['num_istream'] = num_in
+            pe['num_ostream'] = num_out
+            pes_v.append(pe)
+
+        self.arch['pe'] = pes_v
+
         op_max_latency = max(self.alu_ops.get_operators(list(self.all_isa)),key=lambda op:op.getLatency())
         op_max_latency = op_max_latency.getLatency()
         for pe in self.arch['pe']:
@@ -63,25 +90,28 @@ class Cgra(Module):
             self.conf_raw_bits = max(self.conf_raw_bits, m_pe.getConfRawBits())
             self.array_pe[pe['id']] = m_pe
             self.array_pe_arch[pe['id']] = pe
-            if pe['num_istream'] > 0:
-                self.input_ids.append((pe['id'], pe['num_istream']))
-            if pe['num_ostream'] > 0:
-                self.output_ids.append((pe['id'], pe['num_ostream']))
+        
 
         clk = self.Input('clk')
         conf_bus = self.Input('conf_bus', self.conf_bus_width + 1)
+
+        #criar reg tree para cada zone
+        
         for pe in self.arch['pe']:
             a = []
             for i in range(pe['num_istream']):
-                a.append(self.Input('in_stream%s_%s' %
-                         (pe['id'], i), self.data_width + 1))
+                a.append(self.Input('in_stream%s_%s'%(pe['id'], i), self.data_width + 1))
             array_pe_istream[pe['id']] = a
+        
+        
         for pe in self.arch['pe']:
             a = []
             for o in range(pe['num_ostream']):
                 a.append(self.Output('out_stream%s_%s' %
                          (pe['id'], o), self.data_width + 1))
             array_pe_ostream[pe['id']] = a
+
+        
         for pe in self.arch['pe']:
             for w in pe['neighbors']:
                 n = 'pe%d_to_pe%d' % (pe['id'], w)
@@ -98,8 +128,7 @@ class Cgra(Module):
             w = wires['conf_bus_reg_in'][pe]
             con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', w),
                    ('out', wires['conf_bus_reg_out'][pe])]
-            self.Instance(reg_pipe_conf_bus, 'reg_pipe_conf_%d' %
-                          pe, param, con)
+            self.Instance(reg_pipe_conf_bus, 'reg_pipe_conf_%d' %pe, param, con)
 
         for pe in self.array_pe:
             outputs = []
@@ -109,7 +138,6 @@ class Cgra(Module):
             ports = self.array_pe[pe].get_ports()
 
             params = [('id', pe + 1), ('conf_raw_bits', self.conf_raw_bits)]
-
             con = [('clk', clk), ('conf_bus', wires['conf_bus_reg_out'][pe])]
 
             for st in array_pe_istream[pe]:
@@ -241,7 +269,7 @@ class Alu(Module):
                 if l > 0:            
                     con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in',out_ops[i][j]),
                         ('out', out_ops_reg[i][j])]
-                    self.Instance(regpipe,'%s_outreg'%op.name,param, con)
+                    self.Instance(regpipe,'%s_outreg%d'%(op.name,i),param, con)
                 else:
                     out_ops_reg[i][j].assign(out_ops[i][j])
 
@@ -358,8 +386,10 @@ class Pe(Module):
                        for i in range(self.alu.getNumInputs())]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
         
+        routes = self.alu.getNumOutputs() if routes < self.alu.getNumOutputs() else self.alu.getNumOutputs();
+        
         router = self.components.create_router(
-            routes, len(neighbors) + 1, len(outputs))
+            routes, len(neighbors) + self.alu.getNumOutputs(), len(outputs))
         route_ports = router.get_ports()
         route_sel_in = None
         route_sel_out = None

@@ -3,7 +3,7 @@
 import glob
 import json
 
-files = glob.glob("*.json")
+files = glob.glob("**/*.dfg", recursive=True)
 
 opcodes = {}
 

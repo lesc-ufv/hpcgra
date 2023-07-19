@@ -315,7 +315,7 @@ class Components:
         
         routes = routes + 1 if routes > 0 else routes 
         
-        if routes == 0:
+        if routes == 0 or num_in == 1:
             in0 = m.Input('in0', width)
             outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
             for o in outputs:

@@ -135,6 +135,17 @@ class AluOperationNot(AluOperationUnary):
         self.Assign(self.outputs["out0"](Not(self.inputs["in0"])))
         self.Assign(self.out_valids["out0_valid"](self.in_valids['in0_valid']))
 
+    def getLatency(self):
+        return 0
+
+class AluOperationPass(AluOperationUnary):
+    def __init__(self) -> None:
+        super().__init__("pass_m")
+        self.Assign(self.outputs["out0"](self.inputs["in0"]))
+        self.Assign(self.out_valids["out0_valid"](self.in_valids['in0_valid']))
+
+    def getLatency(self):
+        return 0
 
 class AluOperationAbs(AluOperationUnary):
     def __init__(self) -> None:
@@ -145,7 +156,6 @@ class AluOperationAbs(AluOperationUnary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationAdd(AluOperationBinary):
     def __init__(self) -> None:
@@ -458,6 +468,7 @@ class CgraAluOperations:
             'and': AluOperationAnd(),
             'not': AluOperationNot(),
             'abs': AluOperationAbs(),
+            'pass': AluOperationPass(),
             'reg': AluOperationReg(),
             'muladd': AluOperationMulAdd(),
             'mulsub': AluOperationMulSub(),

@@ -83,7 +83,7 @@ class CgraAccelerator:
         con = [('clk', clk), ('inputs_ready_0', en)]
         con += [('inputs_ready_%d' % (i + 1), available_pop[i] | ~read_fifo_mask[i]) for i in range(self.num_in)]
         con += [('outputs_ready_%d' % (i), available_push[i] | ~write_fifo_mask[i]) for i in range(self.num_out)]
-        con += [('inputs_enables_%d' % i, en_pop[i]) for i in range(self.num_out)]
+        con += [('inputs_enables_%d' % i, en_pop[i]) for i in range(self.num_in)]
         m.Instance(control_data_flow, 'control_data_flow', param, con)
 
         genInstFor1 = m.GenerateFor(genv(0), genv < self.num_in, genv.inc(), 'inst_fecth_data')

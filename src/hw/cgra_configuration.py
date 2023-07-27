@@ -17,7 +17,8 @@ class CgraConfiguration:
         alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         conf_tag = ConfTag(alu_num_inputs)
         conf_bits = self.cgra.conf_raw_bits
-        id_bits = format(int(bin(id + 1)[2:], 2), '0%db' % self.cgra.pe_id_width)
+        id_bits = format(int(bin(id + 1)[2:], 2),
+                         '0%db' % self.cgra.pe_id_width)
         raw_conf = format(int(conf_tag.reset + id_bits, 2), '0%db' % conf_bits)
         return True, [raw_conf]
 
@@ -29,16 +30,17 @@ class CgraConfiguration:
         elastic_queue = self.cgra.array_pe_arch[id]['elastic_queue']
         pe_num_istream = self.cgra.array_pe_arch[id]['num_istream']
         isa = self.cgra.array_pe_arch[id]['isa']
-        neighbors = self.cgra.array_pe_arch[id]['neighbors']
+        neighbors_in = self.cgra.array_pe_arch[id]['neighbors_in']
         isa.sort()
-        neighbors.sort()
+        neighbors_in.sort()
         alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
         alu_num_const = self.cgra.array_pe[id].alu.getNumConst()
 
         routes = self.cgra.array_pe_arch[id]['routes']
-        routes = self.cgra.array_pe[id].alu.getNumOutputs() if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
-        
-        conf_tag = ConfTag(routes > 0,alu_num_inputs+alu_num_const)
+        routes = self.cgra.array_pe[id].alu.getNumOutputs(
+        ) if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
+
+        conf_tag = ConfTag(routes > 0, alu_num_inputs+alu_num_const)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
 
@@ -62,8 +64,9 @@ class CgraConfiguration:
 
         offset_mux_alu = 1 + pe_num_istream
 
-        sel_alu_bits = bits(len(neighbors) + offset_mux_alu)
-        sel_alu = [format(0, '0%db' % sel_alu_bits) for _ in range(alu_num_inputs)]
+        sel_alu_bits = bits(len(neighbors_in) + offset_mux_alu)
+        sel_alu = [format(0, '0%db' % sel_alu_bits)
+                   for _ in range(alu_num_inputs)]
 
         for i in range(alu_num_inputs):
             if i < len(alu_src):
@@ -74,10 +77,11 @@ class CgraConfiguration:
                         return False, 'PE %s does not have inputs streams.' % id
                     sel_alu[i] = format(istream_id, '0%db' % sel_alu_bits)
                 elif src == 'const':
-                    sel_alu[i] = format(offset_mux_alu - 1, '0%db' % sel_alu_bits)
+                    sel_alu[i] = format(offset_mux_alu - 1,
+                                        '0%db' % sel_alu_bits)
                 else:
                     try:
-                        pe_src = neighbors.index(src) + offset_mux_alu
+                        pe_src = neighbors_in.index(src) + offset_mux_alu
                         sel_alu[i] = format(pe_src, '0%db' % sel_alu_bits)
                     except:
                         return False, 'The PE %s does not have PE %s in neighbors.' % (id, src)
@@ -107,19 +111,26 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
+        if id == 32:
+            print(id)
         num_ostream = self.cgra.array_pe_arch[id]['num_ostream']
-        isa = self.cgra.array_pe_arch[id]['isa']
-        neighbors = self.cgra.array_pe_arch[id]['neighbors']
+        neighbors_in = self.cgra.array_pe_arch[id]['neighbors_in']
+        neighbors_out = self.cgra.array_pe_arch[id]['neighbors_out']
         alu = self.cgra.array_pe[id].alu
-        isa.sort()
-        neighbors.sort()
+        neighbors_in.sort()
+        neighbors_out.sort()
         num_consts = alu.getNumInputs() + alu.getNumConst()
         alu_num_out = alu.getNumOutputs()
 
         routes = self.cgra.array_pe_arch[id]['routes']
+        route_only_alu = False
+        router_in_size = len(neighbors_in)+alu_num_out
+        router_out_size = len(neighbors_out)+num_ostream
+        if routes == 0:  # este caso nenhum vizinho é roteado
+            route_only_alu = True
+            router_in_size = alu_num_out
         routes = alu_num_out if routes < alu_num_out else routes
-        
-        conf_tag = ConfTag(routes > 0,num_consts)
+        conf_tag = ConfTag(routes > 0, num_consts)
         conf_bits = self.cgra.conf_raw_bits
 
         route_tb = {}
@@ -142,20 +153,24 @@ class CgraConfiguration:
         if len(route_tb) <= routes:
             map_route = {}
             for i, vo in route_tb.items():
+                if not 'alu' in i and route_only_alu:
+                    lines = lines_error.get(i)
+                    return False, list(lines), 'PE %s not performes routing of neighbors' % (i)
                 for o in vo:
-                    if not 'alu' in str(i) and i not in neighbors:
+                    if not 'alu' in str(i) and i not in neighbors_out:
                         lines = lines_error.get(i)
                         return False, list(lines), 'PE %s not in neighbors of PE %s.' % (i, id)
-                    if o not in neighbors:
+                    if o not in neighbors_out:
                         lines = lines_error.get(o)
                         if 'ostream' in str(o):
                             if int(o[8:-1]) >= num_ostream:
                                 return False, list(lines), 'PE %s cannot perform output data.' % (id)
                         else:
                             return False, list(lines), 'PE %s not in neighbors of PE %s.' % (o, id)
-                    
+
                     if i == o:
-                        lines = lines_error.get(i).intersection(lines_error.get(o))
+                        lines = lines_error.get(
+                            i).intersection(lines_error.get(o))
                         return False, list(lines), 'It is not possible to route %s to %s' % (i, o)
 
                     if o in map_route.keys():
@@ -171,82 +186,92 @@ class CgraConfiguration:
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
         route_sel_in = ''
         route_sel_out = ''
-        if routes > 0:
-            if routes == 1:
-                route_sel_in_bits = bits(len(neighbors) + alu_num_out)
-                for i, _ in route_tb.items():
-                    if i == 'alu':
-                        route_sel_in = format(0, '0%db' % route_sel_in_bits)
-                    else:
-                        iidx = neighbors.index(i) + alu_num_out # the first port is always alu
-                        route_sel_in = format(iidx, '0%db' % route_sel_in_bits)
+
+        if route_only_alu and alu_num_out == 1:
+            pass  # não tem configuração
+        else:
+            if len(route_tb) > routes:
+                return False, 'PE %s can perform only %d routing.' % (id, routes)
             else:
-                if len(route_tb) > routes:
-                    return False, 'PE %s can perform only %d routing.' % (id, routes)
-                else:
-                    if routes >= (len(neighbors)+num_ostream):
-                        route_sel_in_bits = bits(len(neighbors) + alu_num_out)
-                        route_sel_in_v = [format(0, '0%db' % route_sel_in_bits) for _ in range(len(neighbors) + 1)]
-                        for i, vo in route_tb.items():
-                            for o in vo:
-                                if 'ostream' in str(o):
-                                    offset = int(o[8:-1])
-                                    oidx = len(neighbors) + offset
-                                else:
-                                    oidx = neighbors.index(o)
-
-                                if 'alu' in str(i):
-                                    alu_out_id = int(i[4:-1])
-                                    route_sel_in_v[oidx] = format(alu_out_id, '0%db' % route_sel_in_bits)
-                                else:
-                                    iidx = neighbors.index(i) + alu_num_out  # the first port is always alu
-                                    route_sel_in_v[oidx] = format(iidx, '0%db' % route_sel_in_bits)
-                        route_sel_in_v.reverse()
-                        route_sel_in = "".join(route_sel_in_v)
-                    else:
-                        num_out = len(neighbors) + num_ostream
-                        route_sel_in_bits = bits(len(neighbors) + alu_num_out)  # plus one because alu output
-                        route_sel_out_bits = bits(routes)
-                        route_sel_in_v = []
-                        route_sel_out_v = [format(0, '0%db' % route_sel_out_bits) for _ in range(num_out)]
-                        for i, vo in route_tb.items():
-                            if 'alu' in str(i):
-                                iidx = int(i[4:-1])
+                if routes >= router_out_size:  # TODO conferir se neste o router é uma crossbar
+                    route_sel_in_bits = bits(router_in_size)
+                    route_sel_in_v = [
+                        format(0, '0%db' % route_sel_in_bits) for _ in range(router_out_size)]
+                    for i, vo in route_tb.items():
+                        for o in vo:
+                            if 'ostream' in str(o):
+                                offset = int(o[8:-1])
+                                oidx = len(neighbors_out) + offset
                             else:
-                                iidx = neighbors.index(i) + alu_num_out
+                                oidx = neighbors_out.index(o)
 
-                            route_sel_in_v.append(format(iidx, '0%db' % route_sel_in_bits))
-                            for o in vo:
-                                if 'ostream' in str(o):
-                                    offset = int(o[8:-1])
-                                    oidx = len(neighbors)+offset
-                                else:
-                                    oidx = neighbors.index(o)
+                            if 'alu' in str(i):
+                                alu_out_id = int(i[4:-1])
+                                route_sel_in_v[oidx] = format(
+                                    alu_out_id, '0%db' % route_sel_in_bits)
+                            else:
+                                # the first port is always alu
+                                iidx = neighbors_out.index(i) + alu_num_out
+                                route_sel_in_v[oidx] = format(
+                                    iidx, '0%db' % route_sel_in_bits)
+                    route_sel_in_v.reverse()
+                    route_sel_in = "".join(route_sel_in_v)
+                else:
+                    num_out = len(neighbors_out) + num_ostream
+                    route_sel_in_bits = bits(router_in_size)
+                    route_sel_out_bits = bits(router_out_size)
+                    route_sel_in_v = []
+                    route_sel_out_v = [
+                        format(0, '0%db' % route_sel_out_bits) for _ in range(num_out)]
+                    for i, vo in route_tb.items():
+                        if 'alu' in str(i):
+                            iidx = int(i[4:-1])
+                        else:
+                            iidx = neighbors_out.index(i) + alu_num_out
 
-                                route_sel_out_v[oidx] = format(len(route_sel_in_v) - 1, '0%db' % route_sel_out_bits)
+                        route_sel_in_v.append(
+                            format(iidx, '0%db' % route_sel_in_bits))
+                        for o in vo:
+                            if 'ostream' in str(o):
+                                offset = int(o[8:-1])
+                                oidx = len(neighbors_out)+offset
+                            else:
+                                oidx = neighbors_out.index(o)
 
-                        route_sel_in_v += [format(0, '0%db' % route_sel_in_bits) for _ in
-                                           range(routes - len(route_sel_in_v))]
-                        route_sel_in_v.reverse()
-                        route_sel_out_v.reverse()
-                        route_sel_in = "".join(route_sel_in_v)
-                        route_sel_out = "".join(route_sel_out_v)
-        
-        raw_conf = format(int(route_sel_out + route_sel_in + conf_tag.router + id_bits, 2), '0%db' % conf_bits)
-        return True, None, [raw_conf]
+                            route_sel_out_v[oidx] = format(
+                                len(route_sel_in_v) - 1, '0%db' % route_sel_out_bits)
+
+                    route_sel_in_v += [format(0, '0%db' % route_sel_in_bits) for _ in
+                                       range(routes - len(route_sel_in_v))]
+                    route_sel_in_v.reverse()
+                    route_sel_out_v.reverse()
+                    route_sel_in = "".join(route_sel_in_v)
+                    route_sel_out = "".join(route_sel_out_v)
+
+        if len(route_sel_out) == 0 and len(route_sel_in) == 0:
+            ret = []
+        else:
+            raw_conf = format(int(route_sel_out + route_sel_in +
+                              conf_tag.router + id_bits, 2), '0%db' % conf_bits)
+            ret = [raw_conf]
+
+        return True, None, ret
 
     def create_const_conf(self, id, op_idx, const):
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
-        num_consts = self.cgra.array_pe[id].alu.getNumInputs() + self.cgra.array_pe[id].alu.getNumConst()
+        num_consts = self.cgra.array_pe[id].alu.getNumInputs(
+        ) + self.cgra.array_pe[id].alu.getNumConst()
         routes = self.cgra.array_pe_arch[id]['routes']
-        routes = self.cgra.array_pe[id].alu.getNumOutputs() if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
-        conf_tag = ConfTag(routes > 0,num_consts)
+        routes = self.cgra.array_pe[id].alu.getNumOutputs(
+        ) if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
+        conf_tag = ConfTag(routes > 0, num_consts)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
         if const < 0:
             const = Complement2(const)
         const = format(const, '0%db' % self.cgra.data_width)
-        raw_conf = format(int(const + conf_tag.const[op_idx] + id_bits, 2), '0%db' % conf_bits)
+        raw_conf = format(
+            int(const + conf_tag.const[op_idx] + id_bits, 2), '0%db' % conf_bits)
         return True, [raw_conf]

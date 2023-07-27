@@ -169,7 +169,7 @@ def bfs(g):
 def create_conf_path(cgra_arch):
     G = nx.Graph()
     for pe in cgra_arch['pe']:
-        for w in pe['neighbors']:
+        for w in pe['neighbors_out']:
             G.add_edge(pe['id'], w)
 
     return bfs(G)

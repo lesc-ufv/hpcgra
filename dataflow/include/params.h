@@ -12,6 +12,7 @@ public:
     unsigned short **data;
     int size;
     int qtd;
+    std::string label;
 
     explicit Params(int id) : id(id),
                      data(nullptr),
@@ -20,6 +21,13 @@ public:
 
     Params(int id, unsigned short constant0) : id(id),
                                    constant0(constant0),
+                                   data(nullptr),
+                                   size(0),
+                                   qtd(0) {}
+    
+        Params(int id, unsigned short constant0, std::string label) : id(id),
+                                   constant0(constant0),
+                                   label(label),
                                    data(nullptr),
                                    size(0),
                                    qtd(0) {}

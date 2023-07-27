@@ -1,3 +1,7 @@
+from src.hw.utils import bits, initialize_regs, create_conf_path
+from src.hw.components import Components
+from src.hw.cgra_conf_tag import ConfTag
+from src.hw.cgra_alu_operations import CgraAluOperations
 import json
 from veriloggen import *
 from math import ceil
@@ -6,12 +10,6 @@ p = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))))
 if not p in sys.path:
     sys.path.insert(0, p)
-
-
-from src.hw.cgra_alu_operations import CgraAluOperations
-from src.hw.cgra_conf_tag import ConfTag
-from src.hw.components import Components
-from src.hw.utils import bits, initialize_regs, create_conf_path
 
 
 class Cgra(Module):
@@ -39,21 +37,42 @@ class Cgra(Module):
         self.axi_bus_data_width = self.arch['axi_bus_data_width']
         self.input_ids = []
         self.output_ids = []
-        self.all_isa = set() 
+        self.all_isa = set()
 
         wires = {}
         array_pe_istream = {}
         array_pe_ostream = {}
         pe_cache = {}
+
+        num_pe = len(self.arch['pe'])
+
+        for i in range(num_pe):
+            pe_arch = self.arch['pe'][i]
+            neighbors_in = []
+            neighbors_out = pe_arch['neighbors']
+            for j in range(num_pe):
+                if i != j:
+                    pe = self.arch['pe'][j]
+                    if pe_arch['id'] in pe['neighbors']:
+                        neighbors_in.append(pe['id'])
+
+            pe_arch['neighbors_in'] = neighbors_in
+            pe_arch['neighbors_out'] = neighbors_out
+            self.arch['pe'][i] = pe_arch
+
+        for i in range(num_pe):
+            del self.arch['pe'][i]['neighbors']
+
         for pe in self.arch['pe']:
             for isa in pe['isa']:
                 self.all_isa.add(isa)
-        
-        op_max_latency = max(self.alu_ops.get_operators(list(self.all_isa)),key=lambda op:op.getLatency())
+
+        op_max_latency = max(self.alu_ops.get_operators(
+            list(self.all_isa)), key=lambda op: op.getLatency())
         op_max_latency = op_max_latency.getLatency()
         for pe in self.arch['pe']:
-            m_pe = Pe(
-                pe, self.alu_ops, self.data_width, self.conf_bus_width, self.pe_id_width,op_max_latency)
+            m_pe = Pe(pe, self.alu_ops, self.data_width,
+                      self.conf_bus_width, self.pe_id_width, op_max_latency)
 
             if not pe_cache.get(m_pe.name):
                 pe_cache[m_pe.name] = m_pe
@@ -83,9 +102,12 @@ class Cgra(Module):
                          (pe['id'], o), self.data_width + 1))
             array_pe_ostream[pe['id']] = a
         for pe in self.arch['pe']:
-            for w in pe['neighbors']:
+            for w in pe['neighbors_out']:
                 n = 'pe%d_to_pe%d' % (pe['id'], w)
                 wires[n] = self.Wire(n, self.data_width + 1)
+            #for w in pe['neighbors_in']:
+            #    n = 'pe%d_to_pe%d' % (w, pe['id'])
+            #    wires[n] = self.Wire(n, self.data_width + 1)
 
         wires['conf_bus_reg_in'] = self.Wire(
             'conf_bus_reg_in', self.conf_bus_width + 1, len(self.array_pe))
@@ -104,8 +126,10 @@ class Cgra(Module):
         for pe in self.array_pe:
             outputs = []
             inputs = []
-            neighbors = self.array_pe_arch[pe]['neighbors']
-            neighbors.sort()
+            neighbors_in = self.array_pe_arch[pe]['neighbors_in']
+            neighbors_out = self.array_pe_arch[pe]['neighbors_out']
+            neighbors_in.sort()
+            neighbors_out.sort()
             ports = self.array_pe[pe].get_ports()
 
             params = [('id', pe + 1), ('conf_raw_bits', self.conf_raw_bits)]
@@ -125,16 +149,17 @@ class Cgra(Module):
                     inputs.append(ports[p])
                 else:
                     outputs.append(ports[p])
+
             for p in inputs:
                 if 'in' == p.name[0:2]:
                     idx = int(p.name[2:])
-                    n = 'pe%s_to_pe%s' % (neighbors[idx], pe)
+                    n = 'pe%s_to_pe%s' % (neighbors_in[idx], pe)
                     if n in wires.keys():
                         con.append((p.name, wires[n]))
             for p in outputs:
                 if 'out' == p.name[0:3]:
                     idx = int(p.name[3:])
-                    n = 'pe%s_to_pe%s' % (pe, neighbors[idx])
+                    n = 'pe%s_to_pe%s' % (pe, neighbors_out[idx])
                     if n in wires.keys():
                         con.append((p.name, wires[n]))
 
@@ -144,10 +169,10 @@ class Cgra(Module):
         p = create_conf_path(self.arch)
         for i, j in p:
             wires['conf_bus_reg_in'][j].assign(wires['conf_bus_reg_out'][i])
-        
+
 
 class Alu(Module):
-    def __init__(self, operators: list, max_op_latency : Int) -> None:
+    def __init__(self, operators: list, max_op_latency: Int) -> None:
         operators = sorted(operators, key=lambda op: op.name)
         name = 'alu%s' % ("".join([o.name for o in operators]))
         super().__init__(name)
@@ -157,14 +182,14 @@ class Alu(Module):
         self.num_inputs = 0
         self.num_outputs = 0
         self.num_const = 0
-        
-        max_op_latency = max(max_op_latency,1)
+
+        max_op_latency = max(max_op_latency, 1)
 
         for op in operators:
             self.num_inputs = max(op.get_num_in_operand(), self.num_inputs)
             self.num_outputs = max(op.get_num_out_operand(), self.num_outputs)
             self.num_const = max(op.get_num_const(), self.num_const)
-        
+
         regpipe = Components().create_register_pipeline()
 
         clk = self.Input('clk')
@@ -174,16 +199,16 @@ class Alu(Module):
                   for i in range(self.num_inputs)]
         outputs = [self.Output('out%d' % i, Add(width, 1))
                    for i in range(self.num_outputs)]
-        
+
         in_consts = [self.Input('const%d' % i, Add(width, 1))
-                  for i in range(self.num_const)]
+                     for i in range(self.num_const)]
 
         inputs_reg = [self.Reg('in_reg%d' % i, Add(width, 1))
                       for i in range(self.num_inputs)]
 
         out_ops = [self.Wire('out_ops%d' % i, Add(
             width, 1), num_opcodes) for i in range(self.num_outputs)]
-        
+
         out_ops_reg = [self.Wire('out_ops_reg%d' % i, Add(
             width, 1), num_opcodes) for i in range(self.num_outputs)]
 
@@ -194,7 +219,7 @@ class Alu(Module):
             in_consts_reg.append(r)
             in_consts_vals.append(r[0:width])
             in_consts_vals.append(r[width])
-     
+
         seq = Seq(self, 'in_regs', clk=clk)
 
         for r, i in zip(inputs_reg, inputs):
@@ -221,27 +246,30 @@ class Alu(Module):
                 n = op.get_output_by_pos(i)
                 con.append((n, out_ops[i][j][EmbeddedCode('width-1:0')]))
                 con.append(('%s_valid' % n, out_ops[i][j][width]))
-            
-            const_ports = [op.get_const_ports()[p] for p in op.get_const_ports()]
-            const_ports = sorted(const_ports,key=lambda p:p.name)
-            const_names += [ "%s.%s"%(op.name,"".join(n.split('__')[:-1])) for n,_ in op.get_const_ports().items()]
+
+            const_ports = [op.get_const_ports()[p]
+                           for p in op.get_const_ports()]
+            const_ports = sorted(const_ports, key=lambda p: p.name)
+            const_names += ["%s.%s" % (op.name, "".join(n.split('__')[:-1]))
+                            for n, _ in op.get_const_ports().items()]
 
             const_ports_v = []
             for i in const_ports:
                 const_ports_v.append(i.name)
-                const_ports_v.append('%s_valid'%i.name)
+                const_ports_v.append('%s_valid' % i.name)
 
-            for c,r in zip(const_ports_v,in_consts_vals):
-                con.append((c,r))
-                
+            for c, r in zip(const_ports_v, in_consts_vals):
+                con.append((c, r))
+
             self.Instance(op, op.name, [('width', width)], con)
             l = max_op_latency-op.getLatency()
             param = [('num_register', l), ('width', width+1)]
             for i in range(op.get_num_out_operand()):
-                if l > 0:            
-                    con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in',out_ops[i][j]),
-                        ('out', out_ops_reg[i][j])]
-                    self.Instance(regpipe,'%s_outreg%d'%(op.name,i),param, con)
+                if l > 0:
+                    con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', out_ops[i][j]),
+                           ('out', out_ops_reg[i][j])]
+                    self.Instance(regpipe, '%s_outreg%d' %
+                                  (op.name, i), param, con)
                 else:
                     out_ops_reg[i][j].assign(out_ops[i][j])
 
@@ -272,18 +300,19 @@ class Alu(Module):
 
     def getNumConst(self):
         return self.num_const
-    
+
     def getLatency(self):
         return self.latency
-    
+
     def getConstIds(self):
-        return self.const_ids 
+        return self.const_ids
 
 
 class Pe(Module):
-    def __init__(self, pe_arch: dict, operators: CgraAluOperations, data_width: Int, conf_bus_width: Int, pe_id_width: Int, op_max_latency:Int) -> None:
+    def __init__(self, pe_arch: dict, operators: CgraAluOperations, data_width: Int, conf_bus_width: Int, pe_id_width: Int, op_max_latency: Int) -> None:
         self.operators = operators
-        self.alu = Alu(self.operators.get_operators(pe_arch['isa']),op_max_latency)
+        self.alu = Alu(self.operators.get_operators(
+            pe_arch['isa']), op_max_latency)
         self.data_width = data_width
         self.conf_bus_width = conf_bus_width
         self.pe_id_width = pe_id_width
@@ -293,13 +322,15 @@ class Pe(Module):
             self.const_ids[cn] += self.alu.getNumInputs()
 
         elastic_queue = pe_arch['elastic_queue']
-        neighbors = sorted(pe_arch['neighbors'])
+        neighbors_in = sorted(pe_arch['neighbors_in'])
+        neighbors_out = sorted(pe_arch['neighbors_out'])
+
         routes = pe_arch['routes']
         num_istream = pe_arch['num_istream']
         num_ostream = pe_arch['num_ostream']
         elastic_queue_str = ''.join(['%d' % i for i in elastic_queue])
-        name = 'pei%do%dn%dr%de%s%s' % (num_istream, num_ostream,
-                                             len(neighbors), routes, elastic_queue_str, self.alu.name)
+        name = 'pei%do%dn%d_%dr%de%s%s' % (num_istream, num_ostream, len(neighbors_in),
+                                           len(neighbors_out), routes, elastic_queue_str, self.alu.name)
 
         super().__init__(name)
 
@@ -310,14 +341,14 @@ class Pe(Module):
         conf_bus = self.Input('conf_bus', self.conf_bus_width + 1)
 
         inputs = [self.Input('in%d' % i, self.data_width + 1)
-                  for i in range(len(neighbors))]
+                  for i in range(len(neighbors_in))]
         inputs_reg = [self.Wire('in_reg%d' % i, self.data_width + 1)
-                      for i in range(len(neighbors))]
+                      for i in range(len(neighbors_in))]
 
         outputs = [self.Output('out%d' % i, self.data_width + 1)
-                   for i in range(len(neighbors))]
+                   for i in range(len(neighbors_out))]
         router_out = [self.Wire('router_out%d' % i, self.data_width + 1)
-                      for i in range(len(neighbors))]
+                      for i in range(len(neighbors_out))]
 
         mux_alu_inputs = []
         load_pe = []
@@ -345,9 +376,6 @@ class Pe(Module):
         for i in inputs_reg:
             mux_alu_inputs.append(i)
 
-        inputs_regs_router = [self.Wire(
-            'in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors))]
-
         mux_alu_bits = bits(len(mux_alu_inputs))
         alu_in = [self.Wire('mux_alu_out%d' % i, self.data_width + 1)
                   for i in range(self.alu.getNumInputs())]
@@ -357,11 +385,20 @@ class Pe(Module):
         sel_mux_alu = [self.Reg('sel_mux_alu%d' % i, mux_alu_bits)
                        for i in range(self.alu.getNumInputs())]
         conf_array_alu = [sel_alu_opcode] + sel_mux_alu
-  
-        routes = self.alu.getNumOutputs() if routes < self.alu.getNumOutputs() else routes
-        router = self.components.create_router(
-            routes, len(neighbors) + self.alu.getNumOutputs(), len(outputs))
-        
+
+        only_alu = False
+        if routes == 0:
+            routes = self.alu.getNumOutputs()
+            router = self.components.create_router(
+                routes, self.alu.getNumOutputs(), len(outputs))
+            only_alu = True
+        else:
+            inputs_regs_router = [self.Wire(
+                'in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors_in))]
+            routes = self.alu.getNumOutputs() if routes < self.alu.getNumOutputs() else routes
+            router = self.components.create_router(
+                routes, len(neighbors_in) + self.alu.getNumOutputs(), len(outputs))
+
         route_ports = router.get_ports()
         route_sel_in = None
         route_sel_out = None
@@ -378,7 +415,7 @@ class Pe(Module):
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(
                 1, 1, 2)), ('in', load_pe[i]), ('out', stream_in_reg[i])]
-            
+
             self.Instance(m_reg, 'm_stream_in_reg%d' % i, param, con)
 
         m_reg = self.components.create_register_pipeline()
@@ -386,7 +423,7 @@ class Pe(Module):
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)),
                    ('en', Int(1, 1, 2)), ('in', i), ('out', j)]
-             
+
             self.Instance(m_reg, i.name + '_reg', param, con)
 
         mux_alu = self.components.create_multiplexer(len(mux_alu_inputs))
@@ -403,7 +440,7 @@ class Pe(Module):
                     con.append(('in%d' % j, mux_alu_inputs[j]))
             con.append(('out', alu_in[i]))
             params = [('width', self.data_width + 1)]
-             
+
             self.Instance(mux_alu, 'mux_alu_in%d' % i, params, con)
             elastic_pipeline_to_alu = self.Wire(
                 'elastic_pipeline_to_alu%d' % i, self.data_width + 1)
@@ -417,40 +454,40 @@ class Pe(Module):
                 con.append(('latency', w))
 
             params = [('width', self.data_width + 1)]
-            eq = self.components.create_elastic_pipeline(self.alu.getLatency()+2,elastic_queue[i])
-             
+            eq = self.components.create_elastic_pipeline(
+                self.alu.getLatency()+2, elastic_queue[i])
+
             self.Instance(eq, 'elastic_pipeline%d' % i, params, con)
             alu_in[i] = elastic_pipeline_to_alu
 
         alu_const = []
         for c in range(self.alu.getNumConst()):
-            offset=c+self.alu.getNumInputs()
+            offset = c+self.alu.getNumInputs()
             w = pe_const[Mul(
-                        offset, self.data_width + 1):Mul((offset + 1), self.data_width + 1)]
-            alu_const.append(('const%d'%c,w))
+                offset, self.data_width + 1):Mul((offset + 1), self.data_width + 1)]
+            alu_const.append(('const%d' % c, w))
 
-
-        con = [('clk', clk),('rst',reset), ('opcode', sel_alu_opcode)]
+        con = [('clk', clk), ('rst', reset), ('opcode', sel_alu_opcode)]
         con += [('in%d' % i, alu_in[i])
                 for i in range(self.alu.getNumInputs())]
-        
+
         con += [('out%d' % i, alu_out[i])
                 for i in range(self.alu.getNumOutputs())]
-        
+
         con += alu_const
 
         params = [('width', self.data_width)]
-         
+
         self.Instance(self.alu, 'alu', params, con)
 
-        if routes > 0:
+        if routes > 0 and not only_alu:
             reg_pipe_in = self.components.create_register_pipeline()
             for i, j in zip(inputs_reg, inputs_regs_router):
                 con1 = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i),
                         ('out', j)]
                 param1 = [('num_register', balance),
                           ('width', self.data_width + 1)]
-                 
+
                 self.Instance(reg_pipe_in, i.name + '_router', param1, con1)
 
         con = []
@@ -465,10 +502,10 @@ class Pe(Module):
 
         c = 0
         for p in alu_out:
-            con.append(('in%d'%c, p))
+            con.append(('in%d' % c, p))
             c += 1
 
-        if routes > 0:
+        if routes > 0 and not only_alu:
             for i in inputs_regs_router:
                 con.append(('in%d' % c, i))
                 c += 1
@@ -478,7 +515,6 @@ class Pe(Module):
             con.append(('out%d' % c, o))
             c += 1
 
-         
         self.Instance(router, 'router', [('width', self.data_width + 1)], con)
 
         conf_array_alu += sel_elastic_pipeline
@@ -490,7 +526,8 @@ class Pe(Module):
         for w in conf_array_router:
             conf_router_width += w.width
 
-        conf_tag_bits = ConfTag(routes > 0,self.alu.getNumInputs()+self.alu.getNumConst()).bits
+        conf_tag_bits = ConfTag(
+            routes > 0, self.alu.getNumInputs()+self.alu.getNumConst()).bits
         self.conf_raw_bits = max(conf_alu_width + self.pe_id_width + conf_tag_bits,
                                  conf_router_width + self.pe_id_width + conf_tag_bits,
                                  self.data_width + self.pe_id_width + conf_tag_bits)
@@ -511,7 +548,6 @@ class Pe(Module):
         cf = ConfReader(conf_router_width > 0, self.pe_id_width, conf_alu_width, self.alu,
                         conf_router_width, self.conf_bus_width, self.data_width)
 
-         
         self.Instance(cf, 'pe_conf_reader', params, con)
 
         for o, ro in zip(outputs, router_out):
@@ -519,7 +555,7 @@ class Pe(Module):
             param = [('num_register', 1), ('width', self.data_width + 1)]
             con = [('clk', clk), ('rst', Int(0, 1, 2)),
                    ('en', Int(1, 1, 2)), ('in', ro), ('out', o)]
-             
+
             self.Instance(out_reg, o.name + '_reg', param, con)
 
         stm = []
@@ -542,8 +578,8 @@ class Pe(Module):
 
     def getConfRawBits(self):
         return self.conf_raw_bits
-    
-    def getConstId(self,const_name):
+
+    def getConstId(self, const_name):
         return self.const_ids[const_name]
 
 
@@ -552,7 +588,7 @@ class ConfReader(Module):
                  conf_router_width: Int, conf_bus_width: Int, data_width: Int) -> None:
 
         alu_confs_size = alu.getNumInputs()+alu.getNumConst()
-        tag_bits = ConfTag(has_router,alu_confs_size).bits
+        tag_bits = ConfTag(has_router, alu_confs_size).bits
         name = 'pe_conf_reader_alu_in_%d_alu_w_%d_router_w_%d' % (
             alu_confs_size, conf_alu_width, conf_router_width)
 
@@ -585,23 +621,34 @@ class ConfReader(Module):
         conf_reg2 = self.Reg('conf_reg2', conf_width)
         conf_reg = self.Reg('conf_reg', conf_width)
         conf_raw_reg = self.Reg('conf_raw_reg', conf_raw_bits)
-        count = self.Reg('count', Div(conf_raw_bits, conf_bus_width))
+        size = EmbeddedCode(
+            f'($rtoi($ceil($clog2(conf_raw_bits/{conf_bus_width}))) + 1)')
+        count = self.Reg('count', size)
+
         self.Always(Posedge(clk))(
             conf_bus_r(conf_bus)
         )
+
         self.Always(Posedge(clk))(
             conf_valid0(Int(0, 1, 2)),
             conf_reg0(Int(0, conf_width, 2)),
-            conf_raw_reg(Mux(conf_bus_r[0], Cat(conf_bus_r[1:], conf_raw_reg[conf_bus_width:]),
-                             Repeat(Int(0, 1, 2), conf_raw_bits))),
-            count(Mux(conf_bus_r[0], Cat(Int(1, 1, 2), count[1:]), Repeat(
-                Int(0, 1, 2), count.width))),
-
-            If(count[0])(
+            If(EmbeddedCode(f'count == $rtoi($ceil(conf_raw_bits/{conf_bus_width}))'))(
                 conf_reg0(conf_raw_reg[0:conf_reg0.width]),
                 conf_valid0(Int(1, 1, 2)),
-                count(Cat(conf_bus_r[0], Repeat(
-                    Int(0, 1, 2), count.width - 1)))
+                If(conf_bus_r[0])(
+                    count(1),
+                    conf_raw_reg(
+                        Cat(conf_bus_r[1:], Repeat(Int(0, 1, 2), conf_raw_bits-8)))
+                ).Else(
+                    count(0),
+                    conf_raw_reg(Repeat(Int(0, 1, 2), conf_raw_bits))
+                )
+            ).Else(
+                If(conf_bus_r[0])(
+                    count.inc(),
+                    conf_raw_reg(
+                        Cat(conf_bus_r[1:], conf_raw_reg[conf_bus_width:]))
+                )
             )
         )
 

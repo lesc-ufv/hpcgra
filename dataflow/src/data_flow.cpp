@@ -122,7 +122,7 @@ void DataFlow::toDOT(const std::string &fileNamePath)
         else if (op.second->getType() == OP_IMMEDIATE)
         {
             myfile << " " << op.first;
-            myfile << " [ label = " << op.second->getOpCode() << "i";
+            myfile << " [ label = " << op.second->getLabel();
             myfile << ", value = \"[";
             auto v = op.second->getConst();
             int i = 0;
@@ -237,7 +237,6 @@ void DataFlow::toJSON(const std::string &fileNamePath)
     writer->write(df, &myfile);
 }
 
-// TODO: Need to be FIXED
 void DataFlow::toJsonOperator(const std::string &fileNamePath)
 {
     Json::Value json;
@@ -279,8 +278,22 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath)
                 if (exitfor)
                     break;
             }
-
             json["outputs"].append(name);
+        }
+        else if (typeid(*op) == typeid(Const))
+        {
+            Json::Value df;
+            df["type"] = op->getOpCode();
+            df["label"] = op->getLabel();
+            for (auto c : op->getConst())
+            {
+                df["inputs"].append(c.second);
+            }
+            for (int i = 0; op->getOutputs()[i].size(); ++i)
+            {
+                df["outputs"].append("out" + std::to_string(i));
+            }
+            json["dataflow"].append(df);
         }
         else
         {
@@ -291,25 +304,29 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath)
             for (int i = 0; x = op->getSrc(i); ++i)
             {
                 std::string name = x->getOpCode() + std::to_string(x->getId());
-                // if (x->getType() != OP_IN)
-                //     name += ".out" + std::to_string(x->getDstPort(op));
-                auto exitfor = false;
-                for (auto dp : x->getDstPort(op))
+                if (typeid(*x) == typeid(Const))
                 {
-                    for (auto sp : op->getSrcPort(x))
+                    name = x->getLabel();
+                }
+                auto exitfor = false;
+                if (x->getType() != OP_IN)
+                {
+                    for (auto dp : x->getDstPort(op))
                     {
-                        auto key = std::tuple<int, int, int, int>(op->getId(), x->getId(), sp, dp);
-
-                        if (map_port.find(key) == map_port.end())
+                        for (auto sp : op->getSrcPort(x))
                         {
-                            name += ".out" + std::to_string(sp);
-                            map_port[key] = true;
-                            exitfor = true;
-                            break;
+                            auto key = std::tuple<int, int, int, int>(op->getId(), x->getId(), sp, dp);
+                            if (map_port.find(key) == map_port.end())
+                            {
+                                name += ".out" + std::to_string(dp);
+                                map_port[key] = true;
+                                exitfor = true;
+                                break;
+                            }
                         }
+                        if (exitfor)
+                            break;
                     }
-                    if (exitfor)
-                        break;
                 }
                 df["inputs"].append(name);
             }

@@ -36,6 +36,7 @@ OperatorFactory::OperatorFactory() {
     Register("shri", &Shri::create);
     Register("slt", &Slt::create);
     Register("slti", &Slti::create);
+    Register("const", &Const::create);
 }
 
 void OperatorFactory::Register(const std::string &operatorName, pfnCreate_t pfnCreate) {

@@ -157,7 +157,7 @@ class CgraAssembler:
                     if arg[0] != '$':
                         alu_src.append('const')
                         self.const.append((line, pe, port, int(arg)))
-                    elif arg[1:-3] == 'istream':
+                    elif arg[1:+8] == 'istream':
                         alu_src.append(arg[1:])
                         is_istream.append(int(arg[9:-1]))
                     else:
@@ -208,12 +208,12 @@ class CgraAssembler:
         is_ostream = []
         try:
             pe = int(inst[1][1:])
-            if inst[2][1:-3] == 'alu':
+            if inst[2][1:+4] == 'alu':
                 src = inst[2][1:]
             else:
                 src = int(inst[2][1:])
 
-            if inst[3][1:-3] == 'ostream':
+            if inst[3][1:+8] == 'ostream':
                 dst = inst[3][1:]
                 is_ostream.append(int(dst[8:-1]))
             else:

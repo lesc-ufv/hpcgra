@@ -49,7 +49,9 @@ public:
     void toJsonOperator(const std::string &fileNamePath);
 
     void connect(Operator *src, int srcPort, Operator *dst, int dstPort);
-
+    
+    void disconnect(Operator *src, int srcPort, Operator *dst, int dstPort);
+    
     void updateOpLevel();
 
     int getId() const;

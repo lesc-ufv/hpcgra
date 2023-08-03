@@ -6,6 +6,10 @@
 
 using namespace std;
 
+void createDataFlow2();
+
+void insertReg(DataFlow *df);
+
 DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, int share_inputs);
 
 bool compare(Operator *a, Operator *b);

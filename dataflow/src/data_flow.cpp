@@ -243,7 +243,6 @@ void DataFlow::toJsonOperator(const std::string &fileNamePath)
     std::map<std::tuple<int, int, int, int>, bool> map_port;
 
     json["opcode"] = this->name;
-
     for (auto item : this->op_array)
     {
         int id = item.first;
@@ -358,6 +357,23 @@ void DataFlow::connect(Operator *src, int srcPort, Operator *dst, int dstPort)
     DataFlow::graph[src->getId()].push_back(dst->getId());
     src->addDst(dst, srcPort);
     dst->addSrc(src, dstPort);
+    DataFlow::updateOpLevel();
+}
+void DataFlow::disconnect(Operator *src, int srcPort, Operator *dst, int dstPort)
+{
+    int idx = 0;
+    for (auto e : DataFlow::graph[src->getId()])
+    {
+        if (e == dst->getId())
+        {
+            break;
+        }
+        idx++;
+    }
+    auto it = DataFlow::graph[src->getId()].begin() + idx;
+    DataFlow::graph[src->getId()].erase(it);
+    src->rmDst(dst, srcPort);
+    dst->rmSrc(dstPort);
     DataFlow::updateOpLevel();
 }
 

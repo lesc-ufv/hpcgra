@@ -84,6 +84,11 @@ void Operator::addSrc(Operator *src, int port)
     m_inputs[port] = src;
 }
 
+void Operator::rmSrc(int port)
+{
+    m_inputs.erase(port);
+}
+
 Operator *Operator::getSrc(int port)
 {
     if (m_inputs.find(port) != m_inputs.end())
@@ -91,11 +96,28 @@ Operator *Operator::getSrc(int port)
         return m_inputs[port];
     }
     assert((1) && "Source operator not found!");
+
+    return nullptr;
 }
 
 void Operator::addDst(Operator *dst, int port)
 {
     m_outputs[port].push_back(dst);
+}
+
+void Operator::rmDst(Operator *dst, int port)
+{
+    int idx = 0;
+    for (auto op : m_outputs[port])
+    {
+        if (op->getId() == dst->getId())
+        {
+            break;
+        }
+        idx++;
+    }
+    auto it = m_outputs[port].begin() + idx;
+    m_outputs[port].erase(it);
 }
 
 std::vector<Operator *> &Operator::getDst(int port)

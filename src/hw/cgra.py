@@ -322,6 +322,10 @@ class Pe(Module):
             self.const_ids[cn] += self.alu.getNumInputs()
 
         elastic_queue = pe_arch['elastic_queue']
+
+        for i in range(len(elastic_queue),self.alu.getNumInputs()):
+            elastic_queue.append(0)
+
         neighbors_in = sorted(pe_arch['neighbors_in'])
         neighbors_out = sorted(pe_arch['neighbors_out'])
 
@@ -445,6 +449,7 @@ class Pe(Module):
             elastic_pipeline_to_alu = self.Wire(
                 'elastic_pipeline_to_alu%d' % i, self.data_width + 1)
             con = [('in', alu_in[i]), ('out', elastic_pipeline_to_alu)]
+            
             if elastic_queue[i] > 0:
                 w = self.Reg('sel_elastic_pipeline%d' %
                              i, bits(elastic_queue[i] + 1))

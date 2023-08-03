@@ -111,8 +111,6 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
-        if id == 32:
-            print(id)
         num_ostream = self.cgra.array_pe_arch[id]['num_ostream']
         neighbors_in = self.cgra.array_pe_arch[id]['neighbors_in']
         neighbors_out = self.cgra.array_pe_arch[id]['neighbors_out']
@@ -153,11 +151,11 @@ class CgraConfiguration:
         if len(route_tb) <= routes:
             map_route = {}
             for i, vo in route_tb.items():
-                if not 'alu' in i and route_only_alu:
+                if not 'alu' in str(i) and route_only_alu:
                     lines = lines_error.get(i)
                     return False, list(lines), 'PE %s not performes routing of neighbors' % (i)
                 for o in vo:
-                    if not 'alu' in str(i) and i not in neighbors_out:
+                    if not 'alu' in str(i) and i not in neighbors_in:
                         lines = lines_error.get(i)
                         return False, list(lines), 'PE %s not in neighbors of PE %s.' % (i, id)
                     if o not in neighbors_out:
@@ -211,7 +209,7 @@ class CgraConfiguration:
                                     alu_out_id, '0%db' % route_sel_in_bits)
                             else:
                                 # the first port is always alu
-                                iidx = neighbors_out.index(i) + alu_num_out
+                                iidx = neighbors_in.index(i) + alu_num_out
                                 route_sel_in_v[oidx] = format(
                                     iidx, '0%db' % route_sel_in_bits)
                     route_sel_in_v.reverse()

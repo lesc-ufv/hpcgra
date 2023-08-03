@@ -54,9 +54,13 @@ public:
 
     void addSrc(Operator *src, int port);
 
+    void rmSrc(int port);
+
     Operator *getSrc(int port);
 
     void addDst(Operator *dst, int port);
+
+    void rmDst(Operator *dst, int port);
 
     std::vector<Operator *> &getDst(int port);
 

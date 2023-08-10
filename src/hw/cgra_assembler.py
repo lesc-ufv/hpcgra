@@ -31,6 +31,7 @@ class CgraAssembler:
         self.dot_edges = {}
         self.dot_tips = {}
         self.pr_dot = pr_dot
+        self.watchdog = 0
 
     def create_dot_arch(self):
         self.dot = "digraph layout{\nrankdir=TB;\nsplines=ortho;\n"
@@ -131,11 +132,14 @@ class CgraAssembler:
 
     def decode_set_inst(self, line, inst):
         try:
-            pe_id = int(inst[1][1:])
-            const_name = inst[2]
-            const_val = int(inst[3])
-            const_id = self.cgra.array_pe[pe_id].getConstId(const_name)
-            self.const.append((line, pe_id, const_id, const_val))
+            if inst[1] == '$watchdog':
+                self.watchdog = int(inst[2])
+            else:
+                pe_id = int(inst[1][1:])
+                const_name = inst[2]
+                const_val = int(inst[3])
+                const_id = self.cgra.array_pe[pe_id].getConstId(const_name)
+                self.const.append((line, pe_id, const_id, const_val))
         except Exception as e:
             return False, str(e)
 
@@ -311,3 +315,6 @@ class CgraAssembler:
             print('Build succeeded, output file save in %s' % self.output_file)
 
         return machine_code[:-1]
+    
+    def getWatchDog(self):
+        return self.watchdog

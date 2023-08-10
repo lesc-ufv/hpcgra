@@ -32,7 +32,6 @@ class Components:
         data_in = m.Input('in', data_width)
         data_out = m.Output('out', data_width)
 
-         
         regs = m.Reg('regs', data_width, num_stages)
         i = m.Integer('i')
         m.EmbeddedCode('')
@@ -93,7 +92,8 @@ class Components:
         din = m.Input('din', data_width)
         dout = m.OutputReg('dout', data_width)
 
-        m.EmbeddedCode('(* ramstyle = "AUTO, no_rw_check" *) reg  [data_width-1:0] mem[0:2**addr_width-1];')
+        m.EmbeddedCode(
+            '(* ramstyle = "AUTO, no_rw_check" *) reg  [data_width-1:0] mem[0:2**addr_width-1];')
         m.EmbeddedCode('/*')
         mem = m.Reg('mem', data_width, Power(2, addr_width))
         m.EmbeddedCode('*/')
@@ -124,8 +124,10 @@ class Components:
         m = Module('fifo')
         FIFO_WIDTH = m.Parameter('FIFO_WIDTH', 32)
         FIFO_DEPTH_BITS = m.Parameter('FIFO_DEPTH_BITS', 8)
-        FIFO_ALMOSTFULL_THRESHOLD = m.Parameter('FIFO_ALMOSTFULL_THRESHOLD', Power(2, FIFO_DEPTH_BITS) - 4)
-        FIFO_ALMOSTEMPTY_THRESHOLD = m.Parameter('FIFO_ALMOSTEMPTY_THRESHOLD', 2)
+        FIFO_ALMOSTFULL_THRESHOLD = m.Parameter(
+            'FIFO_ALMOSTFULL_THRESHOLD', Power(2, FIFO_DEPTH_BITS) - 4)
+        FIFO_ALMOSTEMPTY_THRESHOLD = m.Parameter(
+            'FIFO_ALMOSTEMPTY_THRESHOLD', 2)
 
         clk = m.Input('clk')
         rst = m.Input('rst')
@@ -224,7 +226,7 @@ class Components:
         return m
 
     def create_elastic_pipeline(self, pe_latency, max_latency):
-        name = 'elastic_pipeline_%d_%d' % (pe_latency,max_latency)
+        name = 'elastic_pipeline_%d_%d' % (pe_latency, max_latency)
         if name in self.cache.keys():
             return self.cache[name]
 
@@ -237,7 +239,7 @@ class Components:
             latency = m.Input('latency', max_latency_bits)
             din = m.Input('in', width)
             dout = m.Output('out', width)
-             
+
             shift_reg = m.Reg('shift_reg', width, pe_latency * max_latency)
             i = m.Integer('i')
             m.Always(Posedge(clk))(
@@ -250,7 +252,8 @@ class Components:
             )
             mux = self.create_multiplexer(max_latency + 1)
             con = [('sel', latency), ('in0', din)]
-            con += [('in%d' % j, shift_reg[(j * pe_latency) - 1]) for j in range(1, max_latency + 1)]
+            con += [('in%d' % j, shift_reg[(j * pe_latency) - 1])
+                    for j in range(1, max_latency + 1)]
             con.append(('out', dout))
             params = [('width', width)]
             m.Instance(mux, 'mux' % i, params, con)
@@ -301,7 +304,8 @@ class Components:
                 p.append(('sel', ports_cross['sel'][start:]))
 
             p.append(('out', ports_cross['out%d' % i]))
-            m.Instance(mux, ('mux%d' % i), params=m.connect_params(mux), ports=p)
+            m.Instance(mux, ('mux%d' % i),
+                       params=m.connect_params(mux), ports=p)
 
         self.cache[name] = m
         return m
@@ -312,9 +316,9 @@ class Components:
             return self.cache[name]
         m = Module(name)
         width = m.Parameter('width', 16)
-        
-        routes = routes + 1 if routes > 0 else routes 
-        
+
+        routes = routes + 1 if routes > 0 else routes
+
         if routes == 0 or num_in == 1:
             in0 = m.Input('in0', width)
             outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
@@ -325,9 +329,12 @@ class Components:
             switch_in = self.create_switch_box(num_in, num_out)
             p = switch_in.get_ports()
             sel_in = m.Input('sel_in', p['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + outputs)
+            inputs = [('in%d' % i, m.Input('in%d' % i, width))
+                      for i in range(num_in)]
+            outputs = [('out%d' % i, m.Output('out%d' % i, width))
+                       for i in range(num_out)]
+            m.Instance(switch_in, switch_in.name, [('width', width)], [
+                       ('sel', sel_in)] + inputs + outputs)
 
         else:
             switch_in = self.create_switch_box(num_in, routes)
@@ -336,12 +343,18 @@ class Components:
             p_out = switch_out.get_ports()
             sel_in = m.Input('sel_in', p_in['sel'].width)
             sel_out = m.Input('sel_out', p_out['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
-            sin_sout_out = [('out%d' % i, m.Wire('sin_sout%d' % i, width)) for i in range(routes)]
-            sin_sout_in = [('in%d' % i, sin_sout_out[i][1]) for i in range(routes)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + sin_sout_out)
-            m.Instance(switch_out, switch_out.name, [('width', width)], [('sel', sel_out)] + sin_sout_in + outputs)
+            inputs = [('in%d' % i, m.Input('in%d' % i, width))
+                      for i in range(num_in)]
+            outputs = [('out%d' % i, m.Output('out%d' % i, width))
+                       for i in range(num_out)]
+            sin_sout_out = [('out%d' % i, m.Wire('sin_sout%d' % i, width))
+                            for i in range(routes)]
+            sin_sout_in = [('in%d' % i, sin_sout_out[i][1])
+                           for i in range(routes)]
+            m.Instance(switch_in, switch_in.name, [('width', width)], [
+                       ('sel', sel_in)] + inputs + sin_sout_out)
+            m.Instance(switch_out, switch_out.name, [('width', width)], [
+                       ('sel', sel_out)] + sin_sout_in + outputs)
 
         self.cache[name] = m
 
@@ -354,7 +367,7 @@ class Components:
             return self.cache[name]
 
         m = Module(name)
-        CONF_SIZE = axi_bus_data_width // cgra_conf_width
+
         clk = m.Input('clk')
         rst = m.Input('rst')
         start = m.Input('start')
@@ -364,9 +377,9 @@ class Components:
         rd_data_valid = m.Input('rd_data_valid')
 
         conf_out_bus = m.OutputReg('conf_out_bus', cgra_conf_width + 1)
-
         read_fifo_mask = m.OutputReg('read_fifo_mask', num_pe_io_in)
         write_fifo_mask = m.OutputReg('write_fifo_mask', num_pe_io_out)
+        watchdog_count_limit = m.OutputReg('watchdog_count_limit', 64)
 
         done = m.OutputReg('done')
 
@@ -374,26 +387,78 @@ class Components:
         FSM_INIT_CTRL_INIT = m.Localparam('FSM_INIT_CTRL_INIT', 1)
         FSM_INIT_CTRL_INIT2 = m.Localparam('FSM_INIT_CTRL_INIT2', 2)
         FSM_INIT_CTRL_INIT3 = m.Localparam('FSM_INIT_CTRL_INIT3', 3)
-        FSM_SEND_INIT_CONF_PE = m.Localparam('FSM_SEND_INIT_CONF_PE', 4)
-        FSM_INIT_CTRL_REQ_DATA = m.Localparam('FSM_INIT_CTRL_REQ_DATA', 5)
-        FSM_WAIT_ALL_CONF_FINISH = m.Localparam('FSM_WAIT_ALL_CONF_FINISH', 6)
+        FSM_INIT_CTRL_INIT4 = m.Localparam('FSM_INIT_CTRL_INIT4', 4)
+        FSM_SEND_INIT_CONF_PE = m.Localparam('FSM_SEND_INIT_CONF_PE', 5)
+        FSM_INIT_CTRL_REQ_DATA = m.Localparam('FSM_INIT_CTRL_REQ_DATA', 6)
+        FSM_WAIT_ALL_CONF_FINISH = m.Localparam('FSM_WAIT_ALL_CONF_FINISH', 7)
         FSM_INIT_CONF_DONE = m.Localparam('FSM_INIT_CONF_DONE', 7)
 
         m.EmbeddedCode('')
+
         fsm_conf_ctrl = m.Reg('fsm_conf_ctrl', 3)
         fsm_conf_ctrl_next = m.Reg('fsm_conf_ctrl_next', 3)
         conf_req_data = m.Reg('conf_req_data')
-        conf_cl = m.Reg('conf_cl', axi_bus_data_width)
-        qtd_conf = m.Reg('qtd_conf', 18)
+        qtd_conf = m.Reg('qtd_conf', 32)
+        conf_cl_width = max(num_pe_io_in, num_pe_io_out,
+                            qtd_conf.width, watchdog_count_limit.width,
+                            axi_bus_data_width)
+
+        conf_cl = m.Reg('conf_cl', conf_cl_width)
         conf_data = m.Reg('conf_data', cgra_conf_width)
         send_conf = m.Reg('send_conf')
-        conf_counter = m.Reg('conf_counter', 18)
+        conf_counter = m.Reg('conf_counter', 32)
         conf_counter_cl = m.Reg('conf_counter_cl', 10)
-        wait_counter = m.Reg('wait_counter', int(ceil(log2(num_cicle_wait_conf_finish))) + 1)
+        wait_counter = m.Reg('wait_counter', int(
+            ceil(log2(num_cicle_wait_conf_finish))) + 1)
 
         m.EmbeddedCode('')
 
+        CL_SIZE = conf_cl_width // axi_bus_data_width
+        CONF_SIZE = conf_cl_width // cgra_conf_width
+
         req_rd_data.assign(conf_req_data)
+
+        clWordCount = m.Reg('clWordCount', bits(CL_SIZE))
+
+        clSwitch = Case(clWordCount)
+
+        for i in range(CL_SIZE):
+            if i == CL_SIZE-1:
+                clSwitch.add(When(Int(i, clWordCount.width, 2))(
+                    If(rd_data_valid)(
+                        conf_cl[i*rd_data.width:(i+1)*rd_data.width](rd_data),
+                        conf_req_data(1),
+                        fsm_conf_ctrl(fsm_conf_ctrl_next),
+                        clWordCount(0),
+                    )
+                ))
+            else:
+                clSwitch.add(When(Int(i, clWordCount.width, 2))(
+                    If(rd_data_valid)(
+                        conf_cl[i*rd_data.width:(i+1)*rd_data.width](rd_data),
+                        conf_req_data(1),
+                        clWordCount(i+1),
+                    )
+                )
+                )
+        if (CONF_SIZE > 1):
+            readNextConf = If(conf_counter_cl < CONF_SIZE)(
+                conf_data(conf_cl[0:cgra_conf_width]),
+                conf_cl(conf_cl[cgra_conf_width:]),
+                send_conf(1),
+                conf_counter.inc(),
+                conf_counter_cl.inc(),
+            ).Else(
+                conf_counter_cl(
+                    Int(0, conf_counter_cl.width, 10)),
+                fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
+                fsm_conf_ctrl_next(FSM_SEND_INIT_CONF_PE)
+            )
+        else:
+            readNextConf = (conf_data(conf_cl[0:cgra_conf_width]),
+                            send_conf(1),
+                            fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
+                            fsm_conf_ctrl_next(FSM_SEND_INIT_CONF_PE))
 
         m.Always(Posedge(clk))(
             If(rst)(
@@ -406,7 +471,9 @@ class Components:
                 done(0),
                 read_fifo_mask(0),
                 write_fifo_mask(0),
-                wait_counter(0)
+                watchdog_count_limit(0),
+                wait_counter(0),
+                clWordCount(0)
             ).Else(
                 conf_req_data(0),
                 send_conf(0),
@@ -431,31 +498,23 @@ class Components:
                     When(FSM_INIT_CTRL_INIT3)(
                         write_fifo_mask(conf_cl[0:num_pe_io_out]),
                         fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
+                        fsm_conf_ctrl_next(FSM_INIT_CTRL_INIT4)
+                    ),
+                    When(FSM_INIT_CTRL_INIT4)(
+                        watchdog_count_limit(
+                            conf_cl[0:watchdog_count_limit.width]),
+                        fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
                         fsm_conf_ctrl_next(FSM_SEND_INIT_CONF_PE)
                     ),
                     When(FSM_SEND_INIT_CONF_PE)(
                         If(conf_counter >= qtd_conf)(
                             fsm_conf_ctrl(FSM_WAIT_ALL_CONF_FINISH)
                         ).Else(
-                            If(conf_counter_cl < CONF_SIZE)(
-                                conf_data(conf_cl[0:cgra_conf_width]),
-                                conf_cl(conf_cl[cgra_conf_width:]),
-                                send_conf(1),
-                                conf_counter.inc(),
-                                conf_counter_cl.inc(),
-                            ).Else(
-                                conf_counter_cl(Int(0, conf_counter_cl.width, 10)),
-                                fsm_conf_ctrl(FSM_INIT_CTRL_REQ_DATA),
-                                fsm_conf_ctrl_next(FSM_SEND_INIT_CONF_PE)
-                            )
+                            readNextConf
                         )
                     ),
                     When(FSM_INIT_CTRL_REQ_DATA)(
-                        If(rd_data_valid)(
-                            conf_cl(rd_data),
-                            conf_req_data(1),
-                            fsm_conf_ctrl(fsm_conf_ctrl_next),
-                        )
+                        clSwitch
                     ),
                     When(FSM_WAIT_ALL_CONF_FINISH)(
                         wait_counter.inc(),
@@ -489,7 +548,7 @@ class Components:
 
         return m
 
-    def create_control_exec(self, cgra_id, num_pe_io_in, num_pe_io_out, watchdog_count_limit=1048576):
+    def create_control_exec(self, cgra_id, num_pe_io_in, num_pe_io_out):
         name = 'cgra%d_control_exec' % cgra_id
         if name in self.cache.keys():
             return self.cache[name]
@@ -503,6 +562,7 @@ class Components:
         write_fifo_mask = m.Input('write_fifo_mask', num_pe_io_out)
         read_fifo_done = m.Input('read_fifo_done', num_pe_io_in)
         write_fifo_done = m.Input('write_fifo_done', num_pe_io_out)
+        watchdog_count_limit = m.Input('watchdog_count_limit', 64)
 
         en = m.OutputReg('en')
         done = m.Output('done')
@@ -528,7 +588,8 @@ class Components:
         start_r = m.Reg('start_r')
         flag_initial = m.Reg('flag_initial')
 
-        watchdog_count = m.Reg('watchdog_count', bits(watchdog_count_limit) + 1)
+        watchdog_count = m.Reg(
+            'watchdog_count', watchdog_count_limit.width)
 
         m.EmbeddedCode('')
         done.assign(done_r)
@@ -553,8 +614,10 @@ class Components:
                 read_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
                 write_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_out))
             ).Elif(start_r)(
-                write_fifo_done_masked(Or(write_fifo_done_r, Unot(write_fifo_mask_r))),
-                read_fifo_done_masked(Or(read_fifo_done_r, Unot(read_fifo_mask_r)))
+                write_fifo_done_masked(
+                    Or(write_fifo_done_r, Unot(write_fifo_mask_r))),
+                read_fifo_done_masked(
+                    Or(read_fifo_done_r, Unot(read_fifo_mask_r)))
             ).Else(
                 read_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_in)),
                 write_fifo_done_masked(Repeat(Int(0, 1, 2), num_pe_io_out))
@@ -578,7 +641,11 @@ class Components:
                     ),
                     When(FSM_PROCESS)(
                         en(Int(1, 1, 2)),
-                        If(Or(Uand(write_fifo_done_masked), watchdog_count > watchdog_count_limit))(
+                        If(Uand(write_fifo_done_masked))(
+                            fsm_state(FSM_DONE),
+                            done_r(Int(1, 1, 2))
+                        ),
+                        If(Land(watchdog_count_limit > 0, watchdog_count > watchdog_count_limit))(
                             fsm_state(FSM_DONE),
                             done_r(Int(1, 1, 2))
                         ),
@@ -1128,7 +1195,6 @@ class Components:
             name = 'out_%d' % i
             outputs.append(m.Output(name, DATA_WIDTH))
 
-         
         regs = m.Reg('r', DATA_WIDTH, r)
 
         m.Always(Posedge(clk))(
@@ -1152,7 +1218,7 @@ class Components:
         inn = [m.Input('in_%d' % i) for i in range(num_input)]
         out = m.Output('out')
         s = self.calc_and_tree_size_helper(num_input, radix)
-         
+
         reg = m.Reg('r', s)
         stack1 = []
         stack2 = []
@@ -1206,25 +1272,31 @@ class Components:
         return m
 
     def create_control_data_flow(self, num_inputs, num_outputs, and_tree_radix, reg_tree_radix):
-        name = 'control_data_flow_%d_%d_%d_%d' % (num_inputs, num_outputs, and_tree_radix, reg_tree_radix)
+        name = 'control_data_flow_%d_%d_%d_%d' % (
+            num_inputs, num_outputs, and_tree_radix, reg_tree_radix)
         if name in self.cache.keys():
             return self.cache[name]
         m = Module(name)
 
         clk = m.Input('clk')
 
-        inputs_ready = [m.Input('inputs_ready_%d' % i) for i in range(num_inputs)]
-        outputs_ready = [m.Input('outputs_ready_%d' % i) for i in range(num_outputs)]
-        inputs_enables = [m.Output('inputs_enables_%d' % i) for i in range(num_inputs)]
+        inputs_ready = [m.Input('inputs_ready_%d' % i)
+                        for i in range(num_inputs)]
+        outputs_ready = [m.Input('outputs_ready_%d' % i)
+                         for i in range(num_outputs)]
+        inputs_enables = [m.Output('inputs_enables_%d' % i)
+                          for i in range(num_inputs)]
 
-        and_tree = self.create_and_tree(and_tree_radix, num_inputs + num_outputs)
+        and_tree = self.create_and_tree(
+            and_tree_radix, num_inputs + num_outputs)
         reg_tree = self.create_reg_tree(reg_tree_radix, num_inputs)
 
         and_tree_to_reg_tree = m.Wire('and_tree_to_reg_tree')
 
         con = [('clk', clk)]
         con += [('in_%d' % i, inputs_ready[i]) for i in range(num_inputs)]
-        con += [('in_%d' % (i + num_inputs), outputs_ready[i]) for i in range(num_outputs)]
+        con += [('in_%d' % (i + num_inputs), outputs_ready[i])
+                for i in range(num_outputs)]
         con += [('out', and_tree_to_reg_tree)]
         params = []
         m.Instance(and_tree, 'and_tree', params, con)

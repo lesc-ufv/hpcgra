@@ -5,16 +5,16 @@ int main(int argc, char *argv[])
 
     int num_kmeans = 1;
     int num_clusters[] = {2};
-    int num_dim[] = {128};
+    int num_dim[] = {32};
     int is_share_inputs = 0;
 
     auto df = createDataFlow(0, num_clusters, num_dim, num_kmeans, is_share_inputs);
 
     insertReg(df);
 
-    df->toJSON("../kmeans2x128.json");
-    df->toJsonOperator("../kmeans2x128.op.json");
-    df->toDOT("../kmeans2x128.dot");
+    df->toJSON("../kmeans2x32.json");
+    df->toJsonOperator("../kmeans2x32.op.json");
+    df->toDOT("../kmeans2x32.dot");
 
     delete df;
 
@@ -32,9 +32,9 @@ void createDataFlow2()
     auto in2 = new InputStream(idx++, nullptr, 1, 0);
     auto in3 = new InputStream(idx++, nullptr, 1, 0);
 
-    auto pass0 = new Reg(idx++);
-    auto pass1 = new Reg(idx++);
-    auto pass3 = new Reg(idx++);
+    auto pass0 = new Addi(idx++,0);
+    auto pass1 = new Addi(idx++,0);
+    auto pass3 = new Addi(idx++,0);
 
     auto slt = new Slt(idx++);
     auto mux = new Mux(idx++);
@@ -54,6 +54,8 @@ void createDataFlow2()
     df->connect(slt, 0, pass3, 0);
     df->connect(pass3, 0, out0, 0);
     df->connect(mux, 0, out1, 0);
+
+    insertReg(df);
 
     df->toJSON("../kmeans_filter.json");
     df->toJsonOperator("../kmeans_filter.op.json");
@@ -82,8 +84,6 @@ void insertReg(DataFlow *df)
             typeid(*op) != typeid(OutputStream) &&
             typeid(*op) != typeid(Const))
         {
-            if (levels[op->getId()] % 2 != 0)
-            {
                 auto dstArray = op->getOutputs();
                 for (auto iitem : dstArray)
                 {
@@ -101,7 +101,6 @@ void insertReg(DataFlow *df)
                         }
                     }
                 }
-            }
         }
     }
 }
@@ -168,7 +167,7 @@ DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, in
                     int start = 0;
                     if (aux.size() % 2 != 0)
                     {
-                        auto passA = new Reg(idx++);
+                        auto passA = new Addi(idx++,0);
                         df->connect(aux[0], 0, passA, 0);
                         aux_reduz.push_back(passA);
                         start = 1;
@@ -252,7 +251,7 @@ DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, in
                 auto rr = addEnd;
                 for (int i = 0; i < reg; ++i)
                 {
-                    auto r = new Reg(idx++);
+                    auto r = new Addi(idx++,0);
                     df->connect(rr, 0, r, 0);
                     rr = r;
                 }
@@ -265,14 +264,14 @@ DataFlow *createDataFlow(int id, int *num_clusters, int *num_dim, int number, in
                 df->connect(mux_reduz.front(), 0, muxEnd, 1);
                 auto out = new OutputStream(outId, nullptr, 1, 0);
                 auto outS = new OutputStream(outSId, nullptr, 1, 0);
-                auto regS = new Reg(idx++);
+                auto regS = new Addi(idx++,0);
                 df->connect(muxEnd, 0, out, 0);
             }
             else
             {
                 auto out = new OutputStream(outId, nullptr, 1, 0);
                 auto outS = new OutputStream(outSId, nullptr, 1, 0);
-                auto regS = new Reg(idx++);
+                auto regS = new Addi(idx++,0);
                 df->connect(mux_reduz.front(), 0, out, 0);
                 df->connect(aux[0], 0, regS, 0);
                 df->connect(regS, 0, outS, 0);

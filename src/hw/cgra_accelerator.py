@@ -65,6 +65,7 @@ class CgraAccelerator:
         conf_out_bus = m.Wire('conf_out_bus', self.cgra.conf_bus_width + 1)
         read_fifo_mask = m.Wire('read_fifo_mask', self.num_in)
         write_fifo_mask = m.Wire('write_fifo_mask', self.num_out)
+        watchdog_count_limit = m.Wire('watchdog_count_limit',64)
 
         conf_done = m.Wire('conf_done')
         reg_tree_conf_done = m.Wire('reg_tree_conf_done', 1 + self.num_in)
@@ -120,6 +121,7 @@ class CgraAccelerator:
             ('rd_data_valid', acc_user_read_data_valid[0]), ('conf_out_bus', conf_out_bus),
             ('read_fifo_mask', read_fifo_mask),
             ('write_fifo_mask', write_fifo_mask),
+            ('watchdog_count_limit',watchdog_count_limit),
             ('done', conf_done)
         ]
         m.Instance(control_conf, 'control_conf', params, con)
@@ -132,6 +134,7 @@ class CgraAccelerator:
                ('write_fifo_mask', write_fifo_mask),
                ('read_fifo_done', acc_user_done_rd_data),
                ('write_fifo_done', acc_user_done_wr_data),
+               ('watchdog_count_limit',watchdog_count_limit),
                ('en', en),
                ('done', acc_user_done)
                ]

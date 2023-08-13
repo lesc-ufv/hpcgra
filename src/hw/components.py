@@ -317,15 +317,13 @@ class Components:
         m = Module(name)
         width = m.Parameter('width', 16)
 
-        routes = routes + 1 if routes > 0 else routes
-
         if routes == 0 or num_in == 1:
             in0 = m.Input('in0', width)
             outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
             for o in outputs:
                 o.assign(in0)
 
-        elif routes >= num_out:
+        elif routes >= num_out or routes == num_in:
             switch_in = self.create_switch_box(num_in, num_out)
             p = switch_in.get_ports()
             sel_in = m.Input('sel_in', p['sel'].width)
@@ -379,7 +377,7 @@ class Components:
         conf_out_bus = m.OutputReg('conf_out_bus', cgra_conf_width + 1)
         read_fifo_mask = m.OutputReg('read_fifo_mask', num_pe_io_in)
         write_fifo_mask = m.OutputReg('write_fifo_mask', num_pe_io_out)
-        watchdog_count_limit = m.OutputReg('watchdog_count_limit', 64)
+        watchdog_count_limit = m.OutputReg('watchdog_count_limit', 48)
 
         done = m.OutputReg('done')
 
@@ -391,16 +389,16 @@ class Components:
         FSM_SEND_INIT_CONF_PE = m.Localparam('FSM_SEND_INIT_CONF_PE', 5)
         FSM_INIT_CTRL_REQ_DATA = m.Localparam('FSM_INIT_CTRL_REQ_DATA', 6)
         FSM_WAIT_ALL_CONF_FINISH = m.Localparam('FSM_WAIT_ALL_CONF_FINISH', 7)
-        FSM_INIT_CONF_DONE = m.Localparam('FSM_INIT_CONF_DONE', 7)
+        FSM_INIT_CONF_DONE = m.Localparam('FSM_INIT_CONF_DONE', 8)
 
         m.EmbeddedCode('')
 
-        fsm_conf_ctrl = m.Reg('fsm_conf_ctrl', 3)
-        fsm_conf_ctrl_next = m.Reg('fsm_conf_ctrl_next', 3)
+        fsm_conf_ctrl = m.Reg('fsm_conf_ctrl', 4)
+        fsm_conf_ctrl_next = m.Reg('fsm_conf_ctrl_next', 4)
         conf_req_data = m.Reg('conf_req_data')
         qtd_conf = m.Reg('qtd_conf', 32)
         conf_cl_width = max(num_pe_io_in, num_pe_io_out,
-                            qtd_conf.width, watchdog_count_limit.width,
+                            qtd_conf.width, 64,
                             axi_bus_data_width)
 
         conf_cl = m.Reg('conf_cl', conf_cl_width)
@@ -514,7 +512,8 @@ class Components:
                         )
                     ),
                     When(FSM_INIT_CTRL_REQ_DATA)(
-                        clSwitch
+                        If(Not(conf_req_data))(
+                            clSwitch)
                     ),
                     When(FSM_WAIT_ALL_CONF_FINISH)(
                         wait_counter.inc(),
@@ -562,7 +561,7 @@ class Components:
         write_fifo_mask = m.Input('write_fifo_mask', num_pe_io_out)
         read_fifo_done = m.Input('read_fifo_done', num_pe_io_in)
         write_fifo_done = m.Input('write_fifo_done', num_pe_io_out)
-        watchdog_count_limit = m.Input('watchdog_count_limit', 64)
+        watchdog_count_limit = m.Input('watchdog_count_limit', 48)
 
         en = m.OutputReg('en')
         done = m.Output('done')

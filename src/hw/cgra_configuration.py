@@ -107,7 +107,6 @@ class CgraConfiguration:
         return True, [raw_conf]
 
     def create_router_conf(self, id, routing):
-
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
@@ -127,7 +126,8 @@ class CgraConfiguration:
         if routes == 0:  # este caso nenhum vizinho é roteado
             route_only_alu = True
             router_in_size = alu_num_out
-        routes = alu_num_out if routes < alu_num_out else routes
+
+        routes = max(alu_num_out,routes)
         conf_tag = ConfTag(routes > 0, num_consts)
         conf_bits = self.cgra.conf_raw_bits
 
@@ -191,7 +191,7 @@ class CgraConfiguration:
             if len(route_tb) > routes:
                 return False, 'PE %s can perform only %d routing.' % (id, routes)
             else:
-                if routes >= router_out_size:  # TODO conferir se neste o router é uma crossbar
+                if routes >= router_out_size or routes == router_in_size:  # TODO conferir se neste o router é uma crossbar
                     route_sel_in_bits = bits(router_in_size)
                     route_sel_in_v = [
                         format(0, '0%db' % route_sel_in_bits) for _ in range(router_out_size)]

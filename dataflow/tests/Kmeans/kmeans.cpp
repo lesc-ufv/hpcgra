@@ -4,17 +4,17 @@ int main(int argc, char *argv[])
 {
 
     int num_kmeans = 1;
-    int num_clusters[] = {2};
-    int num_dim[] = {32};
+    int num_clusters[] = {4};
+    int num_dim[] = {4};
     int is_share_inputs = 0;
 
     auto df = createDataFlow(0, num_clusters, num_dim, num_kmeans, is_share_inputs);
 
-    insertReg(df);
+   // insertReg(df);
 
-    df->toJSON("../kmeans2x32.json");
-    df->toJsonOperator("../kmeans2x32.op.json");
-    df->toDOT("../kmeans2x32.dot");
+    df->toJSON("../kmeans4x4.json");
+    df->toJsonOperator("../kmeans4x4.op.json");
+    df->toDOT("../kmeans4x4.dot");
 
     delete df;
 

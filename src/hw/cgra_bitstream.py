@@ -73,7 +73,6 @@ class Bitstream:
 
         cgra_bitstream_hex = []
         for cb in cgra_bitstream:
-            print(cb)
             align = int(ceil(len(cb) / self.cgra.conf_bus_width)) * \
                 self.cgra.conf_bus_width
             cbr = "".join(list(reversed(to_hex(int(cb, 2), align))))

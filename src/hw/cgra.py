@@ -399,7 +399,7 @@ class Pe(Module):
         else:
             inputs_regs_router = [self.Wire(
                 'in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors_in))]
-            routes = self.alu.getNumOutputs() if routes < self.alu.getNumOutputs() else routes
+            routes = max(self.alu.getNumOutputs(),routes)
             router = self.components.create_router(
                 routes, len(neighbors_in) + self.alu.getNumOutputs(), len(outputs))
 

@@ -15,7 +15,8 @@ int main(int argc, char *argv[])
     vector_u16 inputs[NUM_CHANNELS];
     vector_u16 outputs[NUM_CHANNELS];
 
-    int size;
+    long size;
+    std::vector<long> out_size;
 
     auto cgra_acc = CgraFpga(NUM_CHANNELS, NUM_CHANNELS);
     cgra_acc.cgra_fpga_init(binaryFile, kernel_name, bitstreamFile);
@@ -24,22 +25,23 @@ int main(int argc, char *argv[])
     {
         std::stringstream ssin;
         ssin << "in" << i << ".txt";
-        read_file(ssin.str(), inputs[i]);
-        if (inputs[i][0] > 0)
+        size = read_file(ssin.str(), inputs[i]);
+        if (size > 0)
         {
-            cgra_acc.createInputQueue(i, inputs[i][0] * 2);
+            cgra_acc.createInputQueue(i, size*2);
             auto ptr_in = (uint16_t*)cgra_acc.getInputQueue(i);
-            for(int j = 0; j < inputs[i][0];j++)
+            for(int j = 0; j < size;j++)
             {
-                ptr_in[j] = inputs[i][j+1];
+                ptr_in[j] = inputs[i][j];
             }
         }
         std::stringstream ssout;
         ssout << "out" << i << ".txt";
-        read_file(ssout.str(), outputs[i]);
-        if (outputs[i][0] > 0)
+        size = read_file(ssout.str(), outputs[i]);
+        out_size.push_back(size);
+        if (size > 0)
         {
-            cgra_acc.createOutputQueue(i, outputs[i][0] * 2);
+            cgra_acc.createOutputQueue(i, size * 2);
         }
     }
 
@@ -47,26 +49,28 @@ int main(int argc, char *argv[])
 
     for (int c = 0; c < NUM_CHANNELS; c++)
     {
-
+        if(inputs[c].size() > 0){
         std::cout << std::endl
                   << "IN" << c << ": ";
-        size = std::min((int)inputs[c][0], 10);
+        size = 10;
         auto ptr_in = (unsigned short *)cgra_acc.getInputQueue(c);
         for (int i = 0; i < size; i++)
         {
             std::cout << ptr_in[i] << " ";
         }
         std::cout << std::endl;
-
+        }
+        if(out_size[c] > 0){
         std::cout << std::endl
                   << "OUT" << c << ": ";
-        size = std::min((int)outputs[c][0], 10);
+        size = 10;
         auto ptr_out = (unsigned short *)cgra_acc.getOutputQueue(c);
         for (int i = 0; i < size; i++)
         {
             std::cout << ptr_out[i] << " ";
         }
         std::cout << std::endl;
+        }
     }
 
     cgra_acc.print_report();
@@ -75,12 +79,15 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-bool read_file(std::string file, vector_u16 &data)
+long read_file(std::string file, vector_u16 &data)
 {
+    long size = 0;
     std::string line;
     if (file.substr(0, 2) == "in")
     {
         std::ifstream MyReadFile(file);
+        getline(MyReadFile, line);
+	    size = std::stoul(line, nullptr, 10);
         while (getline(MyReadFile, line))
         {
             unsigned short x = std::stoul(line, nullptr, 10);
@@ -92,15 +99,14 @@ bool read_file(std::string file, vector_u16 &data)
     {
         std::ifstream MyReadFile(file);
         getline(MyReadFile, line);
-        int x = std::stoul(line, nullptr, 10);
-        data.push_back(x);
+        size = std::stoul(line, nullptr, 10);
         MyReadFile.close();
     }
     else
     {
         std::cout << "[Error] Input file not found: " << file << std::endl;
-        return false;
+        return -1;
     }
 
-    return true;
+    return size;
 }

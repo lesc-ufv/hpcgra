@@ -65,7 +65,7 @@ class CgraAccelerator:
         conf_out_bus = m.Wire('conf_out_bus', self.cgra.conf_bus_width + 1)
         read_fifo_mask = m.Wire('read_fifo_mask', self.num_in)
         write_fifo_mask = m.Wire('write_fifo_mask', self.num_out)
-        watchdog_count_limit = m.Wire('watchdog_count_limit',64)
+        watchdog_count_limit = m.Wire('watchdog_count_limit',48)
 
         conf_done = m.Wire('conf_done')
         reg_tree_conf_done = m.Wire('reg_tree_conf_done', 1 + self.num_in)

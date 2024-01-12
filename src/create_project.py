@@ -14,7 +14,7 @@ from src.hw.cgra_accelerator import CgraAccelerator
 from src.hw.create_acc_axi_interface import AccAXIInterface
 from src.hw.utils import commands_getoutput
 
-
+#cesar
 def write_file(name, string):
     with open(name, 'w') as fp:
         fp.write(string)

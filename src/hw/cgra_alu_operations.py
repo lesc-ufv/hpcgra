@@ -447,6 +447,48 @@ class AluOperationConst(AluOperation):
         return 0
 
 
+class AluOperationAcc(AluOperation):
+    def __init__(self) -> None:
+        super().__init__('acc_m', 'register')
+        self.add_input('in0', 0)
+        self.add_input('in1', 1)
+        self.add_output('out0', 0)
+        self.add_output('out1', 1)
+        value = self.Reg("value", self.width)
+        out = self.Reg("out", self.width)
+        valid = self.Reg("valid")
+        counter = self.Reg("counter", 32)
+
+        self.Always(Posedge(self.clk))(
+            If(self.rst)(
+                valid(0),
+                value(0),
+                counter(1)
+            ).Else(
+                valid(0),
+                If(And(self.in_valids['in0_valid'],self.in_valids['in1_valid']) )(
+                    value(value + self.inputs['in1']),
+                    counter.inc(),
+                    If(counter == self.inputs['in0'])(
+                      valid(1),
+                      out(value + self.inputs['in1']),
+                      value(self.inputs['in1']),
+                      counter(2)
+                    )
+                ),
+            ),
+        )
+        self.outputs['out0'].assign(out)
+        self.out_valids['out0_valid'].assign(valid)
+        self.outputs['out1'].assign(Cat(Repeat(Int(0,1,2),15), valid))
+        self.out_valids['out1_valid'].assign(valid)
+
+        initialize_regs(self)
+
+    def getLatency(self):
+        return 1
+
+
 class CgraAluOperations:
     def __init__(self, json_arch: dict = None, json_arch_file: str = None) -> None:
         if json_arch_file:
@@ -484,7 +526,8 @@ class CgraAluOperations:
             'shr': AluOperationShr(),
             'max': AluOperationMax(),
             'min': AluOperationMin(),
-            'const': AluOperationConst()
+            'const': AluOperationConst(),
+            'acc':AluOperationAcc()
         }
         if jarch:
             if "operations" in jarch.keys():

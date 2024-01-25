@@ -40,7 +40,7 @@ class CgraConfiguration:
         routes = self.cgra.array_pe[id].alu.getNumOutputs(
         ) if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
 
-        conf_tag = ConfTag(routes > 0, alu_num_inputs+alu_num_const)
+        conf_tag = ConfTag(routes > 0, alu_num_inputs + alu_num_const)
         conf_bits = self.cgra.conf_raw_bits
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
 
@@ -121,13 +121,13 @@ class CgraConfiguration:
 
         routes = self.cgra.array_pe_arch[id]['routes']
         route_only_alu = False
-        router_in_size = len(neighbors_in)+alu_num_out
-        router_out_size = len(neighbors_out)+num_ostream
+        router_in_size = len(neighbors_in) + alu_num_out
+        router_out_size = len(neighbors_out) + num_ostream
         if routes == 0:  # este caso nenhum vizinho é roteado
             route_only_alu = True
             router_in_size = alu_num_out
 
-        routes = max(alu_num_out,routes)
+        routes = max(alu_num_out, routes)
         conf_tag = ConfTag(routes > 0, num_consts)
         conf_bits = self.cgra.conf_raw_bits
 
@@ -214,6 +214,18 @@ class CgraConfiguration:
                                     iidx, '0%db' % route_sel_in_bits)
                     route_sel_in_v.reverse()
                     route_sel_in = "".join(route_sel_in_v)
+                elif routes == 1:
+                    route_sel_in_bits = bits(router_in_size)
+                    route_sel_in_v = format(0, '0%db' % route_sel_in_bits)
+                    for i, vo in route_tb.items():
+                        if 'alu' in str(i):
+                            alu_out_id = int(i[4:-1])
+                            route_sel_in_v = format(alu_out_id, '0%db' % route_sel_in_bits)
+                        else:
+                            # the first port is always alu
+                            iidx = neighbors_in.index(i) + alu_num_out
+                            route_sel_in_v = format(iidx, '0%db' % route_sel_in_bits)
+                    route_sel_in = route_sel_in_v
                 else:
                     num_out = len(neighbors_out) + num_ostream
                     route_sel_in_bits = bits(router_in_size)
@@ -232,7 +244,7 @@ class CgraConfiguration:
                         for o in vo:
                             if 'ostream' in str(o):
                                 offset = int(o[8:-1])
-                                oidx = len(neighbors_out)+offset
+                                oidx = len(neighbors_out) + offset
                             else:
                                 oidx = neighbors_out.index(o)
 
@@ -249,8 +261,7 @@ class CgraConfiguration:
         if len(route_sel_out) == 0 and len(route_sel_in) == 0:
             ret = []
         else:
-            raw_conf = format(int(route_sel_out + route_sel_in +
-                              conf_tag.router + id_bits, 2), '0%db' % conf_bits)
+            raw_conf = format(int(route_sel_out + route_sel_in + conf_tag.router + id_bits, 2), '0%db' % conf_bits)
             ret = [raw_conf]
 
         return True, None, ret

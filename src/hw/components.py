@@ -322,7 +322,16 @@ class Components:
             outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
             for o in outputs:
                 o.assign(in0)
-
+        elif routes == 1:
+            switch_in = self.create_switch_box(num_in, routes)
+            p_in = switch_in.get_ports()
+            sel_in = m.Input('sel_in', p_in['sel'].width)
+            inputs = [('in%d' % i, m.Input('in%d' % i, width))
+                      for i in range(num_in)]
+            outputs = [('out0', m.Output('out%d' % i, width))
+                       for i in range(num_out)]
+            m.Instance(switch_in, switch_in.name, [('width', width)], [
+                       ('sel', sel_in)] + inputs + outputs)
         elif routes >= num_out or routes == num_in:
             switch_in = self.create_switch_box(num_in, num_out)
             p = switch_in.get_ports()

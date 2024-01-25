@@ -51,7 +51,7 @@ def main():
                                            args.data_width,
                                            args.conf_bus_width, args.axi_bus_width, args.inputs, args.outputs)
                    
-                    cgra = Cgra(json_arch=json_str)
+                    #cgra = Cgra(json_arch=json_str)
                     if args.emit:
                         with open(args.emit, 'w') as f:
                             f.write(json.dumps(json_str, indent=4))

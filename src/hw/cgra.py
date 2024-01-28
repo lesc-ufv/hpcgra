@@ -392,16 +392,19 @@ class Pe(Module):
 
         only_alu = False
         if routes == 0:
-            routes = self.alu.getNumOutputs()
+            routes = self.alu.getNumOutputs()+num_istream
             router = self.components.create_router(
-                routes, self.alu.getNumOutputs(), len(outputs))
+                routes, self.alu.getNumOutputs()+num_istream, len(outputs))
             only_alu = True
         else:
             inputs_regs_router = [self.Wire(
                 'in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors_in))]
-            routes = max(self.alu.getNumOutputs(),routes)
+            stream_in_reg_router=[self.Wire(
+                'istream_reg_router%d' % i, self.data_width + 1) for i in range(num_istream)]
+            
+            routes = max(self.alu.getNumOutputs()+num_istream,routes)
             router = self.components.create_router(
-                routes, len(neighbors_in) + self.alu.getNumOutputs(), len(outputs))
+                routes, len(neighbors_in) + self.alu.getNumOutputs()+num_istream, len(outputs))
 
         route_ports = router.get_ports()
         route_sel_in = None
@@ -484,9 +487,13 @@ class Pe(Module):
         params = [('width', self.data_width)]
 
         self.Instance(self.alu, 'alu', params, con)
+        reg_pipe_in = self.components.create_register_pipeline()
+        for i,j in zip(stream_in_reg,stream_in_reg_router):
+            con1 = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i),('out', j)]
+            param1 = [('num_register', balance),('width', self.data_width + 1)]
+            self.Instance(reg_pipe_in, i.name + '_router', param1, con1)
 
         if routes > 0 and not only_alu:
-            reg_pipe_in = self.components.create_register_pipeline()
             for i, j in zip(inputs_reg, inputs_regs_router):
                 con1 = [('clk', clk), ('rst', Int(0, 1, 2)), ('en', Int(1, 1, 2)), ('in', i),
                         ('out', j)]
@@ -494,7 +501,7 @@ class Pe(Module):
                           ('width', self.data_width + 1)]
 
                 self.Instance(reg_pipe_in, i.name + '_router', param1, con1)
-
+                                
         con = []
         conf_array_router = []
         if route_sel_in:
@@ -507,6 +514,10 @@ class Pe(Module):
 
         c = 0
         for p in alu_out:
+            con.append(('in%d' % c, p))
+            c += 1
+        
+        for p in stream_in_reg_router:
             con.append(('in%d' % c, p))
             c += 1
 

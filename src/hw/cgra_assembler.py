@@ -158,7 +158,9 @@ class CgraAssembler:
                 if arg[0] == '#':
                     delays.append((port, int(arg[1:])))
                 else:
-                    if arg[0] != '$':
+                    if arg[0] == '_':
+                        alu_src.append('const')
+                    elif arg[0] != '$':
                         alu_src.append('const')
                         self.const.append((line, pe, port, int(arg)))
                     elif arg[1:+8] == 'istream':
@@ -214,6 +216,8 @@ class CgraAssembler:
             pe = int(inst[1][1:])
             if inst[2][1:+4] == 'alu':
                 src = inst[2][1:]
+            elif inst[2][1:+8] == 'istream':
+                src = inst[2][1:]
             else:
                 src = int(inst[2][1:])
 
@@ -242,6 +246,9 @@ class CgraAssembler:
             if inst[2][1:-3] == 'alu':
                 self.dot_edges["%d-%d" %
                                (pe, dst)] = "pe%d -> pe%d [color=red];\n" % (pe, dst)
+            elif inst[2][1:+8] == 'istream':
+                self.dot_edges["%d-%d" %
+                               (pe, dst)] = "pe%d -> pe%d [color=blue];\n" % (pe, dst)
             else:
                 self.dot_edges["%d-%d" % (pe, dst)] = "pe%d -> pe%d [color=blue];\n" % (
                     pe, dst)

@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         if(inputs[c].size() > 0){
         std::cout << std::endl
                   << "IN" << c << ": ";
-        size = 10;
+        size = size<10?size:10;
         auto ptr_in = (unsigned short *)cgra_acc.getInputQueue(c);
         for (int i = 0; i < size; i++)
         {
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
         if(out_size[c] > 0){
         std::cout << std::endl
                   << "OUT" << c << ": ";
-        size = 10;
+         size = out_size[c]<10?out_size[c]:10;
         auto ptr_out = (unsigned short *)cgra_acc.getOutputQueue(c);
         for (int i = 0; i < size; i++)
         {

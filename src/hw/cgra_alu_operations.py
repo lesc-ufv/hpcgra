@@ -456,21 +456,24 @@ class AluOperationAcc(AluOperation):
         self.add_output('out1', 1)
         value = self.Reg("value", self.width)
         out = self.Reg("out", self.width)
-        valid = self.Reg("valid")
+        valid0 = self.Reg("valid0")
+        valid1 = self.Reg("valid1")
         counter = self.Reg("counter", 32)
 
         self.Always(Posedge(self.clk))(
             If(self.rst)(
-                valid(0),
+                valid0(0),
+                valid1(0),
                 value(0),
                 counter(1)
             ).Else(
-                valid(0),
-                If(And(self.in_valids['in0_valid'],self.in_valids['in1_valid']) )(
+                valid1(0),
+                valid0(And(self.in_valids['in0_valid'],self.in_valids['in1_valid'])),
+                If(And(self.in_valids['in0_valid'],self.in_valids['in1_valid']))(
                     value(value + self.inputs['in1']),
                     counter.inc(),
                     If(counter == self.inputs['in0'])(
-                      valid(1),
+                      valid1(1),
                       out(value + self.inputs['in1']),
                       value(self.inputs['in1']),
                       counter(2)
@@ -478,16 +481,72 @@ class AluOperationAcc(AluOperation):
                 ),
             ),
         )
-        self.outputs['out0'].assign(out)
-        self.out_valids['out0_valid'].assign(valid)
-        self.outputs['out1'].assign(Cat(Repeat(Int(0,1,2),15), valid))
-        self.out_valids['out1_valid'].assign(valid)
+        self.outputs['out1'].assign(out)
+        self.out_valids['out1_valid'].assign(valid0)
+
+        self.outputs['out0'].assign(Cat(Repeat(Int(0,1,2),15), valid1))
+        self.out_valids['out0_valid'].assign(valid0)
 
         initialize_regs(self)
 
     def getLatency(self):
         return 1
 
+
+class AluOperationMacc(AluOperation):
+    def __init__(self) -> None:
+        super().__init__('macc_m', 'register')
+        self.add_input('in0', 0) # N
+        self.add_input('in1', 1) # Op1
+        self.add_input('in2', 2) # Op2
+        self.add_input('in3', 3) # repassa 
+        self.add_output('out0', 0)
+        value = self.Reg("value", self.width)
+        out = self.Reg("out", self.width)
+        valid0 = self.Reg("valid0")
+        counter = self.Reg("counter", 32)
+        multiply = self.Reg("multiply",self.width)
+        flag_acc = self.Reg('flag_acc')
+        
+        end_count =  self.Wire('end_count')
+        #tratar no assembly o menos 1 na quantidade da soma
+        end_count.assign(And(counter == self.inputs['in0'], self.in_valids['in0_valid']))
+        
+        self.Always(Posedge(self.clk))(
+            If(self.rst)(
+                valid0(0),
+                value(0),
+                counter(0),
+                flag_acc(0),
+            ).Else(
+                flag_acc(0),
+                valid0(self.in_valids['in3_valid']),
+                out(self.inputs['in3']),
+                
+                If(AndList(self.in_valids['in0_valid'],self.in_valids['in1_valid'],self.in_valids['in2_valid']))(
+                   multiply(self.inputs['in1'] * self.inputs['in2']),
+                   flag_acc(1)
+                ),
+                
+                If(flag_acc)(
+                    If(end_count)(
+                      valid0(1),
+                      out(value),
+                      value(multiply),
+                      counter(1)
+                   ).Else(
+                      value(multiply + value),
+                      counter.inc(),
+                   )
+                )
+            ),
+        )
+        self.outputs['out0'].assign(out)
+        self.out_valids['out0_valid'].assign(valid0)
+        initialize_regs(self)
+
+    def getLatency(self):
+        return 1
 
 class CgraAluOperations:
     def __init__(self, json_arch: dict = None, json_arch_file: str = None) -> None:
@@ -527,7 +586,8 @@ class CgraAluOperations:
             'max': AluOperationMax(),
             'min': AluOperationMin(),
             'const': AluOperationConst(),
-            'acc':AluOperationAcc()
+            'acc':AluOperationAcc(),
+            'macc':AluOperationMacc()
         }
         if jarch:
             if "operations" in jarch.keys():

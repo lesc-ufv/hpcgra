@@ -1,22 +1,18 @@
 #include <main.h>
 #include "annealing.h"
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     auto timetime = 1676579628;//time(nullptr);
     srand(timetime);
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
     std::string path_dot = "", name = "", path_arch = "", path_asm = "";
     int NGRIDS = 1000;
 
-    if (argc > 3)
-    {
+    if (argc > 3) {
         name = argv[1];
         path_dot = argv[2];
         path_arch = argv[3];
-    }
-    else
-    {
+    } else {
         printf("ERROR: ./place <name> <path_to_dot.json> <path_to_arch.json> [number_trying]\n");
         return 1;
     }
@@ -28,19 +24,19 @@ int main(int argc, char **argv)
     path_asm = name;
 
     std::vector<pe_t> pe;
-    std::map<std::string, int> map_type = {{"input", 0}, {"output", 1}, {"inout", 2}};
+    std::map<std::string, int> map_type = {{"input",  0},
+                                           {"output", 1},
+                                           {"inout",  2}};
 
     // read arch
-    if (!read_arch(path_arch, pe, map_type))
-    {
+    if (!read_arch(path_arch, pe, map_type)) {
         printf("Architecture format wrong!\n\n");
         return 1;
     }
 
     Graph graph(path_dot, map_type);
 
-    if (!graph.get_ok())
-    { // verify if graph format it's ok
+    if (!graph.get_ok()) { // verify if graph format it's ok
         printf("bad format of graph json\n\n");
         return 1;
     }
@@ -90,8 +86,7 @@ int main(int argc, char **argv)
     duration = (stop - start);
     time_data = duration.count();
 
-    if (!verify_solution(results, NGRIDS))
-    {
+    if (!verify_solution(results, NGRIDS)) {
         printf("Initial Solution invalid for all trying\n\n");
         return 1;
     }
@@ -100,9 +95,8 @@ int main(int argc, char **argv)
     get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, table, graph);
 
     start = std::chrono::high_resolution_clock::now();
-#pragma omp parallel for
-    for (int i = 0; i < NGRIDS; ++i)
-    {
+#pragma omp parallel  for
+    for (int i = 0; i < NGRIDS; ++i) {
         if (results[i] == MAXVALUE)
             continue; // Found perfect solution!
 
@@ -129,8 +123,7 @@ int main(int argc, char **argv)
     duration = (stop - start);
     time_route = duration.count();
 
-    if (!verify_solution(results, NGRIDS))
-    {
+    if (!verify_solution(results, NGRIDS)) {
         printf("Routing invalid for all trying\n\n");
         print_grid_dot(path_asm, graph, pe, grid, 0, TOTAL_GRID_SIZE, pos, nullptr);
 
@@ -148,8 +141,7 @@ int main(int argc, char **argv)
     duration = (stop - start);
     time_buffer = duration.count();
 
-    if (!verify_solution(results, NGRIDS))
-    {
+    if (!verify_solution(results, NGRIDS)) {
         printf("Buffer invalid for all trying\n\n");
         print_grid_dot(path_asm, graph, pe, grid, 0, TOTAL_GRID_SIZE, pos, nullptr);
 

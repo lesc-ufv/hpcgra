@@ -5,10 +5,10 @@
 
 #include <map>
 
-void create_table_floyd_warshall(const int TOTAL_GRID_SIZE, 
-                                 int **table, 
+void create_table_floyd_warshall(const int TOTAL_GRID_SIZE,
+                                 int **table,
                                  std::vector<pe_t> &arch
-                                ) {
+) {
     /*
     let dist be a |V| × |V| array of minimum distances initialized to ∞ (infinity)
     for each edge (u, v) do
@@ -55,13 +55,13 @@ void create_table_floyd_warshall(const int TOTAL_GRID_SIZE,
     }
 }
 
-void update_all_positions(const int NODE_SIZE, 
+void update_all_positions(const int NODE_SIZE,
                           const int GRID_SIZE,
-                          const int TOTAL_GRID_SIZE, 
-                          const int NGRIDS, 
-                          int *pos, 
+                          const int TOTAL_GRID_SIZE,
+                          const int NGRIDS,
+                          int *pos,
                           int *grid
-                         ) {
+) {
 
     for (int n = 0; n < NGRIDS; ++n) {
         for (int i = 0; i < NODE_SIZE; ++i) {
@@ -75,14 +75,14 @@ void update_all_positions(const int NODE_SIZE,
     }
 }
 
-void get_all_results(const int NGRIDS, 
-                     const int SIZE_EDGE, 
+void get_all_results(const int NGRIDS,
+                     const int SIZE_EDGE,
                      const int SIZE_NODES,
-                     int *pos, 
-                     int *results, 
+                     int *pos,
+                     int *results,
                      int **table,
                      Graph &graph
-                    ) {
+) {
 
     std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
@@ -101,14 +101,14 @@ void get_all_results(const int NGRIDS,
     }
 }
 
-int get_result(const int N, 
-               const int SIZE_EDGE, 
+int get_result(const int N,
+               const int SIZE_EDGE,
                const int SIZE_NODES,
-               int *pos, 
-               int *h_edgeA, 
-               int *h_edgeB, 
+               int *pos,
+               int *h_edgeA,
+               int *h_edgeB,
                int **table
-            ) {
+) {
     int sum = 0;
     int pos_global_A, pos_global_B;
     for (int i = 0; i < SIZE_EDGE; ++i) {
@@ -125,9 +125,9 @@ void get_edge_cost(const int NGRIDS,
                    int *pos,
                    int **table,
                    std::map<std::tuple<int, int, int, int>, int> *edges_cost,
-                   int * results,
+                   int *results,
                    Graph &graph) {
-    
+
     std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int a, b;

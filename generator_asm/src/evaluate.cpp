@@ -2,13 +2,13 @@
 #include <map>
 #include "../include/main.h"
 
-int get_better_index(const int NGRIDS, 
-                     const int SIZE_EDGES, 
+int get_better_index(const int NGRIDS,
+                     const int SIZE_EDGES,
                      int &best_worst_buffer,
-                     int *results, 
+                     int *results,
                      std::map<std::tuple<int, int, int, int>, int> *buffers_EDGE,
                      Graph &graph
-                     ) {
+) {
 
     best_worst_buffer = MAXVALUE;
     int best_index = -1, best_cost = MAXVALUE, worst_buffer = -1;
@@ -35,15 +35,15 @@ int get_better_index(const int NGRIDS,
 }
 
 void print_results(const double time_data,
-                   const double time_table, 
-                   const double time_place, 
+                   const double time_table,
+                   const double time_place,
                    const double time_route,
-                   const double time_buffer, 
-                   const double time_total, 
+                   const double time_buffer,
+                   const double time_total,
                    const int best_index,
-                   const int worst_fifo, 
+                   const int worst_fifo,
                    int *results) {
-    
+
     printf("\nTime spent DATA  : %.4lf\n", time_data);
     printf("Time spent TABLE : %.4lf\n", time_table);
     printf("Time spent PLACE : %.4lf\n", time_place);
@@ -60,9 +60,9 @@ void print_results(const double time_data,
     }
 }
 
-bool verify_solution(int *results, 
+bool verify_solution(int *results,
                      const int N
-                    ) {
+) {
     int sum = 0;
     for (int i = 0; i < N; ++i) {
         sum += (results[i] == MAXVALUE);

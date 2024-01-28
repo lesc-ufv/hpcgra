@@ -1,0 +1,142 @@
+{
+    "data_width": 16,
+    "axi_bus_data_width": 64,
+    "conf_bus_width": 8,
+    "pe": [
+        {
+            "id": 0,
+            "num_istream": 1,
+            "num_ostream": 1,
+            "neighbors": [4,5],
+            "routes": 0,
+            "elastic_queue": [
+                0,
+                0
+            ],
+            "isa": [
+                "add",
+                "sub"
+            ]
+        },
+        {
+            "id": 1,
+            "num_istream": 1,
+            "num_ostream": 1,
+            "neighbors": [6,7],
+            "routes": 0,
+            "elastic_queue": [
+                0,
+                0
+            ],
+            "isa": [
+                "add",
+                "sub"
+            ]
+        },
+        {
+            "id": 2,
+            "num_istream": 1,
+            "num_ostream": 1,
+            "neighbors": [4,5],
+            "routes": 0,
+            "elastic_queue": [
+                0,
+                0
+            ],
+            "isa": [
+                "add",
+                "sub"
+            ]
+        },
+        {
+            "id": 3,
+            "num_istream": 1,
+            "num_ostream": 1,
+            "neighbors": [6,7],
+            "routes": 0,
+            "elastic_queue": [
+                0,
+                0
+            ],
+            "isa": [
+                "add",
+                "sub"
+            ]
+        },
+        
+
+        {
+            "id": 4,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [8,9],
+            "routes": 2,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        },
+        {
+            "id": 5,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [10,11],
+            "routes": 2,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        },
+        {
+            "id": 6,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [8,9],
+            "routes": 2,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        },
+        {
+            "id": 7,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [10,11],
+            "routes": 2,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        },
+
+        {
+            "id": 8,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [0,1],
+            "routes": 2,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        },
+        {
+            "id": 9,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [2,3],
+            "routes": 0,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        },
+        {
+            "id": 10,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [0,1],
+            "routes": 2,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        },
+        {
+            "id": 11,
+            "num_istream": 0,
+            "num_ostream": 0,
+            "neighbors": [2,3],
+            "routes": 2,
+            "elastic_queue": [0],
+            "isa": ["pass"]
+        }
+    ]
+}

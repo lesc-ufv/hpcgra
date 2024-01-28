@@ -37,7 +37,7 @@ bool verify(const int SIZE_NODES,
     for (int i = 0; i < pe.size(); ++i) {
         for (int j = 0; j < SIZE_TYPE; ++j) {
             if (!pe[i].isa[j]) continue;
-            
+
             if (alu.count(j) > 0) {
                 alu[j]++;
             } else {
@@ -52,7 +52,8 @@ bool verify(const int SIZE_NODES,
             std::cerr << "insufficient architecture: Don't have type " << g.get_opcode(i).c_str() << "\n\n";
             pass = false;
         } else if (alu[g.get_code(i)] == 0) {
-            std::cerr << "insufficient architecture: There is not enough number of the type " << g.get_opcode(i).c_str() << "\n\n";
+            std::cerr << "insufficient architecture: There is not enough number of the type " << g.get_opcode(i).c_str()
+                      << "\n\n";
             pass = false;
         } else {
             alu[g.get_code(i)]--;

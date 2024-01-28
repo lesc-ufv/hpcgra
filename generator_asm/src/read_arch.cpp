@@ -1,9 +1,9 @@
 #include "../include/read_arch.h"
 
-bool read_arch(std::string &arch_file, 
-               std::vector<pe_t> &pe, 
+bool read_arch(std::string &arch_file,
+               std::vector<pe_t> &pe,
                std::map<std::string, int> &map_type
-            ) {
+) {
 
     Json::Value data;
     std::ifstream ifs;
@@ -41,12 +41,12 @@ bool read_arch(std::string &arch_file,
             pe_t aux_pe;
             aux_pe.isa = new bool[SIZE_TYPE];
             aux_pe.id = data["pe"][i]["id"].asInt();
-            
+
             aux_pe.type = -1;
 
             for (int j = 0; j < SIZE_TYPE; ++j)
                 aux_pe.isa[j] = false;
-            
+
             aux_pe.isa[0] = (data["pe"][i]["num_istream"].asInt() >= 1); // input
             aux_pe.isa[1] = (data["pe"][i]["num_ostream"].asInt() >= 1); // output
 
@@ -82,7 +82,7 @@ bool read_arch(std::string &arch_file,
 
             pe.push_back(aux_pe);
         }
-    } catch (std::exception& e) {
+    } catch (std::exception &e) {
         std::cout << "Standard exception: " << e.what() << "\n";
         return false;
     }

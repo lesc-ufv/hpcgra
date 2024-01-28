@@ -23,7 +23,6 @@ class CgraConfiguration:
         return True, [raw_conf]
 
     def create_alu_conf(self, id, op, alu_src, alu_delay):
-
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
@@ -111,6 +110,7 @@ class CgraConfiguration:
             return False, 'CGRA does not contain the PE %d.' % id
 
         num_ostream = self.cgra.array_pe_arch[id]['num_ostream']
+        num_istream = self.cgra.array_pe_arch[id]['num_istream']
         neighbors_in = self.cgra.array_pe_arch[id]['neighbors_in']
         neighbors_out = self.cgra.array_pe_arch[id]['neighbors_out']
         alu = self.cgra.array_pe[id].alu
@@ -121,13 +121,13 @@ class CgraConfiguration:
 
         routes = self.cgra.array_pe_arch[id]['routes']
         route_only_alu = False
-        router_in_size = len(neighbors_in) + alu_num_out
+        router_in_size = len(neighbors_in) + alu_num_out+num_istream
         router_out_size = len(neighbors_out) + num_ostream
         if routes == 0:  # este caso nenhum vizinho é roteado
             route_only_alu = True
-            router_in_size = alu_num_out
+            router_in_size = alu_num_out+num_istream
 
-        routes = max(alu_num_out, routes)
+        routes = max(alu_num_out+num_istream, routes)
         conf_tag = ConfTag(routes > 0, num_consts)
         conf_bits = self.cgra.conf_raw_bits
 
@@ -151,11 +151,11 @@ class CgraConfiguration:
         if len(route_tb) <= routes:
             map_route = {}
             for i, vo in route_tb.items():
-                if not 'alu' in str(i) and route_only_alu:
+                if (not 'alu' in str(i) and not 'istream' in str(i)) and route_only_alu:
                     lines = lines_error.get(i)
                     return False, list(lines), 'PE %s not performes routing of neighbors' % (i)
                 for o in vo:
-                    if not 'alu' in str(i) and i not in neighbors_in:
+                    if (not 'alu' in str(i) and not 'istream' in str(i)) and i not in neighbors_in:
                         lines = lines_error.get(i)
                         return False, list(lines), 'PE %s not in neighbors of PE %s.' % (i, id)
                     if o not in neighbors_out:
@@ -185,7 +185,7 @@ class CgraConfiguration:
         route_sel_in = ''
         route_sel_out = ''
 
-        if route_only_alu and alu_num_out == 1:
+        if route_only_alu and alu_num_out == 1 and num_istream == 0:
             pass  # não tem configuração
         else:
             if len(route_tb) > routes:
@@ -207,9 +207,13 @@ class CgraConfiguration:
                                 alu_out_id = int(i[4:-1])
                                 route_sel_in_v[oidx] = format(
                                     alu_out_id, '0%db' % route_sel_in_bits)
+                            elif 'istream' in str(i):
+                                istream_id = int(i[8:-1]) + alu_num_out
+                                route_sel_in_v[oidx] = format(
+                                    istream_id, '0%db' % route_sel_in_bits)
                             else:
                                 # the first port is always alu
-                                iidx = neighbors_in.index(i) + alu_num_out
+                                iidx = neighbors_in.index(i) + alu_num_out + num_istream
                                 route_sel_in_v[oidx] = format(
                                     iidx, '0%db' % route_sel_in_bits)
                     route_sel_in_v.reverse()
@@ -221,9 +225,13 @@ class CgraConfiguration:
                         if 'alu' in str(i):
                             alu_out_id = int(i[4:-1])
                             route_sel_in_v = format(alu_out_id, '0%db' % route_sel_in_bits)
+                        elif 'istream' in str(i):
+                            istream_id = int(i[8:-1]) + alu_num_out
+                            route_sel_in_v = format(
+                            istream_id, '0%db' % route_sel_in_bits)
                         else:
                             # the first port is always alu
-                            iidx = neighbors_in.index(i) + alu_num_out
+                            iidx = neighbors_in.index(i) + alu_num_out + num_istream
                             route_sel_in_v = format(iidx, '0%db' % route_sel_in_bits)
                     route_sel_in = route_sel_in_v
                 else:
@@ -236,8 +244,10 @@ class CgraConfiguration:
                     for i, vo in route_tb.items():
                         if 'alu' in str(i):
                             iidx = int(i[4:-1])
+                        elif 'istream' in str(i):
+                            iidx = int(i[8:-1]) + alu_num_out
                         else:
-                            iidx = neighbors_out.index(i) + alu_num_out
+                            iidx = neighbors_out.index(i) + alu_num_out + num_istream
 
                         route_sel_in_v.append(
                             format(iidx, '0%db' % route_sel_in_bits))

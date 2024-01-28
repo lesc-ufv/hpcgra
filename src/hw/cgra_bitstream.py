@@ -34,14 +34,12 @@ class Bitstream:
         pe_out_size = [idx[1] for idx in self.cgra.output_ids]
 
         for pe_id, istream_id in self.assembler.used_inputs.items():
-            istream_id_global = pe_in_ids.index(
-                pe_id) * pe_in_size[pe_in_ids.index(pe_id)]
+            istream_id_global = sum(pe_in_size[:pe_in_ids.index(pe_id)])
             for i in istream_id:
                 mask_input_v[istream_id_global+i] = '1'
 
         for pe_id, ostream_id in self.assembler.used_outputs.items():
-            ostream_id_global = pe_out_ids.index(
-                pe_id) * pe_out_size[pe_out_ids.index(pe_id)]
+            ostream_id_global = sum(pe_out_size[:pe_out_ids.index(pe_id)])
             for o in ostream_id:
                 mask_output_v[ostream_id_global+o] = '1'
 

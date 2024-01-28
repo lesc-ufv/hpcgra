@@ -1,0 +1,48 @@
+{
+    "edges": [
+        {
+            "source": "0",
+            "source-port": "0",
+            "target": "2",
+            "target-port": "0"
+        },
+        {
+            "source": "1",
+            "source-port": "0",
+            "target": "2",
+            "target-port": "1"
+        },
+        {
+            "source": "2",
+            "source-port": "0",
+            "target": "3",
+            "target-port": "0"
+        }
+    ],
+    "nodes": [
+        {
+            "id": "0",
+            "label": "input",
+            "opcode": "input",
+            "size": "1"
+        },
+        {
+            "id": "1",
+            "label": "input",
+            "opcode": "input",
+            "size": "1"
+        },
+        {
+            "id": "2",
+            "label": "add",
+            "opcode": "add",
+            "size": "1"
+        },
+        {
+            "id": "3",
+            "label": "output",
+            "opcode": "output",
+            "size": "1"
+        }
+    ]
+}

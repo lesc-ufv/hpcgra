@@ -528,16 +528,26 @@ class AluOperationMacc(AluOperation):
                    flag_acc(1)
                 ),
                 
-                If(flag_acc)(
-                    If(end_count)(
-                      valid0(1),
-                      out(value),
-                      value(multiply),
-                      counter(1)
-                   ).Else(
-                      value(multiply + value),
-                      counter.inc(),
-                   )
+                Case(Cat(flag_acc,end_count))(
+                   When(Int(0,2,2))(
+                   
+                   ),
+                   When(Int(1,2,2))(
+                    valid0(Int(1,1,2)),
+                    out(value),
+                    value(0),
+                    counter(0)
+                   ),
+                   When(Int(2,2,2))(
+                     value(multiply + value),
+                      counter.inc()
+                   ),
+                   When(Int(3,2,2))(
+                   valid0(Int(1,1,2)),
+                    out(value),
+                    value(multiply),
+                    counter(1)
+                   ),
                 )
             ),
         )

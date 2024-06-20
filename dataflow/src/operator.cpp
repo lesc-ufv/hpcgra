@@ -122,7 +122,6 @@ void Operator::rmDst(Operator *dst, int port)
 
 std::vector<Operator *> &Operator::getDst(int port)
 {
-
     if (m_outputs.find(port) != m_outputs.end())
     {
         return m_outputs[port];

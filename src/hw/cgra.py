@@ -392,6 +392,10 @@ class Pe(Module):
 
         only_alu = False
         if routes == 0:
+            inputs_regs_router = [self.Wire(
+                'in_reg_router%d' % i, self.data_width + 1) for i in range(len(neighbors_in))]
+            stream_in_reg_router=[self.Wire(
+                'istream_reg_router%d' % i, self.data_width + 1) for i in range(num_istream)]
             routes = self.alu.getNumOutputs()+num_istream
             router = self.components.create_router(
                 routes, self.alu.getNumOutputs()+num_istream, len(outputs))
@@ -404,7 +408,7 @@ class Pe(Module):
             
             routes = max(self.alu.getNumOutputs()+num_istream,routes)
             router = self.components.create_router(
-                routes, len(neighbors_in) + self.alu.getNumOutputs()+num_istream, len(outputs))
+                routes, len(neighbors_in) + self.alu.getNumOutputs() + num_istream, len(outputs))
 
         route_ports = router.get_ports()
         route_sel_in = None

@@ -38,6 +38,7 @@ OperatorFactory::OperatorFactory() {
     Register("slti", &Slti::create);
     Register("const", &Const::create);
     Register("reg", &Reg::create);
+    Register("generic",&Generic::create);
 }
 
 void OperatorFactory::Register(const std::string &operatorName, pfnCreate_t pfnCreate) {

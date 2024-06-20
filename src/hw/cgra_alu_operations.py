@@ -168,7 +168,6 @@ class AluOperationAdd(AluOperationBinary):
     def getLatency(self):
         return 0
 
-
 class AluOperationSub(AluOperationBinary):
     def __init__(self) -> None:
         super().__init__('sub_m')
@@ -179,7 +178,6 @@ class AluOperationSub(AluOperationBinary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationMul(AluOperationBinary):
     def __init__(self) -> None:
@@ -192,18 +190,15 @@ class AluOperationMul(AluOperationBinary):
     def getLatency(self):
         return 0
 
-
 class AluOperationOr(AluOperationBinary):
     def __init__(self) -> None:
         super().__init__('or_m')
-        self.Assign(self.outputs["out0"](
-            self.inputs["in0"] | self.inputs["in1"]))
+        self.Assign(self.outputs["out0"](self.inputs["in0"] | self.inputs["in1"]))
         self.Assign(self.out_valids["out0_valid"](
             And(self.in_valids['in0_valid'], self.in_valids['in1_valid'])))
 
     def getLatency(self):
         return 0
-
 
 class AluOperationXor(AluOperationBinary):
     def __init__(self) -> None:
@@ -216,18 +211,15 @@ class AluOperationXor(AluOperationBinary):
     def getLatency(self):
         return 0
 
-
 class AluOperationAnd(AluOperationBinary):
     def __init__(self) -> None:
         super().__init__('and_m')
-        self.Assign(self.outputs["out0"](
-            self.inputs["in0"] & self.inputs["in1"]))
+        self.Assign(self.outputs["out0"](self.inputs["in0"] & self.inputs["in1"]))
         self.Assign(self.out_valids["out0_valid"](
             And(self.in_valids['in0_valid'], self.in_valids['in1_valid'])))
 
     def getLatency(self):
         return 0
-
 
 class AluOperationShl(AluOperationBinary):
     def __init__(self) -> None:
@@ -240,7 +232,6 @@ class AluOperationShl(AluOperationBinary):
     def getLatency(self):
         return 0
 
-
 class AluOperationShr(AluOperationBinary):
     def __init__(self) -> None:
         super().__init__('shr_m')
@@ -251,7 +242,6 @@ class AluOperationShr(AluOperationBinary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationSlt(AluOperationBinary):
     def __init__(self) -> None:
@@ -264,7 +254,6 @@ class AluOperationSlt(AluOperationBinary):
     def getLatency(self):
         return 0
 
-
 class AluOperationSgt(AluOperationBinary):
     def __init__(self) -> None:
         super().__init__('sgt_m')
@@ -275,7 +264,6 @@ class AluOperationSgt(AluOperationBinary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationSeq(AluOperationBinary):
     def __init__(self) -> None:
@@ -288,7 +276,6 @@ class AluOperationSeq(AluOperationBinary):
     def getLatency(self):
         return 0
 
-
 class AluOperationSne(AluOperationBinary):
     def __init__(self) -> None:
         super().__init__('sne_m')
@@ -299,7 +286,6 @@ class AluOperationSne(AluOperationBinary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationMax(AluOperationBinary):
     def __init__(self) -> None:
@@ -312,7 +298,6 @@ class AluOperationMax(AluOperationBinary):
     def getLatency(self):
         return 0
 
-
 class AluOperationMin(AluOperationBinary):
     def __init__(self) -> None:
         super().__init__('min_m')
@@ -323,7 +308,6 @@ class AluOperationMin(AluOperationBinary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationMulAdd(AluOperationTernary):
     def __init__(self) -> None:
@@ -336,7 +320,6 @@ class AluOperationMulAdd(AluOperationTernary):
     def getLatency(self):
         return 0
 
-
 class AluOperationMulSub(AluOperationTernary):
     def __init__(self) -> None:
         super().__init__('mulsub_m')
@@ -347,7 +330,6 @@ class AluOperationMulSub(AluOperationTernary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationAddAdd(AluOperationTernary):
     def __init__(self) -> None:
@@ -360,7 +342,6 @@ class AluOperationAddAdd(AluOperationTernary):
     def getLatency(self):
         return 0
 
-
 class AluOperationSubSub(AluOperationTernary):
     def __init__(self) -> None:
         super().__init__('subsub_m')
@@ -371,7 +352,6 @@ class AluOperationSubSub(AluOperationTernary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationAddSub(AluOperationTernary):
     def __init__(self) -> None:
@@ -384,7 +364,6 @@ class AluOperationAddSub(AluOperationTernary):
     def getLatency(self):
         return 0
 
-
 class AluOperationMux(AluOperationTernary):
     def __init__(self) -> None:
         super().__init__('mux_m')
@@ -395,7 +374,6 @@ class AluOperationMux(AluOperationTernary):
 
     def getLatency(self):
         return 0
-
 
 class AluOperationReg(AluOperation):
     def __init__(self) -> None:
@@ -421,7 +399,6 @@ class AluOperationReg(AluOperation):
     def getLatency(self):
         return 1
 
-
 class AluOperationConst(AluOperation):
     def __init__(self) -> None:
         super().__init__('const_m', 'register')
@@ -446,52 +423,45 @@ class AluOperationConst(AluOperation):
     def getLatency(self):
         return 0
 
-
 class AluOperationAcc(AluOperation):
     def __init__(self) -> None:
         super().__init__('acc_m', 'register')
         self.add_input('in0', 0)
         self.add_input('in1', 1)
         self.add_output('out0', 0)
-        self.add_output('out1', 1)
         value = self.Reg("value", self.width)
         out = self.Reg("out", self.width)
         valid0 = self.Reg("valid0")
-        valid1 = self.Reg("valid1")
         counter = self.Reg("counter", 32)
 
         self.Always(Posedge(self.clk))(
             If(self.rst)(
                 valid0(0),
-                valid1(0),
                 value(0),
-                counter(1)
+                counter(1),
+                out(0)
             ).Else(
-                valid1(0),
-                valid0(And(self.in_valids['in0_valid'],self.in_valids['in1_valid'])),
+                valid0(0),
                 If(And(self.in_valids['in0_valid'],self.in_valids['in1_valid']))(
                     value(value + self.inputs['in1']),
                     counter.inc(),
                     If(counter == self.inputs['in0'])(
-                      valid1(1),
                       out(value + self.inputs['in1']),
-                      value(self.inputs['in1']),
-                      counter(2)
+                      value(0),
+                      valid0(1),
+                      counter(1)
                     )
                 ),
             ),
         )
-        self.outputs['out1'].assign(out)
-        self.out_valids['out1_valid'].assign(valid0)
-
-        self.outputs['out0'].assign(Cat(Repeat(Int(0,1,2),15), valid1))
+ 
+        self.outputs['out0'].assign(out)
         self.out_valids['out0_valid'].assign(valid0)
 
         initialize_regs(self)
 
     def getLatency(self):
         return 1
-
 
 class AluOperationMacc(AluOperation):
     def __init__(self) -> None:
@@ -557,6 +527,48 @@ class AluOperationMacc(AluOperation):
 
     def getLatency(self):
         return 1
+    
+class AluOperationMerge(AluOperation):
+    def __init__(self) -> None:
+        super().__init__('merge_m', 'register')
+        self.add_input('in0', 0)
+        self.add_input('in1', 1)
+        self.add_output('out0', 0)
+        out = self.Reg("out", self.width)
+        valid0 = self.Reg("valid0")
+        
+        self.Always(Posedge(self.clk))(
+            If(self.rst)(
+                out(0),
+                valid0(0)
+            ).Else(
+                Case(Cat(self.in_valids['in1_valid'],self.in_valids['in0_valid']))(
+                   When(Int(0,2,2))(
+                     valid0(0)
+                   ),
+                   When(Int(1,2,2))(
+                     valid0(Int(1,1,2)),
+                     out(self.inputs['in0']),
+                   ),
+                   When(Int(2,2,2))(
+                     valid0(Int(1,1,2)),
+                     out(self.inputs['in1']),
+                   ),
+                   When(Int(3,2,2))(
+                     valid0(Int(1,1,2)),
+                     out(self.inputs['in0']),
+                   ),
+                ),
+            ),
+        )
+ 
+        self.outputs['out0'].assign(out)
+        self.out_valids['out0_valid'].assign(valid0)
+
+        initialize_regs(self)
+
+    def getLatency(self):
+        return 1
 
 class CgraAluOperations:
     def __init__(self, json_arch: dict = None, json_arch_file: str = None) -> None:
@@ -597,7 +609,8 @@ class CgraAluOperations:
             'min': AluOperationMin(),
             'const': AluOperationConst(),
             'acc':AluOperationAcc(),
-            'macc':AluOperationMacc()
+            'macc':AluOperationMacc(),
+            'merge':AluOperationMerge()
         }
         if jarch:
             if "operations" in jarch.keys():
@@ -611,6 +624,7 @@ class CgraAluOperations:
 
         for j_op in j_all_operations:
             if self.operations.get(j_op['opcode']) is None:
+                print('Create operator %s'%j_op['opcode'])
                 op = self.create_operator(j_op)
                 self.operations[op.name] = op
 
@@ -671,6 +685,7 @@ class CgraAluOperations:
                 con_outputs.append(wires[nv])
 
             c = 0
+
             for i in op.get_inputs():
                 con_inputs[c] = (i, con_inputs[c])
                 con_inputs[c+1] = ("%s_valid" % i, con_inputs[c+1])

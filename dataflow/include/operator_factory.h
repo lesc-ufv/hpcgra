@@ -26,6 +26,7 @@
 #include <xor.h>
 #include <const.h>
 #include <reg.h>
+#include <generic.h>
 
 typedef Operator *(*pfnCreate_t)(Params); // function pointer type
 

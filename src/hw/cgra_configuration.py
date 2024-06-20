@@ -13,12 +13,15 @@ class CgraConfiguration:
         if id not in self.cgra.array_pe_arch.keys():
             return False, 'CGRA does not contain the PE %d.' % id
 
+        routes = self.cgra.array_pe_arch[id]['routes']
+        routes = self.cgra.array_pe[id].alu.getNumOutputs(
+        ) if routes < self.cgra.array_pe[id].alu.getNumOutputs() else routes
+        
         isa = self.cgra.array_pe_arch[id]['isa']
         alu_num_inputs = self.cgra.array_pe[id].alu.getNumInputs()
-        conf_tag = ConfTag(alu_num_inputs)
+        conf_tag = ConfTag(routes>0, alu_num_inputs)
         conf_bits = self.cgra.conf_raw_bits
-        id_bits = format(int(bin(id + 1)[2:], 2),
-                         '0%db' % self.cgra.pe_id_width)
+        id_bits = format(int(bin(id + 1)[2:], 2),'0%db' % self.cgra.pe_id_width)
         raw_conf = format(int(conf_tag.reset + id_bits, 2), '0%db' % conf_bits)
         return True, [raw_conf]
 
@@ -291,6 +294,5 @@ class CgraConfiguration:
         if const < 0:
             const = Complement2(const)
         const = format(const, '0%db' % self.cgra.data_width)
-        raw_conf = format(
-            int(const + conf_tag.const[op_idx] + id_bits, 2), '0%db' % conf_bits)
+        raw_conf = format(int(const + conf_tag.const[op_idx] + id_bits, 2), '0%db' % conf_bits)
         return True, [raw_conf]

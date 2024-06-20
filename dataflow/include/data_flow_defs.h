@@ -5,7 +5,8 @@ typedef enum {
     OP_BASIC,
     OP_IMMEDIATE,
     OP_IN,
-    OP_OUT
+    OP_OUT,
+    OP_GENERIC
 } op_type_t;
 
 #endif //DATAFLOW_H

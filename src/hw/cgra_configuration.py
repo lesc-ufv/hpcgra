@@ -165,7 +165,7 @@ class CgraConfiguration:
                         lines = lines_error.get(o)
                         if 'ostream' in str(o):
                             if int(o[8:-1]) >= num_ostream:
-                                return False, list(lines), 'PE %s cannot perform output data.' % (id)
+                                return False, list(lines), 'PE %s cannot perform output data for ostream[%d].' % (id,int(o[8:-1]))
                         else:
                             return False, list(lines), 'PE %s not in neighbors of PE %s.' % (o, id)
 

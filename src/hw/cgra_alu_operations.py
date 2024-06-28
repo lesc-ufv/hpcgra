@@ -624,7 +624,6 @@ class CgraAluOperations:
 
         for j_op in j_all_operations:
             if self.operations.get(j_op['opcode']) is None:
-                print('Create operator %s'%j_op['opcode'])
                 op = self.create_operator(j_op)
                 self.operations[op.name] = op
 

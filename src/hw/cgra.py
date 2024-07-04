@@ -711,6 +711,3 @@ class ConfReader(Module):
         )
 
         initialize_regs(self)
-
-
-Cgra("/home/lucas/Documentos/hpcgra/test/tests_lucas/cesar/cgra_2x2.json").to_verilog("/home/lucas/Documentos/hpcgra/test/tests_lucas/cesar/cgra.v")

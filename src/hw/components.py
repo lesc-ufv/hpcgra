@@ -3,6 +3,11 @@ from math import ceil, log
 from veriloggen import *
 from veriloggen.types.util import *
 
+p = os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))))
+if not p in sys.path:
+    sys.path.insert(0, p)
+
 from src.hw.utils import initialize_regs, bits
 
 
@@ -310,58 +315,62 @@ class Components:
         self.cache[name] = m
         return m
 
-    def create_router(self, routes, num_in, num_out):
-        name = 'route_%d_%dx%d' % (routes, num_in, num_out)
+    '''
+    TODO Mudar o router para que as saidas da alu mais as entradas externas sejam
+    conectadas no apenas no switch de saida e os vizinhos em um switch de entrada.
+    '''
+
+    def create_router1(self, num_in, num_out):
+        name = 'route_%dx%d' % (num_in, num_out)
         if name in self.cache.keys():
             return self.cache[name]
         m = Module(name)
         width = m.Parameter('width', 16)
 
-        if routes == 0 or num_in == 1:
+        if num_in == 1:
             in0 = m.Input('in0', width)
             outputs = [m.Output('out%d' % i, width) for i in range(num_out)]
             for o in outputs:
                 o.assign(in0)
-        elif routes == 1:
-            switch_in = self.create_switch_box(num_in, routes)
+        else:
+            switch_in = self.create_switch_box(num_in, num_out)
             p_in = switch_in.get_ports()
             sel_in = m.Input('sel_in', p_in['sel'].width)
             inputs = [('in%d' % i, m.Input('in%d' % i, width))
                       for i in range(num_in)]
             outputs = [('out0', m.Output('out%d' % i, width))
                        for i in range(num_out)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [
-                       ('sel', sel_in)] + inputs + outputs)
-        elif routes >= num_out or routes == num_in:
-            switch_in = self.create_switch_box(num_in, num_out)
-            p = switch_in.get_ports()
-            sel_in = m.Input('sel_in', p['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width))
-                      for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width))
-                       for i in range(num_out)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [
-                       ('sel', sel_in)] + inputs + outputs)
+            m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + outputs)
 
-        else:
-            switch_in = self.create_switch_box(num_in, routes)
-            switch_out = self.create_switch_box(routes, num_out)
-            p_in = switch_in.get_ports()
-            p_out = switch_out.get_ports()
-            sel_in = m.Input('sel_in', p_in['sel'].width)
-            sel_out = m.Input('sel_out', p_out['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width))
-                      for i in range(num_in)]
-            outputs = [('out%d' % i, m.Output('out%d' % i, width))
-                       for i in range(num_out)]
-            sin_sout_out = [('out%d' % i, m.Wire('sin_sout%d' % i, width))
-                            for i in range(routes)]
-            sin_sout_in = [('in%d' % i, sin_sout_out[i][1])
-                           for i in range(routes)]
-            m.Instance(switch_in, switch_in.name, [('width', width)], [
-                       ('sel', sel_in)] + inputs + sin_sout_out)
-            m.Instance(switch_out, switch_out.name, [('width', width)], [
-                       ('sel', sel_out)] + sin_sout_in + outputs)
+        self.cache[name] = m
+
+        return m
+
+    def create_router2(self, num_in_sw0,num_in_sw1, routes, num_out):
+        name = 'route_%d_%d_%d_%d' % (num_in_sw0,num_in_sw1, routes, num_out)
+        if name in self.cache.keys():
+            return self.cache[name]
+        m = Module(name)
+        width = m.Parameter('width', 16)
+
+        switch_in = self.create_switch_box(num_in_sw0, routes)
+        switch_out = self.create_switch_box(routes + num_in_sw1, num_out)
+        p_in = switch_in.get_ports()
+        p_out = switch_out.get_ports()
+        sel_in = m.Input('sel_in', p_in['sel'].width)
+        sel_out = m.Input('sel_out', p_out['sel'].width)
+        inputs = [m.Input('in%d' % i, width) for i in range(num_in_sw0+num_in_sw1)]
+        outputs = [('out%d' % i, m.Output('out%d' % i, width)) for i in range(num_out)]
+
+        wires = [m.Wire('sw0_out%d' % i, width) for i in range(routes)]
+        con_sw0_out = [('out%d' % i, wires[i]) for i in range(routes)]
+        sin_sout_in = [('in%d' % i, inputs[i+num_in_sw1]) for i in range(num_in_sw0)]
+        m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + sin_sout_in + con_sw0_out)
+
+        con_sw1_in = [('in%d' % i, inputs[i]) for i in range(num_in_sw1)]
+        con_sw1_in += [('in%d' % (i+num_in_sw1), wires[i]) for i in range(routes)]
+
+        m.Instance(switch_out, switch_out.name, [('width', width)], [('sel', sel_out)] + con_sw1_in + outputs)
 
         self.cache[name] = m
 
@@ -430,10 +439,10 @@ class Components:
         clSwitch = Case(clWordCount)
 
         for i in range(CL_SIZE):
-            if i == CL_SIZE-1:
+            if i == CL_SIZE - 1:
                 clSwitch.add(When(Int(i, clWordCount.width, 2))(
                     If(rd_data_valid)(
-                        conf_cl[i*rd_data.width:(i+1)*rd_data.width](rd_data),
+                        conf_cl[i * rd_data.width:(i + 1) * rd_data.width](rd_data),
                         conf_req_data(1),
                         fsm_conf_ctrl(fsm_conf_ctrl_next),
                         clWordCount(0),
@@ -442,9 +451,9 @@ class Components:
             else:
                 clSwitch.add(When(Int(i, clWordCount.width, 2))(
                     If(rd_data_valid)(
-                        conf_cl[i*rd_data.width:(i+1)*rd_data.width](rd_data),
+                        conf_cl[i * rd_data.width:(i + 1) * rd_data.width](rd_data),
                         conf_req_data(1),
-                        clWordCount(i+1),
+                        clWordCount(i + 1),
                     )
                 )
                 )

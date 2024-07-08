@@ -81,7 +81,7 @@ class CgraAccelerator:
         m.Instance(reg_tree, 'reg_tree_conf', param, con)
 
         param = []
-        con = [('clk', clk), ('inputs_ready_0', en)]
+        con = [('inputs_ready_0', en)]
         con += [('inputs_ready_%d' % (i + 1), available_pop[i] | ~read_fifo_mask[i]) for i in range(self.num_in)]
         con += [('outputs_ready_%d' % (i), available_push[i] | ~write_fifo_mask[i]) for i in range(self.num_out)]
         con += [('inputs_enables_%d' % i, en_pop[i]) for i in range(self.num_in)]

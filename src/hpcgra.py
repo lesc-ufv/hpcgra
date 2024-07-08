@@ -41,7 +41,7 @@ def main():
     args = create_args()
     if args.json or args.arch:
         if args.json:
-            cgra = Cgra(json_file=args.json)
+            cgra = Cgra(args.json)
         else:
             if args.shape:
                 v = args.shape.split('x')

@@ -7,7 +7,7 @@ from src.hw.utils import to_hex
 
 class Bitstream:
     def __init__(self, cgra_json, assembly, pr_dot_path):
-        self.cgra = Cgra(json_file=cgra_json)
+        self.cgra = Cgra(cgra_json)
         self.assembler = CgraAssembler(self.cgra, assembly, pr_dot=pr_dot_path)
         cgra_bitstream = self.assembler.compile()
         if cgra_bitstream is None:

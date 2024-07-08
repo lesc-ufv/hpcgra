@@ -50,26 +50,23 @@ int main(int argc, char *argv[])
     for (int c = 0; c < NUM_CHANNELS; c++)
     {
         if(inputs[c].size() > 0){
-        std::cout << std::endl
-                  << "IN" << c << ": ";
-        size = size<10?size:10;
-        auto ptr_in = (unsigned short *)cgra_acc.getInputQueue(c);
-        for (int i = 0; i < size; i++)
-        {
-            std::cout << ptr_in[i] << " ";
+            std::cout << std::endl << "IN" << c << ": ";
+            auto ptr_in = (unsigned short *)cgra_acc.getInputQueue(c);
+            for (int i = 0; i < inputs[c].size(); i++)
+            {
+                std::cout << ptr_in[i] << " ";
+            }
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
-        }
+        
         if(out_size[c] > 0){
-        std::cout << std::endl
-                  << "OUT" << c << ": ";
-         size = out_size[c]<10?out_size[c]:10;
-        auto ptr_out = (unsigned short *)cgra_acc.getOutputQueue(c);
-        for (int i = 0; i < size; i++)
-        {
-            std::cout << ptr_out[i] << " ";
-        }
-        std::cout << std::endl;
+            std::cout << std::endl << "OUT" << c << ": ";
+            auto ptr_out = (unsigned short *)cgra_acc.getOutputQueue(c);
+            for (int i = 0; i < out_size[c]; i++)
+            {
+                std::cout << ptr_out[i] << " ";
+            }
+            std::cout << std::endl;
         }
     }
 

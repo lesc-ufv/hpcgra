@@ -121,7 +121,7 @@ class CgraConfiguration:
         num_neighbors_out = len(neighbors_out)
 
         alu = self.cgra.array_pe[id].alu
-        num_consts = alu.getNumConst() + alu.num_inputs()
+        num_consts = alu.getNumConst() + alu.getNumInputs()
         alu_num_out = alu.getNumOutputs()
         routes = 0 if self.cgra.array_pe_arch[id]['routes'] < 0 else self.cgra.array_pe_arch[id]['routes']
 
@@ -144,7 +144,7 @@ class CgraConfiguration:
                     route_tb[src].append(dst)
                 else:
                     route_tb[src] = [dst]
-                    if not ('alu' in src or 'istream' in src):
+                    if not ('alu' in str(src) or 'istream' in str(src)):
                         num_neighbors_routing += 1
 
         if routes == 0:
@@ -206,8 +206,8 @@ class CgraConfiguration:
 
         id_bits = format(id + 1, '0%db' % self.cgra.pe_id_width)
 
-        conf_bits_sw0 = ''
-        conf_bits_sw1 = ''
+        conf_bits_sw0 = []
+        conf_bits_sw1 = []
 
         if num_sw == 1:
             if sw0_sel_bits > 0:
@@ -270,10 +270,10 @@ class CgraConfiguration:
 
                     conf_bits_sw1[oidx] = format(iidx,'0%db' % (sw1_sel_bits / num_sw1_out))
 
-            conf_bits_sw0.reverse()
-            conf_bits_sw0 = "".join(conf_bits_sw0)
-            conf_bits_sw1.reverse()
-            conf_bits_sw1 = "".join(conf_bits_sw1)
+        conf_bits_sw0.reverse()
+        conf_bits_sw0 = "".join(conf_bits_sw0)
+        conf_bits_sw1.reverse()
+        conf_bits_sw1 = "".join(conf_bits_sw1)
 
         if len(conf_bits_sw0) == 0 and len(conf_bits_sw1) == 0:
             ret = []

@@ -315,11 +315,6 @@ class Components:
         self.cache[name] = m
         return m
 
-    '''
-    TODO Mudar o router para que as saidas da alu mais as entradas externas sejam
-    conectadas no apenas no switch de saida e os vizinhos em um switch de entrada.
-    '''
-
     def create_router1(self, num_in, num_out):
         name = 'route_%dx%d' % (num_in, num_out)
         if name in self.cache.keys():
@@ -336,10 +331,8 @@ class Components:
             switch_in = self.create_switch_box(num_in, num_out)
             p_in = switch_in.get_ports()
             sel_in = m.Input('sel_in', p_in['sel'].width)
-            inputs = [('in%d' % i, m.Input('in%d' % i, width))
-                      for i in range(num_in)]
-            outputs = [('out0', m.Output('out%d' % i, width))
-                       for i in range(num_out)]
+            inputs = [('in%d' % i, m.Input('in%d' % i, width)) for i in range(num_in)]
+            outputs = [('out%d'%i, m.Output('out%d' % i, width)) for i in range(num_out)]
             m.Instance(switch_in, switch_in.name, [('width', width)], [('sel', sel_in)] + inputs + outputs)
 
         self.cache[name] = m
@@ -1289,39 +1282,35 @@ class Components:
         return m
 
     def create_control_data_flow(self, num_inputs, num_outputs, and_tree_radix, reg_tree_radix):
-        name = 'control_data_flow_%d_%d_%d_%d' % (
-            num_inputs, num_outputs, and_tree_radix, reg_tree_radix)
+        name = 'control_data_flow_%d_%d_%d_%d' % ( num_inputs, num_outputs, and_tree_radix, reg_tree_radix)
         if name in self.cache.keys():
             return self.cache[name]
         m = Module(name)
 
-        clk = m.Input('clk')
+        #clk = m.Input('clk')
 
-        inputs_ready = [m.Input('inputs_ready_%d' % i)
-                        for i in range(num_inputs)]
-        outputs_ready = [m.Input('outputs_ready_%d' % i)
-                         for i in range(num_outputs)]
-        inputs_enables = [m.Output('inputs_enables_%d' % i)
-                          for i in range(num_inputs)]
+        inputs_ready = [m.Input('inputs_ready_%d' % i) for i in range(num_inputs)]
+        outputs_ready = [m.Input('outputs_ready_%d' % i) for i in range(num_outputs)]
+        inputs_enables = [m.Output('inputs_enables_%d' % i) for i in range(num_inputs)]
 
-        and_tree = self.create_and_tree(
-            and_tree_radix, num_inputs + num_outputs)
-        reg_tree = self.create_reg_tree(reg_tree_radix, num_inputs)
+        and_tree = self.create_and_tree( and_tree_radix, num_inputs + num_outputs)
+        #reg_tree = self.create_reg_tree(reg_tree_radix, num_inputs)
 
-        and_tree_to_reg_tree = m.Wire('and_tree_to_reg_tree')
+        #and_tree_to_reg_tree = m.Wire('and_tree_to_reg_tree')
 
-        con = [('clk', clk)]
-        con += [('in_%d' % i, inputs_ready[i]) for i in range(num_inputs)]
-        con += [('in_%d' % (i + num_inputs), outputs_ready[i])
-                for i in range(num_outputs)]
-        con += [('out', and_tree_to_reg_tree)]
-        params = []
-        m.Instance(and_tree, 'and_tree', params, con)
+        #con = [('clk', clk)]
+        # con = [('in_%d' % i, inputs_ready[i]) for i in range(num_inputs)]
+        # con += [('in_%d' % (i + num_inputs), outputs_ready[i]) for i in range(num_outputs)]
+        # con += [('out', and_tree_to_reg_tree)]
+        # params = []
+        # m.Instance(and_tree, 'and_tree', params, con)
+        ands = inputs_ready+outputs_ready
+        for i in range(len(inputs_enables)):
+            inputs_enables[i].assign(AndList(*ands))
 
-        con = [('clk', clk), ('in', and_tree_to_reg_tree)]
-        con += [('out_%d' % i, inputs_enables[i]) for i in range(num_inputs)]
-        params = [('DATA_WIDTH', 1)]
-        m.Instance(reg_tree, 'reg_tree', params, con)
+        #con = [('clk', clk), ('in', and_tree_to_reg_tree)]
+        #con += [('out_%d' % i, inputs_enables[i]) for i in range(num_inputs)]  params = [('DATA_WIDTH', 1)]
+        #m.Instance(reg_tree, 'reg_tree', params, con)
 
         initialize_regs(m)
         self.cache[name] = m

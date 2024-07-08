@@ -35,7 +35,7 @@ def create_args():
 
 
 def create_project(hpcgra_root, arch_json, name, clock, output_path, mem_type, size):
-    cgra = Cgra(json_file=arch_json)
+    cgra = Cgra(arch_json)
     cgraacc = CgraAccelerator(cgra)
     acc_axi = AccAXIInterface(cgraacc)
 

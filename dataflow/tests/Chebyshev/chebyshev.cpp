@@ -1,31 +1,64 @@
 #include "chebyshev.h"
 
 int main(int argc, char *argv[]) {
-
-    auto df = createDataFlow(0, 1);
-    auto data_in = new unsigned short[1024];
-    auto data_out = new unsigned short[1024];
-
-    for (int k = 0; k < 1024; ++k) {
-        data_in[k] = k+1;
-        data_out[k] = 0;
-    }
-
-    auto in = reinterpret_cast<InputStream *>(df->getOp(0));
-    auto out = reinterpret_cast<OutputStream *>(df->getOp(1));
     
-    in->setData(data_in,0,10);
-    out->setData(data_out,0,10);
+    srand(time(nullptr));
+    int n = 1024;
+    int copies = 1;
+    if(argc > 1){
+       n = atoi(argv[1]);
+    }
+    if(argc > 2){
+        copies = atoi(argv[2]);
+    }
+    auto df = createDataFlow(0,copies);
+    
+    auto data_in = new unsigned short*[copies];
+    auto data_out = new unsigned short*[copies];
+    int i = 0; 
+    for (int c = 0; c < copies;c++){
+        data_in[c] = new unsigned short[n];
+        data_out[c] = new unsigned short[n];
+        for (int k = 0; k < n; ++k) {
+            data_in[c][k] = rand()%((1<<16)- 1);
+            data_out[c][k] = 0;
+        }
+        auto in = reinterpret_cast<InputStream *>(df->getOp(i));
+        auto out = reinterpret_cast<OutputStream *>(df->getOp(i+1));
+        in->setData(data_in[c],0,n);
+        out->setData(data_out[c],0,n);
+        i+=2;
+    }
     df->compute();
-
+    
+    for (int c = 0; c < copies;c++){
+        std::string fname = "in"+std::to_string(c)+".txt";
+        FILE *fp = fopen(fname.c_str(),"w");        
+        fprintf(fp,"%d\n",n);
+        for (int k = 0; k < n; ++k) {
+            fprintf(fp,"%d\n",data_in[c][k]);
+        }
+        fclose(fp);
+    }
+    
+    for (int c = 0; c < copies;c++){
+        std::string fname1 = "out"+std::to_string(c)+".txt";
+        std::string fname2 = "out"+std::to_string(c)+".golden.txt";
+        FILE *fp1 = fopen(fname1.c_str(),"w");
+        FILE *fp2 = fopen(fname2.c_str(),"w");        
+        fprintf(fp1,"%d\n",n);
+        for (int k = 0; k < n; ++k) {
+            fprintf(fp2,"%d\n",data_out[c][k]);
+        }
+        fclose(fp1);
+        fclose(fp2);
+        i+=2;
+    }
+    
+    
     df->toJSON("../chebyshev.json");
     df->toDOT("../chebyshev.dot");
     df->toJsonOperator("../chebyshev.op.json");
-
-    for(int i=0;i < 10;i++){
-      std::cout << data_out[i] << " ";
-    }
-    std::cout << std::endl;
     
     delete df;
 

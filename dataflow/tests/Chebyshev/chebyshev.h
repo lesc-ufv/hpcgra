@@ -2,6 +2,7 @@
 #define CHEBYSHEV_H
 
 #include <data_flow.h>
+#include <stdlib.h>
 
 using namespace std;
 

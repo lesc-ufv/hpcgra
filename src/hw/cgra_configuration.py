@@ -175,7 +175,7 @@ class CgraConfiguration:
         if num_neighbors_routing <= routes:
             map_route = {}
             for i, vo in route_tb.items():
-                if (not ('alu' in str(i) or 'istream' in str(i))) and routes == 0:
+                if (routes == 0) and ('alu' in str(i) or 'istream' in str(i)):
                     lines = lines_error.get(i)
                     return False, list(lines), 'PE %s not performs routing of neighbors' % (i)
                 if (not ('alu' in str(i) or 'istream' in str(i))) and i not in neighbors_in:
@@ -238,7 +238,7 @@ class CgraConfiguration:
             conf_bits_sw1 = [format(0, '0%db' % (sw1_sel_bits / num_sw1_out)) for _ in range(num_sw1_out)]
             routind_idx = 0
             for i, vo in route_tb.items():
-                if not ('alu' in str(i) and 'istream' in str(i)):
+                if 'alu' not in str(i) and 'istream' not in str(i):
                     if sw0_sel_bits > 0:
                         iidx = neighbors_in.index(i)
                         conf_bits_sw0[routind_idx] = (format(iidx, '0%db' % (sw0_sel_bits / num_sw0_out)))

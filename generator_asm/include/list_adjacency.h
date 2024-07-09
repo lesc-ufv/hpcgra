@@ -1,5 +1,5 @@
-#ifndef __LIST_ADJACENCY_H
-#define __LIST_ADJACENCY_H
+#ifndef LIST_ADJACENCY_H
+#define LIST_ADJACENCY_H
 
 #include <vector>
 

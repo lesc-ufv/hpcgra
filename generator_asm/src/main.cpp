@@ -5,9 +5,8 @@ int main(int argc, char **argv) {
     auto timetime = time(nullptr);
     srand(timetime);
     // Creating the structure of graph with the vectors (A, v, v_i) from Graph g
-    std::string path_dot = "", name = "", path_arch = "", path_asm = "";
+    std::string path_dot, name, path_arch, path_asm;
     int NGRIDS = 1000;
-
     if (argc > 3) {
         name = argv[1];
         path_dot = argv[2];
@@ -34,25 +33,23 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    Graph graph(path_dot, map_type);
+    auto graph = new Graph(path_dot, map_type);
 
-    if (!graph.get_ok()) { // verify if graph format it's ok
+    if (!graph->get_ok()) { // verify if graph format it's ok
         printf("bad format of graph json\n\n");
         return 1;
     }
 
-    const int SIZE_NODES = graph.num_nodes();
-    const int SIZE_EDGES = graph.num_edges();
-    const int TOTAL_GRID_SIZE = pe.size();
+    const int SIZE_NODES = graph->num_nodes();
+    const int SIZE_EDGES = graph->num_edges();
+    const int TOTAL_GRID_SIZE = (int)pe.size();
     const int SIZE_GRID = ceil(sqrt(TOTAL_GRID_SIZE));
-    const int VGRID = ceil(sqrt(graph.num_nodes()));
-
-    int *table_pe = new int[TOTAL_GRID_SIZE];
+    const int VGRID = ceil(sqrt(graph->num_nodes()));
 
     // print mapping of json
-    print_inputs_outputs_json(graph, name);
+    print_inputs_outputs_json(*graph, name);
 
-    double *randomvec = new double[RANDOM_SIZE];
+    auto *randomvec = new double[RANDOM_SIZE];
     int *v = new int[SIZE_NODES];
     int *v_i = new int[SIZE_NODES];
     int *grid = new int[TOTAL_GRID_SIZE * NGRIDS];
@@ -64,7 +61,7 @@ int main(int argc, char **argv) {
         table[i] = new int[TOTAL_GRID_SIZE];
 
     std::vector<int> A;
-    std::map<std::tuple<int, int, int, int>, int> *edges_cost = new std::map<std::tuple<int, int, int, int>, int>[NGRIDS];
+    auto *edges_cost = new std::map<std::tuple<int, int, int, int>, int>[NGRIDS];
 
     double time_data, time_total, time_place, time_route, time_buffer, time_table;
 
@@ -79,7 +76,7 @@ int main(int argc, char **argv) {
     start = std::chrono::high_resolution_clock::now();
     // fill the data
     if (!fill_data(TOTAL_GRID_SIZE, NGRIDS, SIZE_EDGES, SIZE_NODES,
-                   VGRID, grid, edges_cost, buffers, pos, v, v_i, randomvec, A, pe, graph, results, table,
+                   VGRID, grid, edges_cost, buffers, pos, v, v_i, randomvec, A, pe, *graph, results, table,
                    map_type))
         return 1;
     stop = std::chrono::high_resolution_clock::now();
@@ -92,7 +89,7 @@ int main(int argc, char **argv) {
     }
 
     // get all results and put in results array
-    get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, table, graph);
+    get_all_results(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, results, table, *graph);
 
     start = std::chrono::high_resolution_clock::now();
 #pragma omp parallel  for
@@ -101,7 +98,7 @@ int main(int argc, char **argv) {
             continue; // Found perfect solution!
 
         annealing(i, SIZE_NODES, SIZE_EDGES, SIZE_GRID, TOTAL_GRID_SIZE,
-                  grid, pos, v_i, v, A, randomvec, results, table, pe, graph);
+                  grid, pos, v_i, v, A, randomvec, results, table, pe, *graph);
     }
     stop = std::chrono::high_resolution_clock::now();
 
@@ -109,14 +106,14 @@ int main(int argc, char **argv) {
     time_place = duration.count();
 
     // get each value of edge, to routing
-    get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, table, edges_cost, results, graph);
+    get_edge_cost(NGRIDS, SIZE_EDGES, SIZE_NODES, pos, table, edges_cost, results, *graph);
 
     auto *route = new std::map<std::tuple<int, int, int, int>, std::vector<int>>[NGRIDS];
 
     start = std::chrono::high_resolution_clock::now();
     // verify and return path of routing
     routing(NGRIDS, SIZE_EDGES, SIZE_NODES, TOTAL_GRID_SIZE,
-            edges_cost, results, pos, route, pe, table, graph);
+            edges_cost, results, pos, route, pe, table, *graph);
     // end routing
     stop = std::chrono::high_resolution_clock::now();
 
@@ -125,16 +122,15 @@ int main(int argc, char **argv) {
 
     if (!verify_solution(results, NGRIDS)) {
         printf("Routing invalid for all trying\n\n");
-        print_grid_dot(path_asm, graph, pe, grid, 0, TOTAL_GRID_SIZE, pos, nullptr);
-
+        print_grid_dot(path_asm, *graph, pe, grid, 0, TOTAL_GRID_SIZE, pos, nullptr);
         return 1;
     }
 
-    std::map<std::tuple<int, int, int, int>, int> *buffers_EDGE = new std::map<std::tuple<int, int, int, int>, int>[NGRIDS];
+    auto *buffers_EDGE = new std::map<std::tuple<int, int, int, int>, int>[NGRIDS];
 
     start = std::chrono::high_resolution_clock::now();
     // generate buffer
-    buffer(graph, NGRIDS, SIZE_NODES, SIZE_EDGES, results, edges_cost, buffers_EDGE, pe, pos);
+    buffer(*graph, NGRIDS, SIZE_NODES, SIZE_EDGES, results, edges_cost, buffers_EDGE, pe, pos);
     // end buffer
     stop = std::chrono::high_resolution_clock::now();
 
@@ -143,18 +139,15 @@ int main(int argc, char **argv) {
 
     if (!verify_solution(results, NGRIDS)) {
         printf("Buffer invalid for all trying\n\n");
-        print_grid_dot(path_asm, graph, pe, grid, 0, TOTAL_GRID_SIZE, pos, nullptr);
-
+        print_grid_dot(path_asm, *graph, pe, grid, 0, TOTAL_GRID_SIZE, pos, nullptr);
         return 1;
     }
 
     int worst_fifo;
-    int best_index = get_better_index(NGRIDS, SIZE_EDGES, worst_fifo,
-                                      results, buffers_EDGE, graph);
+    int best_index = get_better_index(NGRIDS, SIZE_EDGES, worst_fifo, results, buffers_EDGE, *graph);
 
     // generate assembly code
-    generate_asm(graph, best_index, SIZE_NODES, TOTAL_GRID_SIZE, pos,
-                 buffers_EDGE, path_asm, route, edges_cost);
+    generate_asm(*graph, best_index, SIZE_NODES, TOTAL_GRID_SIZE, pos, buffers_EDGE, path_asm, route, edges_cost);
 
     auto stop_total = std::chrono::high_resolution_clock::now();
 
@@ -163,12 +156,11 @@ int main(int argc, char **argv) {
 
     printf("\nSeed\t\t : %lu", timetime);
     // print the time and the best results
-    print_results(time_data, time_table, time_place, time_route, time_buffer,
-                  time_total, best_index, worst_fifo, results);
+    print_results(time_data, time_table, time_place, time_route, time_buffer, time_total, best_index, worst_fifo, results);
 
-    print_pr_graph(graph, pos, best_index, edges_cost, buffers_EDGE, path_asm, route);
+    print_pr_graph(*graph, pos, best_index, buffers_EDGE, path_asm, route);
 
-    print_grid_dot(path_asm, graph, pe, grid, best_index, TOTAL_GRID_SIZE, pos, route);
+    print_grid_dot(path_asm, *graph, pe, grid, best_index, TOTAL_GRID_SIZE, pos, route);
 
     // clean memory
     delete[] randomvec;
@@ -179,6 +171,7 @@ int main(int argc, char **argv) {
     delete[] buffers;
     delete[] pos;
     delete[] results;
+    delete graph;
 
     for (int i = 0; i < TOTAL_GRID_SIZE; ++i)
         delete[] table[i];

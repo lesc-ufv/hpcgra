@@ -1,8 +1,4 @@
-#include "../include/greedy_solution.h"
-#include "../include/graph.h"
-#include "../include/read_arch.h"
-
-#include <queue>
+#include <greedy_solution.h>
 
 const int ADJACENCY_SIZE = 2112;
 const int ADJACENCY[ADJACENCY_SIZE][2] = {

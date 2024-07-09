@@ -1,9 +1,4 @@
-#include "../include/routing.h"
-#include <vector>
-#include <map>
-#include <queue>
-#include "../include/read_arch.h"
-#include "../include/main.h"
+#include <routing.h>
 
 void remove_element(int pe_source,
                     int pe_target,
@@ -39,7 +34,7 @@ bool try_route_aStar(
     std::tuple<int, int> key;
 
     std::priority_queue<std::tuple<int, int, int>, std::vector<std::tuple<int, int, int>>, spq> open;
-    open.push(std::make_tuple(-1, pe_source, table[pe_source][pe_target]));
+    open.emplace(-1, pe_source, table[pe_source][pe_target]);
     // open.push(make_pair(make_pair(pe_source, pe_source), table[pe_source][pe_target]));
 
     bool found = false, multicast;
@@ -181,7 +176,7 @@ bool try_route_aStar(
             //printf("%d %d, ", pe_aux_a, pe_aux_b);
             route[elem].push_back(pe_aux_a);
             route[elem].push_back(pe_aux_b);
-            pe_route[pe_aux_a].push_back(std::make_pair(pe_aux_a, pe_aux_b));
+            pe_route[pe_aux_a].emplace_back(pe_aux_a, pe_aux_b);
             // se for multicast
             if (map_pe[pe_aux_a][pe_aux_b].first == -1) {
                 min_rota[pe_aux_a]--;
@@ -203,21 +198,21 @@ void routing(
         const int TOTAL_GRID_SIZE,
         std::map<std::tuple<int, int, int, int>, int> *edges_cost,
         int *results,
-        int *pos,
+        const int *pos,
         map_tuple_vector_int *route,
         std::vector<pe_t> &pe,
         int **table,
         Graph &graph) {
 
-    std::vector<std::tuple<int, int, int, int>> *edges_not_solved = new std::vector<std::tuple<int, int, int, int>>[NGRIDS];
-    std::vector<int> *grid_route = new std::vector<int>[TOTAL_GRID_SIZE];
-    std::map<int, std::map<int, std::pair<int, int>>> *map_pe = new std::map<int, std::map<int, std::pair<int, int>>>[NGRIDS];
+    auto *edges_not_solved = new std::vector<std::tuple<int, int, int, int>>[NGRIDS];
+    auto *grid_route = new std::vector<int>[TOTAL_GRID_SIZE];
+    auto *map_pe = new std::map<int, std::map<int, std::pair<int, int>>>[NGRIDS];
     std::tuple<int, int, int, int> key;
 
     std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
 
     int **min_rota = new int *[NGRIDS];
-    std::vector<std::pair<int, int>> **pe_route = new std::vector<std::pair<int, int>> *[NGRIDS];
+    auto **pe_route = new std::vector<std::pair<int, int>> *[NGRIDS];
 
     for (int i = 0; i < NGRIDS; ++i) {
         min_rota[i] = new int[TOTAL_GRID_SIZE];
@@ -262,7 +257,7 @@ void routing(
                 if (min_rota[j][pe_source] > 0) {
                     min_rota[j][pe_source] -= 1;
                     map_pe[j][pe_source][pe_target] = std::make_pair(s, s_port);
-                    pe_route[j][pe_source].push_back(std::make_pair(pe_source, pe_target));
+                    pe_route[j][pe_source].emplace_back(pe_source, pe_target);
 
                     route[j][key].push_back(pe_source);
                     route[j][key].push_back(pe_target);

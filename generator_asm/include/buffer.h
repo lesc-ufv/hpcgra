@@ -1,18 +1,20 @@
 #ifndef __BUFFER_H
 #define __BUFFER_H
 
-#include <graph.h>
-#include <get_critical_path.h>
 #include <map>
 #include <queue>
 #include <vector>
-#include "read_arch.h"
 #include <utility>
+
+#include <graph.h>
+#include <get_critical_path.h>
+#include <read_arch.h>
+#include <defines.h>
 
 void dfsBuffer(
     Graph g, 
     int *level, 
-    int *levelOrig, 
+    const int *levelOrig,
     std::map<std::tuple<int, int, int, int>, int> &buffers,
     std::map<std::tuple<int, int, int, int>, int> &edges
 );
@@ -34,31 +36,31 @@ void getBuffer(
     std::map<int, std::vector<int>> map_level
 );
 
-void dfsLvl(Graph g, const int NODE_SIZE, int *critical_path, std::map<std::pair<int, int>, int> &edges);
+void dfsLvl(Graph g, int NODE_SIZE, int *critical_path, std::map<std::pair<int, int>, int> &edges);
 
 void optimizeBuffer(
-    const int k,
-    const int SIZE_NODES,
-    int *pos,
+    int k,
+    int SIZE_NODES,
+    const int *pos,
     Graph &g, 
     std::map<std::tuple<int, int, int, int>, int> &buffers,
     std::vector<pe_t> &arch
 );
 
 bool verify_buffer(
-    const int k,
-    const int SIZE_EDGES,
-    const int SIZE_NODES,
-    int *pos,
+    int k,
+    int SIZE_EDGES,
+    int SIZE_NODES,
+    const int *pos,
     Graph &g,
     std::vector<pe_t> &arch, 
     std::map<std::tuple<int, int, int, int>, int> &buffers
 );
 
 void buffer(Graph &g, 
-            const int NGRIDS, 
-            const int SIZE_NODES, 
-            const int SIZE_EDGES,
+            int NGRIDS,
+            int SIZE_NODES,
+            int SIZE_EDGES,
             int *results, 
             std::map<std::tuple<int, int, int, int>, int> *edges_cost,
             std::map<std::tuple<int, int, int, int>, int> *buffers, 

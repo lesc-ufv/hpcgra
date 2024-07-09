@@ -4,14 +4,19 @@
 #include <map>
 #include <utility>
 #include <vector>
-#include "read_arch.h"
 #include <string>
-#include "graph.h"
+#include <cmath>
 
-void clean_data(const int NGRIDS, 
-                const int SIZE_EDGES,
-                const int SIZE_NODES, 
-                const int TOTAL_GRID_SIZE,
+#include <defines.h>
+#include <graph.h>
+#include <read_arch.h>
+#include <verify.h>
+#include <greedy_solution.h>
+
+void clean_data(int NGRIDS,
+                int SIZE_EDGES,
+                int SIZE_NODES,
+                int TOTAL_GRID_SIZE,
                 std::map<std::tuple<int, int, int, int>, int> *edges_cost,
                 int *buffers, int *pos,
                 int *grid, 
@@ -21,11 +26,11 @@ void clean_data(const int NGRIDS,
                 Graph& graph
                 );
 
-bool fill_data(const int TOTAL_GRID_SIZE,
-               const int NGRIDS,
-               const int SIZE_EDGES,
-               const int SIZE_NODES,
-               const int VGRID,
+bool fill_data(int TOTAL_GRID_SIZE,
+               int NGRIDS,
+               int SIZE_EDGES,
+               int SIZE_NODES,
+               int VGRID,
                int *grid,
                std::map<std::tuple<int, int, int, int>, int> *edges_cost,
                int *buffers,

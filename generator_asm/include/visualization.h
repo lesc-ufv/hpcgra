@@ -5,10 +5,10 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "graph.h"
-#include "read_arch.h"
 
-#define RAND() (rand() % 255)
+#include <defines.h>
+#include <graph.h>
+#include <read_arch.h>
 
 const std::map<std::string, std::string> op_colors = {
     {"add", "lightblue "},
@@ -39,30 +39,29 @@ const std::map<std::string, std::string> op_colors = {
 };
 
 void print_grid(Graph &g,
-                int *grid,
+                const int *grid,
                 int index,
                 int GRID_SIZE);
 
-void print_grid_dot(std::string path,
+void print_grid_dot(const std::string& path,
                     Graph &g, std::vector<pe_t> &pes,
-                    int *grid,
+                    const int *grid,
                     int index,
                     int GRID_SIZE,
-                    int *pos,
+                    const int *pos,
                     std::map<std::tuple<int, int, int, int>, std::vector<int>> *route);
 
 std::string create_grid_dot_str(std::vector<pe_t> &pes);
 
-void print_inputs_outputs_json(Graph g,
-                               std::string path);
+void print_inputs_outputs_json(Graph &g,
+                               std::string &path);
 
 void print_pr_graph(
     Graph &g,
-    int *pos,
+    const int *pos,
     int best_index,
-    std::map<std::tuple<int, int, int, int>, int> *edges_cost,
     std::map<std::tuple<int, int, int, int>, int> *buffers,
-    std::string path,
+    const std::string& path,
     std::map<std::tuple<int, int, int, int>, std::vector<int>> *route);
 
 void replace_first(

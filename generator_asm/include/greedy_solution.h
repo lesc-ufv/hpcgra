@@ -1,15 +1,17 @@
-#ifndef __GREEDY_SOLUTION_H
-#define __GREEDY_SOLUTION_H
+#ifndef GREEDY_SOLUTION_H
+#define GREEDY_SOLUTION_H
 
-#include "graph.h"
 #include <vector>
-#include "read_arch.h"
+#include <queue>
+
+#include <graph.h>
+#include <read_arch.h>
 
 bool greedy_solution(
-    const int n,
-    const int SIZE_NODE,
-    const int SIZE_GRID,
-    const int TOTAL_GRID_SIZE,
+    int n,
+    int SIZE_NODE,
+    int SIZE_GRID,
+    int TOTAL_GRID_SIZE,
     int *pos,
     int *grid,
     int **table,

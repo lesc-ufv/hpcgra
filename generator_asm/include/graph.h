@@ -1,22 +1,23 @@
-#ifndef __GRAPH__H
-#define __GRAPH__H
+#ifndef GRAPH_H
+#define GRAPH_H
 
-#include <json/json.h>
+#include <cstdio>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <vector>
 #include <map>
-#include <stdio.h>
 #include <algorithm>
+#include <json/json.h>
+
 
 class Graph {
 public:
 
     Graph();
 
-    Graph(const std::string filename, std::map<std::string, int> &map_type);
+    Graph(const std::string& filename, std::map<std::string, int> &map_type);
 
     Graph(const Graph &g);
 

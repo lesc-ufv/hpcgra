@@ -1,16 +1,20 @@
 #include "poly5.h"
 
 int main(int argc, char *argv[]) {
+    
+    srand(time(nullptr));
     auto df = createDataFlow(0,1);
+    
     auto data_in0 = new unsigned short[1024];
     auto data_in1 = new unsigned short[1024];
     auto data_in2 = new unsigned short[1024];
+    
     auto data_out = new unsigned short[1024];
 
     for (int k = 0; k < 1024; ++k) {
-        data_in0[k] = k+1;
-        data_in1[k] = k+1;
-        data_in2[k] = k+1;
+        data_in0[k] = rand() % (65535);
+        data_in1[k] = rand() % (65535);
+        data_in2[k] = rand() % (65535);
         data_out[k] = 0;
     }
 
@@ -24,17 +28,18 @@ int main(int argc, char *argv[]) {
     in2->setData(data_in2,0,1024);
     out->setData(data_out,0,1024);
     
-    //df->compute();
+    df->compute();
     
     
-    df->toJSON("../poly5.json");
-    df->toDOT("../poly5.dot");
-    df->toJsonOperator("../poly5.op.json");
+    for(int i=0;i < 1024;i++){
+     std::cout << data_out[i] << " ";
+    } 
+    std::cout << std::endl;
     
-//     for(int i=0;i < 1024;i++){
-//      std::cout << data_out[i] << " ";
-//     } 
-//     std::cout << std::endl;
+        
+    df->toJSON("poly5.json");
+    df->toDOT("poly5.dot");
+    df->toJsonOperator("poly5.op.json");
     
     delete df;
     return 0;
@@ -56,6 +61,9 @@ DataFlow *createDataFlow(int id, int copies) {
     }
     for (int i = 0; i < copies; ++i) {
 
+        auto in0_0 = new Addi(idx++,0);
+        auto in0_1 = new Addi(idx++,0);
+        
         auto in0_3 = new Addi(idx++,0);
         auto in0_4 = new Addi(idx++,0);
         auto in0_5 = new Addi(idx++,0);
@@ -112,6 +120,9 @@ DataFlow *createDataFlow(int id, int copies) {
         auto mul_n25 = new Mul(idx++);
 
         //level 1
+        df->connect(in0[i],0,in0_0,0);
+        df->connect(in0_0,0,in0_1,0);
+        
         df->connect(in2[i],0, sub_imm_432_n28, 0);
         df->connect(in2[i],0, mul_imm_78_n9, 0);
         df->connect(in2[i],0, mul_imm_288_n8, 0);
@@ -132,15 +143,17 @@ DataFlow *createDataFlow(int id, int copies) {
         df->connect(in2_1,0, in2_2, 0);
         df->connect(in1_1,0, in1_2, 0);
         // level 3
-        df->connect(in0[i],0, in0_3, 0);
+        
+        
+        df->connect(in0_1,0, in0_3, 0);
         df->connect(mul_n17,0, add_imm_62208_n15, 0);
         df->connect(sub_imm_9504_n16,0, mul_n11, 0);
         df->connect(in2_2,0, mul_n11, 1);
         df->connect(sub_imm_5184_n29,0, mul_n19, 0);
-        df->connect(in0[i],0, mul_n19, 1);
+        df->connect(in0_1,0, mul_n19, 1);
         df->connect(mul_n7,0, add_imm_3456_n14, 0);
         df->connect(sub_n18,0, mul_n6, 0);
-        df->connect(in0[i],0, mul_n6, 1);
+        df->connect(in0_1,0, mul_n6, 1);
         df->connect(in2_2,0, in2_3, 0);
         df->connect(in1_2,0, in1_3, 0);
         // level 4

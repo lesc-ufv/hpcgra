@@ -3,11 +3,7 @@
 #include <string>
 #include <algorithm>
 
-#include "../include/data.h"
-#include "../include/graph.h"
-#include "../include/read_arch.h"
-#include "../include/verify.h"
-#include "../include/main.h"
+#include <data.h>
 
 void clean_data(const int NGRIDS,
                 const int SIZE_EDGES,

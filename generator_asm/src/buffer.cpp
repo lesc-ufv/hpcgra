@@ -1,24 +1,22 @@
-#include "../include/buffer.h"
-#include "../include/read_arch.h"
-#include "../include/main.h"
+#include <buffer.h>
 
 void dfsBuffer(
         Graph g,
         int *level,
-        int *levelOrig,
+        const int *levelOrig,
         std::map<std::tuple<int, int, int, int>, int> &buffers,
         std::map<std::tuple<int, int, int, int>, int> &edges) {
 
     std::queue<std::pair<int, int>> q;
-    int node, nodeLvl, edgeCost, nodeLvlOrig, min = INT_MAX;
+    int node, nodeLvl, edgeCost, nodeLvlOrig;
     std::vector<int> outputs;
     std::tuple<int, int, int, int> key;
     std::vector<int> parents;
 
     outputs = g.get_outputs();
 
-    for (int i = 0; i < outputs.size(); ++i)
-        q.push(std::make_pair(outputs[i], level[outputs[i]]));
+    for (int & output : outputs)
+        q.emplace(output, level[output]);
 
     while (!q.empty()) {
         node = q.front().first;
@@ -31,13 +29,13 @@ void dfsBuffer(
         std::vector<int> parentLvl(parents.size()), parentLvlOrig(parents.size());
         std::vector<int> diffLvl(parents.size());
 
-        for (int i = 0, n = parents.size(); i < n; i++) {
+        for (int i = 0, n = (int)parents.size(); i < n; i++) {
             if (node == parents[i])
                 continue;
 
             std::vector<std::pair<int, int>> port = g.get_port(std::make_pair(parents[i], node));
-            for (int j = 0; j < port.size(); ++j) {
-                key = std::make_tuple(parents[i], node, port[j].first, port[j].second);
+            for (auto & j : port) {
+                key = std::make_tuple(parents[i], node, j.first, j.second);
 
                 edgeCost = edges[key];
 
@@ -53,7 +51,7 @@ void dfsBuffer(
                 // set buffer size
                 if (diffLvl[i] > buffers[key])
                     buffers[key] = diffLvl[i];
-                q.push(std::make_pair(parents[i], level[parents[i]]));
+                q.emplace(parents[i], level[parents[i]]);
             }
         }
     }
@@ -111,8 +109,8 @@ void dfsLvl(
     for (int i = 0; i < NODE_SIZE; ++i)
         critical_path[i] = -1;
 
-    for (int i = 0; i < inputs.size(); ++i)
-        q.push(std::make_pair(inputs[i], 0));
+    for (int & input : inputs)
+        q.emplace(input, 0);
 
     while (!q.empty()) {
         dad = q.front().first;
@@ -123,21 +121,21 @@ void dfsLvl(
             critical_path[dad] = cost;
 
         son = g.get_sucessors(dad);
-        for (int i = 0, n = son.size(); i < n; ++i) {
-            child = son[i];
+        for (int i : son) {
+            child = i;
             if (dad == child)
                 continue;
 
             std::vector<std::pair<int, int>> port = g.get_port(std::make_pair(dad, child));
-            for (int j = 0; j < port.size(); ++j) {
-                key = std::make_tuple(dad, child, port[j].first, port[j].second);
-                keyInv = std::make_tuple(child, dad, port[j].second, port[j].first);
+            for (auto & j : port) {
+                key = std::make_tuple(dad, child, j.first, j.second);
+                keyInv = std::make_tuple(child, dad, j.second, j.first);
 
                 if (edges.count(key) > 0)
                     new_cost = cost + edges[key];
                 else if (edges.count(keyInv) > 0)
                     new_cost = cost + edges[keyInv];
-                q.push(std::make_pair(child, new_cost));
+                q.emplace(child, new_cost);
             }
         }
     }
@@ -146,13 +144,13 @@ void dfsLvl(
 void optimizeBuffer(
         const int k,
         const int SIZE_NODES,
-        int *pos,
+        const int *pos,
         Graph &g,
         std::map<std::tuple<int, int, int, int>, int> &buffers,
         std::vector<pe_t> &arch) {
 
     std::queue<int> q;
-    int node, buffer_arch, pe, diff, p;
+    int node, buffer_arch, pe, diff;
     std::vector<int> outputs, parents, ancestors;
     std::tuple<int, int, int, int> key;
 
@@ -160,8 +158,8 @@ void optimizeBuffer(
 
     outputs = g.get_outputs();
 
-    for (int i = 0; i < outputs.size(); ++i)
-        q.push(outputs[i]);
+    for (int output : outputs)
+        q.push(output);
 
     while (!q.empty()) {
         node = q.front();
@@ -170,37 +168,36 @@ void optimizeBuffer(
         pe = pos[k * SIZE_NODES + node];
 
         parents = g.get_predecessors(node);
-        for (int i = 0, n = parents.size(); i < n; ++i) {
-            if (parents[i] == node)
+        for (int & parent : parents) {
+            if (parent == node)
                 continue;
 
-            port = g.get_port(std::make_pair(parents[i], node));
-            for (int k = 0; k < port.size(); ++k) {
-                key = std::make_tuple(parents[i], node, port[k].first, port[k].second);
+            port = g.get_port(std::make_pair(parent, node));
+            for (auto & p : port) {
+                key = std::make_tuple(parent, node, p.first, p.second);
 
-                buffer_arch = arch[pe].elastic_queue[port[k].first];
+                buffer_arch = arch[pe].elastic_queue[p.first];
 
                 diff = buffers[key] - buffer_arch;
 
                 if (diff > 0) {
-                    ancestors = g.get_predecessors(parents[i]);
+                    ancestors = g.get_predecessors(parent);
 
-                    if (ancestors.size() > 0) {
+                    if (!ancestors.empty()) {
                         buffers[key] = buffer_arch;
 
-                        for (int j = 0; j < ancestors.size(); ++j) {
+                        for (int & ancestor : ancestors) {
                             std::vector<std::pair<int, int>> aux_pair = g.get_port(
-                                    std::make_pair(ancestors[j], parents[i]));
-                            for (int l = 0; l < aux_pair.size(); ++l) {
-                                buffers[std::make_tuple(ancestors[j], parents[i], aux_pair[l].first,
-                                                        aux_pair[l].second)] += diff;
+                                    std::make_pair(ancestor, parent));
+                            for (auto & l : aux_pair) {
+                                buffers[std::make_tuple(ancestor, parent, l.first, l.second)] += diff;
                             }
                         }
                     }
                 }
             }
             // printf("%3d -> %3d pe: %3d port: %d buffer: %2d buffer_arch: %2d\n", parents[i], node, pe, port[p], buffers[key], buffer_arch);
-            q.push(parents[i]);
+            q.push(parent);
         }
     }
 }
@@ -209,12 +206,12 @@ bool verify_buffer(
         const int k,
         const int SIZE_EDGES,
         const int SIZE_NODES,
-        int *pos,
+        const int *pos,
         Graph &graph,
         std::vector<pe_t> &arch,
         std::map<std::tuple<int, int, int, int>, int> &buffers) {
 
-    int source, target, source_port, target_port, pe, buffer_arch, p;
+    int source, target, pe, buffer_arch;
     std::vector<std::tuple<int, int, int, int>> edge_list = graph.get_edges();
     std::vector<std::pair<int, int>> port;
 
@@ -226,8 +223,8 @@ bool verify_buffer(
         pe = pos[k * SIZE_NODES + target];
         port = graph.get_port(std::make_pair(source, target));
 
-        for (int j = 0, n = port.size(); j < n; ++j) {
-            buffer_arch = arch[pe].elastic_queue[std::get<1>(port[j])];
+        for (auto & j : port) {
+            buffer_arch = arch[pe].elastic_queue[std::get<1>(j)];
             //printf("j: %d, b: %d, ba: %d\n", j, buffers[edge_list[i]], buffer_arch);
             if (buffers[edge_list[i]] > buffer_arch)
                 return false;
@@ -258,7 +255,6 @@ void buffer(Graph &graph,
         map_level[levelOrig[i]].push_back(i);
     }
 
-    std::pair<int, int> aux;
     for (int k = 0; k < NGRIDS; k++) {
         level[k] = new int[SIZE_NODES];
 

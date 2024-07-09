@@ -1,6 +1,6 @@
-#include "../include/split.h"
+#include <split.h>
 
-std::vector<std::string> split(std::string data, std::string token) {
+std::vector<std::string> split(std::string data, const std::string& token) {
     std::vector<std::string> output;
     size_t pos = std::string::npos; // size_t to avoid improbable overflow
     do {

@@ -1,5 +1,5 @@
-#ifndef __STATISTICS_H
-#define __STATISTICS_H
+#ifndef STATISTICS_H
+#define STATISTICS_H
 
 void statistic();
 

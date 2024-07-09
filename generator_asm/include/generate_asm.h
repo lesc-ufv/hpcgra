@@ -4,19 +4,19 @@
 #include <map>
 #include <string>
 #include <utility>
-#include "graph.h"
 #include <vector>
+#include <queue>
 
-
-/// TODO: Refactor code, because this code is bad format.
+#include <defines.h>
+#include <graph.h>
 
 void generate_asm(Graph &g,
-                  const int best_index,
-                  const int SIZE_NODES,
-                  const int SIZE_PE,
+                  int best_index,
+                  int SIZE_NODES,
+                  int SIZE_PE,
                   int *pos,
                   std::map<std::tuple<int, int, int, int>, int> *buffers_EDGE,
-                  std::string path,
+                  const std::string& path,
                   std::map<std::tuple<int, int, int, int>, std::vector<int>> *route,
                   std::map<std::tuple<int, int, int, int>, int> *edges_cost
 );

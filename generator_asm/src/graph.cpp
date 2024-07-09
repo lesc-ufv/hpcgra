@@ -4,7 +4,7 @@ Graph::Graph() {
     this->ok = true;
 }
 
-Graph::Graph(const std::string filename,
+Graph::Graph(const std::string& filename,
              std::map<std::string, int> &map_type) {
 
     Json::Value data;
@@ -38,7 +38,7 @@ Graph::Graph(const std::string filename,
 
         if (node.isMember("const")) {
             for (auto c: node["const"]) {
-                this->constant[u].push_back(std::make_pair(atoi(c[0].asCString()), atoi(c[1].asCString())));
+                this->constant[u].emplace_back(atoi(c[0].asCString()), atoi(c[1].asCString()));
             }
         }
     }
@@ -53,7 +53,7 @@ Graph::Graph(const std::string filename,
 
         aux_e = std::make_tuple(u, v, s, t);
 
-        this->port[std::make_pair(u, v)].push_back(std::make_pair(s, t));
+        this->port[std::make_pair(u, v)].emplace_back(s, t);
 
         this->source_port[u].push_back(s);
         this->target_port[v].push_back(t);
@@ -67,7 +67,7 @@ Graph::Graph(const std::string filename,
 }
 
 int Graph::get_number_inputs() const {
-    return this->inputs.size();
+    return inputs.size();
 }
 
 Graph::Graph(const Graph &g) {
@@ -97,7 +97,7 @@ Graph::~Graph() {
 }
 
 bool Graph::get_ok() const {
-    return this->ok;
+    return ok;
 }
 
 void Graph::print() {
@@ -106,7 +106,7 @@ void Graph::print() {
 
 void Graph::write(std::string path) {
     std::string graphName;
-    if (path.length() < 4 && path.substr(path.find_last_of(".") + 1) != "dot") {
+    if (path.length() < 4 && path.substr(path.find_last_of('.') + 1) != "dot") {
         graphName = path;
         path.append(".dot");
     } else {
@@ -115,43 +115,43 @@ void Graph::write(std::string path) {
 }
 
 int Graph::num_nodes() const {
-    return this->nodes.size();
+    return nodes.size();
 }
 
 int Graph::num_edges() const {
-    return this->edges.size();
+    return edges.size();
 }
 
 std::vector<std::tuple<int, int, int, int>> Graph::get_edges() {
-    return this->edges;
+    return edges;
 }
 
 std::vector<int> Graph::get_nodes() {
-    return this->nodes;
+    return nodes;
 }
 
 std::string Graph::get_name_node(int u) {
-    return this->name_label[u];
+    return name_label[u];
 }
 
 std::vector<std::pair<int, int>> Graph::get_const(int u) {
-    return this->constant[u];
+    return constant[u];
 }
 
 std::string Graph::get_opcode(int u) {
-    return this->opcode[u];
+    return opcode[u];
 }
 
 int Graph::get_code(int u) {
-    return this->code[u];
+    return code[u];
 }
 
 std::vector<int> Graph::get_predecessors(int u) {
-    return this->node_in_degree[u];
+    return node_in_degree[u];
 }
 
 std::vector<int> Graph::get_sucessors(int u) {
-    return this->node_out_degree[u];
+    return node_out_degree[u];
 }
 
 std::vector<std::vector<int>> Graph::get_fanin() {
@@ -169,15 +169,15 @@ std::vector<std::vector<int>> Graph::get_fanout() {
 }
 
 std::vector<int> Graph::get_inputs() {
-    return this->inputs;
+    return inputs;
 }
 
 std::vector<int> Graph::get_outputs() {
-    return this->outputs;
+    return outputs;
 }
 
 std::vector<int> Graph::get_basic() {
-    return this->basic;
+    return basic;
 }
 
 std::vector<std::tuple<int, int, int, int>> Graph::get_edges_inverse() {
@@ -189,7 +189,7 @@ std::vector<std::tuple<int, int, int, int>> Graph::get_edges_inverse() {
         v = std::get<1>(this->edges[i]);
         s = std::get<2>(this->edges[i]);
         t = std::get<3>(this->edges[i]);
-        aux.push_back(std::make_tuple(v, u, s, t));
+        aux.emplace_back(v, u, s, t);
     }
     return aux;
 }

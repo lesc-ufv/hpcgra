@@ -1,8 +1,4 @@
-#include "../include/verify.h"
-#include "../include/read_arch.h"
-#include <map>
-#include <iostream>
-#include "../include/graph.h"
+#include <verify.h>
 
 // verify if arch works
 bool verify(const int SIZE_NODES,
@@ -11,7 +7,7 @@ bool verify(const int SIZE_NODES,
             const int SIZE_OUT,
             const int SIZE_PE_IN,
             const int SIZE_PE_OUT,
-            std::vector<pe_t> pe,
+            const std::vector<pe_t>& pe,
             std::map<std::string, int> &map_type,
             Graph g) {
 
@@ -31,13 +27,12 @@ bool verify(const int SIZE_NODES,
     }
 
     std::map<int, int> alu;
-    int type_alu;
     const unsigned int SIZE_TYPE = map_type.size();
 
-    for (int i = 0; i < pe.size(); ++i) {
+    for (auto & i : pe) {
         for (int j = 0; j < SIZE_TYPE; ++j) {
-            if (!pe[i].isa[j]) continue;
-
+            if (!i.isa[j])
+                continue;
             if (alu.count(j) > 0) {
                 alu[j]++;
             } else {

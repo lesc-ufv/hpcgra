@@ -1,9 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define MAXVALUE 9999
-#define RANDOM_SIZE 1000000
-
 #include <cstdio>
 #include <string>
 #include <chrono>

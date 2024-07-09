@@ -1,5 +1,5 @@
-#ifndef __READ_ARCH_H
-#define __READ_ARCH_H
+#ifndef READ_ARCH_H
+#define READ_ARCH_H
 
 #include <json/json.h>
 #include <fstream>

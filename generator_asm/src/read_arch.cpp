@@ -1,4 +1,4 @@
-#include "../include/read_arch.h"
+#include <read_arch.h>
 
 bool read_arch(std::string &arch_file,
                std::vector<pe_t> &pe,

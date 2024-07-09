@@ -1,8 +1,4 @@
-#include "../include/list.h"
-
-#include <graph.h>
-#include <queue>
-#include <vector>
+#include <list.h>
 
 void dfs(Graph g, std::vector<int> &aux_edges, int *visited, int dad) {
 
@@ -10,10 +6,10 @@ void dfs(Graph g, std::vector<int> &aux_edges, int *visited, int dad) {
     int child;
     std::vector<int> children = g.get_predecessors(dad);
 
-    std::random_shuffle(children.begin(), children.end());
+    std::shuffle(children.begin(), children.end(), std::mt19937(std::random_device()()));
 
-    for (int i = 0; i < children.size(); ++i) {
-        child = children[i];
+    for (int i : children) {
+        child = i;
         aux_edges.push_back(dad);
         aux_edges.push_back(child);
         if (!visited[child])
@@ -30,15 +26,15 @@ void dfs_position_order(Graph g, std::vector<std::pair<std::pair<int, int>, int>
     for (int t = 0; t < times; ++t) {
         aux_edges.clear();
         outputs = g.get_outputs();
-        std::random_shuffle(outputs.begin(), outputs.end());
+        std::shuffle(outputs.begin(), outputs.end(), std::mt19937(std::random_device()()));
         memset(visited, 0, sizeof(int) * NODE_SIZE);
 
-        for (int i = 0; i < outputs.size(); ++i)
-            dfs(g, aux_edges, visited, outputs[i]);
+        for (int output : outputs)
+            dfs(g, aux_edges, visited, output);
 
         for (int i = 0; i < aux_edges.size(); i += 2) {
             //printf("%d -> %d\n", aux_edges[i], aux_edges[i+1]);
-            EDGES.push_back(std::make_pair(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0));
+            EDGES.emplace_back(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0);
         }
     }
 }
@@ -55,23 +51,19 @@ void bfs_position_order(Graph g, std::vector<std::pair<std::pair<int, int>, int>
         aux_edges.clear();
         outputs = g.get_outputs();
         memset(visited, 0, sizeof(int) * NODE_SIZE);
-        std::random_shuffle(outputs.begin(), outputs.end());
+        std::shuffle(outputs.begin(), outputs.end(), std::mt19937(std::random_device()()));
 
-        for (int i = 0; i < outputs.size(); ++i)
-            q.push(outputs[i]);
+        for (int output : outputs)
+            q.push(output);
 
         while (!q.empty()) {
             dad = q.front();
             q.pop();
-
             visited[dad] = 1;
-
             children = g.get_predecessors(dad);
-
-            std::random_shuffle(children.begin(), children.end());
-
-            for (int i = 0; i < children.size(); ++i) {
-                child = children[i];
+            std::shuffle(children.begin(), children.end(), std::mt19937(std::random_device()()));
+            for (int i : children) {
+                child = i;
                 aux_edges.push_back(dad);
                 aux_edges.push_back(child);
                 if (!visited[child]) {
@@ -81,7 +73,7 @@ void bfs_position_order(Graph g, std::vector<std::pair<std::pair<int, int>, int>
             }
         }
         for (int i = 0; i < aux_edges.size(); i += 2) {
-            EDGES.push_back(std::make_pair(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0));
+            EDGES.emplace_back(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0);
         }
     }
 }
@@ -98,10 +90,10 @@ void bfs_critical_path(Graph g, std::vector<std::pair<std::pair<int, int>, int>>
         aux_edges.clear();
         outputs = g.get_outputs();
         memset(visited, 0, sizeof(int) * NODE_SIZE);
-        std::random_shuffle(outputs.begin(), outputs.end());
+        std::shuffle(outputs.begin(), outputs.end(), std::mt19937(std::random_device()()));
 
-        for (int i = 0; i < outputs.size(); ++i)
-            q.push(outputs[i]);
+        for (int output : outputs)
+            q.push(output);
 
         while (!q.empty()) {
             dad = q.front();
@@ -111,10 +103,10 @@ void bfs_critical_path(Graph g, std::vector<std::pair<std::pair<int, int>, int>>
 
             children = g.get_predecessors(dad);
 
-            std::random_shuffle(children.begin(), children.end());
+            std::shuffle(children.begin(), children.end(), std::mt19937(std::random_device()()));
 
-            for (int i = 0; i < children.size(); ++i) {
-                child = children[i];
+            for (int i : children) {
+                child = i;
                 aux_edges.push_back(dad);
                 aux_edges.push_back(child);
                 if (!visited[child]) {
@@ -124,7 +116,7 @@ void bfs_critical_path(Graph g, std::vector<std::pair<std::pair<int, int>, int>>
             }
         }
         for (int i = 0; i < aux_edges.size(); i += 2) {
-            EDGES.push_back(std::make_pair(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0));
+            EDGES.emplace_back(std::make_pair(aux_edges[i], aux_edges[i + 1]), 0);
         }
     }
 }
@@ -149,8 +141,8 @@ void create_list_borders(Graph g, const int NODE_SIZE, const int GRID_SIZE,
     for (int i = 0; i < NODE_SIZE; ++i) list_borders[i] = 0;
 
     inputs = g.get_inputs();
-    for (int i = 0; i < inputs.size(); ++i)
-        q.push(std::make_pair(inputs[i], 0));
+    for (int & input : inputs)
+        q.emplace(input, 0);
 
     while (!q.empty()) {
         dad = q.front().first;
@@ -163,16 +155,16 @@ void create_list_borders(Graph g, const int NODE_SIZE, const int GRID_SIZE,
             list_borders[dad] = cost;
 
         son = g.get_sucessors(dad);
-        for (int i = 0, n = son.size(); i < n; ++i) {
-            child = son[i];
+        for (int i : son) {
+            child = i;
             if (dad == child) continue;
-            q.push(std::make_pair(child, cost + 1));
+            q.emplace(child, cost + 1);
         }
     }
 
     inputs = g.get_outputs();
-    for (int i = 0; i < inputs.size(); ++i)
-        q.push(std::make_pair(inputs[i], 0));
+    for (int & input : inputs)
+        q.emplace(input, 0);
 
     while (!q.empty()) {
         dad = q.front().first;
@@ -185,10 +177,10 @@ void create_list_borders(Graph g, const int NODE_SIZE, const int GRID_SIZE,
             list_borders[dad] = cost;
 
         son = g.get_predecessors(dad);
-        for (int i = 0, n = son.size(); i < n; ++i) {
-            child = son[i];
+        for (int i : son) {
+            child = i;
             if (dad == child) continue;
-            q.push(std::make_pair(child, cost + 1));
+            q.emplace(child, cost + 1);
         }
     }
 }

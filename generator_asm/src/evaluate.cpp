@@ -1,6 +1,4 @@
-#include "../include/evaluate.h"
-#include <map>
-#include "../include/main.h"
+#include <evaluate.h>
 
 int get_better_index(const int NGRIDS,
                      const int SIZE_EDGES,

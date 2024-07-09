@@ -1,4 +1,4 @@
-#include "../include/annealing.h"
+#include <annealing.h>
 
 void annealing(const int N,
                const int SIZE_NODES,
@@ -10,7 +10,7 @@ void annealing(const int N,
                int *v_i,
                int *v,
                std::vector<int> A,
-               double *randomvec,
+               const double *randomvec,
                int *results,
                int **table,
                std::vector<pe_t> &pe,

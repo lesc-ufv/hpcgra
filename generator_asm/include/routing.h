@@ -1,23 +1,20 @@
-#ifndef __ROUTING_H
-#define __ROUTING_H
+#ifndef ROUTING_H
+#define ROUTING_H
 
 #include <map>
 #include <utility>
 #include <vector>
 #include <tuple>
-#include "read_arch.h"
-#include "graph.h"
+#include <queue>
+
+#include <defines.h>
+#include <read_arch.h>
+#include <graph.h>
 
 typedef struct route_t {
     std::vector<int> *path;
 } route_t;
 
-void remove_element(int pe_a, 
-                    int pe_b, 
-                    std::vector<int> *grid_route
-                   );
-
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
 typedef std::pair<int, int> pd;
 typedef std::map<std::tuple<int, int, int, int>, std::vector<int>> map_tuple_vector_int;
 typedef std::map<std::pair<int, int>, std::vector<int>> map_pair_vector_int;
@@ -32,8 +29,13 @@ struct spq {
     }
 };
 
+void remove_element(int pe_a,
+                    int pe_b,
+                    std::vector<int> *grid_route
+);
+
 bool try_route_aStar(
-        const int TOTAL_GRID_SIZE,
+        int TOTAL_GRID_SIZE,
         int pe_a,
         int pe_b,
         int a,
@@ -49,13 +51,13 @@ bool try_route_aStar(
 );
 
 void routing(
-        const int NGRIDS,
-        const int SIZE_EDGES,
-        const int SIZE_NODES,
-        const int TOTAL_GRID_SIZE,
+        int NGRIDS,
+        int SIZE_EDGES,
+        int SIZE_NODES,
+        int TOTAL_GRID_SIZE,
         std::map<std::tuple<int, int, int, int>, int> *edges_cost,
         int *results,
-        int *pos,
+        const int *pos,
         map_tuple_vector_int *route,
         std::vector<pe_t> &pe,
         int **table,
